@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Torta da Responsabilidade (TCC)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(to bottom right, #e0f2fe, #f0f9ff); /* Gradiente azul claro suave */
+            background-attachment: fixed;
+        }
+        .pie-container {
+            width: 300px;
+            height: 300px;
+        }
+        .input-group {
+            transition: background-color 0.3s;
+        }
+
+        /* Logo Psicólogo */
+        .logo-psicologo {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            z-index: 50;
+            transition: transform 0.3s ease;
+        }
+        .logo-psicologo:hover {
+            transform: scale(1.1);
+        }
+        .logo-psicologo img {
+            height: 112px;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+        }
+        
+        /* Botão WhatsApp */
+        .whatsapp-button {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background-color: #128C7E;
+            color: white;
+            width: 56px; 
+            height: 56px; 
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 14px 0 rgba(0,0,0,0.25);
+            transition: background-color 0.3s ease;
+            z-index: 50;
+        }
+        .whatsapp-button:hover {
+            background-color: #075E54;
+        }
+        .whatsapp-button svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Créditos Verticais */
+        #vertical-credits {
+            position: fixed;
+            bottom: 120px;
+            right: 10px;
+            writing-mode: vertical-rl; 
+            z-index: 50;
+            color: #000000;
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.7);
+            font-size: 0.7rem;
+            pointer-events: none;
+            white-space: nowrap; 
+        }
+        #vertical-credits a {
+            font-weight: bold;
+            color: #000000;
+            transition: color 0.2s ease;
+            pointer-events: all;
+        }
+        #vertical-credits a:hover {
+            color: #333333;
+        }
+        #crp-vertical {
+            position: fixed;
+            bottom: 400px;
+            right: 10px;
+            writing-mode: vertical-rl;
+            z-index: 50;
+            color: #000000;
+            text-shadow: 1px 1px 2px rgba(255,255,255,0.7);
+            font-size: 0.7rem;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+        @media (max-width: 768px) {
+             #vertical-credits, #crp-vertical {
+                display: none;
+            }
+             .logo-psicologo img {
+                 height: 80px;
+             }
+        }
+    </style>
+<script src="seguranca.js" defer></script>
+</head>
+<body class="min-h-screen p-4">
+
+    <a href="https://www.instagram.com/gabrielopsicologo" target="_blank" class="logo-psicologo">
+        <img src="https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/Logo_preta.png" alt="Logo Gabriel Psicólogo preto">
+    </a>
+
+    <a href="https://wa.me/message/WV34TWMSKTEEL1" target="_blank" title="Precisa de Ajuda?" class="whatsapp-button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        </svg>
+    </a>
+
+    <div id="crp-vertical">
+        CRP 06/215890
+    </div>
+    <div id="vertical-credits">
+        Recurso terapêutico por 
+        <a href="https://www.instagram.com/gabrielopsicologo" target="_blank">
+            @gabrielopsicologo
+        </a>
+    </div>
+
+    <div class="max-w-4xl mx-auto bg-white shadow-2xl rounded-xl p-6 md:p-10 border-t-8 border-blue-600">
+        
+        <h1 class="text-3xl md:text-4xl font-extrabold text-gray-800 mb-2">
+            🍰 Torta da Responsabilidade 
+        </h1>
+        <p class="text-lg text-gray-600 mb-6">
+            Vamos dividir a responsabilidade por um evento de forma justa. Distribua 100% entre os fatores.
+        </p>
+
+        <hr class="mb-6">
+
+        <div class="mb-8 p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded-lg">
+            <label for="event-input" class="block text-xl font-semibold text-gray-800 mb-2">
+                Qual evento negativo estamos analisando?
+            </label>
+            <input type="text" id="event-input" class="w-full px-4 py-2 bg-white text-gray-800 border-2 border-yellow-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500" placeholder="Ex: Não consegui entregar o trabalho no prazo.">
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            
+            <div class="flex flex-col items-center">
+                 <h2 id="pie-title" class="text-xl font-bold text-gray-700 mb-4 text-center">
+                    Torta do Evento: <span id="event-display" class="text-blue-600 italic">...</span>
+                </h2>
+                <div class="pie-container relative">
+                    <canvas id="responsibility-pie" class="rounded-full shadow-lg"></canvas>
+                </div>
+                
+                <div id="total-display" class="mt-4 p-3 font-extrabold text-xl rounded-lg shadow-md text-center">
+                    Total: <span id="current-total">0%</span>
+                </div>
+                <p id="alert-message" class="text-red-500 font-semibold mt-2 hidden">
+                    O total deve ser 100%!
+                </p>
+            </div>
+
+            <div>
+                 <h2 class="text-xl font-bold text-gray-700 mb-4">
+                    Fatores Contribuintes (Fatias)
+                </h2>
+
+                <div class="flex mb-4 space-x-2">
+                    <input type="text" id="new-factor-input" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Adicionar novo fator (Ex: Cansaço, Sorte, Trânsito)">
+                    <button id="add-factor-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors">
+                        +
+                    </button>
+                </div>
+
+                <div id="factors-list" class="space-y-4">
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        const canvas = document.getElementById('responsibility-pie');
+        const ctx = canvas.getContext('2d');
+        const factorsList = document.getElementById('factors-list');
+        const addFactorBtn = document.getElementById('add-factor-btn');
+        const newFactorInput = document.getElementById('new-factor-input');
+        const eventInput = document.getElementById('event-input');
+        const eventDisplay = document.getElementById('event-display');
+        const currentTotalSpan = document.getElementById('current-total');
+        const totalDisplayDiv = document.getElementById('total-display');
+        const alertMessage = document.getElementById('alert-message');
+
+        canvas.width = 300;
+        canvas.height = 300;
+        
+        const PIE_COLORS = [
+            '#ef4444', '#3b82f6', '#10b981', '#f97316', 
+            '#6366f1', '#ec4899', '#a855f7', '#06b6d4'
+        ];
+
+        let factors = [
+            { name: 'Minha Responsabilidade (Ações/Omissões)', percentage: 50, color: PIE_COLORS[0] },
+            { name: 'Outra Pessoa/Fator Externo (Professor, Colega, etc.)', percentage: 25, color: PIE_COLORS[1] },
+            { name: 'Circunstâncias (Falta de tempo, Trânsito, etc.)', percentage: 25, color: PIE_COLORS[2] },
+        ];
+
+        function drawPie() {
+            let total = 0;
+            factors.forEach(f => total += f.percentage);
+
+            let startAngle = -0.5 * Math.PI;
+            ctx.clearRect(0, 0, canvas.width, canvas.height); 
+
+            ctx.beginPath();
+            ctx.arc(150, 150, 140, 0, 2 * Math.PI);
+            ctx.fillStyle = '#e5e7eb'; 
+            ctx.fill();
+
+            factors.forEach((factor, index) => {
+                const sliceAngle = (factor.percentage / 100) * 2 * Math.PI;
+                const endAngle = startAngle + sliceAngle;
+
+                ctx.beginPath();
+                ctx.moveTo(150, 150);
+                ctx.arc(150, 150, 140, startAngle, endAngle);
+                ctx.closePath();
+
+                ctx.fillStyle = factor.color;
+                ctx.fill();
+
+                ctx.strokeStyle = '#ffffff';
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                startAngle = endAngle;
+            });
+        }
+
+        function renderFactors() {
+            factorsList.innerHTML = ''; 
+
+            factors.forEach((factor, index) => {
+                const groupDiv = document.createElement('div');
+                groupDiv.className = `input-group p-3 rounded-lg shadow-sm border-l-4 mb-3 transition-shadow ${factor.percentage < 100 ? 'hover:shadow-lg' : ''}`;
+                groupDiv.style.borderColor = factor.color;
+
+                groupDiv.innerHTML = `
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="font-semibold text-gray-700" style="color: ${factor.color};">
+                            ${factor.name}
+                        </span>
+                        <span class="text-lg font-bold text-gray-800" id="percent-${index}">
+                            ${factor.percentage}%
+                        </span>
+                    </div>
+                    <input type="range" min="0" max="100" value="${factor.percentage}" data-index="${index}" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer range-lg">
+                    
+                    ${index >= 3 ? `<button data-index="${index}" class="remove-factor-btn mt-2 text-sm text-red-500 hover:text-red-700 font-medium">Remover</button>` : ''}
+                `;
+                
+                factorsList.appendChild(groupDiv);
+            });
+            
+            document.querySelectorAll('input[type="range"]').forEach(slider => {
+                slider.addEventListener('input', updatePieData);
+            });
+
+            document.querySelectorAll('.remove-factor-btn').forEach(button => {
+                button.addEventListener('click', removeFactor);
+            });
+
+            updateTotalDisplay();
+            drawPie();
+        }
+
+        function updatePieData(event) {
+            const slider = event.target;
+            const index = parseInt(slider.getAttribute('data-index'));
+            const newPercentage = parseInt(slider.value);
+            
+            factors[index].percentage = newPercentage;
+
+            document.getElementById(`percent-${index}`).textContent = `${newPercentage}%`;
+
+            updateTotalDisplay();
+            drawPie();
+        }
+
+        function updateTotalDisplay() {
+            let total = factors.reduce((sum, f) => sum + f.percentage, 0);
+            currentTotalSpan.textContent = `${total}%`;
+
+            if (total === 100) {
+                totalDisplayDiv.className = 'mt-4 p-3 font-extrabold text-xl rounded-lg shadow-md text-center bg-green-100 text-green-700 border-2 border-green-500';
+                alertMessage.classList.add('hidden');
+            } else {
+                totalDisplayDiv.className = 'mt-4 p-3 font-extrabold text-xl rounded-lg shadow-md text-center bg-red-100 text-red-700 border-2 border-red-500';
+                alertMessage.classList.remove('hidden');
+            }
+        }
+
+        addFactorBtn.addEventListener('click', () => {
+            const newName = newFactorInput.value.trim();
+            if (newName && factors.length < PIE_COLORS.length) {
+                factors.push({ 
+                    name: newName, 
+                    percentage: 0, 
+                    color: PIE_COLORS[factors.length] 
+                });
+                newFactorInput.value = '';
+                renderFactors();
+            } else if (factors.length >= PIE_COLORS.length) {
+                alert("Limite de fatores atingido!");
+            }
+        });
+
+        function removeFactor(event) {
+            const indexToRemove = parseInt(event.target.getAttribute('data-index'));
+            
+            if (indexToRemove >= 3) {
+                factors.splice(indexToRemove, 1);
+                
+                factors.forEach((factor, i) => {
+                    factor.color = PIE_COLORS[i];
+                });
+                
+                renderFactors();
+            }
+        }
+        
+        eventInput.addEventListener('input', () => {
+            eventDisplay.textContent = eventInput.value || '...';
+        });
+
+        renderFactors();
+    </script>
+
+    <script>
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.onkeydown = function(e) { if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) || (e.ctrlKey && e.key === 'u')) { return false; } };
+    </script>
+    
+    <script>
+        (function() {
+            // Pré-carrega o logo (única imagem externa agora)
+            const logo = new Image();
+            logo.src = 'https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/Logo_preta.png';
+        })();
+    </script>
+
+</body>
+</html>
