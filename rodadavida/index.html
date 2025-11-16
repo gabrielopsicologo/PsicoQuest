@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roda da Vida - Interativa (Versão 5.1 Corrigida)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Pacifico&display=swap');
+
+        :root {
+            --text-light: rgba(255, 255, 255, 0.9);
+            --text-dark: rgba(255, 255, 255, 1);
+            --accent-color: #FFA726;
+            --polygon-fill: rgba(255, 167, 38, 0.35);
+            --polygon-stroke: #FFCA28;
+            --point-hover-fill: #FFA726;
+            --grid-line-color: rgba(255, 255, 255, 0.2);
+            --grid-line-color-strong: rgba(255, 255, 255, 0.4);
+            --sidebar-bg: rgba(0, 0, 0, 0.15);
+            --capture-bg: #142e61;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, #1A237E 0%, #0D47A1 50%, #01579B 100%);
+            color: var(--text-light);
+            overflow-x: hidden;
+        }
+
+        /* LAYOUT PRINCIPAL COM SIDEBAR */
+        .app-layout {
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+
+        .wheel-section {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1.5rem;
+        }
+        
+        .controls-sidebar {
+            width: 100%;
+            background-color: var(--sidebar-bg);
+            backdrop-filter: blur(10px);
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        @media (min-width: 1024px) {
+            .app-layout { flex-direction: row; }
+            .controls-sidebar { width: 380px; min-height: 100vh; }
+        }
+
+        header { text-align: center; margin-bottom: 2rem; }
+        header h1 { font-family: 'Pacifico', cursive; font-size: clamp(2rem, 5vw, 2.5rem); color: var(--text-dark); }
+        header p { font-size: clamp(0.9rem, 2vw, 1rem); max-width: 600px; margin: 0.5rem auto 0; }
+        
+        #capture-area {
+            background-color: var(--capture-bg);
+            padding: 2rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .wheel-container {
+            position: relative;
+            width: clamp(280px, 65vmin, 450px);
+            height: clamp(280px, 65vmin, 450px);
+        }
+        .wheel-svg { width: 100%; height: 100%; overflow: visible; }
+
+        /* --- REMOVIDO O .label-box --- */
+
+        .score-polygon { fill: var(--polygon-fill); stroke: var(--polygon-stroke); stroke-width: 2.5; stroke-linejoin: round; transition: points 0.5s ease; }
+        .score-point { cursor: pointer; fill: rgba(255, 255, 255, 0.3); transition: all 0.2s ease; }
+        .score-point:hover { fill: var(--point-hover-fill); r: 4.5; }
+        .score-point.active { fill: var(--accent-color); r: 5; }
+
+        .control-section { background-color: rgba(0, 0, 0, 0.2); padding: 1.5rem; border-radius: 12px; }
+        .control-section h2 { font-weight: 700; font-size: 1.5em; color: var(--text-dark); text-align: center; margin-bottom: 1rem; }
+
+        #area-editor .editor-header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+        #area-editor .editor-header .icon { transition: transform 0.3s ease; }
+        #area-editor.open .editor-header .icon { transform: rotate(180deg); }
+        #area-editor .editor-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out, margin-top 0.5s ease-in-out;
+        }
+        #area-editor.open .editor-content {
+            max-height: 500px;
+            margin-top: 1rem;
+        }
+        .area-input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+        .area-input-grid input { background-color: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 6px; padding: 0.5rem 0.75rem; color: var(--text-dark); width: 100%; font-size: 0.9rem; }
+        
+        #save-btn { background-color: var(--accent-color); color: var(--text-dark); font-weight: 700; padding: 0.75rem 1.5rem; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
+        #save-btn:hover { background-color: #ffb74d; transform: scale(1.05); }
+
+        #tooltip { position: absolute; display: none; background-color: rgba(0, 0, 0, 0.8); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.9rem; pointer-events: none; z-index: 100; transition: opacity 0.2s ease; opacity: 0; }
+        #logo-header { position: fixed; top: 1.5rem; right: 1.5rem; z-index: 50; } #logo-header img { height: 7rem; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.4)); }
+        #help-button { position: fixed; bottom: 1.5rem; right: 1.5rem; background-color: #128C7E; color: white; padding: 1rem; border-radius: 9999px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 50; }
+        #crp-vertical { 
+            position: fixed; 
+            bottom: 90px; 
+            right: 18px; 
+            writing-mode: vertical-rl; 
+            transform: rotate(180deg); 
+            z-index: 40; 
+            color: rgba(255, 255, 255, 0.6); 
+            font-size: 0.7rem; 
+        }
+        #vertical-credits { 
+            position: fixed; 
+            bottom: 200px; 
+            right: 18px; 
+            writing-mode: vertical-rl; 
+            transform: rotate(180deg); 
+            z-index: 40; 
+            color: rgba(255, 255, 255, 0.6); 
+            font-size: 0.7rem; 
+        } 
+        #vertical-credits a { 
+            font-weight: bold; 
+            color: rgba(255, 255, 255, 0.8); 
+        } 	
+        @media (max-width: 1023px) { #logo-header, #vertical-credits, #crp-vertical, #help-button { display: none; } }
+    </style>
+<script src="seguranca.js" defer></script>
+</head>
+<body>
+    <div id="tooltip"></div>
+    <a href="https://www.instagram.com/gabrielopsicologo" target="_blank" id="logo-header"><img src="https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/Logo_branca.png" alt="Logo"></a>
+    <a href="https://wa.me/message/WV34TWMSKTEEL1" target="_blank" title="Precisa de Ajuda?" id="help-button"><i data-lucide="message-circle"></i></a>
+    <div id="vertical-credits">Recurso terapêutico por <a href="https://www.instagram.com/gabrielopsicologo" target="_blank">@gabrielopsicologo</a></div>
+    <div id="crp-vertical">CRP 06/215890</div>
+    
+    <div class="app-layout">
+        <main class="wheel-section">
+            <header>
+                <h1>Minha Roda da Vida</h1>
+                <p>Passe o mouse sobre os pontos e clique para definir sua satisfação em cada área.</p>
+            </header>
+            <div id="capture-area">
+                <div class="wheel-container">
+                    <svg viewBox="0 0 240 240" class="wheel-svg" id="wheel-svg">
+                        <g id="grid-lines" stroke-width="0.5" fill="none">
+                            <circle cx="120" cy="120" r="10" stroke="var(--grid-line-color)"></circle>
+                            <circle cx="120" cy="120" r="20" stroke="var(--grid-line-color)"></circle>
+                            <circle cx="120" cy="120" r="30" stroke="var(--grid-line-color)"></circle>
+                            <circle cx="120" cy="120" r="40" stroke="var(--grid-line-color)"></circle>
+                            <circle cx="120" cy="120" r="50" stroke="var(--grid-line-color-strong)" stroke-dasharray="2 2"></circle>
+                            <circle cx="120" cy="120" r="60" stroke="var(--grid-line-color)"></circle>
+                            <circle cx="120" cy="120" r="70" stroke="var(--grid-line-color)"></circle>
+                            <circle cx="120" cy="120" r="80" stroke="var(--grid-line-color)"></circle>
+                            <circle cx="120" cy="120" r="90" stroke="var(--grid-line-color)"></circle>
+                            <circle cx="120" cy="120" r="100" stroke="var(--grid-line-color-strong)" stroke-width="0.75"></circle>
+                        </g>
+                        <g id="spokes" stroke="var(--grid-line-color-strong)" stroke-width="0.5"></g>
+                        <polygon class="score-polygon" id="score-polygon"></polygon>
+                        
+                        <g id="labels-group"></g>
+                        <g id="clickable-points"></g>
+                    </svg>
+                </div>
+            </div>
+        </main>
+
+        <aside class="controls-sidebar">
+            <div class="control-section action-plan">
+                <h2>Plano de Ação</h2>
+                <div class="grid grid-cols-1 gap-4">
+                    <input type="text" placeholder="Área a focar..." class="bg-white/10 border border-white/30 rounded-md p-3 w-full text-white placeholder-white/70">
+                    <textarea placeholder="Qual o primeiro pequeno passo?" rows="3" class="bg-white/10 border border-white/30 rounded-md p-3 w-full text-white placeholder-white/70"></textarea>
+                    <input type="date" class="bg-white/10 border border-white/30 rounded-md p-3 w-full text-white/70">
+                </div>
+            </div>
+
+            <div class="control-section" id="area-editor">
+                <div class="editor-header">
+                    <h2>Personalizar Áreas da Vida</h2>
+                    <i data-lucide="chevron-down" class="icon"></i>
+                </div>
+                <div class="editor-content">
+                    <div class="area-input-grid" id="area-inputs"></div>
+                </div>
+            </div>
+
+            <button id="save-btn">
+                <i data-lucide="camera"></i>
+                Salvar como Imagem
+            </button>
+        </aside>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+
+            const SVG_NS = 'http://www.w3.org/2000/svg';
+            let areas = ["Saúde & Disposição", "Desen. Intelectual", "Equilíbrio Emocional", "Realização & Propósito", "Recursos Financeiros", "Contribuição Social", "Rel. Familiar", "Rel. Afetivo", "Vida Social", "Hobbies & Diversão", "Plenitude & Felicidade", "Espiritualidade"];
+            let scores = new Array(areas.length).fill(0);
+            
+            const tooltip = document.getElementById('tooltip');
+            const polygon = document.getElementById('score-polygon');
+            const spokesContainer = document.getElementById('spokes');
+            const pointsContainer = document.getElementById('clickable-points');
+            const labelsContainer = document.getElementById('labels-group');
+            const saveBtn = document.getElementById('save-btn');
+            const areaInputsContainer = document.getElementById('area-inputs');
+            const areaEditor = document.getElementById('area-editor');
+
+            const centerX = 120, centerY = 120;
+            const numAreas = areas.length;
+
+            const getCoordinates = (areaIndex, radius) => {
+                const angleRad = (areaIndex * (2 * Math.PI / numAreas)) - (Math.PI / 2);
+                return { x: centerX + radius * Math.cos(angleRad), y: centerY + radius * Math.sin(angleRad) };
+            };
+
+            const updatePolygon = () => {
+                const points = scores.map((s, i) => { const {x,y} = getCoordinates(i, s * 10 || 0.1); return `${x},${y}`; }).join(' ');
+                polygon.setAttribute('points', points);
+            };
+
+            const renderWheel = () => {
+                spokesContainer.innerHTML = '';
+                pointsContainer.innerHTML = '';
+                labelsContainer.innerHTML = '';
+
+                areas.forEach((areaText, i) => {
+                    const spokeEnd = getCoordinates(i, 100);
+                    const line = document.createElementNS(SVG_NS, 'line');
+                    line.setAttribute('x1', centerX); line.setAttribute('y1', centerY);
+                    line.setAttribute('x2', spokeEnd.x); line.setAttribute('y2', spokeEnd.y);
+                    spokesContainer.appendChild(line);
+
+                    // --- INÍCIO DA CORREÇÃO: MUDANÇA DE <foreignObject> PARA <text>/<tspan> ---
+                    const labelPos = getCoordinates(i, 118); // Posição do texto
+                    const textElement = document.createElementNS(SVG_NS, 'text');
+                    textElement.setAttribute('x', labelPos.x);
+                    textElement.setAttribute('y', labelPos.y);
+                    textElement.setAttribute('text-anchor', 'middle');
+                    textElement.setAttribute('dominant-baseline', 'middle');
+                    textElement.setAttribute('fill', 'var(--text-light)');
+                    textElement.setAttribute('font-size', '10px'); // Tamanho da fonte
+                    textElement.setAttribute('font-weight', '600');
+                    textElement.style.fontFamily = "'Quicksand', sans-serif"; // Fonte correta
+                    textElement.style.textShadow = '1px 1px 2px rgba(0,0,0,0.4)';
+
+                    // Lógica para quebrar a linha automaticamente
+                    let parts = [];
+                    if (areaText.includes(' & ')) {
+                        parts = areaText.split(' & ');
+                        parts[0] = parts[0] + ' &'; 
+                    } else if (areaText.includes('. ')) {
+                        parts = areaText.split('. ');
+                        parts[0] = parts[0] + '.'; // Mantém o ponto
+                    } else if (areaText.split(' ').length > 1) {
+                        // Pega a primeira palavra e o resto
+                        const words = areaText.split(' ');
+                        parts.push(words[0]);
+                        parts.push(words.slice(1).join(' '));
+                    } else {
+                        parts = [areaText]; // Apenas uma palavra
+                    }
+
+                    if (parts.length > 1) {
+                        // Se tem duas partes, cria duas linhas (tspan)
+                        const tspan1 = document.createElementNS(SVG_NS, 'tspan');
+                        tspan1.textContent = parts[0];
+                        tspan1.setAttribute('x', labelPos.x);
+                        tspan1.setAttribute('dy', '-0.5em'); // Move para cima
+                        
+                        const tspan2 = document.createElementNS(SVG_NS, 'tspan');
+                        tspan2.textContent = parts[1];
+                        tspan2.setAttribute('x', labelPos.x);
+                        tspan2.setAttribute('dy', '1.2em'); // Move para baixo
+                        
+                        textElement.appendChild(tspan1);
+                        textElement.appendChild(tspan2);
+                    } else {
+                        textElement.textContent = parts[0]; // Apenas uma linha
+                    }
+                    
+                    labelsContainer.appendChild(textElement);
+                    // --- FIM DA CORREÇÃO ---
+
+
+                    for (let score = 1; score <= 10; score++) {
+                        const pointPos = getCoordinates(i, score * 10);
+                        const point = document.createElementNS(SVG_NS, 'circle');
+                        point.setAttribute('cx', pointPos.x); point.setAttribute('cy', pointPos.y);
+                        point.setAttribute('r', 3.5);
+                        point.classList.add('score-point');
+                        point.dataset.area = i; point.dataset.score = score;
+                        if (scores[i] === score) point.classList.add('active');
+                        pointsContainer.appendChild(point);
+
+                        point.addEventListener('click', () => {
+                            scores[i] = score;
+                            document.querySelectorAll(`.score-point[data-area="${i}"]`).forEach(p => p.classList.remove('active'));
+                            point.classList.add('active');
+                            updatePolygon();
+                        });
+
+                        point.addEventListener('mouseover', () => {
+                            tooltip.style.display = 'block';
+                            tooltip.textContent = `${areas[i]}: ${score}`; // Tooltip melhorado
+                            setTimeout(() => tooltip.style.opacity = 1, 10);
+                        });
+                        point.addEventListener('mouseout', () => {
+                            tooltip.style.opacity = 0;
+                            setTimeout(() => tooltip.style.display = 'none', 200);
+                        });
+                    }
+                });
+                updatePolygon();
+            };
+
+            const renderAreaInputs = () => {
+                areaInputsContainer.innerHTML = '';
+                areas.forEach((areaText, i) => {
+                    const input = document.createElement('input');
+                    input.type = 'text'; input.value = areaText; input.dataset.index = i;
+                    input.addEventListener('input', (e) => {
+                        areas[i] = e.target.value;
+                        renderWheel();
+                    });
+                    areaInputsContainer.appendChild(input);
+                });
+            };
+
+            areaEditor.querySelector('.editor-header').addEventListener('click', () => {
+                areaEditor.classList.toggle('open');
+            });
+            
+            document.body.addEventListener('mousemove', (e) => {
+                tooltip.style.left = `${e.pageX + 15}px`;
+                tooltip.style.top = `${e.pageY}px`;
+            });
+            
+            saveBtn.addEventListener('click', () => {
+                const captureArea = document.getElementById('capture-area');
+                const sidebar = document.querySelector('.controls-sidebar');
+                const tempContainer = document.createElement('div');
+                
+                const clonedWheel = captureArea.cloneNode(true);
+                const clonedPlan = document.querySelector('.action-plan').cloneNode(true);
+                
+                tempContainer.style.position = 'absolute';
+                tempContainer.style.left = '-9999px';
+                tempContainer.style.padding = '2rem';
+                tempContainer.style.backgroundColor = getComputedStyle(document.documentElement).getPropertyValue('--capture-bg').trim();
+                tempContainer.style.display = 'flex';
+                tempContainer.style.alignItems = 'center';
+                tempContainer.style.gap = '2rem';
+                tempContainer.style.width = '1000px';
+
+                clonedPlan.style.width = '350px';
+
+                // --- INÍCIO DA CORREÇÃO: Copiar valores dos inputs ---
+                const originalInputs = document.querySelectorAll('.action-plan input, .action-plan textarea');
+                const clonedInputs = clonedPlan.querySelectorAll('input, textarea');
+                clonedInputs.forEach((clonedInput, index) => {
+                    clonedInput.value = originalInputs[index].value;
+                    // Adiciona estilo para o texto ficar visível na captura
+                    if(clonedInput.type === 'date' && !clonedInput.value) {
+                         clonedInput.style.color = 'rgba(255,255,255,0.4)'; // Cor do placeholder se vazio
+                    } else {
+                        clonedInput.style.color = 'var(--text-dark)';
+                    }
+                    clonedInput.style.setProperty('background-color', 'rgba(255, 255, 255, 0.1)', 'important');
+                    clonedInput.style.setProperty('border', '1px solid rgba(255, 255, 255, 0.3)', 'important');
+                });
+                // --- FIM DA CORREÇÃO ---
+
+                tempContainer.appendChild(clonedWheel);
+                tempContainer.appendChild(clonedPlan);
+                document.body.appendChild(tempContainer);
+                
+                // --- INÍCIO DA CORREÇÃO: Adiciona um atraso para a fonte carregar ---
+                setTimeout(() => {
+                    html2canvas(tempContainer, { useCORS: true, scale: 2 }).then(canvas => {
+                        const link = document.createElement('a');
+                        link.download = 'minha-roda-da-vida.png';
+                        link.href = canvas.toDataURL('image/png');
+                        link.click();
+                        document.body.removeChild(tempContainer);
+                    });
+                }, 500); // Atraso de 500ms
+                // --- FIM DA CORREÇÃO ---
+            });
+
+            renderWheel();
+            renderAreaInputs();
+        });
+    </script>
+</body>
+</html>
