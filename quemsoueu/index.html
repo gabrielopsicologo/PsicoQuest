@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sua Jornada Pessoal: Mapeando Crenças com Exemplos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap');
+        body {
+            font-family: 'Poppins', sans-serif; 
+            background-image: url('https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/background.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-color: #1a3b61; /* Cor de fallback */
+        }
+        .card-container {
+            min-height: 600px;
+            background-color: #ffffff;
+            border-radius: 1rem;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+        .generic-header {
+            background-color: #1e40af; 
+        }
+        .nav-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* --- INÍCIO DOS AJUSTES DOS CRÉDITOS --- */
+        #vertical-credits {
+            position: fixed;
+            bottom: 120px; /* Ajustado para subir e não sobrepor o botão WA */
+            right: 10px; 
+            writing-mode: vertical-rl; 
+            z-index: 50; 
+            color: rgba(255, 255, 255, 0.8); 
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7); 
+            font-size: 0.7rem;
+            pointer-events: none; 
+            white-space: nowrap; 
+        }
+        #vertical-credits a {
+            font-weight: bold;
+            color: white; 
+            transition: color 0.2s ease;
+            pointer-events: all; 
+        }
+        #vertical-credits a:hover {
+            color: #d1d5db; 
+        }
+        #crp-vertical {
+            position: fixed;
+            bottom: 400px; /* AUMENTADO BASTANTE para separar do texto de baixo */
+            right: 10px; 
+            writing-mode: vertical-rl;
+            z-index: 50;
+            color: rgba(255, 255, 255, 0.8);
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+            font-size: 0.7rem;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+        /* --- FIM DOS AJUSTES DOS CRÉDITOS --- */
+        
+        @media (max-width: 768px) {
+            #vertical-credits, #crp-vertical {
+                display: none; 
+            }
+        }
+    </style>
+<script src="seguranca.js" defer></script>
+</head>
+<body class="p-4 sm:p-8 flex items-center justify-center min-h-screen">
+
+    <a href="https://www.instagram.com/gabrielopsicologo" target="_blank" class="fixed top-6 right-6 z-50 transition-transform duration-300 hover:scale-110">
+        <img src="https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/Logo_branca.png" alt="Logo Gabriel Psicólogo" class="h-28 drop-shadow-lg" style="z-index: 60;"> 
+    </a>
+
+    <a href="https://wa.me/message/WV34TWMSKTEEL1" target="_blank" title="Precisa de Ajuda?" class="fixed bottom-6 right-6 bg-[#128C7E] text-white p-4 rounded-full shadow-lg hover:bg-[#075E54] transition z-50">
+        <i data-lucide="message-circle" class="w-6 h-6"></i>
+    </a>
+
+    <div id="vertical-credits">
+        Recurso terapêutico por 
+        <a href="https://www.instagram.com/gabrielopsicologo" target="_blank">
+            @gabrielopsicologo
+        </a>
+    </div>
+    <div id="crp-vertical">
+        CRP 06/215890
+    </div>
+
+    <div id="app" class="w-full max-w-4xl">
+        <header class="generic-header text-white p-4 rounded-t-xl shadow-md flex justify-between items-center">
+            <h1 class="text-2xl font-black tracking-wider flex items-center">
+                <i data-lucide="users-round" class="w-6 h-6 mr-2 text-yellow-300"></i>
+                Análise de Casos: Crenças e Comportamentos
+            </h1>
+            <span id="slide-counter" class="text-sm bg-black bg-opacity-30 px-3 py-1 rounded-full font-semibold"></span>
+        </header>
+
+        <div id="character-card" class="card-container flex flex-col md:flex-row divide-y md:divide-y-0 md:divide-x divide-gray-200">
+        </div>
+
+        <div class="flex justify-between mt-6">
+            <button id="prev-btn" onclick="window.navigate(-1)" class="nav-button bg-gray-500 text-white px-6 py-3 rounded-xl shadow-lg hover:bg-gray-600 transition duration-200 flex items-center">
+                <i data-lucide="arrow-left" class="w-5 h-5 mr-2"></i>
+                Anterior
+            </button>
+            <button id="next-btn" class="nav-button bg-blue-700 text-white px-6 py-3 rounded-xl shadow-lg hover:bg-blue-800 transition duration-200 flex items-center">
+            </button>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        const IMAGE_URLS = {
+            alex: "https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/Alex.jpg",
+            bia: "https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/bia.jpg",
+            carlos: "https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/carlos.jpg",
+            diana: "https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/diana.jpg",
+            eduardo: "https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/eduardo.jpg",
+            self: "https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/mapa_pessoal.jpg"
+        };
+
+        // Dados com asteriscos já removidos
+        const CREW_DATA = [
+            {
+                name: "Alex",
+                role: "Exemplo: Ação por Impulso",
+                description: "Alex frequentemente toma decisões de última hora no trabalho e nas finanças, movido pela crença de que 'precisa agir agora ou o momento passa'. Ele simboliza a dificuldade em usar a Mediação Cognitiva (pensar antes de agir) e o alto grau de Impulsividade.",
+                imageUrl: IMAGE_URLS.alex,
+                colorClass: 'border-red-600', 
+                strengths: ["Muita energia e iniciativa para começar novos projetos;", "Resiliência e capacidade de 'dar a volta por cima' rapidamente;", "Visão otimista e foco no que é positivo;"],
+                improvements: ["Impulsividade e Falta de planejamento (leva a retrabalhos);", "Reatividade a críticas e dificuldade em gerenciar emoções fortes;", "Comportamentos de risco desnecessário e falta de análise de custo-benefício;"]
+            },
+            {
+                name: "Bia",
+                role: "Exemplo: Padrões Rígidos e Autocobrança",
+                description: "Bia sente que tudo que faz deve ser 'perfeito', e se cobra exaustivamente por qualquer erro, temendo o julgamento. Ela representa o Esquema de Padrões Rígidos (Crenças de Desempenho) e a Cobrança Excessiva, que causam estresse constante.",
+                imageUrl: IMAGE_URLS.bia,
+                colorClass: 'border-green-600', 
+                strengths: ["Extrema dedicação e qualidade em suas entregas;", "Alto senso de responsabilidade e organização;", "Força de vontade para se manter focada em objetivos de longo prazo;"],
+                improvements: ["Perfeccionismo paralisante e Procrastinação por medo de falhar;", "Dificuldade em delegar tarefas (acreditando que só ela faz certo);", "Autocrítica severa e tendência a ignorar conquistas (só vê o erro);"]
+            },
+            {
+                name: "Carlos",
+                role: "Exemplo: Medo de Perda e Desconfiança",
+                description: "Carlos planeja cada detalhe de sua vida financeira e social, com medo constante de ser abandonado ou passar por privações (dificuldades). Ele simboliza a busca por segurança e a superação de Esquemas de Abandono/Privação através de controle excessivo.",
+                imageUrl: IMAGE_URLS.carlos,
+                colorClass: 'border-orange-500', 
+                strengths: ["Raciocínio lógico e planejamento estratégico em momentos de crise;", "Capacidade de prever problemas e evitar riscos (boa navegação);", "Valorização da estabilidade e segurança;"],
+                improvements: ["Desconfiança exagerada em novas relações ou parcerias;", "Dificuldade em relaxar e aceitar incertezas da vida (precisa de controle);", "Risco de isolamento social para se proteger de possíveis perdas;"]
+            },
+            {
+                name: "Diana",
+                role: "Exemplo: Isolamento e Subjugação",
+                description: "Diana frequentemente se sente 'diferente', com vergonha de quem realmente é, e tem o costume de colocar as necessidades dos outros antes das suas. Ela representa o Esquema de Defeito/Vergonha e a tendência à Subjugação (sacrifício pessoal) para evitar ser rejeitada.",
+                imageUrl: IMAGE_URLS.diana,
+                colorClass: 'border-purple-800', 
+                strengths: ["Empatia e capacidade de ouvir e compreender os outros;", "Discrição e foco em aprender e se desenvolver;", "Inteligência emocional para lidar com situações complexas (autocontrole);"],
+                improvements: ["Isolamento Social (evita se expor por medo de julgamento);", "Tendência a se sacrificar, negligenciando as próprias necessidades;", "Dificuldade em estabelecer limites e dizer 'não';"]
+            },
+            {
+                name: "Eduardo",
+                role: "Exemplo: Arrogância e Falta de Empatia",
+                description: "Eduardo acredita que 'as regras não se aplicam a ele' e que ele é 'melhor' que a maioria das pessoas. Ele demonstra baixa empatia para alcançar seus objetivos. Simboliza o Esquema de Superioridade/Arrogância e o Descontrole Emocional em relação a regras e críticas.",
+                imageUrl: IMAGE_URLS.eduardo,
+                colorClass: 'border-gray-700', 
+                strengths: ["Liderança forte e capacidade de motivar (e manipular) grandes grupos;", "Convencimento e alta autoconfiança;", "Extrema capacidade de adaptação para obter o que deseja;"],
+                improvements: ["Comportamento Oportunista e Manipulador (visando apenas o próprio benefício);", "Narcisismo e crenças de grandiosidade;", "Falta absoluta de Empatia e dificuldade em aceitar a responsabilidade por erros;"]
+            },
+            {
+                name: "Seu Mapa Pessoal",
+                role: "O Protagonista da Sua Evolução",
+                description: "Depois de analisar os exemplos, reflita sobre si. Quais dos recursos e desafios desses personagens se parecem mais com você? Liste seus próprios pontos de força e de mudança.",
+                imageUrl: IMAGE_URLS.self,
+                colorClass: 'border-blue-500', 
+                strengths: ["Escreva aqui seus 3 maiores recursos (crenças positivas);"],
+                improvements: ["Escreva aqui seus 3 maiores desafios (comportamentos ou pensamentos limitantes);"]
+            }
+        ];
+
+        let currentSlide = 0;
+
+        function preloadImages() {
+            CREW_DATA.forEach(character => {
+                if (character.imageUrl) {
+                    const img = new Image();
+                    img.src = character.imageUrl;
+                }
+            });
+
+            const logo = new Image();
+            logo.src = 'https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/Logo_branca.png';
+            
+            const bg = new Image();
+            bg.src = 'https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/background.jpg';
+        }
+
+        function renderSlide(index) {
+            currentSlide = index;
+            const data = CREW_DATA[index];
+            const isReflection = index === CREW_DATA.length - 1;
+            const cardElement = document.getElementById('character-card');
+            const counterElement = document.getElementById('slide-counter');
+
+            counterElement.textContent = `${index + 1}/${CREW_DATA.length}`;
+            
+            const imageHtml = `<img src="${data.imageUrl}" alt="${data.name}" class="w-full h-full object-cover">`;
+
+            cardElement.innerHTML = `
+                <div class="p-4 md:w-1/3 flex flex-col items-center justify-center bg-gray-50/80 rounded-l-xl ${isReflection ? 'bg-blue-50/80' : ''}">
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">${isReflection ? 'Sua Autoavaliação' : data.name}</h3>
+                    <p class="text-sm text-gray-600 mb-4">${data.role}</p>
+                    <div class="w-32 h-32 sm:w-48 sm:h-48 rounded-full border-4 ${data.colorClass} shadow-xl mb-4 flex items-center justify-center bg-white overflow-hidden">
+                        ${imageHtml}
+                    </div>
+                    ${isReflection ? '<p class="text-xs italic text-gray-500">O foco é seu EU atual e desejado.</p>' : ''}
+                </div>
+                <div class="p-6 md:p-8 md:w-2/3 flex flex-col justify-start fade-in">
+                    <div class="mb-6 border-b pb-4">
+                        <h4 class="text-xl font-extrabold text-blue-700 flex items-center mb-2">
+                            <i data-lucide="book-open-text" class="w-5 h-5 mr-2"></i>
+                            Análise do Exemplo (Comportamento e Crença)
+                        </h4>
+                        <p class="${isReflection ? 'hidden' : ''} text-gray-700 font-semibold text-lg">${data.description}</p>
+                        ${isReflection ? `<textarea id="self-description" rows="3" class="w-full p-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 resize-none" placeholder="${data.description}"></textarea>` : ''}
+                    </div>
+                    <div class="mb-6">
+                        <h4 class="text-xl font-extrabold text-green-600 flex items-center mb-2">
+                            <i data-lucide="zap" class="w-5 h-5 mr-2"></i>
+                            Recursos e Forças (Seus Ativos)
+                        </h4>
+                        <ul class="list-disc list-inside space-y-1 text-gray-700 ml-4">
+                            ${data.strengths.map(s => `<li class="${isReflection ? 'hidden' : ''}">${s}</li>`).join('')}
+                        </ul>
+                        ${isReflection ? `<textarea id="self-strengths" rows="3" class="w-full p-3 border-2 border-gray-300 rounded-lg focus:border-green-500 resize-none" placeholder="${data.strengths.join('\n')}"></textarea>` : ''}
+                    </div>
+                    <div class="mb-4">
+                        <h4 class="text-xl font-extrabold text-yellow-600 flex items-center mb-2">
+                            <i data-lucide="target" class="w-5 h-5 mr-2"></i>
+                            Pontos de Mudança (Desafios Cognitivos)
+                        </h4>
+                        <ul class="list-disc list-inside space-y-1 text-gray-700 ml-4">
+                            ${data.improvements.map(i => `<li class="${isReflection ? 'hidden' : ''}">${i}</li>`).join('')}
+                        </ul>
+                        ${isReflection ? `<textarea id="self-improvements" rows="3" class="w-full p-3 border-2 border-gray-300 rounded-lg focus:border-yellow-600 resize-none" placeholder="${data.improvements.join('\n')}"></textarea>` : ''}
+                    </div>
+                </div>`;
+
+            lucide.createIcons();
+
+            document.getElementById('prev-btn').disabled = index === 0;
+            const nextBtn = document.getElementById('next-btn');
+            
+            if (isReflection) {
+                nextBtn.innerHTML = 'Autoavaliação Concluída <i data-lucide="check-circle" class="w-5 h-5 ml-2"></i>';
+                nextBtn.className = 'nav-button bg-green-600 text-white px-6 py-3 rounded-xl shadow-lg hover:bg-green-700 transition duration-200 flex items-center';
+                nextBtn.disabled = false;
+                nextBtn.onclick = () => {
+                    alert('Análise concluída com sucesso! O próximo passo na TCC é criar um Plano de Ação para fortalecer seus Recursos e superar seus Desafios.');
+                };
+                lucide.createIcons();
+            } else {
+                nextBtn.innerHTML = 'Próximo Exemplo <i data-lucide="arrow-right" class="w-5 h-5 ml-2"></i>';
+                nextBtn.className = 'nav-button bg-blue-700 text-white px-6 py-3 rounded-xl shadow-lg hover:bg-blue-800 transition duration-200 flex items-center';
+                nextBtn.disabled = false;
+                nextBtn.onclick = () => navigate(1);
+            }
+        }
+
+        window.navigate = function(direction) {
+            const newIndex = currentSlide + direction;
+            if (newIndex >= 0 && newIndex < CREW_DATA.length) {
+                renderSlide(newIndex);
+            }
+        }
+
+        window.onload = () => {
+            renderSlide(currentSlide);
+            preloadImages(); 
+        };
+    </script>
+    
+    <script>
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.onkeydown = function(e) {
+            if (e.keyCode == 123) { return false; }
+            if (e.ctrlKey && e.shiftKey && e.key === 'I') { return false; }
+            if (e.ctrlKey && e.shiftKey && e.key === 'J') { return false; }
+            if (e.ctrlKey && e.key === 'u') { return false; }
+        };
+    </script>
+</body>
+</html>
