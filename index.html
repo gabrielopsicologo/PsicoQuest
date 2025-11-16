@@ -3,551 +3,574 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ilha das Emoções: Jornada Terapêutica</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    
+    <title>Respira & Reseta: Flor e Vela Visual</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            color: #374151; /* Texto geral mais escuro (gray-700) */
+        :root {
+            /* Paleta de Cores para o tema Flor e Vela */
+            --bg-neutral: #1A232E; /* Fundo neutro e escuro (Noite calma) */
+            --bg-card: #263238;    /* Fundo do card, um pouco mais claro */
+            --primary-text: #ECEFF1; /* Texto principal claro */
+
+            --color-flower-start: #66BB6A; /* Verde suave para flor (base do círculo) */
+            --color-flower-end: #388E3C;   /* Verde mais profundo */
             
-            /* --- NOVA IMAGEM: Praia calma com névoa e mistério --- */
-            background-image: url('https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/Background_Ilha.png'); 
-            background-size: cover; 
-            background-position: center center; 
-            background-repeat: no-repeat; 
-            background-attachment: fixed; 
+            --color-hold: #FFD54F;        /* Amarelo para segurar (base do círculo) */
+
+            --color-candle-start: #FF7043; /* Laranja para a chama (base do círculo) */
+            --color-candle-end: #E64A19;   /* Vermelho mais intenso */
+            
+            --border-color: #455A64; /* Borda sutil */
+            
+            --inhale-time: 4s;
+            --hold-time: 4s;
+            --exhale-time: 6s;
         }
 
-        .map-container {
-            background-color: #fff8e1; /* Mantido o fundo de "mapa" */
-            background-size: cover;
-            background-position: center;
-            min-height: 400px;
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-neutral);
+            color: var(--primary-text);
+            margin: 0;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-y: auto;
+            transition: background-color 2s ease-in-out;  
+        }
+
+        .container {
+            background-color: var(--bg-card);
+            border-radius: 20px;
+            padding: 30px;
+            /* --- MUDANÇA (Layout Horizontal) --- */
+            max-width: 1000px; /* Aumentado para comportar as colunas */
+            width: 100%;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+            transition: background-color 1s ease-in-out, box-shadow 0.5s ease-out;
+        }
+        
+        header h1 {
+            font-size: 2.4em;
+            font-weight: 700;
+            margin: 0 0 8px 0;
+            background: linear-gradient(90deg, var(--color-flower-start), var(--color-candle-start));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        header p {
+            font-size: 1.1em;
+            margin-top: 5px;
+            opacity: 0.9;
+            margin-bottom: 35px;
+        }
+
+        /* --- MUDANÇA (Layout Horizontal) --- */
+        /* 'main' agora é um container flexível para as colunas */
+        main {
+            display: flex;
+            flex-wrap: wrap; /* Permite empilhar em telas pequenas */
+            gap: 30px;
+            justify-content: center;
+            align-items: flex-start; /* Alinha as colunas no topo */
+        }
+        
+        /* Coluna da Esquerda (Visual) */
+        .breathing-guide {
+            flex: 1; /* Ocupa metade do espaço */
+            min-width: 300px; /* Largura mínima */
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Centraliza o círculo e texto */
+        }
+        
+        /* Coluna da Direita (Textos) */
+        .text-content-wrapper {
+            flex: 1; /* Ocupa a outra metade */
+            min-width: 320px; /* Largura mínima */
+            display: flex;
+            flex-direction: column;
+            gap: 25px; /* Espaço entre 'tips' e 'why' */
+        }
+        /* --- FIM DA MUDANÇA --- */
+
+
+        .breathing-visuals {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px; 
+        }
+
+        .animation-container {
             position: relative;
-            padding: 2rem;
-        }
-        .island-card {
-            transition: all 0.3s ease;
-        }
-        .island-card:hover {
-            transform: scale(1.05) translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        }
-        .back-button:hover {
-            background-color: #555;
+            width: 280px;
+            height: 280px;
+            margin: 0;
+            overflow: hidden;  
+            border-radius: 50%;
         }
 
-        /* --- Seus créditos e CRP são mantidos --- */
+        .circle-bg {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--bg-card) 50%, transparent 70%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.4) inset;
+        }
+        
+        .breathing-shape {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;  
+            background: var(--bg-card);  
+            box-shadow: 0 0 30px rgba(0,0,0,0.5), inset 0 0 12px rgba(255,255,255,0.2);
+            animation: breathe-animation calc(var(--inhale-time) + var(--hold-time) + var(--exhale-time)) infinite ease-in-out;
+            transition: box-shadow 0.7s ease-in-out;  
+            z-index: 2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @keyframes breathe-animation {
+            0% { transform: scale(0.65); opacity: 0.7; }  
+            30% { transform: scale(0.95); opacity: 1; }  
+            70% { transform: scale(0.95); opacity: 1; }  
+            100% { transform: scale(0.65); opacity: 0.7; }  
+        }
+
+        .breathing-shape img {
+            position: absolute;
+            max-width: 80%;
+            max-height: 80%;
+            object-fit: contain;  
+            opacity: 0;  
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+            transform: scale(0.8);
+            z-index: 3; 
+        }
+
+        .breathing-shape img.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .instruction-text {
+            color: var(--primary-text);  
+            font-size: 1.8em; 
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            white-space: nowrap;
+            transition: color 0.4s ease-out;
+            margin-top: 15px; 
+            margin-bottom: 25px; 
+            text-align: center;
+        }
+
+        /* Seções de dicas */
+        .tips-section {
+            /* --- MUDANÇA (Layout Horizontal) --- */
+            margin-top: 0; /* Removido para layout horizontal */
+            padding-top: 0; /* Removido para layout horizontal */
+            border-top: none; /* Removido para layout horizontal */
+            /* --- FIM DA MUDANÇA --- */
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: 1fr;  
+            gap: 20px;
+            text-align: left;
+        }
+
+        .tip-card {
+            background-color: var(--bg-neutral);
+            padding: 18px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .tip-card h3 {
+            margin: 0 0 8px 0;
+            color: var(--color-flower-start);  
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+        }
+        
+        .tip-card h3 .icon {
+            font-size: 1.3em;
+            margin-right: 10px;
+            color: var(--color-hold);  
+        }
+        
+        .tip-card p {
+            margin: 0;
+            font-size: 0.9em;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+        
+        .why-section {
+            /* --- MUDANÇA (Layout Horizontal) --- */
+            margin-top: 0; /* Removido para layout horizontal */
+            /* --- FIM DA MUDANÇA --- */
+            background-color: var(--bg-neutral);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .why-section h2 {
+            font-size: 1.3em;
+            margin: 0 0 15px 0;
+            color: var(--color-hold);
+        }
+        
+        .why-section ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            font-size: 0.9em;
+            opacity: 0.9;
+            text-align: left;
+        }
+        
+        .why-section li {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+        }
+        .why-section li::before {
+            content: '✓';  
+            color: var(--color-flower-start);
+            margin-right: 8px;
+            font-weight: bold;
+        }
+
+        /* Botões flutuantes (mantidos) */
+        .logo-psicologo {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            z-index: 50;
+            transition: transform 0.3s ease;
+        }
+        .logo-psicologo:hover {
+            transform: scale(1.1);
+        }
+        .logo-psicologo img {
+            height: 90px;  
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.4));
+        }
+
+        .whatsapp-button {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background-color: #128C7E;
+            color: white;
+            width: 50px;  
+            height: 50px;  
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 14px 0 rgba(0,0,0,0.25);
+            transition: background-color 0.3s ease;
+            z-index: 50;
+        }
+        .whatsapp-button:hover {
+            background-color: #075E54;
+        }
+        .whatsapp-button svg {
+            width: 22px;  
+            height: 22px;  
+        }
+        
         #vertical-credits {
             position: fixed;
             bottom: 110px;  
-            right: 18px;    
+            right: 15px;  
             writing-mode: vertical-rl;  
-            transform: rotate(180deg);  
-            z-index: 40;
-            color: rgba(255, 255, 255, 0.6); 
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.7); 
+            z-index: 50;  
+            color: rgba(255, 255, 255, 0.6);  
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.7);  
             font-size: 0.7rem;
+            pointer-events: none;
+            white-space: nowrap;  
         }
         #vertical-credits a {
             font-weight: bold;
             color: rgba(255, 255, 255, 0.8);
             transition: color 0.2s ease;
+            pointer-events: all;
         }
         #vertical-credits a:hover {
             color: white;
         }
+
         #crp-vertical {
             position: fixed;
-            bottom: 110px; 
-            right: 45px;   
+            bottom: 350px;  
+            right: 15px;  
             writing-mode: vertical-rl;
-            transform: rotate(180deg);
-            z-index: 40;
+            z-index: 50;  
             color: rgba(255, 255, 255, 0.6);
             text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
             font-size: 0.7rem;
+            pointer-events: none;
+            white-space: nowrap;  
         }
+
+        /* --- MUDANÇA (Layout Horizontal) --- */
+        /* Novo Media Query para empilhar as colunas em telas médias/pequenas */
+        @media (max-width: 800px) {
+            main {
+                flex-direction: column;
+                align-items: center; /* Centraliza as colunas empilhadas */
+            }
+            .breathing-guide, .text-content-wrapper {
+                width: 100%;
+                max-width: 500px; /* Limita a largura no modo empilhado (similar ao container original) */
+            }
+            /* Devolve as margens/bordas removidas */
+             .tips-section {
+                margin-top: 40px;
+                padding-top: 30px;
+                border-top: 1px solid var(--border-color);
+            }
+            .why-section {
+                 margin-top: 35px;
+            }
+        }
+        /* --- FIM DA MUDANÇA --- */
+
+
+        /* Responsividade */
         @media (max-width: 768px) {
             #vertical-credits, #crp-vertical {
                 display: none;
+            }
+            .logo-psicologo img {
+                height: 70px;  
+            }
+        }
+
+        @media (max-width: 550px) {
+            .container {
+                padding: 25px;
+            }
+            header h1 {
+                font-size: 2em;
+            }
+            .animation-container {
+                width: 220px;
+                height: 220px;
+            }
+            
+            /* Ajustes de margem/padding para telas bem pequenas */
+            .tips-section {
+                margin-top: 30px;
+                padding-top: 20px;
+            }
+            .why-section {
+                margin-top: 25px;
             }
         }
     </style>
 <script src="seguranca.js" defer></script>
 </head>
 <body>
-
-    <a href="https://www.instagram.com/gabrielopsicologo" target="_blank" class="fixed top-6 right-6 z-50 transition-transform duration-300 hover:scale-110">
-        <img src="https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/Logo_branca.png" alt="Logo Gabriel Psicólogo" class="h-28 drop-shadow-lg">
+    
+    <a href="https://www.instagram.com/gabrielopsicologo" target="_blank" class="logo-psicologo">
+        <img src="https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/Logo_branca.png" alt="Logo Gabriel Psicólogo">
     </a>
 
-    <a href="https://wa.me/message/WV34TWMSKTEEL1" target="_blank" title="Precisa de Ajuda?" class="fixed bottom-6 right-6 bg-[#128C7E] text-white p-4 rounded-full shadow-lg hover:bg-[#075E54] transition z-50">
-        <i data-lucide="message-circle" class="w-6 h-6"></i>
+    <a href="https://wa.me/message/WV34TWMSKTEEL1" target="_blank" title="Precisa de Ajuda?" class="whatsapp-button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        </svg>
     </a>
-
+    
     <div id="vertical-credits">
-        <p>
-            Recurso terapêutico por 
-            <a href="https://www.instagram.com/gabrielopsicologo" target="_blank">
-                @gabrielopsicologo
-            </a>
-        </p>
+        Recurso terapêutico por 
+        <a href="https://www.instagram.com/gabrielopsicologo" target="_blank">
+            @gabrielopsicologo
+        </a>
     </div>
     <div id="crp-vertical">
         CRP 06/215890
     </div>
 
-    <div id="app" class="min-h-screen flex flex-col items-center">
-        <header class="w-full bg-blue-600 text-white shadow-lg p-4 flex justify-between items-center rounded-b-lg">
-            <h1 class="text-2xl font-black tracking-wider flex items-center">
-                Ilha das Emoções
-            </h1>
-            <div id="auth-info" class="text-sm opacity-90 text-right">
-                </div>
+    <div class="container">
+        <header>
+            <h1>O Poder da Calma: Flor e Vela</h1>
+            <p>Respire para florescer a serenidade e apagar a agitação da mente.</p>
         </header>
 
-        <main id="content" class="w-full max-w-4xl p-4 sm:p-6 flex-grow">
-            <div id="loading" class="text-center p-8 text-gray-700"> 
-                <i data-lucide="loader-circle" class="w-8 h-8 mx-auto animate-spin"></i>
-                <p class="mt-2">Preparando a sessão...</p>
+        <main>
+            <section class="breathing-guide">
+                <div class="breathing-visuals">
+                    <div class="animation-container">
+                        <div class="circle-bg">
+                            <div class="breathing-shape" id="breathingShape">
+                                
+                                <img id="flowerImage" src="https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/Flor.png" alt="Flor Delicada" class="breathing-asset">
+                                
+                                <img id="candleImage" src="https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/Vela.png" alt="Vela Acesa" class="breathing-asset">
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="instruction-text" id="instruction">Preparar...</div>
+            </section>
+
+            <div class="text-content-wrapper">
+                <section class="tips-section">
+                    <div class="tips-grid">
+                        <div class="tip-card">
+                            <h3><span class="icon">🌸</span> Cheire a Flor</h3>
+                            <p>Inspire profundamente pelo nariz, lenta e suavemente. Imagine o perfume da flor enchendo sua barriga de calma.</p>
+                        </div>
+                        <div class="tip-card">
+                            <h3><span class="icon">🧘‍♀️</span> Segure o Perfume</h3>
+                            <p>Mantenha o ar por um breve momento. Sinta a plenitude sem tensão, apenas a pausa da serenidade.</p>
+                        </div>
+                        <div class="tip-card">
+                            <h3><span class="icon">🕯️</span> Assopre a Vela</h3>
+                            <p>Solte o ar lentamente pela boca, como se assoprasse uma velinha longe. Deixe a tensão se esvair, suavemente.</p>
+                        </div>
+                    </div>
+                </section>
+                
+                <section class="why-section">
+                    <h2>Por que isso funciona? (Foco e Atenção Plena)</h2>
+                    <ul>
+                        <li>Ancoragem: A metáfora visual e as instruções claras ajudam a manter sua atenção no presente.</li>
+                        <li>Regulação Emocional: A respiração profunda e controlada ativa o sistema parassimpático, acalmando o corpo e a mente.</li>
+                        <li>Conexão Corpo-Mente: Permite que você sinta e entenda como a respiração influencia diretamente seu estado interno.</li>
+                        <li>Habilidade Prática: Transforma uma técnica em uma ferramenta lúdica e acessível para o autocuidado diário.</li>
+                    </ul>
+                </section>
             </div>
         </main>
-    </div>
-
-    <div id="instructionsModal" class="fixed inset-0 bg-black bg-opacity-60 z-50 hidden flex items-center justify-center p-4" onclick="window.hideInstructionsModal()">
-        <div class="bg-white rounded-xl shadow-2xl p-6 max-w-lg w-full transform transition-all" onclick="event.stopPropagation()">
-            <div class="flex items-center border-b pb-3 mb-4">
-                 <i data-lucide="alert-triangle" class="w-6 h-6 text-yellow-500 mr-3"></i>
-                 <h3 class="text-xl font-bold text-gray-800">Instruções para Terapeutas</h3> 
-            </div>
-            <ul class="space-y-3 text-gray-700 list-disc list-inside"> 
-                <li>
-                    <strong>Salvamento de Dados:</strong> Esta ferramenta salva o histórico <strong>apenas neste navegador</strong> (Modo Local). Os dados não são enviados para um servidor. É sua responsabilidade transferir as informações relevantes para os registros oficiais do paciente após a sessão.
-                </li>
-                <li>
-                    <strong>Ferramenta de Apoio:</strong> Utilize esta jornada como um guia e um recurso lúdico para facilitar a exploração terapêutica, e não como um roteiro inflexível.
-                </li>
-                <li>
-                    <strong>Aplicação Cuidadosa:</strong> Sempre adapte as perguntas, a linguagem e a abordagem ao contexto e às necessidades individuais de cada paciente.
-                </li>
-            </ul>
-            <div class="mt-6 text-right">
-                <button onclick="window.hideInstructionsModal()" class="bg-blue-600 text-white font-bold py-2 px-5 rounded-lg hover:bg-blue-700 transition duration-200 shadow-md">
-                    Entendi
-                </button>
-            </div>
         </div>
-    </div>
-    
-    <div id="image-export-container" style="position: absolute; left: -9999px; top: -9999px;"></div>
 
-
-    <script type="module">
-        let selectedPatientName = localStorage.getItem('lastPatientName') || null; 
-        let localSessions = [];
-
-        let currentPage = selectedPatientName ? 'map' : 'login';
-        let currentEmotion = null;
-
-        // --- INÍCIO DA ADAPTAÇÃO TCC ACESSÍVEL ---
-        const EMOTIONS = {
-            RAIVA: {
-                name: "Raiva (Ilha do Vulcão)", color: "bg-red-700", textColor: "text-red-700", icon: "flame",
-                questions: [
-                    { id: "s-raiva", q: "O que aconteceu? Qual foi o gatilho que ativou essa emoção?" }, 
-                    { id: "t-raiva", q: "Que pensamento ou imagem veio à sua cabeça quando isso aconteceu?" }, 
-                    { id: "b-raiva", q: "Como seu corpo reagiu? O que você fez ou teve vontade de fazer?" }, 
-                    { id: "a-raiva", q: "Pensando agora, existe uma forma diferente de lidar com essa situação no futuro?" }
-                ]
-            },
-            ALEGRIA: {
-                name: "Alegria (Enseada Radiante)", color: "bg-yellow-500", textColor: "text-yellow-500", icon: "sun",
-                questions: [
-                    { id: "s-alegria", q: "O que aconteceu de bom? Qual foi a situação que trouxe essa alegria?" }, 
-                    { id: "t-alegria", q: "O que você pensou sobre esse momento? (Ex: 'Isso é ótimo!', 'Consegui!')" }, 
-                    { id: "b-alegria", q: "Como você expressou essa alegria? O que você fez?" }, 
-                    { id: "a-alegria", q: "O que você pode aprender com esse momento? Como você pode ter mais momentos assim?" }
-                ]
-            },
-            MEDO: {
-                name: "Medo (Pântano Sombrio)", color: "bg-indigo-700", textColor: "text-indigo-700", icon: "eye-off",
-                questions: [
-                    { id: "s-medo", q: "Qual foi a situação ou gatilho que disparou o medo ou a ansiedade?" }, 
-                    { id: "t-medo", q: "Qual foi a previsão ou pensamento que passou pela sua mente? (Ex: 'Algo ruim vai acontecer')" }, 
-                    { id: "b-medo", q: "O que você fez para se sentir mais seguro? Você evitou algo?" }, 
-                    { id: "a-medo", q: "Quais são as evidências de que seu pensamento é 100% real? O que te acalma?" }
-                ]
-            },
-            TRISTEZA: {
-                name: "Tristeza (Gruta Solitária)", color: "bg-blue-700", textColor: "text-blue-700", icon: "cloud-drizzle",
-                questions: [
-                    { id: "s-tristeza", q: "O que aconteceu que te deixou triste? Qual foi o gatilho?" }, 
-                    { id: "t-tristeza", q: "Que pensamento ou lembrança veio à sua mente? (Ex: 'Eu perdi algo', 'Sou um fracasso')" }, 
-                    { id: "b-tristeza", q: "O que você deixou de fazer por estar triste? Ou o que você fez? (Ex: se isolar, chorar)" }, 
-                    { id: "a-tristeza", q: "Qual é um pequeno passo (autocuidado ou uma pequena tarefa) que você pode dar agora para se sentir um pouco melhor?" }
-                ]
-            }
-        };
-        // --- FIM DA ADAPTAÇÃO TCC ---
+    <script>
+        const instruction = document.getElementById('instruction');
+        const breathingShape = document.getElementById('breathingShape');
+        const flowerImage = document.getElementById('flowerImage');
+        const candleImage = document.getElementById('candleImage');
         
-        setTimeout(renderApp, 100); 
+        const INHALE_TIME = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--inhale-time')) * 1000;
+        const HOLD_TIME = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--hold-time')) * 1000;
+        const EXHALE_TIME = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--exhale-time')) * 1000;
+        const TOTAL_TIME = INHALE_TIME + HOLD_TIME + EXHALE_TIME;
+        
+        const BG_NEUTRAL = 'var(--bg-neutral)';
+        const BG_FLOWER_SCENE = '#33691E';  
+        const BG_HOLD_SCENE = '#FFC107';    
+        const BG_CANDLE_SCENE = '#D32F2F';  
+        
+        const COLOR_FLOWER_TEXT = 'var(--color-flower-start)';
+        const COLOR_HOLD_TEXT = 'var(--color-hold)';
+        const COLOR_CANDLE_TEXT = 'var(--color-candle-start)';
 
-        async function saveSession() {
-            if (!selectedPatientName) {
-                displayMessage("Selecione um paciente primeiro!", 'bg-red-500'); return;
-            }
-            const form = document.getElementById('emotion-form');
-            const answers = {};
-            let isComplete = true;
-
-            EMOTIONS[currentEmotion].questions.forEach(q => {
-                const input = form.querySelector(`#${q.id}`);
-                const value = input ? input.value.trim() : '';
-                answers[q.id] = value;
-                if (!value) isComplete = false;
-            });
-
-            if (!isComplete) {
-                displayMessage("Responda todas as perguntas!", 'bg-yellow-500'); return;
-            }
-            
-            const newSession = {
-                patientName: selectedPatientName, emotion: currentEmotion, emotionName: EMOTIONS[currentEmotion].name, answers: answers, timestamp: new Date().toISOString()
-            };
-
-            const currentSavedSessions = JSON.parse(localStorage.getItem(`localSessions_${selectedPatientName}`)) || [];
-            currentSavedSessions.push(newSession);
-            localStorage.setItem(`localSessions_${selectedPatientName}`, JSON.stringify(currentSavedSessions));
-            localSessions = currentSavedSessions;
-            // --- MENSAGEM GENÉRICA ---
-            displayMessage("Registro salvo com sucesso!", 'bg-blue-500');
-            renderMap();
+        function updateInstruction(text, color) {
+            instruction.textContent = text;
+            instruction.style.color = color; // O texto agora também muda de cor
         }
 
-        function loadAndDisplaySessions() {
-            renderHistory(localSessions);
+        function setBodyBackground(color) {
+            document.body.style.backgroundColor = color;
         }
 
-        function displayMessage(text, bgColor) {
-            const messageBox = document.createElement('div');
-            messageBox.className = `${bgColor} text-white p-3 rounded-lg shadow-xl mb-4 text-center fixed top-4 left-1/2 transform -translate-x-1/2 z-50 transition-opacity duration-300`;
-            messageBox.textContent = text;
-            document.body.appendChild(messageBox);
+        function showAsset(asset) {
+            flowerImage.classList.remove('active');
+            candleImage.classList.remove('active');
+            asset.classList.add('active');
+        }
 
+        function breathingCycle() {
+            // --- FASE 1: INSPIRAÇÃO (Cheirar a Flor) ---
+            updateInstruction('CHEIRE A FLOR', COLOR_FLOWER_TEXT);
+            breathingShape.style.boxShadow = `0 0 30px var(--color-flower-start), inset 0 0 12px rgba(255,255,255,0.5)`;
+            showAsset(flowerImage);  
+            setBodyBackground(BG_FLOWER_SCENE);  
+
+            // --- FASE 2: SEGURAR (Segurar o Perfume) ---
             setTimeout(() => {
-                messageBox.style.opacity = '0';
-                messageBox.addEventListener('transitionend', () => messageBox.remove());
-            }, 3000);
+                updateInstruction('SEGURE O PERFUME', COLOR_HOLD_TEXT);
+                breathingShape.style.boxShadow = `0 0 30px var(--color-hold), inset 0 0 12px rgba(255,255,255,0.5)`;
+                showAsset(flowerImage);  
+                setBodyBackground(BG_HOLD_SCENE);  
+            }, INHALE_TIME);
+
+            // --- FASE 3: EXPIRAÇÃO (Assoprar a Vela) ---
+            setTimeout(() => {
+                updateInstruction('ASSOPRE A VELA', COLOR_CANDLE_TEXT);
+                breathingShape.style.boxShadow = `0 0 30px var(--color-candle-start), inset 0 0 12px #FFEB3B`;
+                showAsset(candleImage);  
+                setBodyBackground(BG_CANDLE_SCENE);  
+            }, INHALE_TIME + HOLD_TIME);
+
+            // Reinicia o fundo padrão e esconde as imagens (Preparar para o próximo ciclo)
+            setTimeout(() => {
+                setBodyBackground(BG_NEUTRAL);  
+                flowerImage.classList.remove('active');
+                candleImage.classList.remove('active');
+            }, TOTAL_TIME - 500);  
         }
 
-        function renderApp() {
-            const loadingElement = document.getElementById('loading');
-            if (loadingElement) loadingElement.remove(); 
-            updateAuthInfo();
-            if (selectedPatientName) {
-                localSessions = JSON.parse(localStorage.getItem(`localSessions_${selectedPatientName}`)) || [];
-            }
-            if (!selectedPatientName || currentPage === 'login') {
-                renderPatientSelector();
-            } else if (currentPage === 'map') {
-                renderMap();
-            } else if (currentPage === 'island' && currentEmotion) {
-                renderIsland(currentEmotion);
-            }
-            lucide.createIcons();
-        }
-        
-        function updateAuthInfo() {
-            const authInfoDiv = document.getElementById('auth-info');
-            if (selectedPatientName) {
-                let statusText = selectedPatientName + ' (Modo Local)';
-                // --- MUDANÇA DE "NAVEGADOR" PARA "PACIENTE" ---
-                authInfoDiv.innerHTML = `<p class="font-bold">Paciente:</p><span class="text-yellow-300">${statusText}</span>`;
-            } else {
-                authInfoDiv.innerHTML = `<p class="font-bold">Modo:</p><span class="text-yellow-300">Seleção de Paciente</span>`;
-            }
-        }
-
-        function renderPatientSelector() {
-            currentPage = 'login';
-            selectedPatientName = null;
-            localSessions = []; 
-            localStorage.removeItem('lastPatientName'); 
-            updateAuthInfo();
-            const contentDiv = document.getElementById('content');
-            const instructionsButton = `
-                <div class="text-center mb-6">
-                    <button onclick="window.showInstructionsModal()" class="text-sm text-blue-600 hover:underline font-semibold flex items-center justify-center mx-auto p-2 rounded-md hover:bg-blue-50 transition">
-                        <i data-lucide="alert-circle" class="w-4 h-4 mr-1"></i>
-                        Avisos e Instruções Importantes
-                    </button>
-                </div>
-            `;
-            // --- PÁGINA DE LOGIN GENÉRICA ---
-            contentDiv.innerHTML = `
-                <div class="p-8 bg-white rounded-xl shadow-2xl border-t-8 border-blue-600 max-w-md mx-auto mt-12 text-center">
-                    <i data-lucide="user-check" class="w-12 h-12 text-blue-600 mx-auto mb-4"></i>
-                    <h2 class="text-3xl font-extrabold text-gray-900 mb-2">Identificação</h2>
-                    <p class="text-gray-700 mb-4">Insira um nome ou código do paciente para iniciar a sessão.</p> 
-                    ${instructionsButton}
-                    <form id="patient-form" onsubmit="event.preventDefault(); window.setPatient()">
-                        <div class="mb-4">
-                            <input type="text" id="patientNameInput" placeholder="Nome do Paciente" 
-                                   class="w-full p-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring focus:ring-blue-200 text-gray-800" required> 
-                        </div>
-                        <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-xl shadow-lg hover:bg-blue-700 transition duration-200 flex items-center justify-center">
-                            <i data-lucide="log-in" class="w-5 h-5 mr-2"></i>
-                            Iniciar Sessão
-                        </button>
-                    </form>
-                </div>`;
-            lucide.createIcons();
-        }
-
-        window.setPatient = function() {
-            const input = document.getElementById('patientNameInput');
-            const name = input.value.trim();
-            if (name) {
-                selectedPatientName = name;
-                localSessions = JSON.parse(localStorage.getItem(`localSessions_${selectedPatientName}`)) || [];
-                localStorage.setItem('lastPatientName', name); 
-                updateAuthInfo();
-                renderMap();
-            } else {
-                // --- MENSAGEM GENÉRICA ---
-                displayMessage("Por favor, insira o nome do paciente.", 'bg-yellow-500');
-            }
-        }
-
-        function renderMap() {
-            currentPage = 'map';
-            currentEmotion = null;
-            const contentDiv = document.getElementById('content');
-
-            const islandButtonsHtml = Object.entries(EMOTIONS).map(([key, emotion]) => {
-                const nameParts = emotion.name.split('(');
-                const emotionText = nameParts[0].trim();
-                const islandText = nameParts[1] ? nameParts[1].replace(')', '').trim() : emotionText;
-
-                return `
-                    <button data-emotion="${key}" class="island-card ${emotion.color} text-white p-4 rounded-xl shadow-lg flex flex-col items-center justify-center text-center font-bold" onclick="window.selectEmotion('${key}')">
-                        <i data-lucide="${emotion.icon}" class="w-8 h-8 sm:w-10 sm:h-10 mb-2"></i>
-                        <span class="text-lg sm:text-xl">${islandText}</span> 
-                        <span class="text-sm opacity-80 mt-1">(${emotionText})</span> 
-                    </button>
-                `;
-            }).join('');
-
-            // --- PÁGINA DO MAPA GENÉRICA ---
-            contentDiv.innerHTML = `
-                <div class="map-container rounded-xl shadow-2xl p-4 sm:p-8 bg-amber-100 border-4 border-amber-900">
-                    <button onclick="window.renderPatientSelector()" class="back-button bg-gray-600 text-white px-4 py-2 rounded-lg mb-4 flex items-center shadow absolute top-4 right-4 text-sm z-10">
-                        <i data-lucide="users" class="w-4 h-4 mr-1"></i>
-                        Mudar Paciente
-                    </button>
-                    <h2 class="text-3xl font-extrabold text-amber-900 mb-6 text-center pt-8">
-                        <i data-lucide="layout-grid" class="w-8 h-8 inline-block mr-2"></i>
-                        Mapa das Emoções: Por onde vamos começar?
-                    </h2>
-                    <p class="text-amber-800 text-center mb-8">
-                        Paciente em Sessão: <span class="font-bold text-blue-600">${selectedPatientName}</span>.
-                        Escolha um destino para explorar.
-                    </p>
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        ${islandButtonsHtml}
-                    </div>
-                </div>
-                <div class="mt-8 p-4 bg-white rounded-xl shadow-lg">
-                    <div class="flex justify-between items-center border-b pb-2 mb-4">
-                        <h3 class="text-xl font-bold text-gray-800"> 
-                            Histórico de Registros (Paciente: ${selectedPatientName})
-                        </h3>
-                        <button onclick="window.clearAllSessions()" class="text-sm bg-red-100 text-red-700 hover:bg-red-200 font-semibold py-1 px-3 rounded-lg flex items-center transition">
-                            <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i>
-                            Limpar Histórico
-                        </button>
-                    </div>
-                    <ul id="history-list" class="space-y-3 text-sm text-gray-700"></ul> 
-                </div>`;
-            lucide.createIcons();
-            loadAndDisplaySessions();
-        }
-
-        function renderIsland(emotionKey) {
-            currentPage = 'island';
-            currentEmotion = emotionKey;
-            const emotion = EMOTIONS[emotionKey];
-            const contentDiv = document.getElementById('content');
-            // --- PÁGINA DE PERGUNTAS GENÉRICA ---
-            contentDiv.innerHTML = `
-                <div id="island-container" class="p-4 sm:p-8 bg-white rounded-xl shadow-2xl border-t-8 border-blue-600">
-                    <button onclick="window.renderMap()" class="back-button bg-gray-500 text-white px-4 py-2 rounded-lg mb-4 flex items-center shadow no-print">
-                        <i data-lucide="arrow-left" class="w-5 h-5 mr-1"></i>
-                        Voltar ao Mapa
-                    </button>
-                    <h2 class="text-3xl font-extrabold text-gray-900 mb-2 flex items-center ${emotion.textColor}"> 
-                        <i data-lucide="${emotion.icon}" class="w-7 h-7 mr-2"></i>
-                        ${emotion.name}
-                    </h2>
-                    <p class="text-gray-700 mb-6 border-b pb-4"> 
-                        Paciente: <span class="font-bold text-blue-600">${selectedPatientName}</span>. Vamos preencher seu registro.
-                    </p>
-                    <form id="emotion-form" onsubmit="event.preventDefault(); window.saveSession()">
-                        ${emotion.questions.map(q => `
-                            <div class="mb-6 p-4 border-l-4 border-blue-600 bg-gray-50 rounded-lg">
-                                <label for="${q.id}" class="block text-lg font-semibold text-gray-800 mb-2">${q.q}</label> 
-                                <textarea id="${q.id}" rows="4" class="w-full p-3 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:ring focus:ring-blue-200 resize-none text-gray-800" placeholder="Escreva aqui seu registro..."></textarea> 
-                            </div>
-                        `).join('')}
-                         <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-xl shadow-lg hover:bg-blue-700 transition duration-200 mt-6 flex items-center justify-center">
-                            <i data-lucide="save" class="w-5 h-5 mr-2"></i>
-                            Salvar Registro
-                        </button>
-                    </form>
-                </div>`;
-            lucide.createIcons();
-        }
-
-        function renderHistory(sessions) {
-            const historyList = document.getElementById('history-list');
-            if (!historyList) return;
-
-            if (!sessions || sessions.length === 0) {
-                historyList.innerHTML = `<li class="italic text-gray-500">Nenhum registro encontrado.</li>`;
-                return;
-            }
-
-            sessions.sort((a, b) => (new Date(b.timestamp).getTime()) - (new Date(a.timestamp).getTime()));
-
-            historyList.innerHTML = sessions.map((session, index) => {
-                const date = new Date(session.timestamp).toLocaleString('pt-BR');
-                const emotionName = session.emotionName.split('(')[0].trim();
-                // --- ÍCONE PADRÃO GENÉRICO ---
-                const sessionIcon = EMOTIONS[session.emotion]?.icon || 'clipboard-list';
-                const answersHtml = EMOTIONS[session.emotion]?.questions.map(q => `<p><strong>${q.q}</strong><br><span class="text-gray-600">${session.answers[q.id] || 'Sem resposta.'}</span></p>`).join('');
-                return `
-                    <li class="border-b last:border-b-0 py-3 flex items-start space-x-3 text-gray-700"> 
-                        <i data-lucide="${sessionIcon}" class="w-5 h-5 text-blue-600 flex-shrink-0 mt-1"></i>
-                        <div class="flex-grow">
-                            <p class="font-semibold">${emotionName} - <span class="font-normal text-gray-500">${date}</span></p> 
-                            <div class="mt-2 flex items-center space-x-4">
-                                <details>
-                                    <summary class="cursor-pointer text-sm text-blue-600 hover:text-blue-800 font-semibold">Ver registro</summary>
-                                    <div class="bg-gray-50 p-3 mt-2 rounded-md text-xs space-y-2 border text-gray-700">${answersHtml}</div> 
-                                </details>
-                                <button onclick="window.exportHistoryEntryAsImage(${index})" class="text-sm text-green-600 hover:text-green-800 font-semibold flex items-center">
-                                    <i data-lucide="camera" class="w-4 h-4 mr-1"></i>Exportar
-                                </button>
-                            </div>
-                        </div>
-                    </li>`;
-            }).join('');
-            lucide.createIcons();
-        }
-        
-        window.clearAllSessions = function() {
-            if (localSessions.length === 0) {
-                displayMessage('O histórico já está vazio.', 'bg-yellow-500');
-                return;
-            }
-            if (confirm(`Tem certeza que deseja apagar TODOS os ${localSessions.length} registros de ${selectedPatientName}? Esta ação não pode ser desfeita.`)) {
-                localStorage.removeItem(`localSessions_${selectedPatientName}`);
-                localSessions = [];
-                // --- MENSAGEM GENÉRICA ---
-                displayMessage('Histórico do paciente foi limpo.', 'bg-blue-500');
-                renderMap();
-            }
-        }
-
-        // --- EXPORTAÇÃO GENÉRICA ---
-        function generateSessionHtmlForExport(session) {
-            const emotion = EMOTIONS[session.emotion];
-            if (!emotion) return '';
-            const answersHtml = emotion.questions.map(q => `
-                <div class="mb-4 p-3 border-l-4 border-blue-500 bg-gray-50 rounded-r-lg">
-                    <h3 class="text-base font-semibold text-gray-800">${q.q}</h3> 
-                    <p class="mt-1 text-gray-700">${session.answers[q.id] || 'Sem resposta.'}</p> 
-                </div>
-            `).join('');
-            return `
-                <div class="p-8 bg-white rounded-lg shadow-lg border-t-8 border-blue-600" style="width: 800px;">
-                    <h2 class="text-4xl font-extrabold mb-2 flex items-center ${emotion.textColor}">
-                        <i data-lucide="${emotion.icon}" class="w-9 h-9 mr-3"></i>
-                        ${emotion.name}
-                    </h2>
-                    <p class="text-lg text-gray-700 mb-6 border-b pb-4"> 
-                        Paciente: <span class="font-bold text-blue-600">${session.patientName}</span>
-                    </p>
-                    ${answersHtml}
-                    <p class="text-right text-xs text-gray-500 mt-6"> 
-                        Registro de ${new Date(session.timestamp).toLocaleString('pt-BR')}
-                    </p>
-                </div>
-            `;
-        }
-        
-        window.exportHistoryEntryAsImage = async function(sessionIndex) {
-            const session = localSessions[sessionIndex];
-            if (!session) return;
-            displayMessage('Gerando imagem do registro...', 'bg-blue-500');
-            const exportContainer = document.getElementById('image-export-container');
-            exportContainer.innerHTML = generateSessionHtmlForExport(session);
-            const iconsInContainer = exportContainer.querySelectorAll('[data-lucide]');
-            if (iconsInContainer.length > 0) {
-                 lucide.createIcons({ nodes: Array.from(iconsInContainer) });
-                 await new Promise(resolve => setTimeout(resolve, 100));
-            }
-            const elementToCapture = exportContainer.querySelector('div');
-            if (!elementToCapture) return;
-
-            try {
-                const canvas = await html2canvas(elementToCapture, { backgroundColor: '#ffffff', scale: 2 });
-                const link = document.createElement('a');
-                const safePatientName = session.patientName.replace(/[^a-z0-9]/gi, '_').toLowerCase();
-                const emotionName = session.emotion.toLowerCase();
-                link.download = `registro_${safePatientName}_${emotionName}.png`;
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-            } catch (error) {
-                console.error('Erro ao exportar imagem:', error);
-                displayMessage('Houve um erro ao gerar a imagem.', 'bg-red-500');
-            } finally {
-                exportContainer.innerHTML = '';
-            }
-        }
-
-        window.showInstructionsModal = function() {
-            document.getElementById('instructionsModal')?.classList.remove('hidden');
-        }
-        window.hideInstructionsModal = function() {
-            document.getElementById('instructionsModal')?.classList.add('hidden');
-        }
-
-        window.renderMap = renderMap;
-        window.selectEmotion = renderIsland;
-        window.saveSession = saveSession;
-        window.renderPatientSelector = renderPatientSelector; 
-        window.setPatient = setPatient;
-
-        window.onload = () => {
-            lucide.createIcons();
-        };
+        // Inicia e repete o ciclo
+        breathingCycle();
+        setInterval(breathingCycle, TOTAL_TIME);
     </script>
     
     <script>
+        // Funções para desabilitar o clique direito e DevTools (Mantidas)
         document.addEventListener('contextmenu', event => event.preventDefault());
         document.onkeydown = function(e) {
-            if (e.keyCode == 123) { return false; }
-            if (e.ctrlKey && e.shiftKey && e.key === 'I') { return false; }
-            if (e.ctrlKey && e.shiftKey && e.key === 'J') { return false; }
-            if (e.ctrlKey && e.key === 'u') { return false; }
+            if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) || (e.ctrlKey && (e.key === 'u' || e.key === 'U'))) {
+                return false;
+            }
         };
+
+        // --- MUDANÇA (Preload) ---
+        // Preload images (com as novas URLs)
+        (function() {
+            const logo = new Image();
+            logo.src = 'https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/Logo_branca.png';
+            
+            const flower = new Image();
+            flower.src = 'https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/Flor.png?'; // <-- ATUALIZADO
+            
+            const candle = new Image();
+            candle.src = 'https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/Vela.png'; // <-- ATUALIZADO
+        })();
+        // --- FIM DA MUDANÇA ---
     </script>
 
 </body>
