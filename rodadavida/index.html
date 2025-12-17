@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roda da Vida - Interativa (Versão 5.1 Corrigida)</title>
+    <title>Roda da Vida - Interativa (Versão Footer Fluido)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -28,6 +28,7 @@
             background: linear-gradient(135deg, #1A237E 0%, #0D47A1 50%, #01579B 100%);
             color: var(--text-light);
             overflow-x: hidden;
+            margin: 0;
         }
 
         /* LAYOUT PRINCIPAL COM SIDEBAR */
@@ -42,8 +43,10 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            padding: 2rem 1.5rem;
+            /* Permite que o conteúdo flua e empurre o footer para baixo */
+            justify-content: flex-start; 
+            padding: 2rem 1.5rem 0 1.5rem; /* Remove padding bottom para o footer encostar se necessário */
+            position: relative;
         }
         
         .controls-sidebar {
@@ -55,16 +58,26 @@
             flex-direction: column;
             gap: 1.5rem;
             flex-shrink: 0;
+            border-top: 1px solid rgba(255,255,255,0.1);
         }
 
         @media (min-width: 1024px) {
             .app-layout { flex-direction: row; }
-            .controls-sidebar { width: 380px; min-height: 100vh; }
+            .controls-sidebar { 
+                width: 380px; 
+                min-height: 100vh; 
+                border-top: none; 
+                border-left: 1px solid rgba(255,255,255,0.1); 
+            }
+            .wheel-section {
+                height: 100vh;
+                overflow-y: auto;
+            }
         }
 
-        header { text-align: center; margin-bottom: 2rem; }
-        header h1 { font-family: 'Pacifico', cursive; font-size: clamp(2rem, 5vw, 2.5rem); color: var(--text-dark); }
-        header p { font-size: clamp(0.9rem, 2vw, 1rem); max-width: 600px; margin: 0.5rem auto 0; }
+        header { text-align: center; margin-bottom: 2rem; margin-top: 1rem; }
+        header h1 { font-family: 'Pacifico', cursive; font-size: clamp(2rem, 5vw, 2.5rem); color: var(--text-dark); text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        header p { font-size: clamp(0.9rem, 2vw, 1rem); max-width: 600px; margin: 0.5rem auto 0; opacity: 0.8; }
         
         #capture-area {
             background-color: var(--capture-bg);
@@ -73,6 +86,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin-bottom: 2rem;
         }
         
         .wheel-container {
@@ -82,14 +97,12 @@
         }
         .wheel-svg { width: 100%; height: 100%; overflow: visible; }
 
-        /* --- REMOVIDO O .label-box --- */
-
-        .score-polygon { fill: var(--polygon-fill); stroke: var(--polygon-stroke); stroke-width: 2.5; stroke-linejoin: round; transition: points 0.5s ease; }
+        .score-polygon { fill: var(--polygon-fill); stroke: var(--polygon-stroke); stroke-width: 2.5; stroke-linejoin: round; transition: points 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
         .score-point { cursor: pointer; fill: rgba(255, 255, 255, 0.3); transition: all 0.2s ease; }
-        .score-point:hover { fill: var(--point-hover-fill); r: 4.5; }
+        .score-point:hover { fill: var(--point-hover-fill); r: 5; filter: drop-shadow(0 0 5px var(--accent-color)); }
         .score-point.active { fill: var(--accent-color); r: 5; }
 
-        .control-section { background-color: rgba(0, 0, 0, 0.2); padding: 1.5rem; border-radius: 12px; }
+        .control-section { background-color: rgba(0, 0, 0, 0.2); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
         .control-section h2 { font-weight: 700; font-size: 1.5em; color: var(--text-dark); text-align: center; margin-bottom: 1rem; }
 
         #area-editor .editor-header {
@@ -98,7 +111,11 @@
             align-items: center;
             gap: 0.5rem;
             cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 6px;
+            transition: background 0.2s;
         }
+        #area-editor .editor-header:hover { background: rgba(255,255,255,0.05); }
         #area-editor .editor-header .icon { transition: transform 0.3s ease; }
         #area-editor.open .editor-header .icon { transform: rotate(180deg); }
         #area-editor .editor-content {
@@ -109,50 +126,145 @@
         #area-editor.open .editor-content {
             max-height: 500px;
             margin-top: 1rem;
+            overflow-y: auto;
         }
-        .area-input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
-        .area-input-grid input { background-color: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 6px; padding: 0.5rem 0.75rem; color: var(--text-dark); width: 100%; font-size: 0.9rem; }
-        
-        #save-btn { background-color: var(--accent-color); color: var(--text-dark); font-weight: 700; padding: 0.75rem 1.5rem; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
-        #save-btn:hover { background-color: #ffb74d; transform: scale(1.05); }
+        /* Scrollbar fina para o editor */
+        #area-editor .editor-content::-webkit-scrollbar { width: 4px; }
+        #area-editor .editor-content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); border-radius: 4px; }
 
-        #tooltip { position: absolute; display: none; background-color: rgba(0, 0, 0, 0.8); color: white; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.9rem; pointer-events: none; z-index: 100; transition: opacity 0.2s ease; opacity: 0; }
-        #logo-header { position: fixed; top: 1.5rem; right: 1.5rem; z-index: 50; } #logo-header img { height: 7rem; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.4)); }
-        #help-button { position: fixed; bottom: 1.5rem; right: 1.5rem; background-color: #128C7E; color: white; padding: 1rem; border-radius: 9999px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 50; }
-        #crp-vertical { 
-            position: fixed; 
-            bottom: 90px; 
-            right: 18px; 
-            writing-mode: vertical-rl; 
-            transform: rotate(180deg); 
-            z-index: 40; 
-            color: rgba(255, 255, 255, 0.6); 
-            font-size: 0.7rem; 
+        .area-input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+        .area-input-grid input { background-color: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 6px; padding: 0.5rem 0.75rem; color: var(--text-dark); width: 100%; font-size: 0.9rem; transition: border-color 0.2s; }
+        .area-input-grid input:focus { outline: none; border-color: var(--accent-color); background-color: rgba(255, 255, 255, 0.15); }
+        
+        #save-btn { background-color: var(--accent-color); color: var(--text-dark); font-weight: 700; padding: 0.75rem 1.5rem; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; gap: 0.5rem; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
+        #save-btn:hover { background-color: #ffb74d; transform: translateY(-2px); box-shadow: 0 6px 8px rgba(0,0,0,0.3); }
+        #save-btn:active { transform: translateY(0); }
+
+        #tooltip { position: absolute; display: none; background-color: rgba(0, 0, 0, 0.9); color: white; padding: 0.4rem 0.8rem; border-radius: 4px; font-size: 0.9rem; pointer-events: none; z-index: 100; transition: opacity 0.2s ease; opacity: 0; white-space: nowrap; box-shadow: 0 2px 4px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); }
+        
+        /* --- ESTILOS DO NOVO FOOTER --- */
+        .modern-footer {
+            width: 100%;
+            margin-top: auto; /* Empurra para o fundo da wheel-section */
+            padding: 1.5rem 2rem;
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            align-items: center;
         }
-        #vertical-credits { 
-            position: fixed; 
-            bottom: 200px; 
-            right: 18px; 
-            writing-mode: vertical-rl; 
-            transform: rotate(180deg); 
-            z-index: 40; 
-            color: rgba(255, 255, 255, 0.6); 
-            font-size: 0.7rem; 
-        } 
-        #vertical-credits a { 
-            font-weight: bold; 
-            color: rgba(255, 255, 255, 0.8); 
-        } 	
-        @media (max-width: 1023px) { #logo-header, #vertical-credits, #crp-vertical, #help-button { display: none; } }
+
+        .footer-content {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
+        }
+
+        .footer-branding {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .footer-logo {
+            height: 50px;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        }
+        .footer-logo:hover { transform: scale(1.1) rotate(-2deg); }
+
+        .footer-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 0.25rem;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .footer-link {
+            color: var(--accent-color);
+            font-weight: 600;
+            text-decoration: none;
+            position: relative;
+            transition: color 0.2s;
+        }
+        .footer-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: -2px;
+            left: 0;
+            background-color: var(--accent-color);
+            transition: width 0.3s;
+        }
+        .footer-link:hover::after { width: 100%; }
+
+        .footer-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .icon-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .icon-btn:hover {
+            background: var(--accent-color);
+            transform: translateY(-3px);
+            color: #1A237E;
+            box-shadow: 0 4px 10px rgba(255, 167, 38, 0.4);
+        }
+
+        .crp-badge {
+            font-size: 0.75rem;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Responsividade do Footer */
+        @media (min-width: 768px) {
+            .footer-content {
+                flex-direction: row;
+                text-align: left;
+            }
+            .footer-info {
+                align-items: flex-start;
+                text-align: left;
+            }
+            .modern-footer {
+                padding: 1rem 2rem;
+            }
+        }
+        
+        /* Esconder elementos antigos se ainda existirem no cache */
+        #logo-header, #help-button, #vertical-credits, #crp-vertical { display: none !important; }
+
     </style>
 <script src="seguranca.js" defer></script>
 </head>
 <body>
     <div id="tooltip"></div>
-    <a href="https://www.instagram.com/gabrielopsicologo" target="_blank" id="logo-header"><img src="https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/Logo_branca.png" alt="Logo"></a>
-    <a href="https://wa.me/message/WV34TWMSKTEEL1" target="_blank" title="Precisa de Ajuda?" id="help-button"><i data-lucide="message-circle"></i></a>
-    <div id="vertical-credits">Recurso terapêutico por <a href="https://www.instagram.com/gabrielopsicologo" target="_blank">@gabrielopsicologo</a></div>
-    <div id="crp-vertical">CRP 06/215890</div>
     
     <div class="app-layout">
         <main class="wheel-section">
@@ -160,6 +272,7 @@
                 <h1>Minha Roda da Vida</h1>
                 <p>Passe o mouse sobre os pontos e clique para definir sua satisfação em cada área.</p>
             </header>
+            
             <div id="capture-area">
                 <div class="wheel-container">
                     <svg viewBox="0 0 240 240" class="wheel-svg" id="wheel-svg">
@@ -183,15 +296,44 @@
                     </svg>
                 </div>
             </div>
+
+            <footer class="modern-footer">
+                <div class="footer-content">
+                    <div class="footer-branding">
+                        <a href="https://www.instagram.com/gabrielopsicologo" target="_blank">
+                            <img src="https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/Logo_branca.png" alt="Gabriel Psicólogo" class="footer-logo">
+                        </a>
+                        <div class="footer-info">
+                            <span>Recurso Terapêutico Digital</span>
+                            <span class="crp-badge">CRP 06/215890</span>
+                        </div>
+                    </div>
+
+                    <div class="footer-info">
+                        <span>Desenvolvido por <a href="https://www.instagram.com/gabrielopsicologo" target="_blank" class="footer-link">@gabrielopsicologo</a></span>
+                        <span style="opacity: 0.5; font-size: 0.75rem; margin-top: 2px;">&copy; 2025 Todos os direitos reservados.</span>
+                    </div>
+
+                    <div class="footer-actions">
+                        <a href="https://wa.me/message/WV34TWMSKTEEL1" target="_blank" class="icon-btn" title="Falar no Whatsapp">
+                            <i data-lucide="message-circle" width="20"></i>
+                        </a>
+                        <a href="https://www.instagram.com/gabrielopsicologo" target="_blank" class="icon-btn" title="Instagram">
+                            <i data-lucide="instagram" width="20"></i>
+                        </a>
+                    </div>
+                </div>
+            </footer>
+
         </main>
 
         <aside class="controls-sidebar">
             <div class="control-section action-plan">
                 <h2>Plano de Ação</h2>
                 <div class="grid grid-cols-1 gap-4">
-                    <input type="text" placeholder="Área a focar..." class="bg-white/10 border border-white/30 rounded-md p-3 w-full text-white placeholder-white/70">
-                    <textarea placeholder="Qual o primeiro pequeno passo?" rows="3" class="bg-white/10 border border-white/30 rounded-md p-3 w-full text-white placeholder-white/70"></textarea>
-                    <input type="date" class="bg-white/10 border border-white/30 rounded-md p-3 w-full text-white/70">
+                    <input type="text" placeholder="Área a focar..." class="bg-white/10 border border-white/30 rounded-md p-3 w-full text-white placeholder-white/70 focus:outline-none focus:border-yellow-400 transition-colors">
+                    <textarea placeholder="Qual o primeiro pequeno passo?" rows="3" class="bg-white/10 border border-white/30 rounded-md p-3 w-full text-white placeholder-white/70 focus:outline-none focus:border-yellow-400 transition-colors"></textarea>
+                    <input type="date" class="bg-white/10 border border-white/30 rounded-md p-3 w-full text-white/70 focus:outline-none focus:border-yellow-400 transition-colors">
                 </div>
             </div>
 
@@ -254,57 +396,51 @@
                     line.setAttribute('x2', spokeEnd.x); line.setAttribute('y2', spokeEnd.y);
                     spokesContainer.appendChild(line);
 
-                    // --- INÍCIO DA CORREÇÃO: MUDANÇA DE <foreignObject> PARA <text>/<tspan> ---
-                    const labelPos = getCoordinates(i, 118); // Posição do texto
+                    const labelPos = getCoordinates(i, 118);
                     const textElement = document.createElementNS(SVG_NS, 'text');
                     textElement.setAttribute('x', labelPos.x);
                     textElement.setAttribute('y', labelPos.y);
                     textElement.setAttribute('text-anchor', 'middle');
                     textElement.setAttribute('dominant-baseline', 'middle');
                     textElement.setAttribute('fill', 'var(--text-light)');
-                    textElement.setAttribute('font-size', '10px'); // Tamanho da fonte
+                    textElement.setAttribute('font-size', '10px');
                     textElement.setAttribute('font-weight', '600');
-                    textElement.style.fontFamily = "'Quicksand', sans-serif"; // Fonte correta
+                    textElement.style.fontFamily = "'Quicksand', sans-serif";
                     textElement.style.textShadow = '1px 1px 2px rgba(0,0,0,0.4)';
 
-                    // Lógica para quebrar a linha automaticamente
                     let parts = [];
                     if (areaText.includes(' & ')) {
                         parts = areaText.split(' & ');
                         parts[0] = parts[0] + ' &'; 
                     } else if (areaText.includes('. ')) {
                         parts = areaText.split('. ');
-                        parts[0] = parts[0] + '.'; // Mantém o ponto
+                        parts[0] = parts[0] + '.'; 
                     } else if (areaText.split(' ').length > 1) {
-                        // Pega a primeira palavra e o resto
                         const words = areaText.split(' ');
                         parts.push(words[0]);
                         parts.push(words.slice(1).join(' '));
                     } else {
-                        parts = [areaText]; // Apenas uma palavra
+                        parts = [areaText];
                     }
 
                     if (parts.length > 1) {
-                        // Se tem duas partes, cria duas linhas (tspan)
                         const tspan1 = document.createElementNS(SVG_NS, 'tspan');
                         tspan1.textContent = parts[0];
                         tspan1.setAttribute('x', labelPos.x);
-                        tspan1.setAttribute('dy', '-0.5em'); // Move para cima
+                        tspan1.setAttribute('dy', '-0.5em');
                         
                         const tspan2 = document.createElementNS(SVG_NS, 'tspan');
                         tspan2.textContent = parts[1];
                         tspan2.setAttribute('x', labelPos.x);
-                        tspan2.setAttribute('dy', '1.2em'); // Move para baixo
+                        tspan2.setAttribute('dy', '1.2em');
                         
                         textElement.appendChild(tspan1);
                         textElement.appendChild(tspan2);
                     } else {
-                        textElement.textContent = parts[0]; // Apenas uma linha
+                        textElement.textContent = parts[0];
                     }
                     
                     labelsContainer.appendChild(textElement);
-                    // --- FIM DA CORREÇÃO ---
-
 
                     for (let score = 1; score <= 10; score++) {
                         const pointPos = getCoordinates(i, score * 10);
@@ -325,7 +461,7 @@
 
                         point.addEventListener('mouseover', () => {
                             tooltip.style.display = 'block';
-                            tooltip.textContent = `${areas[i]}: ${score}`; // Tooltip melhorado
+                            tooltip.textContent = `${areas[i]}: ${score}`;
                             setTimeout(() => tooltip.style.opacity = 1, 10);
                         });
                         point.addEventListener('mouseout', () => {
@@ -378,27 +514,23 @@
 
                 clonedPlan.style.width = '350px';
 
-                // --- INÍCIO DA CORREÇÃO: Copiar valores dos inputs ---
                 const originalInputs = document.querySelectorAll('.action-plan input, .action-plan textarea');
                 const clonedInputs = clonedPlan.querySelectorAll('input, textarea');
                 clonedInputs.forEach((clonedInput, index) => {
                     clonedInput.value = originalInputs[index].value;
-                    // Adiciona estilo para o texto ficar visível na captura
                     if(clonedInput.type === 'date' && !clonedInput.value) {
-                         clonedInput.style.color = 'rgba(255,255,255,0.4)'; // Cor do placeholder se vazio
+                         clonedInput.style.color = 'rgba(255,255,255,0.4)'; 
                     } else {
                         clonedInput.style.color = 'var(--text-dark)';
                     }
                     clonedInput.style.setProperty('background-color', 'rgba(255, 255, 255, 0.1)', 'important');
                     clonedInput.style.setProperty('border', '1px solid rgba(255, 255, 255, 0.3)', 'important');
                 });
-                // --- FIM DA CORREÇÃO ---
 
                 tempContainer.appendChild(clonedWheel);
                 tempContainer.appendChild(clonedPlan);
                 document.body.appendChild(tempContainer);
                 
-                // --- INÍCIO DA CORREÇÃO: Adiciona um atraso para a fonte carregar ---
                 setTimeout(() => {
                     html2canvas(tempContainer, { useCORS: true, scale: 2 }).then(canvas => {
                         const link = document.createElement('a');
@@ -407,8 +539,7 @@
                         link.click();
                         document.body.removeChild(tempContainer);
                     });
-                }, 500); // Atraso de 500ms
-                // --- FIM DA CORREÇÃO ---
+                }, 500);
             });
 
             renderWheel();
