@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PsicoQuest | Foco e Concentração</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Outfit:wght@500;700&display=swap" rel="stylesheet">
+    <script src="seguranca.js" defer></script>
+    <style>
+        :root {
+            --gold: #d4af37;
+            --gold-light: #fdfaf0;
+            --dark: #121212;
+            --bg: #f8f9fa;
+            --white: #ffffff;
+            --radius: 20px;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header Premium */
+        header {
+            position: sticky; top: 0; z-index: 1000;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            padding: 15px 25px;
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .logo-box img { height: 40px; }
+        
+        .header-nav { display: flex; gap: 10px; }
+
+        .btn-premium {
+            background: var(--white); border: 1.5px solid var(--gold);
+            color: var(--gold); padding: 8px 16px; border-radius: 12px;
+            font-size: 0.75rem; font-weight: 700; cursor: pointer;
+            transition: 0.3s; text-transform: uppercase;
+        }
+
+        .btn-premium.active { background: var(--gold); color: white; }
+
+        /* Grid Organizadíssima */
+        .app-container {
+            flex: 1; padding: 20px; max-width: 1400px; margin: 0 auto; width: 100%;
+        }
+
+        .strategy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        /* Card Design */
+        .card {
+            background: var(--white); border-radius: var(--radius);
+            overflow: hidden; box-shadow: var(--shadow);
+            border: 2px solid transparent; transition: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            cursor: pointer; display: flex; flex-direction: column; position: relative;
+        }
+
+        .card:hover { transform: translateY(-8px); border-color: var(--gold); }
+        .card.is-fav { border-color: var(--gold); background: var(--gold-light); }
+
+        .card-img {
+            width: 100%; aspect-ratio: 16 / 10; overflow: hidden; background: #eee;
+        }
+
+        .card-img img { width: 100%; height: 100%; object-fit: cover; }
+
+        .card-info { padding: 15px; text-align: center; flex-grow: 1; display: flex; align-items: center; justify-content: center; }
+        .card-info h3 { font-family: 'Outfit', sans-serif; font-size: 0.95rem; color: var(--dark); font-weight: 600; }
+
+        /* Estrela de Seleção */
+        .fav-star {
+            position: absolute; top: 10px; right: 10px; width: 28px; height: 28px;
+            background: rgba(255,255,255,0.9); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            border: 1.5px solid var(--gold); z-index: 10; font-size: 14px; color: var(--gold);
+        }
+        .is-fav .fav-star { background: var(--gold); color: white; }
+
+        /* Modal / Rascunho */
+        .modal {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+            display: none; align-items: center; justify-content: center;
+            z-index: 2000; padding: 20px; backdrop-filter: blur(10px);
+        }
+
+        .modal-box {
+            background: white; width: 100%; max-width: 500px;
+            border-radius: 28px; overflow: hidden; animation: slideIn 0.3s;
+        }
+
+        @keyframes slideIn { from { opacity: 0; transform: translateY(30px); } }
+
+        .modal-body { padding: 30px; max-height: 80vh; overflow-y: auto; }
+        .modal-title { font-family: 'Outfit', sans-serif; color: var(--gold); margin-bottom: 10px; }
+        
+        .practice-card {
+            background: var(--gold-light); border-left: 5px solid var(--gold);
+            padding: 15px; border-radius: 12px; margin: 20px 0;
+        }
+
+        .draft-area { margin-top: 20px; }
+        textarea {
+            width: 100%; height: 110px; border: 1.5px solid #eee;
+            border-radius: 15px; padding: 15px; font-family: inherit;
+            margin-top: 8px; outline: none; resize: none; transition: 0.3s;
+        }
+        textarea:focus { border-color: var(--gold); }
+
+        .btn-save {
+            background: var(--dark); color: white; border: none;
+            width: 100%; padding: 18px; font-weight: 700; cursor: pointer;
+            font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        /* Footer */
+        footer {
+            background: white; padding: 50px 20px; text-align: center;
+            border-top: 1px solid #eee; margin-top: auto;
+        }
+        .footer-logo { height: 35px; margin-bottom: 20px; }
+
+        @media (max-width: 600px) {
+            .strategy-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-box">
+            <img src="https://gabrielopsicologo.com/wp-content/uploads/2025/12/Design-sem-nome.png" alt="PsicoQuest">
+        </div>
+        <div class="header-nav">
+            <button class="btn-premium" id="favToggle" onclick="toggleFavFilter()">Meu Plano (0)</button>
+            <button class="btn-premium" onclick="openManual()">Manual</button>
+        </div>
+    </header>
+
+    <main class="app-container">
+        <div class="strategy-grid" id="grid"></div>
+    </main>
+
+    <div class="modal" id="modal">
+        <div class="modal-box">
+            <div class="modal-body">
+                <h2 id="mTitle" class="modal-title"></h2>
+                <p id="mDesc" style="color: #555; line-height: 1.6;"></p>
+                
+                <div class="practice-card">
+                    <strong style="color: var(--gold); font-size: 0.75rem; text-transform: uppercase;">Exemplo Prático:</strong>
+                    <p id="mPractice" style="margin-top: 5px; color: #444; font-size: 0.95rem;"></p>
+                </div>
+
+                <div class="draft-area">
+                    <label style="font-size: 0.7rem; font-weight: 800; color: #aaa;">RASCUNHO: COMO VOU USAR ISSO HOJE?</label>
+                    <textarea id="mDraft" placeholder="Escreva aqui seu plano de ação..."></textarea>
+                </div>
+            </div>
+            <button class="btn-save" onclick="saveAndClose()">Salvar e Voltar</button>
+        </div>
+    </div>
+
+    <footer>
+        <img src="https://gabrielopsicologo.com/wp-content/uploads/2025/11/Logo_preta.png" class="footer-logo">
+        <div style="font-size: 0.8rem; color: #777; line-height: 1.8;">
+            <p>Recurso Terapêutico Digital</p>
+            <p>Desenvolvido por <strong>@gabrielopsicologo</strong> | CRP 06/215890</p>
+            <p>© 2025 Todos os direitos reservados.</p>
+        </div>
+        <a href="https://api.whatsapp.com/message/WV34TWMSKTEEL1?autoload=1&app_absent=0" style="color: #25d366; text-decoration: none; font-weight: 700; display: block; margin-top: 20px; font-size: 0.8rem;">SUPORTE TÉCNICO</a>
+    </footer>
+
+    <script>
+        const cardsData = [
+            { t: "Micro-objetivos", d: "Divida tarefas grandes em passos de 15 minutos.", p: "Se precisa fazer um relatório, foque em escrever apenas o título e a introdução agora.", i: "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b" },
+            { t: "Ambiente Blindado", d: "Remova estímulos que competem pela sua atenção.", p: "Limpe sua mesa e coloque o celular em outro cômodo antes de sentar.", i: "https://images.unsplash.com/photo-1497032628192-86f99bcd76bc" },
+            { t: "Regra de 5 Minutos", d: "Comprometa-se com apenas 5 minutos de atividade.", p: "Diga: 'Vou apenas abrir o livro e ler 2 linhas'. Geralmente a inércia acaba após o início.", i: "https://images.unsplash.com/photo-1508962914676-134849a727f0" },
+            { t: "Body Doubling", d: "Trabalhe perto de outra pessoa, mesmo que em silêncio.", p: "Ligue para um amigo e fiquem ambos em silêncio trabalhando via vídeo.", i: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f" },
+            { t: "Lista de Distrações", d: "Anote pensamentos intrusivos para lidar depois.", p: "Mantenha um bloco ao lado. Surgiu ideia? Anote: 'Lembrar de comprar pão' e volte ao foco.", i: "https://images.unsplash.com/photo-1517842645767-c639042777db" },
+            { t: "Ruído Marrom", d: "Sons constantes para silenciar o ruído interno da mente.", p: "Use fones com sons de motor ou cachoeira forte para foco profundo.", i: "https://images.unsplash.com/photo-1516280440614-37939bbacd81" },
+            { t: "Checklist de Saída", d: "Defina onde parou para facilitar o reinício amanhã.", p: "Antes de sair, anote: 'Parei na página 4, amanhã começo revisando o gráfico'.", i: "https://images.unsplash.com/photo-1454165833767-027ff33027ef" },
+            { t: "Timer Visual", d: "Relógios que mostram o tempo sumindo ajudam na percepção temporal.", p: "Use um cronômetro que 'pinta' a fatia de tempo que falta para o fim do bloco.", i: "https://images.unsplash.com/photo-1516733958055-af7021abc1e1" },
+            { t: "Água no Rosto", d: "Choque térmico suave para resetar o sistema nervoso.", p: "Em momentos de 'travamento' ou paralisia, lave o rosto com água gelada.", i: "https://images.unsplash.com/photo-1548171916-c0dea7f9300e" },
+            { t: "Limpeza Pré-Foco", d: "Organize o espaço visual imediato por 2 minutos.", p: "Jogue o lixo fora e alinhe seu caderno. Ordem externa promove ordem interna.", i: "https://images.unsplash.com/photo-1581578731522-745d05cb9704" },
+            { t: "Desativar Alertas", d: "Notificações são inimigas da imersão profunda.", p: "Ative o modo 'Não Perturbe' e oculte todos os badges vermelhos do celular.", i: "https://images.unsplash.com/photo-1512428559087-560ad5185227" },
+            { t: "Luz Solar", d: "A luz natural regula a dopamina e o ciclo circadiano.", p: "Tome 5 minutos de sol ou olhe para a janela ao iniciar o dia.", i: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b" },
+            { t: "Música sem Letra", d: "Sons instrumentais ajudam no ritmo sem ocupar a área verbal.", p: "Escute playlists de Lo-Fi ou música clássica sem vocais para não se distrair.", i: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4" },
+            { t: "Postura Ereta", d: "A fisiologia do corpo influencia o nível de alerta do cérebro.", p: "Sente-se com os pés no chão e as costas apoiadas para sinalizar foco ao sistema nervoso.", i: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d" },
+            { t: "Escrita Terapêutica", d: "Esvazie preocupações antes de iniciar tarefas cognitivas.", p: "Escreva por 2 minutos tudo o que te preocupa para liberar sua memória de trabalho.", i: "https://images.unsplash.com/photo-1455390582262-044cdead277a" },
+            { t: "Prioridade Única", d: "Escolha apenas UMA tarefa para ser o sucesso do dia.", p: "Se nada mais for feito, qual única tarefa te daria sensação de dever cumprido?", i: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85" },
+            { t: "Agenda Visual", d: "O cérebro TDAH processa melhor informações à vista.", p: "Mantenha um planner de mesa ou quadro branco sempre no seu campo de visão.", i: "https://images.unsplash.com/photo-1506784365847-bbad939e9335" },
+            { t: "Filtro Luz Azul", d: "Reduza a fadiga ocular para manter o foco por mais tempo.", p: "Use óculos com filtro ou ative o 'Modo Noturno' amarelado nas telas.", i: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b" },
+            { t: "Aromaterapia", d: "Estímulos olfativos podem gatilhar estados de alerta.", p: "Use óleo essencial de Alecrim ou Hortelã-pimenta para ajudar na concentração.", i: "https://images.unsplash.com/photo-1602928321679-560bb453f190" },
+            { t: "Temperatura Fria", d: "Ambientes levemente frescos ajudam no despertar mental.", p: "Se estiver com sono, abra a janela ou use um ventilador. O calor induz à dispersão.", i: "https://images.unsplash.com/photo-1520699049698-acd2fccb8cc8" },
+            { t: "Recompensa Imediata", d: "O sistema de recompensa precisa de reforços curtos.", p: "Após concluir 30 minutos de foco, tome seu café favorito ou veja um vídeo curto.", i: "https://images.unsplash.com/photo-1513151233558-d860c5398176" },
+            { t: "Mapa Mental", d: "Organize ideias de forma não linear e visual.", p: "Desenhe conexões entre os temas em vez de fazer listas em tópicos.", i: "https://images.unsplash.com/photo-1512314889357-e157c22f938d" },
+            { t: "Fones com Cancelamento", d: "Crie uma barreira física contra interrupções externas.", p: "Use fones grandes para sinalizar aos outros (e a você) que está em 'modo profundo'.", i: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e" },
+            { t: "Passos Curtos", d: "O cérebro trava diante do 'muito'. Reduza a escala.", p: "Não tente escrever um livro, escreva apenas uma frase agora.", i: "https://images.unsplash.com/photo-1516962215378-7fa2e137ae93" },
+            { t: "Auto-instrução", d: "Narração externa para guiar o comportamento.", p: "Diga em voz alta: 'Agora vou abrir o computador e responder este e-mail'.", i: "https://images.unsplash.com/photo-1478737270239-2f02b77fc618" },
+            { t: "Navegador Limpo", d: "Abas abertas são convites à distração.", p: "Mantenha apenas as 3 abas essenciais para a tarefa atual. Feche o resto.", i: "https://images.unsplash.com/photo-1460925895917-afdab827c52f" },
+            { t: "Pausa Ativa", d: "O movimento oxigena o cérebro e reset a atenção.", p: "Levante e faça 5 polichinelos ou um alongamento rápido de 1 minuto.", i: "https://images.unsplash.com/photo-1552674605-db6ffd4facb5" },
+            { t: "Bloqueio de Sites", d: "Use ferramentas externas para autocontrole.", p: "Instale extensões que bloqueiam o Instagram no PC durante o horário comercial.", i: "https://images.unsplash.com/photo-1512428559087-560ad5185227" },
+            { t: "Caminhada de 2min", d: "Mudar o cenário físico ajuda no reset cognitivo.", p: "Vá até a janela ou beba água em outro cômodo para quebrar o ciclo de cansaço.", i: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b" },
+            { t: "Hidratação", d: "A desidratação leve causa 'névoa mental'.", p: "Mantenha uma garrafa de água sempre ao alcance da sua mão dominante.", i: "https://images.unsplash.com/photo-1548171916-c0dea7f9300e" },
+            { t: "Som de Natureza", d: "Frequências aleatórias da natureza reduzem o estresse.", p: "Use sons de chuva ou floresta para tarefas que exigem criatividade.", i: "https://images.unsplash.com/photo-1519834125788-29b4ad151897" },
+            { t: "Pomodoro Adaptado", d: "Trabalhe em ciclos conforme sua energia do dia.", p: "Se 25 min é muito, tente 15 min de foco por 5 min de descanso.", i: "https://images.unsplash.com/photo-1509048191080-d2984bad6ad5" },
+            { t: "Visualização", d: "Visualize o alívio de concluir a tarefa.", p: "Imagine a sensação de fechar o computador com a meta batida antes de começar.", i: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b" }
+        ];
+
+        let selected = new Set();
+        let showFavs = false;
+        let activeIdx = null;
+
+        function render() {
+            const grid = document.getElementById('grid');
+            grid.innerHTML = '';
+            cardsData.forEach((c, i) => {
+                if(showFavs && !selected.has(i)) return;
+                const card = document.createElement('div');
+                card.className = `card ${selected.has(i) ? 'is-fav' : ''}`;
+                card.innerHTML = `
+                    <div class="fav-star" onclick="toggleFav(event, ${i})">★</div>
+                    <div class="card-img">
+                        <img src="${c.i}?auto=format&fit=crop&w=500&q=80" loading="lazy" onerror="this.src='https://placehold.co/400x300/d4af37/ffffff?text=${c.t}'">
+                    </div>
+                    <div class="card-info"><h3>${c.t}</h3></div>
+                `;
+                card.onclick = (e) => { if(e.target.className !== 'fav-star') openModal(i); };
+                grid.appendChild(card);
+            });
+        }
+
+        function toggleFav(e, i) {
+            e.stopPropagation();
+            if(selected.has(i)) selected.delete(i);
+            else selected.add(i);
+            document.getElementById('favToggle').innerText = `Meu Plano (${selected.size})`;
+            render();
+        }
+
+        function openModal(i) {
+            activeIdx = i;
+            document.getElementById('mTitle').innerText = cardsData[i].t;
+            document.getElementById('mDesc').innerText = cardsData[i].d;
+            document.getElementById('mPractice').innerText = cardsData[i].p;
+            document.getElementById('mDraft').value = localStorage.getItem('pq_draft_'+i) || '';
+            document.getElementById('modal').style.display = 'flex';
+        }
+
+        function saveAndClose() {
+            localStorage.setItem('pq_draft_'+activeIdx, document.getElementById('mDraft').value);
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        function toggleFavFilter() {
+            showFavs = !showFavs;
+            document.getElementById('favToggle').classList.toggle('active');
+            render();
+        }
+
+        function openManual() {
+            alert("PSICOQUEST MANUAL:\n1. Clique na estrela para selecionar as estratégias para o seu dia.\n2. Clique no centro da carta para ver o exemplo prático e escrever como você vai aplicar.\n3. Use 'Meu Plano' para ver apenas o que você escolheu.");
+        }
+
+        render();
+    </script>
+</body>
+</html>

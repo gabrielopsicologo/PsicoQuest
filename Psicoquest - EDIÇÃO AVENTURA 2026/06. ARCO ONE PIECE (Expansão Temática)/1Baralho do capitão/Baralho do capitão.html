@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Baralho do Capitão (TCC)</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Metal+Mania&family=Inter:wght@400;600&family=Lora:wght@400;600&display=swap" rel="stylesheet">
+    <script src="seguranca.js" defer></script>
+
+    <style>
+        /* 🎨 TEMA PIRATA / ONE PIECE */
+        :root {
+            --cor-madeira-escura: #3e2723;
+            --cor-madeira-clara: #5d4037;
+            --cor-papel: #fdf6e3;
+            --cor-ouro: #c8a464;
+            --cor-vermelho-pirata: #8c1c13; 
+            --cor-texto: #4a2c2a;
+            --sombra-padrao: 0 10px 30px rgba(0,0,0,0.6);
+        }
+
+        /* ANIMAÇÕES */
+        @keyframes fade-in-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes card-pop-entrance { 0% { opacity: 0; transform: scale(0.8) translateY(30px); } 70% { transform: scale(1.05); } 100% { opacity: 1; transform: scale(1); } }
+        @keyframes subtle-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-image: url('https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/Background_OP.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .font-brand { font-family: 'Metal Mania', cursive; letter-spacing: 0.1em; }
+        .font-lora { font-family: 'Lora', serif; }
+        .font-cinzel { font-family: 'Cinzel', serif; }
+
+        .animate-fade-in-up { animation: fade-in-up 0.8s ease-out forwards; }
+        .ship-deck-animated { animation: subtle-float 6s ease-in-out infinite; }
+
+        /* DECK */
+        .ship-deck {
+            background-color: rgba(60, 30, 20, 0.95);
+            background-image: url('https://www.transparenttextures.com/patterns/wood-pattern.png');
+            border-radius: 1rem;
+            box-shadow: var(--sombra-padrao);
+            border: 3px solid var(--cor-ouro);
+            width: 95%; 
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 1.5rem;
+            will-change: transform; 
+            flex: 1; 
+        }
+
+        @media (min-width: 768px) { .ship-deck { padding: 2.5rem; margin-top: 3rem; margin-bottom: 3rem; } }
+
+        /* CARTAS */
+        .card-preview {
+            background-color: var(--cor-papel);
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+            cursor: pointer;
+            border: 2px solid var(--cor-ouro);
+            position: relative;
+            aspect-ratio: 10 / 16;
+            overflow: hidden;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+            z-index: 1;
+        }
+
+        .card-preview:active { transform: scale(0.96) !important; }
+
+        .card-label {
+            background: linear-gradient(to bottom, transparent, var(--cor-papel) 10%);
+            border-top: 3px solid var(--cor-madeira-clara);
+        }
+
+        /* MODAL OTIMIZADO */
+        .modal-card {
+            background-color: #f5e6c8;
+            border-radius: 0.75rem;
+            width: 95%;
+            max-height: 90dvh; 
+            display: flex;
+            flex-direction: column;
+            border: 4px double var(--cor-madeira-escura);
+            box-shadow: var(--sombra-padrao);
+            position: relative;
+        }
+
+        @media (min-width: 768px) { .modal-card { width: 95%; max-width: 950px; border-width: 8px; } }
+        
+        .story-scroll-area { 
+            overflow-y: auto; 
+            padding: 0 0.5rem 1rem 0.5rem;
+            margin: 0.5rem 0;
+            color: var(--cor-texto); 
+            -webkit-overflow-scrolling: touch; 
+            flex: 1 1 auto;
+        }
+
+        .question-item {
+            background-color: rgba(255, 255, 255, 0.6);
+            padding: 0.8rem;
+            border-radius: 0.5rem;
+            border-left: 4px solid var(--cor-vermelho-pirata);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .answer-box {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid #d4b57f;
+            border-radius: 4px;
+            padding: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            color: #2a1a18;
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        /* RODAPÉ ESTÁTICO */
+        .static-footer {
+            width: 100%;
+            background: linear-gradient(to top, rgba(20, 10, 5, 0.95) 0%, rgba(20, 10, 5, 0.8) 100%);
+            color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+            padding: 1.5rem 1rem;
+            margin-top: auto;
+            z-index: 20;
+            position: relative;
+            font-size: 0.75rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            border-top: 1px solid rgba(200, 164, 100, 0.3);
+        }
+        
+        @media (min-width: 768px) { .static-footer { font-size: 0.85rem; padding: 2rem 1rem; } }
+
+        .footer-link { color: #fbbf24; font-weight: 600; text-decoration: none; transition: color 0.3s; }
+        .footer-link:hover { color: #fff; text-decoration: underline; }
+
+        #vignette-effect { position: fixed; inset: 0; background: radial-gradient(circle, transparent 60%, rgba(0,0,0,0.8) 100%); z-index: 5; pointer-events: none; }
+    </style>
+</head>
+<body>
+
+    <div id="vignette-effect"></div>
+
+    <main class="relative z-10 w-full flex flex-col items-center flex-grow">
+        
+        <div class="ship-deck ship-deck-animated">
+            <header class="text-center mb-6 md:mb-8 animate-fade-in-up">
+                <div class="inline-flex items-center gap-2 md:gap-4 bg-[#3e2723] py-2 px-4 md:py-3 md:px-6 rounded-lg border-2 border-[#c8a464] shadow-xl w-full justify-center md:w-auto hover:scale-105 transition-transform duration-300">
+                    <i data-lucide="swords" class="w-5 h-5 md:w-6 md:h-6 text-yellow-400 shrink-0 animate-pulse"></i>
+                    <h1 class="font-brand text-lg md:text-3xl font-bold text-yellow-400 drop-shadow-md whitespace-nowrap">
+                        Baralho do Capitão
+                    </h1>
+                    <i data-lucide="swords" class="w-5 h-5 md:w-6 md:h-6 text-yellow-400 shrink-0 animate-pulse"></i>
+                </div>
+                <p class="text-gray-200 mt-3 max-w-2xl mx-auto text-xs md:text-base font-medium drop-shadow-md px-2 animate-fade-in-up" style="animation-delay: 0.3s; opacity: 0; animation-fill-mode: forwards;">
+                    Navegue pelas correntes da Grand Line e explore suas emoções. Toque em uma carta para revelar seu desafio.
+                </p>
+            </header>
+
+            <div id="deck-panel" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-6">
+                </div>
+        </div>
+    </main>
+
+    <footer class="static-footer font-cinzel">
+        <div class="max-w-4xl mx-auto flex flex-col items-center justify-center gap-3">
+            <a href="https://www.instagram.com/gabrielopsicologo" target="_blank" class="hover:scale-105 transition-transform duration-300">
+                <img src="https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/Logo_branca.png" alt="Logo Gabriel Psicólogo" class="h-10 md:h-12 opacity-60 hover:opacity-100 transition-opacity duration-300 drop-shadow-sm">
+            </a>
+
+            <div class="flex flex-col md:flex-row items-center justify-center gap-1 md:gap-4 leading-tight">
+                <p>Desenvolvido por <a href="https://www.instagram.com/gabrielopsicologo" target="_blank" class="footer-link">@gabrielopsicologo</a></p>
+                <span class="hidden md:inline opacity-50">|</span>
+                <p>Gabriel Vinicius dos Santos Fernandes Vasconcelos - CRP 06/215890</p>
+            </div>
+            <div class="mt-1 opacity-50 font-sans text-[0.65rem] md:text-xs">
+                &copy; 2025 Todos os direitos reservados.
+            </div>
+        </div>
+    </footer>
+
+    <div id="card-modal" class="fixed inset-0 bg-black/85 modal-overlay z-50 hidden flex items-center justify-center p-3 md:p-4 transition-opacity duration-300" onclick="closeModal(event)">
+        <div id="modal-content-area" class="modal-card scale-95 transition-transform duration-300 p-4 md:p-5" onclick="event.stopPropagation()">
+            </div>
+    </div>
+
+    <a href="https://wa.me/message/WV34TWMSKTEEL1" target="_blank" class="fixed bottom-24 md:bottom-28 right-4 md:right-6 z-40 bg-[#128C7E] text-white p-3 md:p-4 rounded-full shadow-xl hover:bg-[#075E54] transition-colors animate-bounce-slow animate-fade-in-up" style="animation-delay: 0.7s">
+        <i data-lucide="message-circle" class="w-6 h-6 md:w-7 md:h-7"></i>
+    </a>
+
+    <script>
+        const DECK = [
+            { theme: "Ajuda e Apoio", icon: "hand-heart", iconColor: "text-blue-700", imageUrl: "https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/C_Nami.jpg", situation: "<strong>Nami e Arlong Park:</strong> Após anos tentando resolver tudo sozinha, Nami é traída e perde a esperança. Em desespero, ela finalmente grita para Luffy: 'Me ajuda'. --- O que você acha que ela sentiu nesse momento de rendição? Para você, pedir ajuda é um ato de fraqueza ou de força? Já houve um momento em que pedir ajuda foi a coisa mais corajosa que você fez?" },
+            { theme: "Propósito e Sonhos", icon: "target", iconColor: "text-yellow-700", imageUrl: "https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/C_Zoro.jpg", situation: "<strong>A Promessa de Zoro:</strong> Após ser humilhado por Mihawk, Zoro chora e jura a Luffy que nunca mais irá perder uma luta. Ele dedica cada momento de sua vida a esse objetivo. --- O que a dor da derrota ensinou a Zoro sobre seu sonho? Ter um objetivo claro como o de Zoro ajuda a superar os dias difíceis? Qual é o 'sonho' que te move, mesmo quando as coisas parecem impossíveis?" },
+            { theme: "Conexões e Lealdade", icon: "users", iconColor: "text-purple-700", imageUrl: "https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/C_Robin.jpg", situation: "<strong>Robin e Enies Lobby:</strong> Acreditando ser um fardo, Nico Robin se entrega. Luffy e seu bando declaram guerra ao mundo por ela, fazendo-a gritar: 'Eu quero viver!'. --- Imagine o que Robin sentiu ao ver seus amigos arriscando tudo por ela. Você já se sentiu um fardo para alguém? O que significa 'lealdade' para você?" },
+            { theme: "Luto e Despedida", icon: "flame", iconColor: "text-red-700", imageUrl: "https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/C_Merry.jpg", situation: "<strong>O Funeral do Going Merry:</strong> O primeiro navio dos Chapéus de Palha não pode mais navegar. O bando se despede, queimando-o no mar, como um funeral para um verdadeiro companheiro. --- A despedida do Merry foi como perder um amigo. Como lidamos com a dor de perder algo ou alguém importante? Guardar boas memórias pode nos ajudar a seguir em frente?" },
+            { theme: "Coragem e Vulnerabilidade", icon: "crosshair", iconColor: "text-green-700", imageUrl: "https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/C_Usopp.jpg", situation: "<strong>As Mentiras de Usopp:</strong> Usopp é medroso e conta histórias para se sentir corajoso. Mas, quando precisa, ele coloca a máscara de 'Sogeking' e encontra a coragem para lutar. --- Por que você acha que Usopp precisava de uma 'máscara' para ser corajoso? O medo pode ser útil em algumas situações? Pense em um momento em que você agiu apesar do medo. O que te deu forças?" },
+            { theme: "Valores Pessoais", icon: "chef-hat", iconColor: "text-black", imageUrl: "https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/C_Sanji.jpg", situation: "<strong>A Comida de Sanji:</strong> Sanji encontra um inimigo faminto e o alimenta, pois seu valor como cozinheiro é dar comida a quem tem fome, sem exceção. --- A atitude de Sanji foi guiada por um valor muito forte. Quais são os valores que guiam suas próprias ações? Já teve que defender um valor seu, mesmo que fosse difícil?" },
+            { theme: "Identidade e Autenticidade", icon: "star", iconColor: "text-pink-600", imageUrl: "https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/C_Chopper.jpg", situation: "<strong>A Identidade de Chopper:</strong> Por ser uma rena-humana, Chopper se via como um monstro. Luffy o convida para o bando justamente por ele ser diferente e único. --- A reação de Luffy mudou a forma como Chopper se via. Como a aceitação dos outros impacta a forma como nos vemos? O que em você é 'diferente' e que aprendeu a amar?" },
+            { theme: "Liberdade e Autonomia", icon: "anchor", iconColor: "text-orange-500", imageUrl: "https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/C_Luffy.jpg", situation: "<strong>O Soco no Dragão Celestial:</strong> Luffy soca um 'Nobre Mundial' para defender um amigo, mesmo sabendo das consequências terríveis. Para ele, a liberdade é inegociável. --- O que a palavra 'liberdade' significa para você? Existem situações em que vale a pena quebrar as regras para defender o que é certo? O que te faz sentir verdadeiramente livre?" }, 
+            { theme: "Esperança e Resiliência", icon: "compass", iconColor: "text-gray-700", imageUrl: "https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/C_Brook.jpg", situation: "<strong>A Promessa de Brook:</strong> Brook viveu 50 anos sozinho. A única coisa que o manteve são foi a promessa de reencontrar sua amiga, a baleia Laboon. --- Como uma promessa pôde sustentar Brook por tanto tempo? A esperança pode ser uma ferramenta para sobreviver a momentos difíceis? Qual 'promessa' ou objetivo te ajuda a continuar navegando?" },
+            { theme: "Legado e Memória", icon: "book-open", iconColor: "text-amber-700", imageUrl: "https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/C_Hiluluk.jpg", situation: "<strong>A Cura de Hiluluk:</strong> Dr. Hiluluk deu sua vida para criar uma cura simbólica: cerejeiras que florescem na neve para curar o 'coração doente' do seu país. --- Hiluluk disse: 'Um homem só morre quando é esquecido'. O que ele quis dizer com isso? Que tipo de 'marca' ou legado você gostaria de deixar para as pessoas ao seu redor?" }
+        ];
+
+        function renderDeckPanel() {
+            const panel = document.getElementById('deck-panel');
+            panel.innerHTML = ''; 
+            DECK.forEach((card, index) => {
+                const cardEl = document.createElement('div');
+                cardEl.className = 'card-preview group'; 
+                cardEl.style.animation = `card-pop-entrance 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${index * 0.1}s backwards`;
+                cardEl.onclick = () => openModal(index);
+                cardEl.innerHTML = `
+                    <img src="${card.imageUrl}" alt="${card.theme}" loading="lazy" class="absolute inset-0 w-full h-full object-cover md:group-hover:scale-110 transition-transform duration-500" onerror="this.style.display='none'">
+                    <div class="absolute inset-0 bg-[#fdf6e3] -z-10"></div> 
+                    <div class="absolute bottom-0 w-full p-1.5 md:p-2 z-10">
+                        <div class="card-label bg-[#fdf6e3]/95 backdrop-blur-sm py-1.5 md:py-2 border-t-2 md:border-t-4 border-[#5a3d2b] shadow-lg">
+                            <h3 class="font-brand text-xs md:text-sm font-bold text-[#4a2c2a] text-center uppercase truncate px-1 group-hover:text-[#8c1c13] transition-colors">
+                                ${card.theme}
+                            </h3>
+                        </div>
+                    </div>
+                `;
+                panel.appendChild(cardEl);
+            });
+            lucide.createIcons();
+        }
+
+        function openModal(index) {
+            const data = DECK[index];
+            const modalEl = document.getElementById('card-modal');
+            const contentArea = document.getElementById('modal-content-area');
+
+            const parts = data.situation.split('---');
+            const description = parts[0];
+            const questions = parts[1] ? parts[1].split('?').filter(q => q.trim() !== '') : [];
+            
+            // Renderização dinâmica das perguntas com campo de resposta ao lado/abaixo
+            const questionsHtml = questions.map(q => `
+                <div class="question-item">
+                    <p class="font-sans text-sm font-bold text-[#2a1a18]">${q.trim()}?</p>
+                    <textarea class="answer-box" placeholder="Sua reflexão aqui..."></textarea>
+                </div>
+            `).join('');
+
+            const htmlContent = `
+                <div class="flex items-center gap-3 border-b border-[#88674b] pb-3 shrink-0">
+                    <div class="p-1.5 bg-white rounded-full shadow-sm shrink-0">
+                        <i data-lucide="${data.icon}" class="w-6 h-6 md:w-8 md:h-8 ${data.iconColor}"></i>
+                    </div>
+                    <div class="flex flex-col overflow-hidden">
+                        <span class="font-brand text-xs text-[#8c1c13] uppercase tracking-widest">Procurado</span>
+                        <h3 class="font-brand text-lg md:text-2xl font-bold text-[#5a3d2b] leading-none truncate">${data.theme}</h3>
+                    </div>
+                </div>
+
+                <div class="story-scroll-area custom-scrollbar">
+                    <p class="font-lora text-sm md:text-base leading-relaxed text-[#2a1a18] mb-6 text-justify block">
+                        ${description}
+                    </p>
+                    
+                    ${questionsHtml ? `
+                    <div class="mt-2">
+                        <h4 class="font-cinzel text-xs font-bold text-[#8c1c13] mb-4 uppercase flex items-center gap-1">
+                           <i data-lucide="compass" class="w-3 h-3"></i> Reflexões do Log Pose
+                        </h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            ${questionsHtml}
+                        </div>
+                    </div>` : ''}
+                </div>
+
+                <div class="pt-3 border-t border-[#d4b57f] shrink-0">
+                    <button onclick="closeModalDirect()" class="w-full bg-[#8c1c13] active:bg-[#6b150e] md:hover:bg-[#6b150e] text-white py-2.5 rounded-lg font-bold shadow-md transition-all flex items-center justify-center font-brand tracking-wider text-base">
+                        <i data-lucide="sailing-boat" class="w-4 h-4 mr-2"></i>
+                        Retornar à Frota
+                    </button>
+                </div>
+            `;
+            
+            contentArea.innerHTML = htmlContent;
+            modalEl.classList.remove('hidden');
+            setTimeout(() => {
+                modalEl.firstElementChild.classList.remove('scale-95');
+                modalEl.firstElementChild.classList.add('scale-100');
+            }, 10);
+            
+            lucide.createIcons();
+        }
+
+        function closeModalDirect() {
+            const modalEl = document.getElementById('card-modal');
+            modalEl.firstElementChild.classList.remove('scale-100');
+            modalEl.firstElementChild.classList.add('scale-95');
+            setTimeout(() => {
+                modalEl.classList.add('hidden');
+            }, 200);
+        }
+
+        function closeModal(event) {
+            if (event.target.id === 'card-modal') closeModalDirect();
+        }
+
+        document.addEventListener('DOMContentLoaded', renderDeckPanel);
+    </script>
+</body>
+</html>

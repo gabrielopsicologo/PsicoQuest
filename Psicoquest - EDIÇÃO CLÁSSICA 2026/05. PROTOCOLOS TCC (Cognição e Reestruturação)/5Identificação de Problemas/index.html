@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PsicoQuest | Identificação de Problemas (Grid)</title>
+    
+    <script src="seguranca.js" defer></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- DESIGN SYSTEM --- */
+        :root {
+            --primary-color: #2C3E50;
+            --accent-color: #16A085;
+            --bg-color: #F8F9FA; /* Fundo levemente mais cinza para destacar os cards brancos */
+            --card-bg: #ffffff;
+            --text-main: #333333;
+            --text-light: #7f8c8d;
+            --input-bg: #f0f3f4;
+            --focus-border: #16A085;
+            --shadow-card: 0 4px 6px rgba(0,0,0,0.02);
+            --shadow-hover: 0 10px 15px rgba(0,0,0,0.08);
+            --border-radius: 16px;
+            --header-height: 80px;
+            --footer-height: 80px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            outline: none;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden; /* O body não rola, apenas o main */
+        }
+
+        /* --- HEADER (FIXO) --- */
+        header {
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            flex-shrink: 0;
+            z-index: 20;
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-logo {
+            height: 45px;
+            width: auto;
+        }
+
+        .header-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .btn-manual {
+            background: transparent;
+            border: 1px solid #ddd;
+            color: var(--text-main);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-manual:hover {
+            background: var(--primary-color);
+            color: #fff;
+            border-color: var(--primary-color);
+        }
+
+        /* --- MAIN (GRID COM SCROLL INTERNO) --- */
+        main {
+            flex-grow: 1;
+            padding: 2rem;
+            overflow-y: auto; /* A mágica acontece aqui */
+            overflow-x: hidden;
+            
+            /* Scrollbar estilizada */
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent-color) transparent;
+        }
+
+        main::-webkit-scrollbar {
+            width: 6px;
+        }
+        main::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        main::-webkit-scrollbar-thumb {
+            background-color: #cbd5e0;
+            border-radius: 20px;
+        }
+
+        /* Grid Layout */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding-bottom: 2rem; /* Espaço extra no final */
+        }
+
+        /* Card Estilo */
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-card);
+            border: 1px solid rgba(0,0,0,0.03);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+            border-color: rgba(22, 160, 133, 0.3);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .card-number {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: var(--accent-color);
+            background: rgba(22, 160, 133, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .card-question {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            line-height: 1.5;
+            margin-bottom: 1.2rem;
+        }
+
+        .card-input {
+            width: 100%;
+            background: var(--input-bg);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            color: var(--text-main);
+            resize: none; /* Impede o usuário de quebrar o layout */
+            min-height: 100px;
+            transition: 0.3s;
+        }
+
+        .card-input:focus {
+            background: #fff;
+            border-color: var(--focus-border);
+            box-shadow: 0 0 0 3px rgba(22, 160, 133, 0.1);
+        }
+
+        .card-input::placeholder {
+            color: #bdc3c7;
+        }
+
+        /* --- FOOTER (FIXO) --- */
+        footer {
+            height: auto;
+            min-height: var(--footer-height);
+            background: #fff;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+            z-index: 20;
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .footer-info a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .whatsapp-btn {
+            background-color: #25D366;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+        
+        .whatsapp-btn:hover { background-color: #1ebe57; transform: scale(1.05); }
+
+        .footer-logo-img { height: 35px; width: auto; }
+
+        /* --- MODAL --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(44, 62, 80, 0.4);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: white;
+            width: 90%;
+            max-width: 500px;
+            padding: 2rem;
+            border-radius: 20px;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            animation: slideUp 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+        }
+
+        .close-modal {
+            position: absolute; top: 15px; right: 20px;
+            font-size: 1.5rem; cursor: pointer; color: #999; border: none; background: none;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* --- RESPONSIVIDADE --- */
+        @media (max-width: 768px) {
+            header { padding: 0 1rem; }
+            .header-title { font-size: 1.1rem; }
+            main { padding: 1rem; }
+            .grid-container { grid-template-columns: 1fr; } /* 1 coluna no mobile */
+            
+            footer {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+                height: auto;
+                padding: 1.5rem;
+            }
+            .whatsapp-btn { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-brand">
+            <img src="https://gabrielopsicologo.com/wp-content/uploads/2025/12/Design-sem-nome.png" alt="PsicoQuest Logo" class="header-logo">
+            <h1 class="header-title">PsicoQuest</h1>
+        </div>
+        <button class="btn-manual" onclick="toggleModal()" title="Manual do Terapeuta">
+            <i class="fa-solid fa-book-open"></i>
+        </button>
+    </header>
+
+    <main>
+        <div class="grid-container" id="cards-container">
+            </div>
+    </main>
+
+    <footer>
+        <div class="footer-info">
+            <p>Recurso Terapêutico Digital</p>
+            <p>Desenvolvido por <a href="https://www.instagram.com/gabrielopsicologo/#" target="_blank">@gabrielopsicologo</a></p>
+            <p>CRP 06/215890 | © 2025 Todos os direitos reservados.</p>
+        </div>
+
+        <div>
+            <a href="https://api.whatsapp.com/message/WV34TWMSKTEEL1?autoload=1&app_absent=0" target="_blank" class="whatsapp-btn">
+                <i class="fa-brands fa-whatsapp"></i> Suporte
+            </a>
+        </div>
+
+        <div>
+            <img src="https://gabrielopsicologo.com/wp-content/uploads/2025/11/Logo_preta.png" alt="Logo Gabriel Psicólogo" class="footer-logo-img">
+        </div>
+    </footer>
+
+    <div class="modal-overlay" id="manualModal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="toggleModal()">&times;</button>
+            <h3 style="color:var(--primary-color); margin-bottom:1rem;">Manual do Terapeuta</h3>
+            <p style="margin-bottom:1rem; line-height:1.6; color:#555;">
+                <strong>Seja Bem-Vindo ao Baralho Desafio Cognitivo.</strong><br><br>
+                Este painel tem como propósito explorar pensamentos automáticos e demandas comuns. A visualização em grade permite correlacionar diferentes áreas da vida simultaneamente.
+            </p>
+            <p style="margin-bottom:1rem; line-height:1.6; color:#555;">
+                Peça ao paciente para preencher os campos com reflexões breves ou palavras-chave. Isso ajuda na externalização do problema.
+            </p>
+            <hr style="border:0; border-top:1px solid #eee; margin: 1rem 0;">
+            <p style="font-size:0.8rem; color:#999; text-align:right;">
+                Uso exclusivo clínico.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Dados das Questões
+        const questions = [
+            "Quais são as situações recorrentes que causam desconforto ou insatisfação na sua vida?",
+            "Você tem notado mudanças nos seus relacionamentos interpessoais que gostaria de melhorar?",
+            "Quais emoções frequentes ou intensas você experimenta e gostaria de compreender melhor?",
+            "Existe algum comportamento específico que você considera problemático e deseja modificar?",
+            "Como você lida com o estresse diário e as pressões da vida? Existem estratégias que você gostaria de aprimorar?",
+            "Quais áreas da sua vida você acredita que precisam de atenção para melhoria?",
+            "Quais são suas maiores fontes de preocupação e ansiedade no momento?",
+            "Existe algo em sua vida que você gostaria de explorar mais profundamente para obter maior clareza?",
+            "Você já identificou algum pensamento negativo ou autocrítico que afeta sua autoestima?",
+            "Você enfrenta desafios específicos na tomada de decisões ou na resolução de problemas?",
+            "Você sente que há áreas da sua vida em que gostaria de ter mais autoconfiança?",
+            "Como você se vê em relação aos seus valores e aspirações pessoais?"
+        ];
+
+        // Renderização dos Cards
+        const container = document.getElementById('cards-container');
+
+        questions.forEach((q, index) => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            
+            card.innerHTML = `
+                <div class="card-header">
+                    <span class="card-number">Questão ${index + 1}</span>
+                    <i class="fa-regular fa-pen-to-square" style="color:var(--accent-color); opacity:0.6;"></i>
+                </div>
+                <div class="card-question">${q}</div>
+                <textarea class="card-input" placeholder="Digite sua reflexão aqui..."></textarea>
+            `;
+            
+            container.appendChild(card);
+        });
+
+        // Lógica Modal
+        const modal = document.getElementById('manualModal');
+        function toggleModal() {
+            modal.classList.toggle('active');
+        }
+        modal.addEventListener('click', (e) => {
+            if(e.target === modal) toggleModal();
+        });
+
+        // Segurança básica de UX: Confirmar antes de sair se tiver texto
+        window.addEventListener('beforeunload', (e) => {
+            const inputs = document.querySelectorAll('textarea');
+            let hasText = false;
+            inputs.forEach(i => { if(i.value.length > 0) hasText = true; });
+            
+            if(hasText) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
+
+    </script>
+</body>
+</html>

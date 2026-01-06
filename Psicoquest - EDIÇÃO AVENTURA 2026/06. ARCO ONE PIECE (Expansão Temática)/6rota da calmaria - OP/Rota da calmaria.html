@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>A Calmaria da Grande Rota</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rye&family=Special+Elite&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        :root {
+            /* Cores One Piece */
+            --bg-body: #FDF5E6; 
+            --bg-card: #FAF0E0;
+            --primary-text: #3D2B1F;
+            
+            /* CORES CORRIGIDAS PARA ALTO CONTRASTE */
+            --accent-sea: #1565C0;   /* Azul mais forte */
+            --accent-haki: #2E7D32;  /* Verde mais escuro */
+            --accent-fire: #E65100;  /* Laranja Queimado (Agora visível no bege) */
+            
+            --border-color: #5D4037;
+            
+            /* Tempos */
+            --inhale: 4s;
+            --hold: 4s;
+            --exhale: 6s;
+            --total-cycle: calc(var(--inhale) + var(--hold) + var(--exhale));
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: 'Special Elite', monospace;
+            background-color: var(--bg-body);
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAIQSURBVHhe7dJBTsNADAXQgwLbDAf0IqS6+xQ8YI+lEaNhHiqQYwDBIFxMcs7J7YxnfvP95PzcgcwAAAAAAFiUl/l8vj17AS6Xy6e7bweYXq9/de/rA8y3g4E3IwszQkYWY4SMLEXImJmFkDEziyFjZlZDxo7sZIwsq8hYmVkLmTuzmjJ2ZkNGtixlxMzshYwZmZUys2EZyMaEdWQsZlZExsLsi4wtWYQYs64jY2tWRcbS7IeMbdlFGGOVZWQY5WoyDHKNNMMcW0cyxFYRzJHFNHMcY0cwx5rJzLFVBDMss5IyLGe1cmY5Q5kZlknJmGWWsWYEZ5FyZ1lKmRlWScqcpTVlpllGGWuSs2ZZJjVrlrGmBWOWt2ZpNjVnlrEmBWeSMyVZJjVnkrEmBWOSM0gZkzRLGTOSM0cZM5JzRhkzknNGGTOcM0sZM5tTRhkzmlNGGTOaU0YZE5pTRhkTmjdGGROSN0YZI5t7Rhkjm/dGGSObe0YZE5t7RhkTm/dGGROWd0YZI5f3Rhkjl/dGGROWd0YZE5d3RhkTl/dGGROXd0YZG5b3Rhkbl/dGGVuXd0YZW5b3Rhkbl/dGGdtkN2XMtu2NDOW2bW+kMMi27o0Mhd2NDGVOd2+kMGg3M5QZ3b2RQdHciFFmdyMKYXY3IhRpdjMhFGt2MyEUa3YzIZRrdjMhFGt2MyEUa3YzIZRrdjMhFGt2MyEUa3YzIZRrdjMhFGt2MyEUa3YzIVRrNjMhFGF2YwIAAAAAAD4Tz9sYFk8/iN0TAAAAABJRU5ErkJggg==');
+            background-attachment: fixed;
+            color: var(--primary-text);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .main-wrapper {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px; /* Reduzido padding geral */
+            width: 100%;
+        }
+
+        .container {
+            background-color: var(--bg-card);
+            border-radius: 16px;
+            padding: 20px 15px; /* Reduzido padding interno */
+            max-width: 600px; /* Container mais estreito */
+            width: 100%;
+            text-align: center;
+            border: 3px solid var(--border-color);
+            box-shadow: 0 10px 30px rgba(93, 64, 55, 0.4);
+            position: relative;
+        }
+
+        .container::after, .container::before {
+            content: ''; position: absolute; width: 8px; height: 8px; 
+            background: #3E2723; border-radius: 50%; 
+        }
+        .container::before { top: 8px; left: 8px; }
+        .container::after { top: 8px; right: 8px; }
+
+        header h1 {
+            font-family: 'Rye', serif;
+            font-size: 1.8rem;
+            margin: 0 0 5px 0;
+            color: var(--accent-sea);
+            text-shadow: 1px 1px 0px rgba(0,0,0,0.1);
+        }
+
+        header p { margin: 0; opacity: 0.8; font-size: 0.9rem; }
+
+        /* Área Visual Compacta */
+        .visual-area {
+            margin: 10px auto; /* Margem mínima */
+            position: relative;
+            width: 220px; /* Tamanho reduzido */
+            height: 220px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Aura de Haki */
+        .breathing-aura {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--accent-haki) 0%, transparent 70%);
+            opacity: 0;
+            transform: scale(0.5);
+            transition: transform 0.3s, opacity 0.3s, background 0.5s;
+            z-index: 1;
+        }
+
+        .breathing-aura.animating {
+            animation: haki-pulse var(--total-cycle) infinite ease-in-out;
+        }
+
+        @keyframes haki-pulse {
+            0% { transform: scale(0.6); opacity: 0.3; background: radial-gradient(circle, var(--accent-haki) 0%, transparent 70%); }
+            /* Inspiração (Verde) */
+            28% { transform: scale(1.1); opacity: 0.8; background: radial-gradient(circle, var(--accent-haki) 0%, transparent 70%); } 
+            /* Segurar (Laranja Forte) */
+            57% { transform: scale(1.1); opacity: 0.9; background: radial-gradient(circle, var(--accent-fire) 0%, transparent 70%); } 
+            /* Expirar (Azul) */
+            100% { transform: scale(0.6); opacity: 0.3; background: radial-gradient(circle, var(--accent-sea) 0%, transparent 70%); } 
+        }
+
+        /* Imagem Central */
+        .mascot-image {
+            position: relative;
+            z-index: 2;
+            width: 120px; /* Imagem menor para aproximar */
+            height: auto;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+            transition: transform 0.5s ease;
+        }
+        .animating .mascot-image { transform: scale(1.05); }
+
+        /* Instrução */
+        .instruction-text {
+            font-family: 'Rye', serif;
+            font-size: 1.4rem;
+            min-height: 30px;
+            margin-bottom: 15px;
+            color: var(--border-color);
+            font-weight: bold;
+        }
+
+        /* Controles */
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .btn-main {
+            background: var(--border-color);
+            border: none;
+            padding: 10px 30px;
+            border-radius: 6px;
+            color: #FDF5E6;
+            font-family: 'Rye', serif;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 0 3px 0 #3E2723;
+            transition: transform 0.1s;
+            width: 200px;
+        }
+        .btn-main:active { transform: translateY(3px); box-shadow: none; }
+        .btn-main.stop { background: #C62828; box-shadow: 0 3px 0 #8E0000; }
+
+        .speed-selector {
+            background: rgba(93, 64, 55, 0.1);
+            padding: 4px;
+            border-radius: 20px;
+            display: flex;
+            gap: 4px;
+        }
+
+        .speed-opt {
+            background: transparent;
+            border: none;
+            color: var(--primary-text);
+            padding: 6px 12px;
+            border-radius: 16px;
+            cursor: pointer;
+            font-family: 'Special Elite', monospace;
+            font-size: 0.75rem;
+            opacity: 0.6;
+        }
+        .speed-opt.active { background: var(--border-color); color: #FFF; opacity: 1; }
+
+        /* Cards */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: 1fr; /* Um por linha no mobile para leitura fácil */
+            gap: 8px;
+            text-align: left;
+            margin-top: 15px;
+            border-top: 2px dashed rgba(93, 64, 55, 0.2);
+            padding-top: 15px;
+        }
+        @media(min-width: 500px) { .cards-grid { grid-template-columns: 1fr 1fr 1fr; } }
+
+        .mini-card {
+            background: rgba(255,255,255,0.5);
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid rgba(93, 64, 55, 0.1);
+        }
+        .mini-card h4 { margin: 0 0 2px 0; color: var(--border-color); font-family: 'Rye', serif; font-size: 0.9rem; }
+        .mini-card p { font-size: 0.8rem; margin: 0; line-height: 1.3; }
+
+        /* Footer Pirata Corrigido */
+        .pirate-footer {
+            background: #3E2723; /* Marrom Escuro Sólido */
+            color: #FDF5E6;
+            text-align: center;
+            padding: 20px;
+            border-top: 3px solid var(--accent-fire); /* Borda Laranja */
+            margin-top: auto;
+        }
+        
+        .footer-content {
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-logo {
+            height: 45px;
+            filter: drop-shadow(0 2px 2px rgba(0,0,0,0.5));
+        }
+
+        /* CORREÇÃO DO LINK ROXO: Usando seletor direto e !important para garantir */
+        a.dev-link, a.dev-link:visited, a.dev-link:active { 
+            color: #FFAB00 !important; /* Amarelo Ouro Brilhante */
+            text-decoration: none; 
+            font-weight: bold;
+            transition: color 0.2s;
+        }
+        a.dev-link:hover { color: #FFF !important; text-decoration: underline; }
+        
+        .crp { font-size: 0.75rem; background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 4px; }
+
+        /* Whatsapp */
+        .wa-float {
+            position: fixed;
+            bottom: 15px;
+            right: 15px;
+            background: #25D366;
+            color: white;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            z-index: 100;
+            border: 2px solid #FFF;
+        }
+    </style>
+<script src="seguranca.js" defer></script>
+</head>
+<body>
+
+    <div class="main-wrapper">
+        <div class="container">
+            <header>
+                <h1>Calmaria da Rota</h1>
+                <p>Encontre o foco de um espadachim</p>
+            </header>
+
+            <div class="visual-area">
+                <div class="breathing-aura" id="aura"></div>
+                <img src="https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/Zoro_meditando.png" alt="Zoro Meditando" class="mascot-image" id="zoro">
+            </div>
+
+            <div class="instruction-text" id="instruction">Preparar...</div>
+
+            <div class="controls">
+                <button class="btn-main" id="btnToggle" onclick="toggleBreathing()">Iniciar</button>
+                
+                <div class="speed-selector">
+                    <button class="speed-opt" onclick="setSpeed('calm', this)">Lento</button>
+                    <button class="speed-opt active" onclick="setSpeed('normal', this)">Normal</button>
+                    <button class="speed-opt" onclick="setSpeed('active', this)">Rápido</button>
+                </div>
+            </div>
+
+            <div class="cards-grid">
+                <div class="mini-card" style="border-left: 4px solid var(--accent-haki);">
+                    <h4>⚔️ 1. Inspirar</h4>
+                    <p>Puxe o ar (Verde) e encha o peito.</p>
+                </div>
+                <div class="mini-card" style="border-left: 4px solid var(--accent-fire);">
+                    <h4>🔥 2. Segurar</h4>
+                    <p>Segure (Laranja) e foque sua energia.</p>
+                </div>
+                <div class="mini-card" style="border-left: 4px solid var(--accent-sea);">
+                    <h4>🌊 3. Expirar</h4>
+                    <p>Solte (Azul) e relaxe os ombros.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="pirate-footer">
+        <div class="footer-content">
+            <a href="https://www.instagram.com/gabrielopsicologo" target="_blank">
+                <img src="https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/Logo_branca.png" alt="Logo" class="footer-logo">
+            </a>
+            <div style="font-size: 0.85rem;">
+                Navegado por <a href="https://www.instagram.com/gabrielopsicologo" target="_blank" class="dev-link">@gabrielopsicologo</a>
+            </div>
+            <div class="crp">CRP 06/215890</div>
+            <div style="font-size: 0.65rem; margin-top: 4px; opacity: 0.7;">&copy; 2025 Todos os direitos reservados.</div>
+        </div>
+    </footer>
+
+    <a href="https://wa.me/message/WV34TWMSKTEEL1" target="_blank" class="wa-float">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+    </a>
+
+    <script>
+        let isRunning = false;
+        let cycleTimer;
+        let currentPhaseTimer;
+        
+        const speeds = {
+            calm: { inhale: 5000, hold: 5000, exhale: 7000 },
+            normal: { inhale: 4000, hold: 4000, exhale: 6000 },
+            active: { inhale: 3000, hold: 3000, exhale: 4000 }
+        };
+        let currentSpeed = speeds.normal;
+
+        const aura = document.getElementById('aura');
+        const instruction = document.getElementById('instruction');
+        const btnToggle = document.getElementById('btnToggle');
+        const root = document.documentElement;
+
+        function setSpeed(mode, btn) {
+            if(isRunning) toggleBreathing();
+            currentSpeed = speeds[mode];
+            document.querySelectorAll('.speed-opt').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            root.style.setProperty('--inhale', `${currentSpeed.inhale}ms`);
+            root.style.setProperty('--hold', `${currentSpeed.hold}ms`);
+            root.style.setProperty('--exhale', `${currentSpeed.exhale}ms`);
+        }
+
+        function vibrate(pattern) {
+            if (navigator.vibrate) navigator.vibrate(pattern);
+        }
+
+        function runPhase() {
+            if(!isRunning) return;
+
+            // FASE 1: INSPIRAR
+            instruction.textContent = "Inspira (Verde)...";
+            instruction.style.color = "var(--accent-haki)";
+            vibrate(50);
+
+            currentPhaseTimer = setTimeout(() => {
+                if(!isRunning) return;
+                
+                // FASE 2: SEGURAR
+                instruction.textContent = "Segura (Laranja)...";
+                instruction.style.color = "var(--accent-fire)";
+                vibrate([30, 30]);
+
+                currentPhaseTimer = setTimeout(() => {
+                    if(!isRunning) return;
+
+                    // FASE 3: EXPIRAR
+                    instruction.textContent = "Solta (Azul)...";
+                    instruction.style.color = "var(--accent-sea)";
+                    vibrate(100);
+                    
+                }, currentSpeed.hold);
+
+            }, currentSpeed.inhale);
+        }
+
+        function toggleBreathing() {
+            if (isRunning) {
+                isRunning = false;
+                clearTimeout(currentPhaseTimer);
+                clearInterval(cycleTimer);
+                aura.classList.remove('animating');
+                btnToggle.textContent = "Iniciar";
+                btnToggle.classList.remove('stop');
+                instruction.textContent = "Aguardando...";
+                instruction.style.color = "var(--border-color)";
+            } else {
+                isRunning = true;
+                btnToggle.textContent = "Pausar";
+                btnToggle.classList.add('stop');
+                aura.classList.add('animating');
+                runPhase();
+                const totalTime = currentSpeed.inhale + currentSpeed.hold + currentSpeed.exhale;
+                cycleTimer = setInterval(runPhase, totalTime);
+            }
+        }
+    </script>
+    
+    <script>
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.onkeydown = function(e) {
+            if (e.keyCode == 123) return false;
+            if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) return false;
+            if (e.ctrlKey && e.key === 'u') return false;
+        };
+    </script>
+
+</body>
+</html>

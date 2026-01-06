@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PsicoQuest - Jornada da Autoestima Feminina</title>
+    
+    <script src="seguranca.js" defer></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#881337', /* Vinho Profundo */
+                        secondary: '#be123c', /* Rose Gold Escuro */
+                        accent: '#fb7185', /* Rosa Suave */
+                        bgLight: '#fff1f2', /* Fundo Creme Rosado */
+                        cardDark: '#4c0519', /* Fundo da Carta */
+                        textMain: '#4a044e', /* Texto Principal */
+                    },
+                    fontFamily: {
+                        sans: ['Playfair Display', 'serif'],
+                        body: ['Lato', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Fundo Suave e Feminino */
+        body {
+            background-color: #fff1f2;
+            background-image: radial-gradient(#fecdd3 1px, transparent 1px);
+            background-size: 30px 30px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Scroll Horizontal */
+        .horizontal-scroll {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 2rem;
+            mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+        }
+        .horizontal-scroll::-webkit-scrollbar { height: 6px; }
+        .horizontal-scroll::-webkit-scrollbar-track { background: rgba(0,0,0,0.05); border-radius: 10px; margin: 0 20px; }
+        .horizontal-scroll::-webkit-scrollbar-thumb { background: #fda4af; border-radius: 10px; }
+        .horizontal-scroll::-webkit-scrollbar-thumb:hover { background: #be123c; }
+
+        /* Design das Cartas */
+        .deck-card {
+            flex: 0 0 auto;
+            width: 260px;
+            height: 380px;
+            background: linear-gradient(145deg, #881337, #4c0519);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 1.5rem;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 25px -5px rgba(136, 19, 55, 0.15), 0 8px 10px -6px rgba(136, 19, 55, 0.1);
+            scroll-snap-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .deck-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 25px 50px -12px rgba(251, 113, 133, 0.3);
+            border-color: #fb7185;
+        }
+
+        /* Modal Flip */
+        .flip-container { perspective: 1000px; width: 100%; height: 100%; }
+        .flip-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+        .flip-inner.is-flipped { transform: rotateY(180deg); }
+        
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            background: white;
+            box-shadow: 0 25px 50px -12px rgba(136, 19, 55, 0.25);
+            border: 1px solid #fecdd3;
+        }
+        
+        .card-back-face {
+            background: #fff1f2;
+            transform: rotateY(180deg);
+            border: 4px solid #be123c;
+        }
+
+        .custom-scroll::-webkit-scrollbar { width: 4px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background-color: #fda4af; border-radius: 10px; }
+    </style>
+</head>
+<body class="text-textMain font-body antialiased selection:bg-accent selection:text-white">
+
+    <header class="w-full p-4 flex justify-between items-center z-20 bg-white/80 backdrop-blur-md border-b border-pink-100 sticky top-0 shadow-sm">
+        <div class="flex items-center gap-3">
+            <img src="https://gabrielopsicologo.com/wp-content/uploads/2025/12/Design-sem-nome.png" alt="PsicoQuest Logo" class="h-12 object-contain drop-shadow-sm">
+            <div class="leading-tight">
+                <h1 class="text-2xl font-bold text-primary tracking-wide font-sans">PsicoQuest</h1>
+                <p class="text-[10px] md:text-xs text-secondary font-bold uppercase tracking-[0.15em]">Jornada Feminina</p>
+            </div>
+        </div>
+        
+        <div class="flex items-center gap-3">
+            <button onclick="toggleModal('manualModal')" class="bg-primary hover:bg-secondary text-white px-5 py-2 rounded-full text-sm font-semibold transition shadow-md flex items-center gap-2">
+                <i class="fa-solid fa-circle-info text-pink-200"></i> <span class="hidden sm:inline">Guia</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-grow flex flex-col justify-center w-full overflow-hidden relative">
+        <div class="text-center mb-4 px-4 mt-8">
+            <h2 class="text-lg text-primary/60 font-medium font-sans italic">
+                <i class="fa-solid fa-sparkles mr-2 animate-pulse text-accent"></i>
+                Selecione uma carta para análise
+            </h2>
+        </div>
+
+        <div class="w-full relative px-4 md:px-10">
+            <button onclick="scrollGrid(-300)" class="hidden md:flex absolute left-2 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-white text-primary rounded-full shadow-lg items-center justify-center hover:bg-pink-50 transition border border-pink-100">
+                <i class="fa-solid fa-chevron-left text-xl"></i>
+            </button>
+
+            <div class="horizontal-scroll gap-8 py-10 px-4" id="card-track">
+                </div>
+
+            <button onclick="scrollGrid(300)" class="hidden md:flex absolute right-2 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-white text-primary rounded-full shadow-lg items-center justify-center hover:bg-pink-50 transition border border-pink-100">
+                <i class="fa-solid fa-chevron-right text-xl"></i>
+            </button>
+        </div>
+    </main>
+
+    <footer class="bg-white text-gray-500 py-4 px-6 text-xs border-t border-pink-100 mt-auto">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-2">
+                <img src="https://gabrielopsicologo.com/wp-content/uploads/2025/11/Logo_preta.png" alt="Logo" class="h-6 opacity-80">
+                <div>
+                    <p class="font-semibold text-primary">Desenvolvido por <a href="https://www.instagram.com/gabrielopsicologo/" target="_blank" class="text-secondary hover:underline">@gabrielopsicologo</a></p>
+                    <p>CRP 06/215890</p>
+                </div>
+            </div>
+            <div class="text-center">
+                <p>&copy; 2025 Todos os direitos reservados.</p>
+                <p class="text-[10px] mt-1 text-pink-400">Recurso Terapêutico Digital</p>
+            </div>
+            <a href="https://api.whatsapp.com/message/WV34TWMSKTEEL1?autoload=1&app_absent=0" target="_blank" class="bg-green-100 text-green-700 px-4 py-2 rounded-lg hover:bg-green-200 transition flex items-center gap-2 font-bold border border-green-200 shadow-sm">
+                <i class="fa-brands fa-whatsapp text-lg"></i> Suporte
+            </a>
+        </div>
+    </footer>
+
+    <div id="cardModal" class="fixed inset-0 bg-primary/40 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 transition-all duration-300">
+        <button onclick="closeCard()" class="absolute top-4 right-4 z-50 bg-white text-primary w-10 h-10 rounded-full flex items-center justify-center transition shadow-lg hover:scale-110 hover:text-secondary">
+            <i class="fa-solid fa-times text-xl"></i>
+        </button>
+
+        <div class="relative w-full max-w-md aspect-[3/4] md:aspect-[4/5] max-h-[85vh]">
+            <div class="flip-container">
+                <div class="flip-inner" id="modal-flip-inner" onclick="flipActiveCard()">
+                    <div class="card-face">
+                        <div class="absolute top-6 right-6 text-pink-100"><i class="fa-solid fa-venus text-8xl opacity-40"></i></div>
+                        <div class="w-full flex-grow flex flex-col justify-center items-center text-center z-10">
+                            <span class="bg-pink-100 text-pink-800 text-[10px] font-bold px-3 py-1 rounded-full mb-6 uppercase tracking-wider shadow-sm font-body" id="modal-category">Categoria</span>
+                            <h2 class="text-2xl md:text-3xl font-bold text-primary mb-6 leading-snug font-sans" id="modal-title">Título</h2>
+                            <div class="w-12 h-1 bg-secondary/50 rounded-full mb-6"></div>
+                            <p class="text-gray-600 text-lg font-body leading-relaxed px-4 italic" id="modal-front">...</p>
+                        </div>
+                        <div class="mt-auto text-sm text-secondary font-semibold animate-pulse font-body"><i class="fa-solid fa-arrow-rotate-right mr-1"></i> Toque para virar</div>
+                    </div>
+                    <div class="card-face card-back-face overflow-y-auto custom-scroll">
+                        <div class="w-full h-full flex flex-col items-center justify-center text-center p-2">
+                            <div class="w-14 h-14 bg-pink-100 text-primary rounded-full flex items-center justify-center mb-6 shadow-md border border-pink-200"><i class="fa-solid fa-brain text-2xl"></i></div>
+                            <h3 class="text-xl font-bold text-primary mb-4 font-sans">Análise & Reestruturação</h3>
+                            <p class="text-gray-700 text-base md:text-lg font-body leading-relaxed" id="modal-back">...</p>
+                            <div class="mt-8 w-full border-t border-pink-200 pt-4"><button class="text-pink-400 hover:text-primary text-xs uppercase tracking-widest font-bold transition font-body">Fechar Carta</button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="manualModal" class="fixed inset-0 bg-primary/20 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white rounded-2xl max-w-md w-full p-8 shadow-2xl relative border-t-4 border-secondary">
+            <button onclick="toggleModal('manualModal')" class="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition"><i class="fa-solid fa-times text-xl"></i></button>
+            <div class="text-center mb-6"><h3 class="text-2xl font-bold text-primary mb-1 font-sans">Instruções</h3><p class="text-sm text-gray-500 font-body">Uso do recurso terapêutico</p></div>
+            <div class="space-y-4 text-gray-600 text-sm font-body leading-relaxed">
+                <div class="flex gap-3"><div class="w-8 h-8 rounded-full bg-pink-100 text-secondary flex-shrink-0 flex items-center justify-center font-bold">1</div><p><strong>Seleção:</strong> Escolha uma carta baseada no tema que mais ressoa com o momento atual do paciente.</p></div>
+                <div class="flex gap-3"><div class="w-8 h-8 rounded-full bg-pink-100 text-secondary flex-shrink-0 flex items-center justify-center font-bold">2</div><p><strong>Questionamento:</strong> Leia a pergunta (Frente) para evocar a reflexão inicial e identificar crenças.</p></div>
+                <div class="flex gap-3"><div class="w-8 h-8 rounded-full bg-pink-100 text-secondary flex-shrink-0 flex items-center justify-center font-bold">3</div><p><strong>Reestruturação:</strong> Vire a carta para acessar a orientação clínica e sugestão de comportamento adaptativo.</p></div>
+            </div>
+            <button onclick="toggleModal('manualModal')" class="w-full mt-8 bg-primary text-white py-3 rounded-xl font-bold hover:bg-secondary transition shadow-lg transform active:scale-95 font-sans tracking-wide">Iniciar</button>
+        </div>
+    </div>
+
+    <script>
+        // --- CONTEÚDO CLÍNICO PRAGMÁTICO (TCC/ACT/Esquemas) ---
+        const cards = [
+            { category: "Autoimagem", title: "Neutralidade Corporal", front: "Ao se olhar no espelho, seu foco é na funcionalidade ou apenas na estética?", back: "O corpo é o veículo da sua vivência. Pratique a neutralidade: valorize o que seu corpo permite fazer (respirar, andar, sentir), reduzindo o julgamento estético severo." },
+            { category: "Crenças", title: "Valor Condicional", front: "Você acredita que seu valor pessoal depende diretamente do quanto você produz?", back: "Isso é uma crença de 'Valor Condicional'. Seu valor intrínseco existe independente da sua utilidade ou produtividade. Experimente o descanso sem culpa." },
+            { category: "Limites", title: "Assertividade", front: "Você sente ansiedade ou culpa excessiva ao negar um pedido?", back: "A dificuldade em dizer 'não' reflete medo de rejeição. Limites protegem a saúde das relações a longo prazo. Treine recusas breves, sem justificativas excessivas." },
+            { category: "Distorção Cognitiva", title: "Comparação Social", front: "A comparação com outras mulheres gera inspiração ou sentimento de inadequação?", back: "Redes sociais são recortes editados. Comparar seus 'bastidores' reais com o 'palco' dos outros é uma distorção cognitiva. Foque no seu próprio progresso." },
+            { category: "Autocuidado", title: "Autopreservação", front: "O autocuidado é visto por você como manutenção necessária ou como um 'luxo'?", back: "Sem reabastecer seus recursos, o esgotamento é inevitável. Cuidar de si é um ato de responsabilidade emocional para manter-se funcional." },
+            { category: "Carreira", title: "Atribuição Interna", front: "Você costuma atribuir seus sucessos apenas à sorte ou ao acaso?", back: "Isso minimiza sua autoeficácia. Faça um registro factual das competências e esforços que você utilizou para alcançar seus resultados recentes." },
+            { category: "Regulação Emocional", title: "Supressão", front: "Você reprime a raiva para evitar conflitos ou manter uma imagem agradável?", back: "A raiva sinaliza violação de limites. Reprimí-la pode levar à somatização. Expresse o descontentamento focando no comportamento, não na pessoa." },
+            { category: "Autonomia", title: "Dependência", front: "Sua estabilidade emocional flutua excessivamente com a validação externa?", back: "A dependência gera vulnerabilidade. Fortaleça sua autonomia tomando pequenas decisões sozinha e validando suas próprias percepções." },
+            { category: "Saúde", title: "Comportamento", front: "Suas escolhas alimentares são guiadas por nutrição ou por punição/restrição?", back: "Dietas restritivas frequentemente geram compulsão rebote. Busque uma relação com a comida baseada em saúde e saciedade, evitando o controle rígido." },
+            { category: "Esquemas", title: "Necessidades", front: "Quais necessidades emocionais básicas não foram atendidas na sua infância?", back: "Identificar essas carências ajuda a não projetá-las nas relações atuais. Hoje, como adulta, você tem recursos para acolher e suprir essas vulnerabilidades." },
+            { category: "Ação", title: "Ativação", front: "O medo de falhar tem paralisado o início de seus projetos pessoais?", back: "A evitação reduz a ansiedade no curto prazo, mas aumenta a insegurança no longo. Aja apesar do medo. A competência vem com a prática, não antes dela." },
+            { category: "Sexualidade", title: "Assertividade", front: "Você consegue comunicar claramente suas preferências e limites na intimidade?", back: "A assertividade sexual é componente da saúde mental. Conhecer o próprio corpo e comunicar desejos fortalece a autoeficácia e a conexão." },
+            { category: "Energia", title: "Carga Alostática", front: "Você ignora sinais físicos de fadiga até atingir a exaustão?", back: "Respeitar os limites energéticos previne o burnout. O descanso deve ser preventivo e regular, não apenas uma medida de emergência." },
+            { category: "Comunicação", title: "Posicionamento", front: "Em grupos, você pede desculpas excessivamente antes de dar sua opinião?", back: "O uso excessivo de desculpas diminui a autoridade da sua fala. Pratique comunicação direta: substitua 'Desculpa se eu estiver errada' por 'Esta é minha perspectiva'." },
+            { category: "Padrões", title: "Perfeccionismo", front: "Você evita iniciar tarefas se não puder fazê-las perfeitamente?", back: "O perfeccionismo é, muitas vezes, uma forma de evitação do erro. Adote o padrão de 'bom o suficiente' para reduzir a paralisia e aumentar a funcionalidade." },
+            { category: "Social", title: "Rede de Apoio", front: "Suas relações atuais oferecem validação ou críticas constantes?", back: "O suporte social é um fator protetivo vital. Priorize relações que ofereçam escuta ativa e validação emocional, estabelecendo limites com críticas não construtivas." },
+            { category: "Finanças", title: "Eficácia", front: "A gestão financeira te causa evitação ou sensação de controle?", back: "A evitação financeira aumenta a ansiedade difusa. Encare os dados de forma objetiva. A organização financeira é uma forma prática de autocuidado e segurança." },
+            { category: "Intuição", title: "Validação", front: "Você invalida suas percepções iniciais de desconforto sobre pessoas?", back: "Muitas vezes, a 'intuição' é o cérebro processando padrões de risco rapidamente. Se sentir desconforto, investigue os fatos antes de descartar sua percepção." },
+            { category: "Merecimento", title: "Reforço Positivo", front: "Qual sua reação automática ao receber um elogio ou reconhecimento?", back: "Rejeitar elogios ('não foi nada') reforça a crença de inadequação. Treine comportamentalmente apenas agradecer e absorver o reconhecimento." },
+            { category: "Valores", title: "Alinhamento", front: "Suas ações diárias estão congruentes com seus valores pessoais?", back: "A dissonância entre o que valorizamos e o que fazemos gera sofrimento psicológico. Identifique seus 3 principais valores e ajuste sua rotina a eles." }
+        ];
+
+        // --- RENDERIZAÇÃO (Mantida) ---
+        const track = document.getElementById('card-track');
+
+        cards.forEach((card, index) => {
+            const cardEl = document.createElement('div');
+            cardEl.className = 'deck-card group flex-shrink-0 p-6 text-center';
+            cardEl.innerHTML = `
+                <div class="w-14 h-14 bg-white/5 rounded-full flex items-center justify-center mb-5 group-hover:bg-accent/20 transition backdrop-blur-sm border border-white/10">
+                    <i class="fa-solid fa-clipboard-check text-2xl text-accent group-hover:text-white transition group-hover:scale-110"></i>
+                </div>
+                <span class="text-[10px] font-bold text-pink-200 uppercase tracking-[0.2em] mb-3 font-body opacity-80">${card.category}</span>
+                <h3 class="text-xl font-bold text-white group-hover:text-accent transition duration-300 leading-tight font-sans">${card.title}</h3>
+                <div class="mt-auto pt-6 opacity-0 group-hover:opacity-100 transition-all transform translate-y-4 group-hover:translate-y-0 text-xs text-accent font-bold tracking-wider border-b border-accent pb-1 font-body">ANALISAR</div>
+            `;
+            cardEl.onclick = () => openCard(index);
+            track.appendChild(cardEl);
+        });
+
+        // --- FUNÇÕES DE CONTROLE (Mantidas) ---
+        const modal = document.getElementById('cardModal');
+        const flipInner = document.getElementById('modal-flip-inner');
+        
+        function openCard(index) {
+            const card = cards[index];
+            document.getElementById('modal-category').innerText = card.category;
+            document.getElementById('modal-title').innerText = card.title;
+            document.getElementById('modal-front').innerText = card.front;
+            document.getElementById('modal-back').innerText = card.back;
+            flipInner.classList.remove('is-flipped');
+            modal.classList.remove('hidden');
+        }
+
+        function closeCard() { modal.classList.add('hidden'); }
+        function flipActiveCard() { flipInner.classList.toggle('is-flipped'); }
+        function scrollGrid(amount) { track.scrollBy({ left: amount, behavior: 'smooth' }); }
+        function toggleModal(id) { document.getElementById(id).classList.toggle('hidden'); }
+        modal.addEventListener('click', (e) => { if(e.target === modal) closeCard(); });
+        window.onload = () => setTimeout(() => toggleModal('manualModal'), 600);
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PsicoQuest - Jornada da Masculinidade</title>
+    
+    <script src="seguranca.js" defer></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0f172a', /* Azul Marinho Profundo (Slate 900) */
+                        secondary: '#0369a1', /* Azul Aço (Sky 700) */
+                        accent: '#38bdf8', /* Azul Claro Vibrante (Sky 400) */
+                        bgLight: '#f8fafc', /* Fundo Cinza Gelo */
+                        cardDark: '#1e293b', /* Fundo da Carta (Slate 800) */
+                        textMain: '#334155', /* Texto Principal */
+                    },
+                    fontFamily: {
+                        sans: ['Playfair Display', 'serif'],
+                        body: ['Lato', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Fundo Sóbrio e Masculino */
+        body {
+            background-color: #f1f5f9;
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 30px 30px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Scroll Horizontal */
+        .horizontal-scroll {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 2rem;
+            mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+        }
+        .horizontal-scroll::-webkit-scrollbar { height: 6px; }
+        .horizontal-scroll::-webkit-scrollbar-track { background: rgba(0,0,0,0.05); border-radius: 10px; margin: 0 20px; }
+        .horizontal-scroll::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 10px; }
+        .horizontal-scroll::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+        /* Design das Cartas */
+        .deck-card {
+            flex: 0 0 auto;
+            width: 260px;
+            height: 380px;
+            background: linear-gradient(145deg, #0f172a, #1e293b);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 1.5rem;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.3), 0 8px 10px -6px rgba(15, 23, 42, 0.2);
+            scroll-snap-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .deck-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 25px 50px -12px rgba(56, 189, 248, 0.2);
+            border-color: #38bdf8;
+        }
+
+        /* Modal Flip */
+        .flip-container { perspective: 1000px; width: 100%; height: 100%; }
+        .flip-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+        .flip-inner.is-flipped { transform: rotateY(180deg); }
+        
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            background: white;
+            box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .card-back-face {
+            background: #f8fafc;
+            transform: rotateY(180deg);
+            border: 4px solid #0369a1;
+        }
+
+        .custom-scroll::-webkit-scrollbar { width: 4px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background-color: #94a3b8; border-radius: 10px; }
+    </style>
+</head>
+<body class="text-textMain font-body antialiased selection:bg-accent selection:text-white">
+
+    <header class="w-full p-4 flex justify-between items-center z-20 bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 shadow-sm">
+        <div class="flex items-center gap-3">
+            <img src="https://gabrielopsicologo.com/wp-content/uploads/2025/12/Design-sem-nome.png" alt="PsicoQuest Logo" class="h-12 object-contain drop-shadow-sm">
+            <div class="leading-tight">
+                <h1 class="text-2xl font-bold text-primary tracking-wide font-sans">PsicoQuest</h1>
+                <p class="text-[10px] md:text-xs text-secondary font-bold uppercase tracking-[0.15em]">Jornada Masculina</p>
+            </div>
+        </div>
+        
+        <div class="flex items-center gap-3">
+            <button onclick="toggleModal('manualModal')" class="bg-primary hover:bg-secondary text-white px-5 py-2 rounded-full text-sm font-semibold transition shadow-md flex items-center gap-2">
+                <i class="fa-solid fa-circle-info text-sky-200"></i> <span class="hidden sm:inline">Guia</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-grow flex flex-col justify-center w-full overflow-hidden relative">
+        <div class="text-center mb-4 px-4 mt-8">
+            <h2 class="text-lg text-primary/60 font-medium font-sans italic">
+                <i class="fa-solid fa-compass mr-2 animate-pulse text-accent"></i>
+                Selecione uma carta para análise
+            </h2>
+        </div>
+
+        <div class="w-full relative px-4 md:px-10">
+            <button onclick="scrollGrid(-300)" class="hidden md:flex absolute left-2 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-white text-primary rounded-full shadow-lg items-center justify-center hover:bg-slate-50 transition border border-slate-200">
+                <i class="fa-solid fa-chevron-left text-xl"></i>
+            </button>
+
+            <div class="horizontal-scroll gap-8 py-10 px-4" id="card-track">
+                </div>
+
+            <button onclick="scrollGrid(300)" class="hidden md:flex absolute right-2 top-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-white text-primary rounded-full shadow-lg items-center justify-center hover:bg-slate-50 transition border border-slate-200">
+                <i class="fa-solid fa-chevron-right text-xl"></i>
+            </button>
+        </div>
+    </main>
+
+    <footer class="bg-white text-gray-500 py-4 px-6 text-xs border-t border-slate-200 mt-auto">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-2">
+                <img src="https://gabrielopsicologo.com/wp-content/uploads/2025/11/Logo_preta.png" alt="Logo" class="h-6 opacity-80">
+                <div>
+                    <p class="font-semibold text-primary">Desenvolvido por <a href="https://www.instagram.com/gabrielopsicologo/" target="_blank" class="text-secondary hover:underline">@gabrielopsicologo</a></p>
+                    <p>CRP 06/215890</p>
+                </div>
+            </div>
+            <div class="text-center">
+                <p>&copy; 2025 Todos os direitos reservados.</p>
+                <p class="text-[10px] mt-1 text-sky-400">Recurso Terapêutico Digital</p>
+            </div>
+            <a href="https://api.whatsapp.com/message/WV34TWMSKTEEL1?autoload=1&app_absent=0" target="_blank" class="bg-green-100 text-green-700 px-4 py-2 rounded-lg hover:bg-green-200 transition flex items-center gap-2 font-bold border border-green-200 shadow-sm">
+                <i class="fa-brands fa-whatsapp text-lg"></i> Suporte
+            </a>
+        </div>
+    </footer>
+
+    <div id="cardModal" class="fixed inset-0 bg-primary/60 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 transition-all duration-300">
+        <button onclick="closeCard()" class="absolute top-4 right-4 z-50 bg-white text-primary w-10 h-10 rounded-full flex items-center justify-center transition shadow-lg hover:scale-110 hover:text-secondary">
+            <i class="fa-solid fa-times text-xl"></i>
+        </button>
+
+        <div class="relative w-full max-w-md aspect-[3/4] md:aspect-[4/5] max-h-[85vh]">
+            <div class="flip-container">
+                <div class="flip-inner" id="modal-flip-inner" onclick="flipActiveCard()">
+                    <div class="card-face">
+                        <div class="absolute top-6 right-6 text-sky-100"><i class="fa-solid fa-mars text-8xl opacity-40"></i></div>
+                        <div class="w-full flex-grow flex flex-col justify-center items-center text-center z-10">
+                            <span class="bg-sky-100 text-sky-900 text-[10px] font-bold px-3 py-1 rounded-full mb-6 uppercase tracking-wider shadow-sm font-body" id="modal-category">Categoria</span>
+                            <h2 class="text-2xl md:text-3xl font-bold text-primary mb-6 leading-snug font-sans" id="modal-title">Título</h2>
+                            <div class="w-12 h-1 bg-secondary/50 rounded-full mb-6"></div>
+                            <p class="text-gray-600 text-lg font-body leading-relaxed px-4 italic" id="modal-front">...</p>
+                        </div>
+                        <div class="mt-auto text-sm text-secondary font-semibold animate-pulse font-body"><i class="fa-solid fa-arrow-rotate-right mr-1"></i> Toque para virar</div>
+                    </div>
+                    <div class="card-face card-back-face overflow-y-auto custom-scroll">
+                        <div class="w-full h-full flex flex-col items-center justify-center text-center p-2">
+                            <div class="w-14 h-14 bg-sky-100 text-primary rounded-full flex items-center justify-center mb-6 shadow-md border border-sky-200"><i class="fa-solid fa-lightbulb text-2xl"></i></div>
+                            <h3 class="text-xl font-bold text-primary mb-4 font-sans">Análise & Ação</h3>
+                            <p class="text-gray-700 text-base md:text-lg font-body leading-relaxed" id="modal-back">...</p>
+                            <div class="mt-8 w-full border-t border-sky-200 pt-4"><button class="text-sky-500 hover:text-primary text-xs uppercase tracking-widest font-bold transition font-body">Fechar Carta</button></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="manualModal" class="fixed inset-0 bg-primary/40 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white rounded-2xl max-w-md w-full p-8 shadow-2xl relative border-t-4 border-secondary">
+            <button onclick="toggleModal('manualModal')" class="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition"><i class="fa-solid fa-times text-xl"></i></button>
+            <div class="text-center mb-6"><h3 class="text-2xl font-bold text-primary mb-1 font-sans">Instruções</h3><p class="text-sm text-gray-500 font-body">Guia da Jornada Masculina</p></div>
+            <div class="space-y-4 text-gray-600 text-sm font-body leading-relaxed">
+                <div class="flex gap-3"><div class="w-8 h-8 rounded-full bg-sky-100 text-secondary flex-shrink-0 flex items-center justify-center font-bold">1</div><p><strong>Seleção:</strong> Escolha uma carta baseada no desafio atual (ex: estresse, raiva, trabalho).</p></div>
+                <div class="flex gap-3"><div class="w-8 h-8 rounded-full bg-sky-100 text-secondary flex-shrink-0 flex items-center justify-center font-bold">2</div><p><strong>Questionamento:</strong> Leia a pergunta (Frente) para identificar crenças limitantes comuns aos homens.</p></div>
+                <div class="flex gap-3"><div class="w-8 h-8 rounded-full bg-sky-100 text-secondary flex-shrink-0 flex items-center justify-center font-bold">3</div><p><strong>Ação:</strong> Vire a carta para acessar a orientação prática e quebrar o padrão automático.</p></div>
+            </div>
+            <button onclick="toggleModal('manualModal')" class="w-full mt-8 bg-primary text-white py-3 rounded-xl font-bold hover:bg-secondary transition shadow-lg transform active:scale-95 font-sans tracking-wide">Iniciar</button>
+        </div>
+    </div>
+
+    <script>
+        // --- CONTEÚDO CLÍNICO MASCULINO (Foco: Estoicismo Saudável, Responsabilidade, Quebra de Tabus) ---
+        const cards = [
+            { category: "Emoção", title: "A Máscara de Ferro", front: "Você sente que precisa esconder emoções como medo ou tristeza para parecer forte?", back: "Vulnerabilidade não é fraqueza, é coragem. Reprimir emoções gera isolamento. A verdadeira força está em admitir o que sente e saber pedir ajuda." },
+            { category: "Identidade", title: "Síndrome do Provedor", front: "Se você perdesse seu emprego hoje, sentiria que perdeu seu valor como homem?", back: "Seu valor é intrínseco, não está no contracheque. Atrelar dignidade apenas à produção financeira cria uma ansiedade constante e insustentável." },
+            { category: "Relacionamentos", title: "O Solucionador", front: "Quando alguém desabafa, você tenta logo 'consertar' o problema em vez de escutar?", back: "Muitas vezes, a escuta ativa vale mais que a solução prática. Tentar resolver tudo rapidamente pode invalidar o sentimento do outro. Apenas escute." },
+            { category: "Raiva", title: "O Filtro da Raiva", front: "A raiva é a única emoção 'negativa' que você se sente confortável em demonstrar?", back: "Homens são ensinados a converter tristeza em raiva. Investigue o que está por trás da explosão: é dor? É frustração? É insegurança?" },
+            { category: "Saúde", title: "Negligência", front: "Você ignora sinais do corpo ou adia idas ao médico porque 'não é nada demais'?", back: "Cuidar da saúde não diminui sua masculinidade. A manutenção preventiva é um ato de responsabilidade com você e com quem depende de você." },
+            { category: "Social", title: "Solidão Masculina", front: "Você tem amigos com quem consegue falar sobre problemas reais, ou só sobre futebol e trabalho?", back: "A falta de conexões profundas é um risco à saúde mental. Cultive amizades onde a vulnerabilidade seja permitida, não apenas a competitividade." },
+            { category: "Paternidade", title: "O Exemplo", front: "Que tipo de homem você está ensinando as próximas gerações a serem através das suas atitudes?", back: "Seja você pai, tio ou mentor: seu comportamento ensina mais que suas palavras. Validar sentimentos é um legado poderoso." },
+            { category: "Controle", title: "Rigidez", front: "Você sente que, se não estiver no controle de tudo, as coisas vão desmoronar?", back: "O excesso de controle gera estresse crônico. Aceitar que nem tudo depende de você é libertador e diminui o peso que você carrega nas costas." },
+            { category: "Sexualidade", title: "Ansiedade de Performance", front: "Sua autoestima sexual está 100% ligada ao seu desempenho físico?", back: "Sexo é conexão e prazer, não uma prova olímpica. Focar apenas no desempenho gera ansiedade. Foque na intimidade e no toque." },
+            { category: "Trabalho", title: "Workaholic", front: "Você usa o excesso de trabalho para evitar lidar com problemas pessoais ou emocionais?", back: "O trabalho pode ser uma fuga honrosa. Se você parar, o que você vai sentir? Enfrentar o vazio é o primeiro passo para preenchê-lo de verdade." },
+            { category: "Conflito", title: "Passividade", front: "Você concorda com tudo para evitar brigas ('Tanto faz'), mas acumula ressentimento?", back: "A paz a qualquer custo é uma guerra interna. Posicionar-se com respeito é essencial. O silêncio prolongado geralmente explode mais tarde." },
+            { category: "Ego", title: "O Pedido de Desculpas", front: "Você tem dificuldade em admitir erros e pedir desculpas sinceramente?", back: "Admitir um erro não te diminui; mostra maturidade e integridade. O orgulho rígido quebra relacionamentos que poderiam ser salvos." },
+            { category: "Lazer", title: "Permissão", front: "Você se sente culpado quando está descansando ou fazendo algo 'improdutivo'?", back: "O descanso é parte da performance. Homens também precisam de ócio criativo e lazer sem objetivo financeiro para recarregar a testosterona e a mente." },
+            { category: "Casamento", title: "Parceria", front: "Você vê as tarefas domésticas como uma 'ajuda' que você dá, ou como sua responsabilidade?", back: "Quem 'ajuda' é visita. Em uma casa compartilhada, a responsabilidade é dividida. Assumir o turno mental fortalece a parceria." },
+            { category: "Resiliência", title: "Estoicismo", front: "Você confunde ser estoico com não sentir nada?", back: "O estoicismo não é ausência de emoção, é não ser escravo dela. Sinta a emoção, processe-a, e então escolha a melhor ação racional." }
+        ];
+
+        // --- RENDERIZAÇÃO (Mantida) ---
+        const track = document.getElementById('card-track');
+
+        cards.forEach((card, index) => {
+            const cardEl = document.createElement('div');
+            cardEl.className = 'deck-card group flex-shrink-0 p-6 text-center';
+            cardEl.innerHTML = `
+                <div class="w-14 h-14 bg-white/5 rounded-full flex items-center justify-center mb-5 group-hover:bg-accent/20 transition backdrop-blur-sm border border-white/10">
+                    <i class="fa-solid fa-shield-halved text-2xl text-accent group-hover:text-white transition group-hover:scale-110"></i>
+                </div>
+                <span class="text-[10px] font-bold text-sky-200 uppercase tracking-[0.2em] mb-3 font-body opacity-80">${card.category}</span>
+                <h3 class="text-xl font-bold text-white group-hover:text-accent transition duration-300 leading-tight font-sans">${card.title}</h3>
+                <div class="mt-auto pt-6 opacity-0 group-hover:opacity-100 transition-all transform translate-y-4 group-hover:translate-y-0 text-xs text-accent font-bold tracking-wider border-b border-accent pb-1 font-body">ACESSAR</div>
+            `;
+            cardEl.onclick = () => openCard(index);
+            track.appendChild(cardEl);
+        });
+
+        // --- FUNÇÕES DE CONTROLE (Mantidas) ---
+        const modal = document.getElementById('cardModal');
+        const flipInner = document.getElementById('modal-flip-inner');
+        
+        function openCard(index) {
+            const card = cards[index];
+            document.getElementById('modal-category').innerText = card.category;
+            document.getElementById('modal-title').innerText = card.title;
+            document.getElementById('modal-front').innerText = card.front;
+            document.getElementById('modal-back').innerText = card.back;
+            flipInner.classList.remove('is-flipped');
+            modal.classList.remove('hidden');
+        }
+
+        function closeCard() { modal.classList.add('hidden'); }
+        function flipActiveCard() { flipInner.classList.toggle('is-flipped'); }
+        function scrollGrid(amount) { track.scrollBy({ left: amount, behavior: 'smooth' }); }
+        function toggleModal(id) { document.getElementById(id).classList.toggle('hidden'); }
+        modal.addEventListener('click', (e) => { if(e.target === modal) closeCard(); });
+        window.onload = () => setTimeout(() => toggleModal('manualModal'), 600);
+
+    </script>
+</body>
+</html>

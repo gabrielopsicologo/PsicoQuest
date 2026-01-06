@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PsicoQuest Kids | Aventura da Coragem</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        :root {
+            /* Paleta Vibrante e Lúdica */
+            --primary: #FF6B6B; /* Vermelho Herói */
+            --secondary: #4ECDC4; /* Turquesa Mágico */
+            --accent: #FFE66D; /* Amarelo Ouro */
+            --dark: #292f36;
+            --bg-game: #f7fff7;
+            --card-radius: 25px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: var(--bg-game);
+            background-image: radial-gradient(#4ECDC4 1.5px, transparent 1.5px), radial-gradient(#4ECDC4 1.5px, transparent 1.5px);
+            background-size: 30px 30px;
+            background-position: 0 0, 15px 15px;
+            color: var(--dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- Header Gamer --- */
+        header {
+            background: white;
+            padding: 15px 20px;
+            border-bottom: 5px solid var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 10px 0 rgba(0,0,0,0.05);
+        }
+
+        .brand-box {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .brand-logo {
+            height: 50px;
+            animation: bounce 2s infinite;
+        }
+
+        .game-title {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.8rem;
+            color: var(--primary);
+            text-shadow: 2px 2px 0px #FFE66D;
+        }
+
+        .xp-bar {
+            background: #eee;
+            width: 150px;
+            height: 20px;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px solid var(--dark);
+            display: none; /* Ativa no mobile se quiser, mas escondi para limpar */
+        }
+
+        @media (min-width: 768px) { .xp-bar { display: block; } }
+
+        .xp-fill {
+            background: var(--secondary);
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        /* --- Avatar Selection (Area Inicial) --- */
+        #avatarSelection {
+            padding: 40px 20px;
+            text-align: center;
+            display: flex; /* Começa visível */
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 60vh;
+        }
+
+        .avatar-grid {
+            display: flex;
+            gap: 20px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .avatar-option {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 4px solid #eee;
+            cursor: pointer;
+            transition: transform 0.2s;
+            font-size: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+        }
+
+        .avatar-option:hover {
+            transform: scale(1.1) rotate(10deg);
+            border-color: var(--primary);
+            background: #FFF5F5;
+        }
+
+        /* --- Game Grid (Área Principal) --- */
+        #gameArea {
+            display: none; /* Escondido até escolher avatar */
+            padding: 40px 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+            flex: 1;
+        }
+
+        .intro-mission {
+            text-align: center;
+            margin-bottom: 40px;
+            background: white;
+            padding: 20px;
+            border-radius: 20px;
+            border: 3px solid var(--primary);
+            box-shadow: 5px 5px 0px var(--dark);
+        }
+
+        .chests-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
+        }
+
+        /* Estilo do Baú/Carta */
+        .chest-wrapper {
+            perspective: 1000px;
+            height: 350px;
+            cursor: pointer;
+        }
+
+        .chest-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55); /* Efeito elástico */
+            transform-style: preserve-3d;
+        }
+
+        .chest-wrapper.opened .chest-inner {
+            transform: rotateY(180deg);
+        }
+
+        /* Frente do Baú */
+        .chest-front {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            background: white;
+            border-radius: var(--card-radius);
+            border: 4px solid var(--dark);
+            box-shadow: 8px 8px 0px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-image: linear-gradient(135deg, #ffffff 25%, #f0f0f0 25%, #f0f0f0 50%, #ffffff 50%, #ffffff 75%, #f0f0f0 75%, #f0f0f0 100%);
+            background-size: 20px 20px;
+        }
+
+        .chest-icon {
+            font-size: 5rem;
+            color: var(--accent);
+            text-shadow: 2px 2px 0px var(--dark);
+            margin-bottom: 15px;
+            transition: transform 0.3s;
+        }
+
+        .chest-wrapper:hover .chest-icon {
+            transform: scale(1.1) rotate(-5deg);
+        }
+
+        .chest-label {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.5rem;
+            background: var(--primary);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 15px;
+            border: 2px solid var(--dark);
+            transform: rotate(-2deg);
+        }
+
+        /* Verso do Baú (O Poder) */
+        .chest-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            transform: rotateY(180deg);
+            background: white;
+            border-radius: var(--card-radius);
+            border: 4px solid var(--secondary);
+            box-shadow: 8px 8px 0px var(--secondary);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            text-align: center;
+        }
+
+        .power-title {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.4rem;
+            color: var(--primary);
+        }
+
+        .power-desc {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #555;
+            background: #f0f8ff;
+            padding: 15px;
+            border-radius: 15px;
+        }
+
+        .power-img {
+            font-size: 3rem;
+            margin: 10px 0;
+        }
+
+        /* Footer Gamer */
+        footer {
+            margin-top: auto;
+            background: white;
+            padding: 20px;
+            border-top: 4px solid var(--dark);
+            text-align: center;
+        }
+        
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .whatsapp-btn {
+            background: #25D366;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 15px;
+            font-weight: 900;
+            text-decoration: none;
+            border-bottom: 4px solid #1da851;
+            transition: all 0.2s;
+            display: inline-block;
+        }
+        
+        .whatsapp-btn:active {
+            transform: translateY(4px);
+            border-bottom: 0px;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* Responsividade */
+        @media (max-width: 600px) {
+            .game-title { font-size: 1.4rem; }
+            .chests-grid { grid-template-columns: 1fr; }
+            .chest-wrapper { height: 320px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand-box">
+            <img src="https://gabrielopsicologo.com/wp-content/uploads/2025/12/Design-sem-nome.png" alt="Logo" class="brand-logo">
+            <div class="game-title">PsicoQuest <span style="color:var(--secondary)">Kids</span></div>
+        </div>
+        <div class="xp-bar">
+            <div class="xp-fill" id="xpFill"></div>
+        </div>
+    </header>
+
+    <section id="avatarSelection">
+        <h1 style="font-family:'Fredoka'; color: var(--dark); margin-bottom: 10px;">Quem vai jogar hoje?</h1>
+        <p style="font-size: 1.2rem;">Escolha seu herói para começar a missão!</p>
+        
+        <div class="avatar-grid">
+            <div class="avatar-option" onclick="startGame('🦁')">🦁</div>
+            <div class="avatar-option" onclick="startGame('🚀')">🚀</div>
+            <div class="avatar-option" onclick="startGame('🦄')">🦄</div>
+            <div class="avatar-option" onclick="startGame('🐱')">🐱</div>
+            <div class="avatar-option" onclick="startGame('🐸')">🐸</div>
+        </div>
+    </section>
+
+    <main id="gameArea">
+        <div class="intro-mission">
+            <h2 id="welcomeMsg" style="font-family:'Fredoka'; color: var(--primary);">Olá, Herói!</h2>
+            <p>A ansiedade espalhou alguns mistérios por aqui. Clique nos <strong>Baús Mágicos</strong> para descobrir seus superpoderes secretos!</p>
+        </div>
+
+        <div class="chests-grid" id="gridContainer">
+            </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p style="font-weight:800; color:var(--dark)">Desenvolvido por @gabrielopsicologo | CRP 06/215890</p>
+            <a href="https://api.whatsapp.com/message/WV34TWMSKTEEL1?autoload=1&app_absent=0" class="whatsapp-btn">
+                <i class="fa-solid fa-headset"></i> Pedir Ajuda ao Mestre
+            </a>
+            <p style="font-size: 0.7rem;">© 2026 PsicoQuest Kids. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="seguranca.js" defer></script>
+
+    <script>
+        // Dados Adaptados para Linguagem Infantil (Baseado no PDF)
+        const missions = [
+            {
+                icon: "fa-solid fa-cloud",
+                title: "Nuvens do Pensamento",
+                powerTitle: "Poder da Nuvem",
+                desc: "Pensamentos ruins são como nuvens de chuva. Eles vêm, molham um pouquinho, mas logo o sol volta! Você não é a nuvem.",
+                emoji: "🌦️",
+                ref: ""
+            },
+            {
+                icon: "fa-solid fa-bolt",
+                title: "O Susto Passa",
+                powerTitle: "Escudo do Tempo",
+                desc: "Tá batendo forte o coração? Calma! É só um susto do corpo. Conte até 10 que logo passa, igual uma onda no mar.",
+                emoji: "🌊",
+                ref: ""
+            },
+            {
+                icon: "fa-solid fa-users",
+                title: "Time de Heróis",
+                powerTitle: "Chamado de Aliado",
+                desc: "Não lute sozinho! Todo herói tem um time. Chame o papai, a mamãe ou um amigo. Falar ajuda a vencer o monstro.",
+                emoji: "🤝",
+                ref: ""
+            },
+            {
+                icon: "fa-solid fa-stairs",
+                title: "Passo a Passo",
+                powerTitle: "Degrau Mágico",
+                desc: "Não precisa pular a montanha inteira! Dê apenas um passinho de cada vez. Você já venceu muitos desafios antes!",
+                emoji: "👣",
+                ref: ""
+            },
+            {
+                icon: "fa-solid fa-ghost",
+                title: "Espelho da Verdade",
+                powerTitle: "Detector de Mentiras",
+                desc: "Sua mente às vezes conta mentirinhas de medo. Pergunte: 'Isso é verdade mesmo ou é só o monstro do medo falando?'",
+                emoji: "🔍",
+                ref: ""
+            },
+            {
+                icon: "fa-solid fa-heart",
+                title: "Seja Gentil",
+                powerTitle: "Abraço em Si Mesmo",
+                desc: "Errou? Tudo bem! Todo mundo erra. Dê um abraço em você mesmo e tente de novo. Você é incrível!",
+                emoji: "🥰",
+                ref: ""
+            }
+        ];
+
+        let openedChests = 0;
+
+        // Iniciar Jogo
+        function startGame(avatarEmoji) {
+            document.getElementById('avatarSelection').style.display = 'none';
+            document.getElementById('gameArea').style.display = 'block';
+            document.getElementById('welcomeMsg').innerHTML = `${avatarEmoji} Vamos lá, Guardião!`;
+            renderChests();
+            
+            // Efeito sonoro simulado ou visual
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+        }
+
+        // Renderizar Baús
+        function renderChests() {
+            const container = document.getElementById('gridContainer');
+            container.innerHTML = '';
+
+            missions.forEach((mission, index) => {
+                const chest = document.createElement('div');
+                chest.className = 'chest-wrapper';
+                chest.onclick = function() { openChest(this) };
+
+                chest.innerHTML = `
+                    <div class="chest-inner">
+                        <div class="chest-front">
+                            <i class="fa-solid fa-box-archive chest-icon"></i>
+                            <div class="chest-label">Nível ${index + 1}</div>
+                        </div>
+                        <div class="chest-back">
+                            <div class="power-title">${mission.powerTitle}</div>
+                            <div class="power-img">${mission.emoji}</div>
+                            <div class="power-desc">"${mission.desc}"</div>
+                            <div style="font-size:0.6rem; color:#ccc;">${mission.ref}</div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(chest);
+            });
+        }
+
+        // Abrir Baú
+        function openChest(element) {
+            if (!element.classList.contains('opened')) {
+                element.classList.add('opened');
+                openedChests++;
+                updateXP();
+                
+                // Chuva de confete a cada conquista
+                confetti({
+                    particleCount: 50,
+                    spread: 60,
+                    origin: { y: 0.7 },
+                    colors: ['#FF6B6B', '#4ECDC4', '#FFE66D']
+                });
+            }
+        }
+
+        function updateXP() {
+            const percentage = (openedChests / missions.length) * 100;
+            document.getElementById('xpFill').style.width = percentage + '%';
+        }
+    </script>
+</body>
+</html>

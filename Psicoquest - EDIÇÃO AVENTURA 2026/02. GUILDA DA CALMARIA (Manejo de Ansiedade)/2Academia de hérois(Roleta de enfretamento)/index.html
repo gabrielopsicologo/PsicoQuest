@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PsicoQuest Kids - Edição Definitiva</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="seguranca.js" defer></script>
+
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #84FAB0 0%, #8FD3F4 100%);
+            --glass: rgba(255, 255, 255, 0.9);
+            --primary: #6C5CE7;
+            --accent: #FF7675;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: var(--bg-gradient);
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            color: #2D3436;
+        }
+
+        /* --- HEADER --- */
+        header {
+            background: var(--glass);
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            z-index: 100;
+            flex-shrink: 0;
+            height: 60px;
+        }
+
+        .brand { display: flex; align-items: center; gap: 10px; }
+        .logo-img { height: 32px; }
+        .app-name { font-family: 'Fredoka One'; color: var(--primary); font-size: 1.1rem; }
+
+        .controls { display: flex; align-items: center; gap: 10px; }
+        
+        .btn-restart {
+            background: var(--accent); color: white; border: none;
+            width: 36px; height: 36px; border-radius: 50%;
+            display: none; align-items: center; justify-content: center;
+            cursor: pointer; box-shadow: 0 3px 0 #D63031;
+            font-size: 1rem;
+        }
+        .btn-restart:active { transform: translateY(3px); box-shadow: none; }
+
+        .xp-container {
+            width: 120px; height: 16px; background: #dfe6e9;
+            border-radius: 20px; border: 2px solid #fff; overflow: hidden;
+        }
+        .xp-fill {
+            width: 0%; height: 100%;
+            background: linear-gradient(90deg, #FDCB6E, #E17055);
+            transition: width 0.5s;
+        }
+
+        /* --- ÁREA PRINCIPAL --- */
+        main {
+            flex-grow: 1; /* Ocupa todo o espaço vertical disponível */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center; /* Centraliza verticalmente */
+            position: relative;
+            width: 100%;
+            padding: 10px;
+        }
+
+        /* TELA DE AVATAR */
+        #screenAvatar {
+            background: #fff; padding: 25px; border-radius: 30px;
+            text-align: center; width: 90%; max-width: 400px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            animation: zoomIn 0.5s;
+            display: flex; flex-direction: column; gap: 20px;
+        }
+        .avatar-grid { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+        .avatar-btn {
+            font-size: 2.5rem; background: #f1f2f6; border-radius: 50%;
+            width: 70px; height: 70px; display: flex; align-items: center; justify-content: center;
+            cursor: pointer; border: 4px solid transparent; transition: all 0.2s;
+        }
+        .avatar-btn.selected { border-color: var(--primary); background: #dcd6f7; transform: scale(1.1); }
+
+        .btn-start {
+            background: #00b894; color: white; border: none; padding: 15px;
+            border-radius: 50px; font-family: 'Fredoka One'; font-size: 1.2rem;
+            box-shadow: 0 5px 0 #009476; cursor: pointer; width: 100%;
+        }
+        .btn-start:active { transform: translateY(5px); box-shadow: none; }
+
+        /* TELA DO JOGO (FULL SCREEN LAYOUT) */
+        #screenGame {
+            display: none; 
+            flex-direction: column; 
+            align-items: center;
+            justify-content: space-between; /* Distribui topo, meio e base */
+            width: 100%; 
+            height: 100%;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        /* CONTAINER DA ROLETA */
+        .wheel-wrapper {
+            position: relative;
+            width: 90vw; 
+            height: 90vw; /* Garante que seja quadrada baseada na largura */
+            max-width: 450px; 
+            max-height: 450px;
+            aspect-ratio: 1 / 1; /* Força círculo perfeito */
+            margin: auto; /* Centraliza no espaço livre */
+            filter: drop-shadow(0 15px 30px rgba(0,0,0,0.2));
+        }
+
+        .wheel {
+            width: 100%; height: 100%;
+            border-radius: 50%;
+            position: relative;
+            transition: transform 5s cubic-bezier(0.25, 1, 0.5, 1); /* Animação suave */
+            /* O Background será injetado via JS (conic-gradient) */
+            border: 6px solid #fff;
+        }
+
+        /* Ícones posicionados via JS */
+        .wheel-icon {
+            position: absolute;
+            top: 50%; left: 50%;
+            font-size: 1.2rem;
+            color: #2d3436;
+            transform: translate(-50%, -50%);
+            /* O posicionamento exato radial é feito no script */
+            width: 30px; height: 30px;
+            display: flex; align-items: center; justify-content: center;
+            text-shadow: 0 1px 2px rgba(255,255,255,0.8);
+            pointer-events: none;
+        }
+
+        .pointer {
+            position: absolute; 
+            top: -25px; left: 50%; 
+            transform: translateX(-50%);
+            z-index: 20;
+            filter: drop-shadow(0 4px 2px rgba(0,0,0,0.2));
+            /* Triângulo CSS puro */
+            width: 0; height: 0;
+            border-left: 25px solid transparent;
+            border-right: 25px solid transparent;
+            border-top: 50px solid var(--accent);
+        }
+
+        .center-hub {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 20%; height: 20%; background: #fff; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-size: 2.5rem;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1); z-index: 10; border: 4px solid #fab1a0;
+        }
+
+        /* ÁREA DE AÇÃO */
+        .action-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            min-height: 80px; /* Reserva espaço */
+        }
+
+        .btn-spin {
+            background: var(--primary); color: white; border: none;
+            padding: 15px 60px; border-radius: 60px;
+            font-family: 'Fredoka One'; font-size: 1.5rem;
+            box-shadow: 0 8px 0 #4834d4; cursor: pointer;
+            display: flex; align-items: center; gap: 15px;
+            transition: transform 0.1s;
+        }
+        .btn-spin:active { transform: translateY(8px); box-shadow: none; }
+        .btn-spin:disabled { background: #b2bec3; box-shadow: none; transform: translateY(8px); cursor: not-allowed; }
+
+        /* MODAL RESULTADO */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); backdrop-filter: blur(5px);
+            display: none; align-items: center; justify-content: center; z-index: 200;
+        }
+        .modal-box {
+            background: #fff; width: 90%; max-width: 400px;
+            padding: 30px; border-radius: 30px; text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border: 5px solid var(--primary);
+            animation: popUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* FOOTER */
+        footer {
+            background: rgba(255,255,255,0.8); padding: 8px;
+            text-align: center; font-size: 0.7rem; color: #636e72;
+            flex-shrink: 0;
+            border-top: 1px solid rgba(0,0,0,0.05);
+        }
+        .wpp-float {
+            position: fixed; bottom: 15px; right: 15px; width: 50px; height: 50px;
+            background: #25D366; border-radius: 50%; display: flex; align-items: center;
+            justify-content: center; color: white; font-size: 1.8rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2); border: 2px solid #fff; z-index: 300; text-decoration: none;
+        }
+
+        @keyframes zoomIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        @keyframes popUp { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        /* Responsividade para telas grandes */
+        @media(min-width: 900px) {
+            #screenGame { flex-direction: row; justify-content: center; gap: 80px; }
+            .wheel-wrapper { margin: 0; width: 500px; height: 500px; max-width: none; max-height: none; }
+            .action-container { width: auto; margin-bottom: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand">
+            <img src="https://gabrielopsicologo.com/wp-content/uploads/2025/12/Design-sem-nome.png" alt="Logo" class="logo-img">
+            <span class="app-name">PsicoQuest Kids</span>
+        </div>
+        <div class="controls">
+            <div class="xp-container"><div class="xp-fill" id="xpFill"></div></div>
+            <button class="btn-restart" id="btnRestart" onclick="resetGame()" title="Reiniciar">
+                <i class="fas fa-undo"></i>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <div id="screenAvatar">
+            <h2 style="font-family:'Fredoka One'; color:var(--primary);">Escolha seu Time!</h2>
+            <div class="avatar-grid">
+                <div class="avatar-btn" onclick="selectAvatar(this, '🦊')">🦊</div>
+                <div class="avatar-btn" onclick="selectAvatar(this, '🦁')">🦁</div>
+                <div class="avatar-btn" onclick="selectAvatar(this, '🦄')">🦄</div>
+                <div class="avatar-btn" onclick="selectAvatar(this, '🦖')">🦖</div>
+                <div class="avatar-btn" onclick="selectAvatar(this, '🤖')">🤖</div>
+                <div class="avatar-btn" onclick="selectAvatar(this, '⚡')">⚡</div>
+            </div>
+            <button class="btn-start" onclick="startGame()">COMEÇAR AVENTURA</button>
+        </div>
+
+        <div id="screenGame">
+            <div class="wheel-wrapper">
+                <div class="pointer"></div>
+                <div class="wheel" id="wheel">
+                    </div>
+                <div class="center-hub" id="centerDisplay">?</div>
+            </div>
+
+            <div class="action-container">
+                <button id="spinBtn" class="btn-spin" onclick="spinWheel()">
+                    <i class="fas fa-play"></i> GIRAR
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <div id="missionModal" class="modal-overlay">
+        <div class="modal-box">
+            <div style="font-size:4.5rem; margin-bottom:15px; animation:bounce 2s infinite;" id="mIcon"></div>
+            <h3 style="font-family:'Fredoka One'; color:#2D3436; font-size:1.5rem; margin-bottom:10px;" id="mTitle"></h3>
+            <p style="color:#636e72; font-size:1.1rem; line-height:1.5; margin-bottom:25px;" id="mDesc"></p>
+            <button style="background:#00b894; color:white; border:none; padding:15px; border-radius:30px; font-weight:700; cursor:pointer; width:100%; font-size:1.1rem; box-shadow:0 4px 0 #009476;" onclick="closeModal()">
+                COMPLETEI! (+XP)
+            </button>
+        </div>
+    </div>
+
+    <footer>
+        <p>Recurso Terapêutico Digital • CRP 06/215890</p>
+        <p>© 2026 Desenvolvido por <a href="https://www.instagram.com/gabrielopsicologo/#" style="color:var(--primary); text-decoration:none;">@gabrielopsicologo</a></p>
+    </footer>
+
+    <a href="https://api.whatsapp.com/message/WV34TWMSKTEEL1" target="_blank" class="wpp-float"><i class="fab fa-whatsapp"></i></a>
+
+    <script>
+        // --- DADOS DAS 24 MISSÕES ---
+        const missions = [
+            { t: "Sopro do Dragão", d: "Encha o peito e solte o ar devagar.", i: "🐲", c: "#81ecec" },
+            { t: "Estátua de Gelo", d: "Fique duro como pedra, depois derreta!", i: "🧊", c: "#74b9ff" },
+            { t: "Bolha de Sabão", d: "Sopre uma bolha gigante sem estourar.", i: "🫧", c: "#a29bfe" },
+            { t: "Limão Azedo", d: "Faça careta de quem chupou limão!", i: "🍋", c: "#ffeaa7" },
+            { t: "Tartaruga Zen", d: "Encolha o pescoço. Segure. Relaxe.", i: "🐢", c: "#55efc4" },
+            { t: "Mochila de Penas", d: "Sopre seus problemas para longe.", i: "🪶", c: "#fab1a0" },
+            { t: "Caçador de Cores", d: "Toque em 3 coisas AZUIS e 2 VERMELHAS!", i: "🎨", c: "#fdcb6e" },
+            { t: "Ouvido Biônico", d: "Feche os olhos. O que você ouve?", i: "👂", c: "#ff7675" },
+            { t: "Pés de Raízes", d: "Seus pés são raízes de uma árvore forte.", i: "🌳", c: "#00b894" },
+            { t: "Cheiro da Flor", d: "Imagine sua comida favorita. Sinta o cheiro.", i: "🍰", c: "#fd79a8" },
+            { t: "Textura Mágica", d: "Passe a mão na roupa. É macio ou duro?", i: "✋", c: "#63cdda" },
+            { t: "Escaneamento", d: "Onde seu corpo está relaxado agora?", i: "🤖", c: "#0984e3" },
+            { t: "Detetive da Mente", d: "Esse pensamento é verdade ou mentira?", i: "🕵️", c: "#a29bfe" },
+            { t: "Escudo de Luz", d: "Um escudo brilhante te protege.", i: "🛡️", c: "#fd79a8" },
+            { t: "O Grande Rugido", d: "Solte um som para tirar a raiva!", i: "🦁", c: "#fab1a0" },
+            { t: "Sacudir a Poeira", d: "Balance as mãos e pés bem rápido!", i: "🐕", c: "#dfe6e9" },
+            { t: "Super Pose", d: "Pose de herói por 10 segundos.", i: "🦸", c: "#ffeaa7" },
+            { t: "Botão de Volume", d: "Abaixe o volume da sua mente.", i: "🎛️", c: "#55efc4" },
+            { t: "5 Pulos de Sapo", d: "Pule 5 vezes bem alto!", i: "🐸", c: "#00b894" },
+            { t: "Careta Maluca", d: "A careta mais engraçada vence!", i: "🤪", c: "#ff7675" },
+            { t: "Desenho Invisível", d: "Desenhe um coração no ar.", i: "👆", c: "#74b9ff" },
+            { t: "Abraço de Urso", d: "Se abrace bem forte agora.", i: "🐻", c: "#fdcb6e" },
+            { t: "Chuva de Dedos", d: "Tamborile os dedos como chuva.", i: "🌧️", c: "#81ecec" },
+            { t: "Mão no Coração", d: "Sinta seu coração batendo.", i: "❤️", c: "#ff7675" }
+        ];
+
+        // --- SETUP VISUAL (CONIC GRADIENT & TRIGONOMETRIA) ---
+        const wheel = document.getElementById('wheel');
+        const numSegments = missions.length; // 24
+        const degPerSeg = 360 / numSegments; // 15 graus
+
+        // 1. Criar o Conic Gradient (Fundo da Roda)
+        // Precisamos deslocar o gradiente em metade do segmento (-7.5deg) para que o Item 0 fique centralizado no Topo (0deg/12h)
+        let gradientStr = `conic-gradient(from -${degPerSeg/2}deg, `;
+        
+        missions.forEach((m, i) => {
+            const start = i * degPerSeg;
+            const end = (i + 1) * degPerSeg;
+            gradientStr += `${m.c} ${start}deg ${end}deg${i === numSegments-1 ? '' : ', '}`;
+        });
+        gradientStr += ')';
+        wheel.style.background = gradientStr;
+
+        // 2. Posicionar Ícones com Matemática
+        // Centro do círculo é 50%, 50%. Raio de ~42% para não colar na borda.
+        // O ângulo 0 na matemática (sen/cos) geralmente é 3h (direita).
+        // Mas no nosso CSS, o Item 0 está em 12h (Topo).
+        // Ângulo Visual do Item i = i * 15 graus.
+        // Ângulo Matemático = (i * 15) - 90 graus (para ajustar 12h como 0).
+        
+        const radius = 42; // % do container
+
+        missions.forEach((m, i) => {
+            const icon = document.createElement('div');
+            icon.className = 'wheel-icon';
+            icon.innerText = m.i;
+            
+            // Ângulo em graus onde o item deve estar visualmente (0 = Topo)
+            const angleDeg = i * degPerSeg;
+            
+            // Converter para radianos para Math.sin/cos.
+            // Precisamos subtrair 90deg (PI/2) porque Math.cos(0) é Direita, nós queremos Topo.
+            const angleRad = (angleDeg - 90) * (Math.PI / 180);
+            
+            // Fórmula: x = center + r * cos(a), y = center + r * sin(a)
+            const left = 50 + radius * Math.cos(angleRad);
+            const top = 50 + radius * Math.sin(angleRad);
+
+            icon.style.left = left + '%';
+            icon.style.top = top + '%';
+            
+            // Rotacionar o ícone para ficar "em pé" relativo ao centro
+            icon.style.transform = `translate(-50%, -50%) rotate(${angleDeg}deg)`;
+
+            wheel.appendChild(icon);
+        });
+
+        // --- LÓGICA DO JOGO ---
+        let currentXP = 0;
+        let userAvatar = "";
+        let currentRotation = 0;
+        let isSpinning = false;
+        let lastIndex = -1;
+
+        function selectAvatar(el, char) {
+            document.querySelectorAll('.avatar-btn').forEach(b => b.classList.remove('selected'));
+            el.classList.add('selected');
+            userAvatar = char;
+        }
+
+        function startGame() {
+            if(!userAvatar) return alert("Escolha um herói primeiro!");
+            document.getElementById('screenAvatar').style.display = 'none';
+            document.getElementById('screenGame').style.display = 'flex';
+            document.getElementById('centerDisplay').innerText = userAvatar;
+            document.getElementById('btnRestart').style.display = 'flex';
+        }
+
+        function spinWheel() {
+            if(isSpinning) return;
+            isSpinning = true;
+            document.getElementById('spinBtn').disabled = true;
+
+            // 1. Sorteio (Sem repetição)
+            let idx;
+            do { idx = Math.floor(Math.random() * numSegments); } while(idx === lastIndex);
+            lastIndex = idx;
+
+            // 2. Cálculo da Rotação
+            // O Ponteiro está no Topo (0deg visual no CSS Container).
+            // O Item 'idx' está em (idx * 15) graus.
+            // Para levar o Item 'idx' ao topo, precisamos girar a roda: -(idx * 15).
+            
+            const targetRotation = -(idx * degPerSeg);
+            
+            // Adicionar voltas completas para efeito (5 voltas = 1800 graus)
+            const spins = 5 * 360;
+            
+            // Lógica Acumulativa:
+            // Queremos que a roda vá para um valor que seja (spins + targetRotation)
+            // Mas precisamos manter a continuidade do giro anterior.
+            
+            // Pega a rotação atual, ajusta para o múltiplo de 360 mais próximo (para resetar visualmente o ciclo)
+            // Subtrai porque estamos girando anti-horário
+            let nextRotation = currentRotation - spins; 
+            
+            // Agora ajustamos a fração para cair no target.
+            // O target é um valor entre 0 e -360.
+            // Precisamos calcular a diferença.
+            
+            // Simplificação Robusta:
+            // Apenas subtraia voltas + o ângulo do item + compensação do giro anterior
+            // Rotação Final = (RotaçãoAtual arredondada) - 1800 - (AnguloDoItem)
+            
+            // Reset virtual para 0 (múltiplo de 360)
+            const cycle = Math.floor(currentRotation / 360) * 360;
+            
+            // Destino final
+            const finalDest = cycle - spins - (idx * degPerSeg);
+            
+            wheel.style.transform = `rotate(${finalDest}deg)`;
+            currentRotation = finalDest;
+
+            // 3. Resultado
+            setTimeout(() => {
+                showModal(idx);
+                isSpinning = false;
+                document.getElementById('spinBtn').disabled = false;
+            }, 5000);
+        }
+
+        function showModal(idx) {
+            const m = missions[idx];
+            document.getElementById('mIcon').innerText = m.i;
+            document.getElementById('mTitle').innerText = m.t;
+            document.getElementById('mDesc').innerText = m.d;
+            document.getElementById('missionModal').style.display = 'flex';
+            confetti();
+        }
+
+        function closeModal() {
+            document.getElementById('missionModal').style.display = 'none';
+            currentXP += 10;
+            if(currentXP > 100) currentXP = 0;
+            document.getElementById('xpFill').style.width = currentXP + '%';
+        }
+
+        function resetGame() {
+            if(!confirm("Reiniciar tudo?")) return;
+            location.reload(); // Maneira mais segura de limpar tudo
+        }
+
+        function confetti() {
+            for(let i=0; i<40; i++){
+                const c = document.createElement('div');
+                c.style.position = 'fixed';
+                c.style.width = '10px'; c.style.height = '10px';
+                c.style.background = ['#FF7675','#74b9ff','#55efc4'][Math.floor(Math.random()*3)];
+                c.style.left = Math.random()*100+'vw';
+                c.style.top = '-10px';
+                c.style.zIndex = '300';
+                c.style.transition = 'top 3s ease-in, transform 3s linear';
+                document.body.appendChild(c);
+                setTimeout(() => {
+                    c.style.top = '110vh';
+                    c.style.transform = `rotate(${Math.random()*360}deg)`;
+                }, 10);
+                setTimeout(() => c.remove(), 3000);
+            }
+        }
+    </script>
+</body>
+</html>

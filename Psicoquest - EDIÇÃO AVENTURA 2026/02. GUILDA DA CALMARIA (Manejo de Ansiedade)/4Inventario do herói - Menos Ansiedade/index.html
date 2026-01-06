@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PsicoQuest | Aventura da Mente</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            /* Paleta Vibrante "Cartoon" */
+            --bg-color: #4CC9F0;
+            --card-bg: #FFFFFF;
+            --primary: #4361EE; 
+            --accent: #F72585; /* Rosa Choque */
+            --success: #06D6A0; /* Verde Menta */
+            --warning: #FFD166; /* Amarelo Sol */
+            --text-main: #2B2D42;
+            --shadow-hard: 0 6px 0 rgba(0,0,0,0.2);
+            --shadow-btn: 0 4px 0 rgba(0,0,0,0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none; /* Sensação de App */
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: var(--bg-color);
+            /* Padrão de Nuvens ou Bolinhas */
+            background-image: radial-gradient(#fff 20%, transparent 20%),
+                              radial-gradient(#fff 20%, transparent 20%);
+            background-position: 0 0, 50px 50px;
+            background-size: 100px 100px;
+            color: var(--text-main);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            opacity: 0;
+            animation: fadeIn 0.5s forwards;
+        }
+
+        @keyframes fadeIn { to { opacity: 1; } }
+
+        /* --- Header Gamer --- */
+        header {
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .brand-pill {
+            background: #fff;
+            padding: 8px 16px;
+            border-radius: 50px;
+            box-shadow: var(--shadow-btn);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Fredoka One', cursive;
+            color: var(--primary);
+            font-size: 1.2rem;
+            border: 2px solid var(--primary);
+        }
+
+        .xp-badge {
+            background: var(--warning);
+            color: #5d4000;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 900;
+            border: 2px solid #fff;
+            box-shadow: var(--shadow-btn);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-5px);}
+            60% {transform: translateY(-3px);}
+        }
+
+        /* --- Hero / Avatar Section --- */
+        .hero-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            position: relative;
+        }
+
+        .avatar-container {
+            width: 120px;
+            height: 120px;
+            background: #fff;
+            border-radius: 50%;
+            border: 5px solid var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.5), var(--shadow-hard);
+            cursor: pointer;
+            transition: transform 0.2s;
+            position: relative;
+        }
+
+        .avatar-container:active {
+            transform: scale(0.9);
+        }
+
+        .avatar-hint {
+            position: absolute;
+            bottom: -10px;
+            background: var(--text-main);
+            color: #fff;
+            font-size: 0.6rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: 700;
+        }
+
+        .hero-text {
+            margin-top: 15px;
+            font-family: 'Fredoka One', cursive;
+            color: #fff;
+            font-size: 1.5rem;
+            text-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        /* --- Grid de Cartas (Poderes) --- */
+        main {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem 1.5rem;
+            padding-bottom: 100px; /* Espaço para não cortar o final */
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .power-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: var(--shadow-hard);
+            transition: all 0.2s;
+            border: 3px solid transparent;
+            position: relative;
+            overflow: hidden;
+            height: 160px;
+        }
+
+        .power-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .power-card:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 rgba(0,0,0,0.2);
+        }
+
+        .power-card.completed {
+            background: #E0FFF4;
+            border-color: var(--success);
+            opacity: 0.8;
+        }
+
+        .power-card.completed::after {
+            content: '★';
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            color: var(--success);
+            font-size: 1.5rem;
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            filter: drop-shadow(2px 2px 0 rgba(0,0,0,0.1));
+        }
+
+        .card-title {
+            font-weight: 800;
+            font-size: 0.95rem;
+            line-height: 1.2;
+            color: var(--text-main);
+        }
+
+        /* --- Footer (Navegação & Créditos) --- */
+        footer {
+            background: #fff;
+            padding: 1rem;
+            border-top-left-radius: 25px;
+            border-top-right-radius: 25px;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            z-index: 50;
+        }
+
+        .footer-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-footer {
+            padding: 10px 15px;
+            border-radius: 15px;
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            transition: transform 0.2s;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.1);
+        }
+
+        .btn-footer:active {
+            transform: translateY(3px);
+            box-shadow: none;
+        }
+
+        .btn-insta {
+            background: #E1306C;
+            color: white;
+        }
+
+        .btn-support {
+            background: #25D366;
+            color: white;
+        }
+
+        .footer-credits {
+            text-align: center;
+            font-size: 0.7rem;
+            color: #999;
+        }
+
+        .footer-credits img {
+            height: 20px;
+            vertical-align: middle;
+            margin-left: 5px;
+            opacity: 0.5;
+        }
+
+        /* --- Modal "Pop-up de Jogo" --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(43, 45, 66, 0.8);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .game-popup {
+            background: #fff;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 30px;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 10px 0 rgba(0,0,0,0.2);
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 4px solid var(--primary);
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0.5); }
+            to { transform: scale(1); }
+        }
+
+        .popup-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            animation: wiggle 2s infinite;
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+
+        .popup-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .popup-text {
+            font-size: 1rem;
+            color: #555;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        .btn-action {
+            background: var(--success);
+            color: #fff;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-family: 'Fredoka One', cursive;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 6px 0 #04a77d;
+            width: 100%;
+            transition: all 0.1s;
+        }
+
+        .btn-action:active {
+            transform: translateY(6px);
+            box-shadow: none;
+        }
+
+        .btn-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #eee;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            font-weight: 900;
+            color: #888;
+            cursor: pointer;
+        }
+
+        /* --- Confetti Canvas --- */
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2000;
+        }
+
+        /* Manual Button Discreto */
+        .manual-trigger {
+            position: absolute;
+            top: 5rem;
+            right: 1rem;
+            opacity: 0.3;
+            font-size: 0.8rem;
+            color: white;
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand-pill">
+            <img src="https://gabrielopsicologo.com/wp-content/uploads/2025/12/Design-sem-nome.png" alt="Icon" style="height: 25px;">
+            PsicoQuest
+        </div>
+        <div class="xp-badge">
+            <i class="fa-solid fa-star"></i> <span id="xp-counter">0</span> XP
+        </div>
+    </header>
+
+    <div class="manual-trigger" id="manualBtn">Manual</div>
+
+    <main>
+        <div class="hero-section">
+            <div class="avatar-container" id="heroAvatar" onclick="changeAvatar()">
+                <div id="avatarEmoji">🦸</div>
+                <div class="avatar-hint">Clique!</div>
+            </div>
+            <h2 class="hero-text">Seu Inventário de Poderes</h2>
+        </div>
+
+        <div class="cards-grid" id="cardsGrid">
+            </div>
+    </main>
+
+    <canvas id="confetti-canvas"></canvas>
+
+    <footer>
+        <div class="footer-buttons">
+            <a href="https://www.instagram.com/gabrielopsicologo/#" target="_blank" class="btn-footer btn-insta">
+                <i class="fa-brands fa-instagram"></i> @gabrielopsicologo
+            </a>
+            <a href="https://api.whatsapp.com/message/WV34TWMSKTEEL1?autoload=1&app_absent=0" target="_blank" class="btn-footer btn-support">
+                <i class="fa-brands fa-whatsapp"></i> Preciso de Ajuda
+            </a>
+        </div>
+        <div class="footer-credits">
+            CRP 06/215890 | <img src="https://gabrielopsicologo.com/wp-content/uploads/2025/11/Logo_preta.png" alt="Logo">
+            <br>© 2026 Todos os direitos reservados.
+        </div>
+    </footer>
+
+    <div class="modal-overlay" id="actionModal">
+        <div class="game-popup">
+            <button class="btn-close" onclick="closeModal()">X</button>
+            <div class="popup-icon" id="popupIcon">🥕</div>
+            <h3 class="popup-title" id="popupTitle">Título</h3>
+            <p class="popup-text" id="popupDesc">Descrição da missão.</p>
+            <button class="btn-action" id="btnComplete" onclick="completeMission()">EQUIPAR AGORA!</button>
+        </div>
+    </div>
+
+    <script src="seguranca.js" defer></script>
+    
+    <script>
+        // --- Dados do Jogo ---
+        const powers = [
+            { id: 1, title: "Super Energia", icon: "🍎", color: "#FF595E", desc: "Coma uma fruta ou beba água para encher sua barra de vida!" },
+            { id: 2, title: "Sono Reparador", icon: "😴", color: "#1982C4", desc: "Desligue as telas cedo hoje para salvar o jogo no 'Hard Mode'." },
+            { id: 3, title: "Chamado de Guilda", icon: "🤝", color: "#8AC926", desc: "Converse com um amigo ou familiar que te faz bem." },
+            { id: 4, title: "Movimento Rápido", icon: "⚡", color: "#FFCA3A", desc: "Pule, dance ou corra por 10 minutos. Xô, estresse!" },
+            { id: 5, title: "Modo Criativo", icon: "🎨", color: "#6A4C93", desc: "Desenhe, pinte ou construa algo só por diversão." },
+            { id: 6, title: "Diário de Bordo", icon: "📝", color: "#118AB2", desc: "Escreva o que você está sentindo para esvaziar a cabeça." },
+            { id: 7, title: "Óculos da Gratidão", icon: "😎", color: "#F72585", desc: "Encontre 3 coisas legais que aconteceram hoje." },
+            { id: 8, title: "Base Limpa", icon: "🧹", color: "#4CC9F0", desc: "Arrume um cantinho do seu quarto para achar seus itens fácil." },
+            { id: 9, title: "Pausa Tática", icon: "⏸️", color: "#ADB5BD", desc: "Respire fundo 10 vezes. O herói precisa descansar!" }
+        ];
+
+        const avatars = ["🦸", "🥷", "🧙‍♂️", "🤖", "🦄", "👽", "🦊", "🦁"];
+        let currentAvatarIndex = 0;
+        let xp = 0;
+        let completedIds = [];
+        let currentPower = null;
+
+        // --- Inicialização ---
+        const grid = document.getElementById('cardsGrid');
+        const modal = document.getElementById('actionModal');
+        const xpDisplay = document.getElementById('xp-counter');
+
+        function renderGrid() {
+            grid.innerHTML = '';
+            powers.forEach(power => {
+                const card = document.createElement('div');
+                card.className = `power-card ${completedIds.includes(power.id) ? 'completed' : ''}`;
+                card.style.borderBottomColor = power.color; // Cor temática
+                card.innerHTML = `
+                    <div class="card-icon">${power.icon}</div>
+                    <div class="card-title">${power.title}</div>
+                `;
+                card.onclick = () => openModal(power);
+                grid.appendChild(card);
+            });
+        }
+
+        // --- Avatar Logic ---
+        function changeAvatar() {
+            currentAvatarIndex = (currentAvatarIndex + 1) % avatars.length;
+            document.getElementById('avatarEmoji').innerText = avatars[currentAvatarIndex];
+            // Pequena animação
+            const container = document.getElementById('heroAvatar');
+            container.style.transform = "scale(1.2) rotate(10deg)";
+            setTimeout(() => { container.style.transform = "scale(1) rotate(0deg)"; }, 200);
+        }
+
+        // --- Modal Logic ---
+        function openModal(power) {
+            currentPower = power;
+            document.getElementById('popupIcon').innerText = power.icon;
+            document.getElementById('popupTitle').innerText = power.title;
+            document.getElementById('popupDesc').innerText = power.desc;
+            
+            const btn = document.getElementById('btnComplete');
+            if(completedIds.includes(power.id)) {
+                btn.innerText = "JÁ EQUIPADO!";
+                btn.style.background = "#ccc";
+                btn.style.boxShadow = "none";
+            } else {
+                btn.innerText = "EQUIPAR AGORA!";
+                btn.style.background = "var(--success)";
+                btn.style.boxShadow = "0 6px 0 #04a77d";
+            }
+            
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            modal.classList.remove('active');
+        }
+
+        function completeMission() {
+            if(!currentPower || completedIds.includes(currentPower.id)) return;
+            
+            // Lógica de Sucesso
+            completedIds.push(currentPower.id);
+            xp += 100; // Números grandes são mais legais para crianças
+            xpDisplay.innerText = xp;
+            
+            // Visual
+            renderGrid();
+            closeModal();
+            fireConfetti(); // A mágica acontece aqui
+        }
+
+        // --- Manual do Terapeuta ---
+        document.getElementById('manualBtn').addEventListener('click', () => {
+            alert("MANUAL TERAPÊUTICO:\n\n1. Peça para a criança escolher o Avatar que a representa hoje.\n2. Escolham juntos 1 ou 2 'Poderes' para equipar na semana.\n3. A gamificação visa reduzir a resistência à mudança de hábitos.");
+        });
+
+        // --- Confetti Effect (Simples e Leve) ---
+        function fireConfetti() {
+            const canvas = document.getElementById('confetti-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const particles = [];
+            const colors = ['#F72585', '#4CC9F0', '#F9C74F', '#90BE6D', '#F94144'];
+
+            for (let i = 0; i < 100; i++) {
+                particles.push({
+                    x: window.innerWidth / 2,
+                    y: window.innerHeight / 2,
+                    w: Math.random() * 10 + 5,
+                    h: Math.random() * 10 + 5,
+                    dx: (Math.random() - 0.5) * 20,
+                    dy: (Math.random() - 0.5) * 20,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    life: 100
+                });
+            }
+
+            function update() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                let active = false;
+                particles.forEach(p => {
+                    if (p.life > 0) {
+                        p.x += p.dx;
+                        p.y += p.dy;
+                        p.dy += 0.5; // gravidade
+                        p.life--;
+                        ctx.fillStyle = p.color;
+                        ctx.fillRect(p.x, p.y, p.w, p.h);
+                        active = true;
+                    }
+                });
+                if (active) requestAnimationFrame(update);
+                else ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+            update();
+        }
+
+        renderGrid();
+    </script>
+</body>
+</html>

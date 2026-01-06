@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PsicoQuest | Missão Foco</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="seguranca.js" defer></script>
+    <style>
+        :root {
+            --bg-deep: #0f172a;
+            --card-bg: #1e293b;
+            --neon-blue: #38bdf8;
+            --neon-purple: #818cf8;
+            --neon-gold: #fbbf24;
+            --neon-pink: #f472b6;
+            --white: #f8fafc;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-deep);
+            background-image: radial-gradient(circle at top right, #1e1b4b, transparent),
+                              radial-gradient(circle at bottom left, #1e1b4b, transparent);
+            color: var(--white);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header Cyber Premium */
+        header {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(15px);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--neon-blue);
+            position: sticky; top: 0; z-index: 1000;
+        }
+
+        .logo-box img { height: 38px; filter: drop-shadow(0 0 5px var(--neon-blue)); }
+
+        .btn-inventory {
+            background: var(--neon-blue);
+            color: var(--bg-deep);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #0284c7;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+        }
+
+        /* Container da Grade */
+        .container {
+            flex: 1;
+            padding: 25px 15px;
+            max-width: 1100px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .mission-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 15px;
+        }
+
+        /* Card de Poder */
+        .card {
+            background: var(--card-bg);
+            border: 2px solid rgba(56, 189, 248, 0.2);
+            border-radius: 20px;
+            aspect-ratio: 1 / 1.1;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-align: center;
+        }
+
+        .card:hover { 
+            transform: translateY(-5px); 
+            border-color: var(--neon-blue); 
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+        }
+
+        .card.is-equipped { 
+            border-color: var(--neon-gold); 
+            background: rgba(251, 191, 36, 0.05);
+            box-shadow: 0 0 15px rgba(251, 191, 36, 0.2);
+        }
+
+        .card i { color: var(--neon-blue); margin-bottom: 10px; }
+        .card.is-equipped i { color: var(--neon-gold); }
+        .card h3 { font-size: 0.75rem; font-weight: 700; color: var(--white); text-transform: uppercase; letter-spacing: 0.5px; }
+
+        /* Modal Galáctico */
+        .overlay {
+            position: fixed; inset: 0; background: rgba(15, 23, 42, 0.95);
+            display: none; align-items: center; justify-content: center;
+            z-index: 2000; padding: 20px; backdrop-filter: blur(8px);
+        }
+
+        .modal {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 450px;
+            border-radius: 32px;
+            border: 3px solid var(--neon-blue);
+            position: relative;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 0 40px rgba(0,0,0,0.5);
+        }
+
+        .close-btn {
+            position: absolute; top: -15px; right: -15px;
+            background: var(--neon-pink); color: white; border: 3px solid var(--white);
+            width: 45px; height: 45px; border-radius: 50%;
+            font-weight: 900; cursor: pointer; font-size: 1.2rem;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        .modal-title { font-size: 1.8rem; font-weight: 900; color: var(--neon-gold); margin-bottom: 10px; text-transform: uppercase; }
+        .modal-desc { color: #cbd5e1; font-size: 1rem; margin-bottom: 20px; line-height: 1.5; }
+
+        .action-box {
+            background: rgba(56, 189, 248, 0.1); border-radius: 20px; padding: 20px;
+            margin-bottom: 25px; border: 1px solid var(--neon-blue);
+        }
+        .action-box strong { display: block; color: var(--neon-blue); margin-bottom: 8px; font-size: 0.8rem; letter-spacing: 1px; }
+
+        /* Bateria de Energia */
+        .energy-label { font-weight: 700; font-size: 0.75rem; color: var(--neon-purple); margin-bottom: 12px; text-transform: uppercase; }
+        .energy-selector {
+            display: flex; justify-content: center; gap: 20px; margin-bottom: 30px;
+        }
+        .energy-btn {
+            font-size: 2.5rem; cursor: pointer; opacity: 0.2; transition: 0.3s; filter: grayscale(1);
+        }
+        .energy-btn.active { opacity: 1; transform: scale(1.2); filter: grayscale(0); }
+
+        .btn-activate {
+            background: var(--neon-blue); color: var(--bg-deep); border: none;
+            width: 100%; padding: 18px; border-radius: 15px;
+            font-size: 1.1rem; font-weight: 900; cursor: pointer;
+            box-shadow: 0 5px 0 #0284c7;
+            text-transform: uppercase;
+        }
+
+        /* Footer */
+        footer {
+            background: #020617;
+            padding: 40px 20px;
+            text-align: center;
+            border-top: 2px solid var(--neon-blue);
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+        .footer-logo { height: 30px; margin-bottom: 15px; opacity: 0.5; }
+
+        @media (max-width: 500px) {
+            .mission-grid { grid-template-columns: repeat(2, 1fr); }
+            .modal { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-box">
+            <img src="https://gabrielopsicologo.com/wp-content/uploads/2025/12/Design-sem-nome.png" alt="PsicoQuest">
+        </div>
+        <button class="btn-inventory" id="invBtn" onclick="toggleFavs()">MOCHILA (0)</button>
+    </header>
+
+    <main class="container">
+        <div class="mission-grid" id="grid"></div>
+    </main>
+
+    <div class="overlay" id="overlay">
+        <div class="modal">
+            <button class="close-btn" onclick="closeModal()">X</button>
+            <div id="mIcon" style="margin-bottom: 15px;"></div>
+            <h2 id="mTitle" class="modal-title">PODER</h2>
+            <p id="mDesc" class="modal-desc"></p>
+            
+            <div class="action-box">
+                <strong>COMO ATIVAR:</strong>
+                <span id="mPractice"></span>
+            </div>
+
+            <div class="energy-label">ENERGIA PARA ESTA MISSÃO:</div>
+            <div class="energy-selector">
+                <span class="energy-btn" onclick="setEnergy(this, '🪫')">🪫</span>
+                <span class="energy-btn" onclick="setEnergy(this, '🔋')">🔋</span>
+                <span class="energy-btn" onclick="setEnergy(this, '⚡')">⚡</span>
+            </div>
+
+            <button class="btn-activate" onclick="equip()">ATIVAR PODER!</button>
+        </div>
+    </div>
+
+    <footer>
+        <img src="https://gabrielopsicologo.com/wp-content/uploads/2025/11/Logo_preta.png" class="footer-logo">
+        <p>Recurso Terapêutico Gamificado para TDAH</p>
+        <p>Desenvolvido por <strong>@gabrielopsicologo</strong> | CRP 06/215890</p>
+        <p>© 2025 Todos os direitos reservados.</p>
+        <a href="https://api.whatsapp.com/message/WV34TWMSKTEEL1?autoload=1&app_absent=0" style="color: var(--neon-blue); text-decoration: none; display: block; margin-top: 15px; font-weight: bold;">SUPORTE NO QG</a>
+    </footer>
+
+    <script>
+        const missionCards = [
+            { t: "Missão Curta", d: "Corte tarefas gigantes em blocos de 15 minutos.", p: "Não tente fazer tudo agora. Escolha só o primeiro passo!", i: "scissors" },
+            { t: "Escudo Ativo", d: "Coloque o celular longe do seu radar.", p: "Leve o celular para outro quarto até terminar a missão.", i: "shield" },
+            { t: "Motor 5 Min", d: "Comece a missão por apenas 5 minutos.", p: "O motor do cérebro liga depois que você dá a partida!", i: "zap" },
+            { t: "Base Limpa", d: "Organize sua mesa por apenas 2 minutos.", p: "Jogue o lixo fora e alinhe seus materiais agora.", i: "layout" },
+            { t: "Som Protetor", d: "Use som de chuva ou motor para focar.", p: "Coloque fones para entrar na sua bolha de proteção.", i: "headphones" },
+            { t: "Ponto de Salve", d: "Anote onde parou para não se perder.", p: "Marque o que você já conseguiu conquistar hoje.", i: "map-pin" },
+            { t: "Alvo Único", d: "Escolha apenas 1 missão importante por vez.", p: "Foque no alvo principal até ouvir o sinal de vitória!", i: "target" },
+            { t: "Salto Energia", d: "Pule ou se mexa por 1 minuto para acordar.", p: "Dê 10 pulos altos para mandar oxigênio para o cérebro.", i: "activity" },
+            { t: "Reset Água", d: "Lave o rosto com água bem gelada.", p: "A água fria dá um choque de foco no seu sistema.", i: "droplet" },
+            { t: "Relógio Color", d: "Veja o tempo sumindo no timer visual.", p: "Use um cronômetro que mostra a fatia de tempo acabando.", i: "timer" }
+        ];
+
+        // Expansão para 33 cartas com ícones Lucide
+        const extraThemes = ["Luz do Sol", "Som Natureza", "Postura Ninja", "Mochila Leve", "Música Game", "Poção Água", "Filtro Especial", "Checklist", "Pausa Curta", "Recompensa", "Aromas", "Desenho", "Caminhada"];
+        const extraIcons = ["sun", "tree-pine", "user-check", "briefcase", "music", "glass-water", "eye", "list-checks", "coffee", "gift", "flower2", "pen-tool", "footprints"];
+        
+        for(let i=10; i<33; i++) {
+            missionCards.push({
+                t: extraThemes[i % extraThemes.length],
+                d: "Use este poder especial para fortalecer seu foco hoje.",
+                p: "Combine com seu terapeuta o melhor jeito de usar este poder!",
+                i: extraIcons[i % extraIcons.length]
+            });
+        }
+
+        let equipped = new Set();
+        let currentIdx = null;
+        let filterOn = false;
+
+        function render() {
+            const grid = document.getElementById('grid');
+            grid.innerHTML = '';
+            missionCards.forEach((c, i) => {
+                if(filterOn && !equipped.has(i)) return;
+                const card = document.createElement('div');
+                card.className = `card ${equipped.has(i) ? 'is-equipped' : ''}`;
+                card.innerHTML = `
+                    <i data-lucide="${c.i}" style="width: 35px; height: 35px;"></i>
+                    <h3>${c.t}</h3>
+                `;
+                card.onclick = () => openModal(i);
+                grid.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        function openModal(i) {
+            currentIdx = i;
+            document.getElementById('mTitle').innerText = missionCards[i].t;
+            document.getElementById('mDesc').innerText = missionCards[i].d;
+            document.getElementById('mPractice').innerText = missionCards[i].p;
+            document.getElementById('mIcon').innerHTML = `<i data-lucide="${missionCards[i].i}" style="width: 50px; height: 50px; color: var(--neon-gold)"></i>`;
+            
+            document.querySelectorAll('.energy-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('overlay').style.display = 'flex';
+            lucide.createIcons();
+        }
+
+        function closeModal() { document.getElementById('overlay').style.display = 'none'; }
+
+        function setEnergy(btn, emoji) {
+            document.querySelectorAll('.energy-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            localStorage.setItem('pq_energy_'+currentIdx, emoji);
+        }
+
+        function equip() {
+            equipped.add(currentIdx);
+            document.getElementById('invBtn').innerText = `MOCHILA (${equipped.size})`;
+            closeModal();
+            render();
+        }
+
+        function toggleFavs() {
+            filterOn = !filterOn;
+            document.getElementById('invBtn').classList.toggle('active');
+            render();
+        }
+
+        render();
+    </script>
+</body>
+</html>

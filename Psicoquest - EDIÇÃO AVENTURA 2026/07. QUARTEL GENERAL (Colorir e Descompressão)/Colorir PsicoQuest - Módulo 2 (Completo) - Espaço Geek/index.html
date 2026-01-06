@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PsicoQuest - Módulo 2 (Completo)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        geek: { green: '#4ADE80', purple: '#8B5CF6', pink: '#EC4899', dark: '#1E293B', blue: '#3B82F6', yellow: '#EAB308', red: '#EF4444', teal: '#14B8A6' },
+                        paper: '#F8FBFF',
+                        gray: { text: '#6B7280' }
+                    },
+                    fontFamily: {
+                        sans: ['Nunito', 'sans-serif'],
+                        pixel: ['"Press Start 2P"', 'cursive'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { margin: 0; padding: 0; background: #333; }
+        
+        .page {
+            width: 210mm;
+            height: 297mm;
+            background: #F8FBFF;
+            margin: 20px auto;
+            position: relative;
+            box-sizing: border-box;
+            padding: 15mm;
+            display: flex;
+            flex-direction: column;
+            page-break-after: always;
+        }
+
+        .svg-draw {
+            fill: white;
+            stroke: #1E293B; /* Cor mais escura para o tema Geek */
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            width: 100%;
+            height: 100%;
+            max-height: 170mm; 
+            z-index: 10;
+        }
+
+        .copyright-label {
+            position: absolute;
+            bottom: 8px;
+            right: 12px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 800;
+            color: #CBD5E1;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            pointer-events: none;
+            background: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .frame-border {
+            border: 3px solid #1E293B; /* Borda sólida estilo Pixel Art */
+            border-radius: 0.5rem; /* Cantos menos arredondados */
+            position: relative;
+            background: white;
+            box-shadow: 4px 4px 0px #CBD5E1; /* Sombra dura estilo retro */
+        }
+
+        .mood-circle {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #94A3B8;
+            border-radius: 4px; /* Quadrado arredondado para tema geek */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .mood-face {
+            fill: none;
+            stroke: #94A3B8;
+            stroke-width: 2;
+            stroke-linecap: round;
+        }
+        
+        .pixel-text {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.7rem;
+            line-height: 1.5;
+        }
+
+        @media print {
+            body { background: none; }
+            .page { 
+                margin: 0; 
+                border: none; 
+                width: 100%; 
+                height: 100vh; 
+            }
+            .no-print { display: none; }
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========================================== -->
+    <!-- PÁGINA 13: O ROBÔ DAS EMOÇÕES              -->
+    <!-- ========================================== -->
+    <div class="page">
+        <!-- Cabeçalho Geek -->
+        <header class="border-b-4 border-geek-purple pb-4 mb-4 flex justify-between items-start">
+            <div class="flex items-center gap-3">
+                <div class="bg-geek-purple text-white p-2 rounded shadow-sm">
+                    <i data-lucide="bot" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="pixel-text text-geek-dark text-lg">Espaço Geek</h1>
+                    <p class="text-[10px] font-bold text-geek-purple uppercase tracking-widest font-sans">PsicoQuest • Módulo 02</p>
+                </div>
+            </div>
+            
+            <div class="text-right flex flex-col items-end">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="text-[10px] font-bold text-gray-400 uppercase font-sans">Status:</span>
+                    <div class="flex gap-2">
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,12 Q10,17 15,12" /></svg></div>
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,14 L15,14" /></svg></div>
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,16 Q10,11 15,16" /></svg></div>
+                        <div class="mood-circle"></div>
+                    </div>
+                </div>
+                <div class="w-32 border-b border-geek-purple text-[10px] text-right text-gray-text font-sans">Data: ___/___</div>
+            </div>
+        </header>
+
+        <main class="flex-grow frame-border p-6 flex flex-col items-center justify-center">
+            <div class="absolute top-4 left-6 bg-paper px-3 py-1 rounded border border-geek-purple">
+                <h2 class="font-bold text-geek-dark text-sm font-sans">13. ROBÔ SENTIMENTAL</h2>
+            </div>
+            <div class="copyright-label">© PsicoQuest</div>
+
+            <svg viewBox="0 0 300 300" class="svg-draw">
+                <!-- Antena -->
+                <line x1="150" y1="50" x2="150" y2="80" stroke-width="3" />
+                <circle cx="150" cy="50" r="5" fill="white" />
+                <!-- Cabeça -->
+                <rect x="100" y="80" width="100" height="80" rx="10" fill="white" />
+                <!-- Olhos (Visor) -->
+                <rect x="115" y="100" width="70" height="30" rx="5" fill="none" stroke-width="2" />
+                <circle cx="135" cy="115" r="5" fill="#1E293B" stroke="none" />
+                <circle cx="165" cy="115" r="5" fill="#1E293B" stroke="none" />
+                <!-- Boca (Grade) -->
+                <line x1="130" y1="145" x2="170" y2="145" stroke-width="2" />
+                <line x1="135" y1="140" x2="135" y2="150" stroke-width="1" />
+                <line x1="145" y1="140" x2="145" y2="150" stroke-width="1" />
+                <line x1="155" y1="140" x2="155" y2="150" stroke-width="1" />
+                <line x1="165" y1="140" x2="165" y2="150" stroke-width="1" />
+                <!-- Pescoço -->
+                <rect x="135" y="160" width="30" height="10" fill="white" />
+                <!-- Corpo -->
+                <rect x="90" y="170" width="120" height="100" rx="15" fill="white" />
+                <!-- Painel no Peito -->
+                <rect x="110" y="190" width="80" height="60" rx="5" fill="none" />
+                <!-- Botões do Painel -->
+                <circle cx="130" cy="210" r="8" fill="none" stroke-width="1.5" />
+                <circle cx="170" cy="210" r="8" fill="none" stroke-width="1.5" />
+                <rect x="120" y="230" width="60" height="10" rx="2" fill="none" stroke-width="1.5" />
+                <!-- Braços -->
+                <path d="M90,190 Q70,200 70,230" fill="none" stroke-width="3" />
+                <circle cx="70" cy="235" r="10" fill="white" /> <!-- Mão -->
+                <path d="M210,190 Q230,200 230,230" fill="none" stroke-width="3" />
+                <circle cx="230" cy="235" r="10" fill="white" /> <!-- Mão -->
+            </svg>
+        </main>
+
+        <footer class="mt-4 bg-geek-purple/10 p-3 rounded border-l-4 border-geek-purple">
+            <p class="text-xs text-gray-600 font-medium font-sans">
+                <strong class="text-geek-purple uppercase pixel-text text-[10px]">Missão:</strong>
+                <br>O robô precisa processar seus dados. Pinte os botões do peito com as cores de como você se sente hoje.
+            </p>
+        </footer>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PÁGINA 14: O CONSOLE DA MEMÓRIA            -->
+    <!-- ========================================== -->
+    <div class="page">
+        <header class="border-b-4 border-geek-green pb-4 mb-4 flex justify-between items-start">
+            <div class="flex items-center gap-3">
+                <div class="bg-geek-green text-white p-2 rounded shadow-sm">
+                    <i data-lucide="gamepad-2" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="pixel-text text-geek-dark text-lg">Espaço Geek</h1>
+                    <p class="text-[10px] font-bold text-geek-green uppercase tracking-widest font-sans">PsicoQuest • Módulo 02</p>
+                </div>
+            </div>
+            
+            <div class="text-right flex flex-col items-end">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="text-[10px] font-bold text-gray-400 uppercase font-sans">Status:</span>
+                    <div class="flex gap-2">
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,12 Q10,17 15,12" /></svg></div>
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,14 L15,14" /></svg></div>
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,16 Q10,11 15,16" /></svg></div>
+                        <div class="mood-circle"></div>
+                    </div>
+                </div>
+                <div class="w-32 border-b border-geek-green text-[10px] text-right text-gray-text font-sans">Data: ___/___</div>
+            </div>
+        </header>
+
+        <main class="flex-grow frame-border p-6 flex flex-col items-center justify-center">
+            <div class="absolute top-4 left-6 bg-paper px-3 py-1 rounded border border-geek-green">
+                <h2 class="font-bold text-geek-dark text-sm font-sans">14. O PORTÁTIL RETRÔ</h2>
+            </div>
+            <div class="copyright-label">© PsicoQuest</div>
+
+            <svg viewBox="0 0 300 300" class="svg-draw">
+                <!-- Corpo do Game Boy -->
+                <rect x="80" y="40" width="140" height="220" rx="10" fill="white" stroke-width="3" />
+                <path d="M220,220 L220,250 Q220,260 210,260 L90,260 Q80,260 80,250 L80,220" fill="none" stroke="none" />
+                <!-- Tela -->
+                <rect x="100" y="60" width="100" height="90" rx="5" fill="none" stroke-width="2" />
+                <rect x="110" y="70" width="80" height="70" fill="none" stroke-width="1" />
+                <!-- Desenho na Tela -->
+                <rect x="135" y="90" width="10" height="10" fill="none" stroke-width="1" />
+                <rect x="155" y="90" width="10" height="10" fill="none" stroke-width="1" />
+                <rect x="130" y="100" width="10" height="10" fill="none" stroke-width="1" />
+                <rect x="160" y="100" width="10" height="10" fill="none" stroke-width="1" />
+                <rect x="135" y="110" width="10" height="10" fill="none" stroke-width="1" />
+                <rect x="155" y="110" width="10" height="10" fill="none" stroke-width="1" />
+                <rect x="145" y="120" width="10" height="10" fill="none" stroke-width="1" />
+                <!-- Nome da Marca -->
+                <line x1="100" y1="160" x2="200" y2="160" stroke-width="1" stroke-dasharray="2" />
+                <!-- D-Pad -->
+                <rect x="100" y="180" width="30" height="10" rx="2" fill="white" />
+                <rect x="110" y="170" width="10" height="30" rx="2" fill="white" />
+                <!-- Botões A e B -->
+                <circle cx="190" cy="185" r="8" fill="white" stroke-width="2" />
+                <text x="187" y="189" font-family="sans-serif" font-size="8" stroke="none" fill="#1E293B">A</text>
+                <circle cx="170" cy="195" r="8" fill="white" stroke-width="2" />
+                <text x="167" y="199" font-family="sans-serif" font-size="8" stroke="none" fill="#1E293B">B</text>
+                <!-- Select / Start -->
+                <rect x="125" y="230" width="20" height="6" rx="3" transform="rotate(-25 135 233)" fill="white" stroke-width="1.5" />
+                <rect x="155" y="230" width="20" height="6" rx="3" transform="rotate(-25 165 233)" fill="white" stroke-width="1.5" />
+            </svg>
+        </main>
+
+        <footer class="mt-4 bg-geek-green/10 p-3 rounded border-l-4 border-geek-green">
+            <p class="text-xs text-gray-600 font-medium font-sans">
+                <strong class="text-geek-green uppercase pixel-text text-[10px]">Missão:</strong>
+                <br>O jogo da vida tem fases boas. Desenhe na tela uma memória que você gostaria de dar "Replay".
+            </p>
+        </footer>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PÁGINA 15: O FOGUETE DA CORAGEM            -->
+    <!-- ========================================== -->
+    <div class="page">
+        <header class="border-b-4 border-geek-pink pb-4 mb-4 flex justify-between items-start">
+            <div class="flex items-center gap-3">
+                <div class="bg-geek-pink text-white p-2 rounded shadow-sm">
+                    <i data-lucide="rocket" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="pixel-text text-geek-dark text-lg">Espaço Geek</h1>
+                    <p class="text-[10px] font-bold text-geek-pink uppercase tracking-widest font-sans">PsicoQuest • Módulo 02</p>
+                </div>
+            </div>
+            
+            <div class="text-right flex flex-col items-end">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="text-[10px] font-bold text-gray-400 uppercase font-sans">Status:</span>
+                    <div class="flex gap-2">
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,12 Q10,17 15,12" /></svg></div>
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,14 L15,14" /></svg></div>
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,16 Q10,11 15,16" /></svg></div>
+                        <div class="mood-circle"></div>
+                    </div>
+                </div>
+                <div class="w-32 border-b border-geek-pink text-[10px] text-right text-gray-text font-sans">Data: ___/___</div>
+            </div>
+        </header>
+
+        <main class="flex-grow frame-border p-6 flex flex-col items-center justify-center">
+            <div class="absolute top-4 left-6 bg-paper px-3 py-1 rounded border border-geek-pink">
+                <h2 class="font-bold text-geek-dark text-sm font-sans">15. FOGUETE DA CORAGEM</h2>
+            </div>
+            <div class="copyright-label">© PsicoQuest</div>
+
+            <svg viewBox="0 0 300 300" class="svg-draw">
+                <!-- Corpo Foguete -->
+                <path d="M150,50 Q190,100 190,180 L110,180 Q110,100 150,50 Z" fill="white" />
+                <!-- Asas -->
+                <path d="M110,150 L80,190 L110,180" fill="white" />
+                <path d="M190,150 L220,190 L190,180" fill="white" />
+                <path d="M150,150 L150,190" stroke-width="1" />
+                <!-- Janela -->
+                <circle cx="150" cy="110" r="25" fill="white" stroke-width="2" />
+                <circle cx="150" cy="110" r="20" fill="none" stroke-width="1" />
+                <!-- Rebites -->
+                <circle cx="150" cy="65" r="2" fill="none" stroke-width="1" />
+                <circle cx="150" cy="140" r="2" fill="none" stroke-width="1" />
+                <!-- Fogo -->
+                <path d="M120,190 Q130,220 120,240" fill="none" stroke-width="2" />
+                <path d="M150,190 Q150,230 150,250" fill="none" stroke-width="2" />
+                <path d="M180,190 Q170,220 180,240" fill="none" stroke-width="2" />
+                <!-- Estrelas -->
+                <circle cx="50" cy="50" r="10" fill="none" stroke-width="1" />
+                <path d="M40,50 L60,50" fill="none" stroke-width="1" />
+                <path d="M250,80 L255,85 L250,90 L245,85 Z" fill="none" stroke-width="1" />
+                <path d="M80,250 L85,255 L80,260 L75,255 Z" fill="none" stroke-width="1" />
+            </svg>
+        </main>
+
+        <footer class="mt-4 bg-geek-pink/10 p-3 rounded border-l-4 border-geek-pink">
+            <p class="text-xs text-gray-600 font-medium font-sans">
+                <strong class="text-geek-pink uppercase pixel-text text-[10px]">Missão:</strong>
+                <br>Para voar alto, precisamos de combustível. Escreva na fumaça do foguete 3 coisas que te dão coragem.
+            </p>
+        </footer>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PÁGINA 16: A POÇÃO DE MANA (ENERGIA)       -->
+    <!-- ========================================== -->
+    <div class="page">
+        <header class="border-b-4 border-blue-500 pb-4 mb-4 flex justify-between items-start">
+            <div class="flex items-center gap-3">
+                <div class="bg-blue-500 text-white p-2 rounded shadow-sm">
+                    <i data-lucide="flask-conical" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="pixel-text text-geek-dark text-lg">Espaço Geek</h1>
+                    <p class="text-[10px] font-bold text-blue-500 uppercase tracking-widest font-sans">PsicoQuest • Módulo 02</p>
+                </div>
+            </div>
+            
+            <div class="text-right flex flex-col items-end">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="text-[10px] font-bold text-gray-400 uppercase font-sans">Status:</span>
+                    <div class="flex gap-2">
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,12 Q10,17 15,12" /></svg></div>
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,14 L15,14" /></svg></div>
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,16 Q10,11 15,16" /></svg></div>
+                        <div class="mood-circle"></div>
+                    </div>
+                </div>
+                <div class="w-32 border-b border-blue-500 text-[10px] text-right text-gray-text font-sans">Data: ___/___</div>
+            </div>
+        </header>
+
+        <main class="flex-grow frame-border p-6 flex flex-col items-center justify-center">
+            <div class="absolute top-4 left-6 bg-paper px-3 py-1 rounded border border-blue-500">
+                <h2 class="font-bold text-geek-dark text-sm font-sans">16. POÇÃO DE ENERGIA</h2>
+            </div>
+            <div class="copyright-label">© PsicoQuest</div>
+
+            <svg viewBox="0 0 300 300" class="svg-draw">
+                <!-- Frasco -->
+                <path d="M120,50 L120,100 L80,220 Q80,260 150,260 Q220,260 220,220 L180,100 L180,50" fill="white" stroke-width="3" />
+                <!-- Tampa -->
+                <rect x="115" y="30" width="70" height="20" rx="2" fill="white" stroke-width="2" />
+                <!-- Líquido -->
+                <path d="M100,160 Q150,180 200,160" fill="none" stroke-width="2" stroke-dasharray="4" />
+                <!-- Bolhas -->
+                <circle cx="150" cy="200" r="15" fill="none" stroke-width="1.5" />
+                <circle cx="180" cy="220" r="10" fill="none" stroke-width="1.5" />
+                <circle cx="120" cy="230" r="8" fill="none" stroke-width="1.5" />
+                <circle cx="150" cy="120" r="5" fill="none" stroke-width="1" />
+                <!-- Brilhos -->
+                <path d="M230,120 L235,110 L240,120 L250,125 L240,130 L235,140 L230,130 L220,125 Z" fill="none" stroke-width="1" />
+                <path d="M60,180 L65,170 L70,180 L80,185 L70,190 L65,200 L60,190 L50,185 Z" fill="none" stroke-width="1" />
+                <!-- Rótulo -->
+                <path d="M110,180 L190,180 L180,220 L120,220 Z" fill="white" stroke-width="1" />
+                <path d="M140,195 L150,190 L160,195 L150,210 Z" fill="none" stroke-width="1" />
+            </svg>
+        </main>
+
+        <footer class="mt-4 bg-blue-500/10 p-3 rounded border-l-4 border-blue-500">
+            <p class="text-xs text-gray-600 font-medium font-sans">
+                <strong class="text-blue-500 uppercase pixel-text text-[10px]">Missão:</strong>
+                <br>Quando sua barra de energia está baixa, o que você faz para recarregar? Dormir? Ler? Pinte o líquido de azul ou roxo.
+            </p>
+        </footer>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PÁGINA 17: O ESCUDO ANTI-VÍRUS             -->
+    <!-- ========================================== -->
+    <div class="page">
+        <header class="border-b-4 border-geek-blue pb-4 mb-4 flex justify-between items-start">
+            <div class="flex items-center gap-3">
+                <div class="bg-geek-blue text-white p-2 rounded shadow-sm">
+                    <i data-lucide="shield-check" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="pixel-text text-geek-dark text-lg">Espaço Geek</h1>
+                    <p class="text-[10px] font-bold text-geek-blue uppercase tracking-widest font-sans">PsicoQuest • Módulo 02</p>
+                </div>
+            </div>
+            
+            <div class="text-right flex flex-col items-end">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="text-[10px] font-bold text-gray-400 uppercase font-sans">Status:</span>
+                    <div class="flex gap-2">
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,12 Q10,17 15,12" /></svg></div>
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,14 L15,14" /></svg></div>
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,16 Q10,11 15,16" /></svg></div>
+                        <div class="mood-circle"></div>
+                    </div>
+                </div>
+                <div class="w-32 border-b border-geek-blue text-[10px] text-right text-gray-text font-sans">Data: ___/___</div>
+            </div>
+        </header>
+
+        <main class="flex-grow frame-border p-6 flex flex-col items-center justify-center">
+            <div class="absolute top-4 left-6 bg-paper px-3 py-1 rounded border border-geek-blue">
+                <h2 class="font-bold text-geek-dark text-sm font-sans">17. ESCUDO ANTI-VÍRUS</h2>
+            </div>
+            <div class="copyright-label">© PsicoQuest</div>
+
+            <svg viewBox="0 0 300 300" class="svg-draw">
+                <!-- Formato do Escudo Pixelado -->
+                <path d="M50,50 L250,50" stroke-width="4" />
+                <path d="M50,50 L50,150" stroke-width="4" />
+                <path d="M250,50 L250,150" stroke-width="4" />
+                <path d="M50,150 L80,150 L80,180 L110,180 L110,210 L150,210" stroke-width="4" fill="none" />
+                <path d="M250,150 L220,150 L220,180 L190,180 L190,210 L150,210" stroke-width="4" fill="none" />
+                
+                <!-- Borda Interna -->
+                <path d="M65,65 L235,65 L235,145 L210,145 L210,170 L180,170 L180,195 L120,195 L120,170 L90,170 L90,145 L65,145 Z" fill="none" stroke-width="2" />
+                
+                <!-- Cruz -->
+                <rect x="135" y="100" width="30" height="80" fill="none" stroke-width="2" />
+                <rect x="110" y="125" width="80" height="30" fill="none" stroke-width="2" />
+                
+                <!-- Detalhes -->
+                <rect x="30" y="80" width="10" height="10" fill="none" stroke-width="1" />
+                <rect x="260" y="120" width="10" height="10" fill="none" stroke-width="1" />
+                <rect x="40" y="200" width="10" height="10" fill="none" stroke-width="1" />
+                
+                <!-- Vírus -->
+                <circle cx="270" cy="70" r="5" fill="#1E293B" />
+                <line x1="265" y1="70" x2="275" y2="70" stroke="white" stroke-width="1" />
+                <line x1="270" y1="65" x2="270" y2="75" stroke="white" stroke-width="1" />
+            </svg>
+        </main>
+
+        <footer class="mt-4 bg-geek-blue/10 p-3 rounded border-l-4 border-geek-blue">
+            <p class="text-xs text-gray-600 font-medium font-sans">
+                <strong class="text-geek-blue uppercase pixel-text text-[10px]">Missão:</strong>
+                <br>Seu escudo protege contra pensamentos ruins (vírus). Desenhe no centro algo que te faz sentir seguro.
+            </p>
+        </footer>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PÁGINA 18: O CIRCUITO LÓGICO               -->
+    <!-- ========================================== -->
+    <div class="page">
+        <header class="border-b-4 border-geek-yellow pb-4 mb-4 flex justify-between items-start">
+            <div class="flex items-center gap-3">
+                <div class="bg-geek-yellow text-white p-2 rounded shadow-sm">
+                    <i data-lucide="cpu" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="pixel-text text-geek-dark text-lg">Espaço Geek</h1>
+                    <p class="text-[10px] font-bold text-geek-yellow uppercase tracking-widest font-sans">PsicoQuest • Módulo 02</p>
+                </div>
+            </div>
+            
+            <div class="text-right flex flex-col items-end">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="text-[10px] font-bold text-gray-400 uppercase font-sans">Status:</span>
+                    <div class="flex gap-2">
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,12 Q10,17 15,12" /></svg></div>
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,14 L15,14" /></svg></div>
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,16 Q10,11 15,16" /></svg></div>
+                        <div class="mood-circle"></div>
+                    </div>
+                </div>
+                <div class="w-32 border-b border-geek-yellow text-[10px] text-right text-gray-text font-sans">Data: ___/___</div>
+            </div>
+        </header>
+
+        <main class="flex-grow frame-border p-6 flex flex-col items-center justify-center">
+            <div class="absolute top-4 left-6 bg-paper px-3 py-1 rounded border border-geek-yellow">
+                <h2 class="font-bold text-geek-dark text-sm font-sans">18. O CIRCUITO LÓGICO</h2>
+            </div>
+            <div class="copyright-label">© PsicoQuest</div>
+
+            <svg viewBox="0 0 300 300" class="svg-draw">
+                <!-- Placa de Circuito -->
+                <rect x="40" y="40" width="220" height="220" rx="5" fill="none" stroke-width="3" />
+                
+                <!-- Chip Central -->
+                <rect x="110" y="110" width="80" height="80" fill="white" stroke-width="3" />
+                <rect x="120" y="120" width="60" height="60" fill="none" stroke-width="1" />
+                <text x="130" y="155" font-family="'Press Start 2P', cursive" font-size="10" fill="#1E293B" stroke="none">BRAIN</text>
+                
+                <!-- Trilhas -->
+                <circle cx="60" cy="60" r="5" fill="white" stroke-width="2" />
+                <path d="M60,65 L60,90 L90,90 L90,120" fill="none" stroke-width="2" />
+                <circle cx="240" cy="60" r="5" fill="white" stroke-width="2" />
+                <path d="M240,65 L240,150 L210,150" fill="none" stroke-width="2" />
+                <circle cx="60" cy="240" r="5" fill="white" stroke-width="2" />
+                <path d="M60,235 L60,190 L110,190" fill="none" stroke-width="2" />
+                <circle cx="240" cy="240" r="5" fill="white" stroke-width="2" />
+                <path d="M240,235 L240,210 L190,210 L190,190" fill="none" stroke-width="2" />
+
+                <!-- Detalhes -->
+                <circle cx="100" cy="50" r="2" fill="#1E293B" stroke="none" />
+                <circle cx="200" cy="250" r="2" fill="#1E293B" stroke="none" />
+                <rect x="50" y="130" width="10" height="20" fill="white" stroke-width="1" />
+                <rect x="240" y="100" width="10" height="20" fill="white" stroke-width="1" />
+                
+                <!-- Pinos -->
+                <line x1="110" y1="120" x2="100" y2="120" stroke-width="1" />
+                <line x1="110" y1="130" x2="100" y2="130" stroke-width="1" />
+                <line x1="110" y1="140" x2="100" y2="140" stroke-width="1" />
+                <line x1="190" y1="120" x2="200" y2="120" stroke-width="1" />
+                <line x1="190" y1="130" x2="200" y2="130" stroke-width="1" />
+                <line x1="190" y1="140" x2="200" y2="140" stroke-width="1" />
+            </svg>
+        </main>
+
+        <footer class="mt-4 bg-geek-yellow/10 p-3 rounded border-l-4 border-geek-yellow">
+            <p class="text-xs text-gray-600 font-medium font-sans">
+                <strong class="text-geek-yellow uppercase pixel-text text-[10px]">Missão:</strong>
+                <br>Às vezes a mente fica bagunçada. Trace as linhas com cuidado para conectar tudo ao processador central.
+            </p>
+        </footer>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PÁGINA 19: A BATERIA SOCIAL                -->
+    <!-- ========================================== -->
+    <div class="page">
+        <header class="border-b-4 border-geek-green pb-4 mb-4 flex justify-between items-start">
+            <div class="flex items-center gap-3">
+                <div class="bg-geek-green text-white p-2 rounded shadow-sm">
+                    <i data-lucide="battery-charging" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="pixel-text text-geek-dark text-lg">Espaço Geek</h1>
+                    <p class="text-[10px] font-bold text-geek-green uppercase tracking-widest font-sans">PsicoQuest • Módulo 02</p>
+                </div>
+            </div>
+            
+            <div class="text-right flex flex-col items-end">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="text-[10px] font-bold text-gray-400 uppercase font-sans">Status:</span>
+                    <div class="flex gap-2">
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,12 Q10,17 15,12" /></svg></div>
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,14 L15,14" /></svg></div>
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,16 Q10,11 15,16" /></svg></div>
+                        <div class="mood-circle"></div>
+                    </div>
+                </div>
+                <div class="w-32 border-b border-geek-green text-[10px] text-right text-gray-text font-sans">Data: ___/___</div>
+            </div>
+        </header>
+
+        <main class="flex-grow frame-border p-6 flex flex-col items-center justify-center">
+            <div class="absolute top-4 left-6 bg-paper px-3 py-1 rounded border border-geek-green">
+                <h2 class="font-bold text-geek-dark text-sm font-sans">19. BATERIA SOCIAL</h2>
+            </div>
+            <div class="copyright-label">© PsicoQuest</div>
+
+            <svg viewBox="0 0 300 300" class="svg-draw">
+                <!-- Contorno da Bateria -->
+                <rect x="70" y="60" width="140" height="200" rx="10" fill="none" stroke-width="4" />
+                <rect x="110" y="40" width="60" height="20" rx="2" fill="white" stroke-width="4" />
+                
+                <!-- Segmentos -->
+                <rect x="80" y="210" width="120" height="40" rx="4" fill="none" stroke-width="2" />
+                <rect x="80" y="160" width="120" height="40" rx="4" fill="none" stroke-width="2" />
+                <rect x="80" y="110" width="120" height="40" rx="4" fill="none" stroke-width="2" />
+                
+                <!-- Raio -->
+                <path d="M240,120 L220,150 L240,150 L220,180" fill="none" stroke="#1E293B" stroke-width="2" />
+                <path d="M60,120 L40,150 L60,150 L40,180" fill="none" stroke="#1E293B" stroke-width="2" transform="scale(-1, 1) translate(-100, 0)" />
+
+                <!-- Rosto -->
+                <circle cx="120" cy="180" r="2" fill="#1E293B" stroke="none" opacity="0.5" />
+                <circle cx="160" cy="180" r="2" fill="#1E293B" stroke="none" opacity="0.5" />
+
+                <!-- Porcentagem -->
+                <text x="220" y="250" font-family="'Press Start 2P', cursive" font-size="12" fill="#1E293B" stroke="none">%</text>
+            </svg>
+        </main>
+
+        <footer class="mt-4 bg-geek-green/10 p-3 rounded border-l-4 border-geek-green">
+            <p class="text-xs text-gray-600 font-medium font-sans">
+                <strong class="text-geek-green uppercase pixel-text text-[10px]">Missão:</strong>
+                <br>Como está sua energia para conversar hoje? Pinte até onde ela está cheia (Baixa, Média ou Alta).
+            </p>
+        </footer>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PÁGINA 20: MUNDO VR (LUGAR SEGURO)         -->
+    <!-- ========================================== -->
+    <div class="page">
+        <header class="border-b-4 border-geek-purple pb-4 mb-4 flex justify-between items-start">
+            <div class="flex items-center gap-3">
+                <div class="bg-geek-purple text-white p-2 rounded shadow-sm">
+                    <i data-lucide="glasses" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="pixel-text text-geek-dark text-lg">Espaço Geek</h1>
+                    <p class="text-[10px] font-bold text-geek-purple uppercase tracking-widest font-sans">PsicoQuest • Módulo 02</p>
+                </div>
+            </div>
+            
+            <div class="text-right flex flex-col items-end">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="text-[10px] font-bold text-gray-400 uppercase font-sans">Status:</span>
+                    <div class="flex gap-2">
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,12 Q10,17 15,12" /></svg></div>
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,14 L15,14" /></svg></div>
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,16 Q10,11 15,16" /></svg></div>
+                        <div class="mood-circle"></div>
+                    </div>
+                </div>
+                <div class="w-32 border-b border-geek-purple text-[10px] text-right text-gray-text font-sans">Data: ___/___</div>
+            </div>
+        </header>
+
+        <main class="flex-grow frame-border p-6 flex flex-col items-center justify-center">
+            <div class="absolute top-4 left-6 bg-paper px-3 py-1 rounded border border-geek-purple">
+                <h2 class="font-bold text-geek-dark text-sm font-sans">20. MUNDO VR (REALIDADE VIRTUAL)</h2>
+            </div>
+            <div class="copyright-label">© PsicoQuest</div>
+
+            <svg viewBox="0 0 300 300" class="svg-draw">
+                <!-- Headset VR -->
+                <rect x="50" y="100" width="200" height="100" rx="15" fill="white" stroke-width="3" />
+                
+                <!-- Faixas -->
+                <path d="M50,120 L20,130 Q10,150 20,170 L50,180" fill="none" stroke-width="2" />
+                <path d="M250,120 L280,130 Q290,150 280,170 L250,180" fill="none" stroke-width="2" />
+                <path d="M100,100 L110,60 Q150,40 190,60 L200,100" fill="none" stroke-width="2" />
+                
+                <!-- Lentes -->
+                <rect x="70" y="115" width="160" height="70" rx="5" fill="none" stroke-width="2" />
+                
+                <!-- Detalhes -->
+                <circle cx="230" cy="115" r="3" fill="#1E293B" stroke="none" />
+                <rect x="220" y="180" width="15" height="5" fill="#1E293B" stroke="none" />
+                
+                <!-- Balão de Pensamento -->
+                <path d="M150,100 Q150,80 130,70" fill="none" stroke-width="1" stroke-dasharray="3" />
+                <path d="M130,70 Q100,20 180,20 Q240,20 200,70 Q180,80 150,100" fill="none" stroke-width="2" stroke-dasharray="3" />
+                
+                <!-- Texto -->
+                <text x="110" y="240" font-family="'Press Start 2P', cursive" font-size="8" fill="#1E293B" stroke="none">LUGAR SEGURO</text>
+            </svg>
+        </main>
+
+        <footer class="mt-4 bg-geek-purple/10 p-3 rounded border-l-4 border-geek-purple">
+            <p class="text-xs text-gray-600 font-medium font-sans">
+                <strong class="text-geek-purple uppercase pixel-text text-[10px]">Missão:</strong>
+                <br>Na Realidade Virtual você pode ir para qualquer lugar. Desenhe dentro do óculos o seu lugar favorito para relaxar.
+            </p>
+        </footer>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PÁGINA 21: MEU INVENTÁRIO (HABILIDADES)    -->
+    <!-- ========================================== -->
+    <div class="page">
+        <header class="border-b-4 border-geek-teal pb-4 mb-4 flex justify-between items-start">
+            <div class="flex items-center gap-3">
+                <div class="bg-geek-teal text-white p-2 rounded shadow-sm">
+                    <i data-lucide="backpack" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="pixel-text text-geek-dark text-lg">Espaço Geek</h1>
+                    <p class="text-[10px] font-bold text-geek-teal uppercase tracking-widest font-sans">PsicoQuest • Módulo 02</p>
+                </div>
+            </div>
+            
+            <div class="text-right flex flex-col items-end">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="text-[10px] font-bold text-gray-400 uppercase font-sans">Status:</span>
+                    <div class="flex gap-2">
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,12 Q10,17 15,12" /></svg></div>
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,14 L15,14" /></svg></div>
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,16 Q10,11 15,16" /></svg></div>
+                        <div class="mood-circle"></div>
+                    </div>
+                </div>
+                <div class="w-32 border-b border-geek-teal text-[10px] text-right text-gray-text font-sans">Data: ___/___</div>
+            </div>
+        </header>
+
+        <main class="flex-grow frame-border p-6 flex flex-col items-center justify-center">
+            <div class="absolute top-4 left-6 bg-paper px-3 py-1 rounded border border-geek-teal">
+                <h2 class="font-bold text-geek-dark text-sm font-sans">21. MEU INVENTÁRIO</h2>
+            </div>
+            <div class="copyright-label">© PsicoQuest</div>
+
+            <svg viewBox="0 0 300 300" class="svg-draw">
+                <!-- Mochila Aberta -->
+                <path d="M70,80 Q150,50 230,80 L230,220 Q230,250 200,250 L100,250 Q70,250 70,220 Z" fill="white" stroke-width="3" />
+                
+                <!-- Bolso -->
+                <rect x="90" y="160" width="120" height="70" rx="10" fill="white" stroke-width="2" />
+                <path d="M120,160 L120,230" stroke-width="1" />
+                <circle cx="120" cy="195" r="3" fill="#1E293B" />
+                
+                <!-- Slots -->
+                <rect x="85" y="90" width="40" height="40" rx="5" fill="none" stroke-width="1.5" stroke-dasharray="4" />
+                <rect x="130" y="90" width="40" height="40" rx="5" fill="none" stroke-width="1.5" stroke-dasharray="4" />
+                <rect x="175" y="90" width="40" height="40" rx="5" fill="none" stroke-width="1.5" stroke-dasharray="4" />
+                
+                <!-- Itens Sugeridos -->
+                <path d="M50,120 L60,110 L70,120 L60,130 Z" fill="none" stroke-width="1" />
+                <circle cx="250" cy="120" r="10" fill="none" stroke-width="1" />
+                <path d="M240,150 L260,150 L250,170 Z" fill="none" stroke-width="1" />
+                
+                <!-- Alças -->
+                <path d="M70,100 Q40,120 40,200" fill="none" stroke-width="3" />
+                <path d="M230,100 Q260,120 260,200" fill="none" stroke-width="3" />
+                
+                <!-- Texto -->
+                <text x="110" y="270" font-family="'Press Start 2P', cursive" font-size="10" fill="#1E293B" stroke="none">ITEMS</text>
+            </svg>
+        </main>
+
+        <footer class="mt-4 bg-geek-teal/10 p-3 rounded border-l-4 border-geek-teal">
+            <p class="text-xs text-gray-600 font-medium font-sans">
+                <strong class="text-geek-teal uppercase pixel-text text-[10px]">Missão:</strong>
+                <br>O que você leva na mochila para enfrentar desafios? (Ex: Coragem, Amigos, Música). Desenhe nos quadrados.
+            </p>
+        </footer>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PÁGINA 22: O CHEFÃO (O PROBLEMA)           -->
+    <!-- ========================================== -->
+    <div class="page">
+        <header class="border-b-4 border-geek-red pb-4 mb-4 flex justify-between items-start">
+            <div class="flex items-center gap-3">
+                <div class="bg-geek-red text-white p-2 rounded shadow-sm">
+                    <i data-lucide="skull" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="pixel-text text-geek-dark text-lg">Espaço Geek</h1>
+                    <p class="text-[10px] font-bold text-geek-red uppercase tracking-widest font-sans">PsicoQuest • Módulo 02</p>
+                </div>
+            </div>
+            
+            <div class="text-right flex flex-col items-end">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="text-[10px] font-bold text-gray-400 uppercase font-sans">Status:</span>
+                    <div class="flex gap-2">
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,12 Q10,17 15,12" /></svg></div>
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,14 L15,14" /></svg></div>
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,16 Q10,11 15,16" /></svg></div>
+                        <div class="mood-circle"></div>
+                    </div>
+                </div>
+                <div class="w-32 border-b border-geek-red text-[10px] text-right text-gray-text font-sans">Data: ___/___</div>
+            </div>
+        </header>
+
+        <main class="flex-grow frame-border p-6 flex flex-col items-center justify-center">
+            <div class="absolute top-4 left-6 bg-paper px-3 py-1 rounded border border-geek-red">
+                <h2 class="font-bold text-geek-dark text-sm font-sans">22. O CHEFÃO (BOSS)</h2>
+            </div>
+            <div class="copyright-label">© PsicoQuest</div>
+
+            <svg viewBox="0 0 300 300" class="svg-draw">
+                <!-- Barra de Vida -->
+                <rect x="50" y="40" width="200" height="20" rx="5" fill="none" stroke-width="2" />
+                <rect x="55" y="45" width="100" height="10" fill="#1E293B" opacity="0.2" />
+                <text x="50" y="35" font-family="'Press Start 2P', cursive" font-size="8" fill="#1E293B" stroke="none">MEDO BOSS</text>
+                
+                <!-- Monstro Glitch -->
+                <path d="M100,100 L200,100 L220,130 L200,180 L230,220 L180,250 L150,230 L120,250 L70,220 L100,180 L80,130 Z" fill="white" stroke-width="3" />
+                
+                <!-- Olhos -->
+                <rect x="120" y="130" width="20" height="20" fill="none" stroke-width="2" />
+                <rect x="125" y="135" width="5" height="5" fill="#1E293B" stroke="none" />
+                <rect x="160" y="125" width="30" height="30" fill="none" stroke-width="2" />
+                <rect x="170" y="135" width="5" height="5" fill="#1E293B" stroke="none" />
+                
+                <!-- Boca -->
+                <path d="M130,180 L140,180 L140,190 L150,190 L150,180 L160,180 L160,190 L170,190" fill="none" stroke-width="2" />
+                
+                <!-- Efeito Glitch -->
+                <rect x="210" y="110" width="20" height="5" fill="none" stroke-width="1" />
+                <rect x="80" y="150" width="15" height="5" fill="none" stroke-width="1" />
+                <rect x="190" y="200" width="10" height="10" fill="none" stroke-width="1" stroke-dasharray="2" />
+                
+                <!-- Espaço para desenhar -->
+                <rect x="120" y="200" width="60" height="20" rx="2" fill="none" stroke-width="1" stroke-dasharray="3" />
+            </svg>
+        </main>
+
+        <footer class="mt-4 bg-geek-red/10 p-3 rounded border-l-4 border-geek-red">
+            <p class="text-xs text-gray-600 font-medium font-sans">
+                <strong class="text-geek-red uppercase pixel-text text-[10px]">Missão:</strong>
+                <br>Dê um nome para esse monstro (ex: Escuro, Prova). Desenhar o medo ajuda a diminuir a barra de vida dele.
+            </p>
+        </footer>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PÁGINA 23: O MAPA DA QUEST                 -->
+    <!-- ========================================== -->
+    <div class="page">
+        <header class="border-b-4 border-geek-green pb-4 mb-4 flex justify-between items-start">
+            <div class="flex items-center gap-3">
+                <div class="bg-geek-green text-white p-2 rounded shadow-sm">
+                    <i data-lucide="map" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="pixel-text text-geek-dark text-lg">Espaço Geek</h1>
+                    <p class="text-[10px] font-bold text-geek-green uppercase tracking-widest font-sans">PsicoQuest • Módulo 02</p>
+                </div>
+            </div>
+            
+            <div class="text-right flex flex-col items-end">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="text-[10px] font-bold text-gray-400 uppercase font-sans">Status:</span>
+                    <div class="flex gap-2">
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,12 Q10,17 15,12" /></svg></div>
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,14 L15,14" /></svg></div>
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,16 Q10,11 15,16" /></svg></div>
+                        <div class="mood-circle"></div>
+                    </div>
+                </div>
+                <div class="w-32 border-b border-geek-green text-[10px] text-right text-gray-text font-sans">Data: ___/___</div>
+            </div>
+        </header>
+
+        <main class="flex-grow frame-border p-6 flex flex-col items-center justify-center">
+            <div class="absolute top-4 left-6 bg-paper px-3 py-1 rounded border border-geek-green">
+                <h2 class="font-bold text-geek-dark text-sm font-sans">23. MAPA DA QUEST</h2>
+            </div>
+            <div class="copyright-label">© PsicoQuest</div>
+
+            <svg viewBox="0 0 300 300" class="svg-draw">
+                <!-- Pergaminho -->
+                <rect x="40" y="40" width="220" height="220" rx="10" fill="white" stroke-width="3" />
+                
+                <!-- Caminho -->
+                <circle cx="80" cy="220" r="10" fill="white" stroke-width="2" />
+                <text x="75" y="225" font-family="sans-serif" font-size="12" fill="#1E293B" stroke="none">A</text>
+                <path d="M80,210 Q80,150 150,150 Q220,150 220,90" fill="none" stroke-width="2" stroke-dasharray="4" />
+                
+                <!-- Checkpoints -->
+                <rect x="100" y="170" width="20" height="20" fill="white" stroke-width="1.5" transform="rotate(-15 110 180)" />
+                <rect x="180" y="130" width="20" height="20" fill="white" stroke-width="1.5" transform="rotate(15 190 140)" />
+                
+                <!-- Ponto de Chegada -->
+                <path d="M210,80 L230,100" stroke-width="3" />
+                <path d="M230,80 L210,100" stroke-width="3" />
+                
+                <!-- Elementos -->
+                <path d="M60,80 L80,60 L100,80 L90,90 L70,90 Z" fill="none" stroke-width="1" />
+                <path d="M200,200 L220,200 L220,220 L200,220 Z" fill="none" stroke-width="1" />
+                <path d="M190,210 L230,210" fill="none" stroke-width="1" /> 
+                
+                <!-- Bússola -->
+                <circle cx="230" cy="230" r="15" fill="none" stroke-width="1.5" />
+                <path d="M230,220 L235,230 L230,240 L225,230 Z" fill="none" stroke-width="1" />
+            </svg>
+        </main>
+
+        <footer class="mt-4 bg-geek-green/10 p-3 rounded border-l-4 border-geek-green">
+            <p class="text-xs text-gray-600 font-medium font-sans">
+                <strong class="text-geek-green uppercase pixel-text text-[10px]">Missão:</strong>
+                <br>Onde você quer chegar? O X é o seu objetivo. Escreva ou desenhe o prêmio final lá em cima.
+            </p>
+        </footer>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PÁGINA 24: TELA DE CONTINUE (RESILIÊNCIA)  -->
+    <!-- ========================================== -->
+    <div class="page">
+        <header class="border-b-4 border-geek-purple pb-4 mb-4 flex justify-between items-start">
+            <div class="flex items-center gap-3">
+                <div class="bg-geek-purple text-white p-2 rounded shadow-sm">
+                    <i data-lucide="rotate-ccw" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="pixel-text text-geek-dark text-lg">Espaço Geek</h1>
+                    <p class="text-[10px] font-bold text-geek-purple uppercase tracking-widest font-sans">PsicoQuest • Módulo 02</p>
+                </div>
+            </div>
+            
+            <div class="text-right flex flex-col items-end">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="text-[10px] font-bold text-gray-400 uppercase font-sans">Status:</span>
+                    <div class="flex gap-2">
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,12 Q10,17 15,12" /></svg></div>
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,14 L15,14" /></svg></div>
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,16 Q10,11 15,16" /></svg></div>
+                        <div class="mood-circle"></div>
+                    </div>
+                </div>
+                <div class="w-32 border-b border-geek-purple text-[10px] text-right text-gray-text font-sans">Data: ___/___</div>
+            </div>
+        </header>
+
+        <main class="flex-grow frame-border p-6 flex flex-col items-center justify-center">
+            <div class="absolute top-4 left-6 bg-paper px-3 py-1 rounded border border-geek-purple">
+                <h2 class="font-bold text-geek-dark text-sm font-sans">24. GAME OVER? TRY AGAIN!</h2>
+            </div>
+            <div class="copyright-label">© PsicoQuest</div>
+
+            <svg viewBox="0 0 300 300" class="svg-draw">
+                <!-- Fundo -->
+                <rect x="50" y="50" width="200" height="150" rx="10" fill="none" stroke-width="3" />
+                <!-- Texto -->
+                <text x="150" y="90" font-family="'Press Start 2P', cursive" font-size="16" fill="#1E293B" stroke="none" text-anchor="middle">CONTINUE?</text>
+                <!-- Contagem -->
+                <text x="150" y="140" font-family="'Press Start 2P', cursive" font-size="40" fill="#1E293B" stroke="none" text-anchor="middle">9</text>
+                <!-- Botões -->
+                <rect x="70" y="160" width="70" height="30" rx="5" fill="white" stroke-width="2" />
+                <path d="M60,175 L70,175 L65,180 Z" fill="#1E293B" stroke="none" transform="rotate(-90 65 177)" />
+                <text x="105" y="180" font-family="'Press Start 2P', cursive" font-size="10" fill="#1E293B" stroke="none" text-anchor="middle">YES</text>
+                <rect x="160" y="160" width="70" height="30" rx="5" fill="none" stroke-width="2" opacity="0.5" />
+                <text x="195" y="180" font-family="'Press Start 2P', cursive" font-size="10" fill="#1E293B" stroke="none" text-anchor="middle" opacity="0.5">NO</text>
+                <!-- Controle -->
+                <path d="M100,230 Q100,250 120,250 L180,250 Q200,250 200,230 L200,220 L100,220 Z" fill="white" stroke-width="3" />
+                <circle cx="180" cy="235" r="5" fill="none" stroke-width="1.5" />
+                <circle cx="170" cy="240" r="5" fill="none" stroke-width="1.5" />
+                <rect x="120" y="230" width="15" height="15" fill="none" stroke-width="1.5" />
+                <path d="M150,220 Q150,200 150,200" fill="none" stroke-width="2" />
+            </svg>
+        </main>
+
+        <footer class="mt-4 bg-geek-purple/10 p-3 rounded border-l-4 border-geek-purple">
+            <p class="text-xs text-gray-600 font-medium font-sans">
+                <strong class="text-geek-purple uppercase pixel-text text-[10px]">Missão:</strong>
+                <br>Errar faz parte do jogo. Pinte o botão "YES" bem forte para mostrar que você não desiste fácil.
+            </p>
+        </footer>
+    </div>
+
+</body>
+</html>

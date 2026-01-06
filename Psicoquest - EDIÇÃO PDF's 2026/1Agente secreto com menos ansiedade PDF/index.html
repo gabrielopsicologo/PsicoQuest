@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>PsicoQuest Heroes - Material para Impressão</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #6C5CE7;
+            --secondary: #00CEC9;
+            --accent: #FD79A8;
+            --success: #00B894;
+            --dark: #2D3436;
+            --grey: #b2bec3;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-print-color-adjust: exact !important; /* Força impressão das cores */
+            print-color-adjust: exact !important;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: #eee; /* Cinza na tela, mas branco no papel */
+            font-family: 'Nunito', sans-serif;
+            color: var(--dark);
+        }
+
+        /* Configuração de Página A4 */
+        .page {
+            width: 210mm;
+            height: 297mm;
+            background: white;
+            margin: 20px auto;
+            padding: 15mm;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        @media print {
+            body { background: none; margin: 0; }
+            .page { margin: 0; box-shadow: none; page-break-after: always; }
+        }
+
+        /* --- IDENTIDADE VISUAL --- */
+        .header {
+            text-align: center;
+            border-bottom: 3px solid var(--primary);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            font-family: 'Bungee', cursive;
+            font-size: 2.5rem;
+            color: var(--primary);
+            line-height: 1;
+            margin: 0;
+        }
+
+        .subtitle {
+            font-size: 0.9rem;
+            color: var(--grey);
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* --- SESSÃO 1: PERFIL DO HERÓI (Analógico) --- */
+        .hero-profile {
+            background: #f1f2f6;
+            border-radius: 15px;
+            padding: 15px;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            border: 2px dashed var(--grey);
+            margin-bottom: 20px;
+        }
+
+        .avatar-circle {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border: 3px solid var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #dfe6e9; /* Cor clara para indicar que deve desenhar */
+        }
+
+        .hero-inputs {
+            flex: 1;
+        }
+
+        .input-line {
+            border-bottom: 2px solid var(--dark);
+            margin-bottom: 5px;
+            height: 30px;
+        }
+        
+        .label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        /* --- SESSÃO 2: BARRA DE XP (Para pintar) --- */
+        .xp-section {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .xp-track {
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .xp-block {
+            width: 30px;
+            height: 30px;
+            border: 2px solid var(--dark);
+            border-radius: 5px;
+            background: white;
+        }
+
+        /* --- GRID DE CARTAS (Recortáveis) --- */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            flex: 1;
+        }
+
+        .card {
+            border: 2px dashed #b2bec3; /* Linha de corte */
+            border-radius: 12px;
+            padding: 10px;
+            position: relative;
+            background: white;
+            page-break-inside: avoid;
+        }
+
+        .card::before {
+            content: '✂️'; /* Ícone de tesoura */
+            position: absolute;
+            top: -12px;
+            right: -10px;
+            font-size: 1rem;
+            background: white;
+        }
+
+        .card-inner {
+            border: 2px solid; /* Cor definida inline */
+            border-radius: 8px;
+            height: 100%;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+
+        .card-icon { font-size: 1.8rem; }
+        
+        .card-title {
+            font-family: 'Bungee';
+            font-size: 0.9rem;
+            color: var(--dark);
+            line-height: 1.1;
+        }
+
+        .card-content {
+            font-size: 0.75rem; /* Letra menor para caber */
+            line-height: 1.3;
+        }
+
+        .card-content ul { padding-left: 15px; margin: 5px 0; }
+        .card-content li { margin-bottom: 3px; }
+
+        /* --- RODAPÉ COPYRIGHT --- */
+        .footer {
+            margin-top: auto;
+            border-top: 1px solid #dfe6e9;
+            padding-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            font-size: 0.6rem;
+            color: var(--grey);
+        }
+
+        .footer-logo {
+            width: 80px; /* Espaço para logo se quiser */
+            font-weight: bold;
+            color: var(--dark);
+        }
+
+        .crp-info {
+            text-align: right;
+        }
+
+        /* Auxiliar para cores */
+        .border-red { border-color: #ff7675; background: #fff5f5; }
+        .border-blue { border-color: #74b9ff; background: #f0f9ff; }
+        .border-purple { border-color: #a29bfe; background: #f6f5ff; }
+        .border-green { border-color: #55efc4; background: #f0fff4; }
+        .border-orange { border-color: #fab1a0; background: #fff5f0; }
+
+    </style>
+</head>
+<body>
+
+    <div class="page">
+        
+        <div class="header">
+            <h1 class="logo">PsicoQuest Heroes</h1>
+            <div class="subtitle">Manual de Campo do Agente Secreto</div>
+        </div>
+
+        <div class="hero-profile">
+            <div class="avatar-circle">?</div> <div class="hero-inputs">
+                <div class="label">Nome do Agente:</div>
+                <div class="input-line"></div>
+                <div class="label" style="margin-top: 5px; font-size: 0.6rem; color: #666;">Desenhe seu avatar no círculo ao lado!</div>
+            </div>
+        </div>
+
+        <div class="xp-section">
+            <div class="label" style="color: var(--dark);">BARRA DE ENERGIA (XP)</div>
+            <p style="font-size: 0.7rem;">Pinte um quadrado cada vez que completar uma missão!</p>
+            <div class="xp-track">
+                <div class="xp-block"></div>
+                <div class="xp-block"></div>
+                <div class="xp-block"></div>
+                <div class="xp-block"></div>
+                <div class="xp-block"></div>
+                <div class="xp-block"></div>
+                <div class="xp-block"></div>
+                <div class="xp-block"></div>
+            </div>
+        </div>
+
+        <div class="cards-grid">
+            
+            <div class="card">
+                <div class="card-inner border-red">
+                    <div class="card-header">
+                        <div class="card-icon">📡</div>
+                        <div class="card-title">RADAR DOS<br>SENTIDOS</div>
+                    </div>
+                    <div class="card-content">
+                        <strong>Missão:</strong> Encontrar objetos na sala.
+                        <ul>
+                            <li>👁️ 5 coisas coloridas</li>
+                            <li>✋ 4 coisas para tocar</li>
+                            <li>👂 3 barulhos diferentes</li>
+                            <li>👃 2 cheiros</li>
+                            <li>😋 1 sabor (imaginar)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-inner border-blue">
+                    <div class="card-header">
+                        <div class="card-icon">✋</div>
+                        <div class="card-title">MÃO<br>ESTELAR</div>
+                    </div>
+                    <div class="card-content">
+                        <strong>Missão:</strong> Desenhar a estrela da calma.
+                        <ul>
+                            <li>Contorne sua mão com o dedo.</li>
+                            <li><strong>Subindo o dedo:</strong> Inspire.</li>
+                            <li><strong>Descendo o dedo:</strong> Expire.</li>
+                            <li>Faça na mão completa!</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-inner border-purple">
+                    <div class="card-header">
+                        <div class="card-icon">📦</div>
+                        <div class="card-title">BAÚ<br>MONSTRO</div>
+                    </div>
+                    <div class="card-content">
+                        <strong>Missão:</strong> Prender as preocupações.
+                        <ul>
+                            <li>Escreva num papel o que te chateia.</li>
+                            <li>Dê 1 minuto de atenção.</li>
+                            <li>Amasse o papel com força!</li>
+                            <li>Jogue no lixo (Cesta de 3 pontos!).</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-inner border-green">
+                    <div class="card-header">
+                        <div class="card-icon">🐢</div>
+                        <div class="card-title">MODO<br>TARTARUGA</div>
+                    </div>
+                    <div class="card-content">
+                        <strong>Missão:</strong> Esconder e relaxar.
+                        <ul>
+                            <li>Encolha os ombros nas orelhas.</li>
+                            <li>Aperte forte por 5 segundos.</li>
+                            <li>Solte tudo e vire gelatina!</li>
+                            <li>Repita 3 vezes.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-inner border-orange">
+                    <div class="card-header">
+                        <div class="card-icon">🐉</div>
+                        <div class="card-title">RESPIRAÇÃO<br>DO DRAGÃO</div>
+                    </div>
+                    <div class="card-content">
+                        <strong>Missão:</strong> Controlar o fogo.
+                        <ul>
+                            <li>Cheire a flor (Nariz) contando até 4.</li>
+                            <li>Segure o ar (2 seg).</li>
+                            <li>Assopre a vela (Boca) devagar até 6.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-inner" style="border-color: #fab1a0; background: #fff;">
+                    <div class="card-header">
+                        <div class="card-icon">🛡️</div>
+                        <div class="card-title">ESCUDO<br>SUPREMO</div>
+                    </div>
+                    <div class="card-content">
+                        <strong>Código A.C.A.L.M.E:</strong>
+                        <ul>
+                            <li>Aceite (tá tudo bem)</li>
+                            <li>Contemple (olhe em volta)</li>
+                            <li>Aja com coragem</li>
+                            <li>Libere o ar</li>
+                            <li>Sorria! Você consegue.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer">
+            <div class="footer-logo">
+                PSICOQUEST<br>HEROES
+            </div>
+            <div class="crp-info">
+                Desenvolvido por Gabriel Psicólogo<br>
+                <strong>CRP 06/215890</strong><br>
+                © 2026 Todos os direitos reservados.
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>

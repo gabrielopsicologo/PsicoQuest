@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PsicoQuest - Análise de Custo-Benefício</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script src="seguranca.js" defer></script>
+
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #3498db;
+            --success-color: #27ae60;
+            --danger-color: #c0392b;
+            --bg-color: #f0f4f8;
+            --card-bg: #ffffff;
+            --radius: 12px;
+            --shadow: 0 4px 20px rgba(0,0,0,0.06);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--primary-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- Header --- */
+        header {
+            background: #fff;
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-logo { height: 40px; width: auto; object-fit: contain; }
+        
+        .app-title {
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            display: none;
+        }
+        @media (min-width: 768px) { .app-title { display: block; } }
+
+        .btn-manual {
+            background: rgba(52, 152, 219, 0.1);
+            color: var(--accent-color);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: var(--transition);
+        }
+        .btn-manual:hover { background: rgba(52, 152, 219, 0.2); }
+
+        /* --- Main Content --- */
+        main {
+            flex: 1;
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .intro-text {
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        .intro-text h1 { font-size: 1.5rem; margin-bottom: 5px; }
+        .intro-text p { color: #666; font-size: 0.95rem; }
+
+        /* Card Styles */
+        .section-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            border-left: 4px solid transparent;
+        }
+
+        .section-card.focus-thought { border-left-color: var(--accent-color); }
+        .section-card.focus-pros { border-left-color: var(--success-color); }
+        .section-card.focus-cons { border-left-color: var(--danger-color); }
+        .section-card.focus-calc { border-left-color: var(--primary-color); }
+
+        h2 {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        h2 i { opacity: 0.7; }
+
+        /* Inputs */
+        textarea, input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+            background: #fafafa;
+            transition: var(--transition);
+            resize: vertical;
+        }
+
+        textarea:focus, input:focus {
+            background: #fff;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        /* List Items */
+        .list-group { margin-bottom: 15px; }
+        .list-item { margin-bottom: 8px; display: flex; gap: 8px; }
+        
+        .btn-action-small {
+            background: #f1f2f6;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #555;
+            transition: var(--transition);
+        }
+        .btn-action-small:hover { background: #e1e2e6; color: #000; }
+
+        /* Sliders */
+        .slider-wrapper {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        input[type="range"] {
+            width: 100%;
+            cursor: pointer;
+            height: 6px;
+            background: #ddd;
+            border-radius: 5px;
+            appearance: none;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            cursor: pointer;
+            border: 2px solid #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        /* Calculation Area */
+        .calc-btn-container {
+            text-align: center;
+            margin: 30px 0;
+        }
+        .btn-calc {
+            background: var(--primary-color);
+            color: #fff;
+            border: none;
+            padding: 14px 40px;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(44, 62, 80, 0.3);
+            transition: transform 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .btn-calc:hover { transform: translateY(-2px); background: #34495e; }
+        .btn-calc:active { transform: translateY(0); }
+
+        .result-display {
+            background: #fff;
+            padding: 20px;
+            border-radius: var(--radius);
+            margin-bottom: 20px;
+            display: none;
+            border: 1px solid #eee;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .result-math {
+            font-family: monospace;
+            font-size: 1.1rem;
+            text-align: center;
+            background: #f4f6f8;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            color: #555;
+        }
+
+        .result-verdict {
+            font-weight: 600;
+            font-size: 1.05rem;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        /* --- Footer --- */
+        footer {
+            background: #fff;
+            border-top: 1px solid #eee;
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start; /* Alinhamento ao topo para evitar esticar */
+            margin-top: auto;
+            flex-wrap: wrap;
+        }
+        .footer-info { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 4px; 
+            font-size: 0.75rem; 
+            color: #888; 
+            max-width: 80%;
+        }
+        
+        /* Correção da Logo do Rodapé */
+        .footer-logo {
+            display: block;
+            height: 30px; /* Altura fixa */
+            width: auto;  /* Largura automática */
+            object-fit: contain; /* Garante que a imagem não distorça */
+            margin-bottom: 8px;
+            max-width: 200px; /* Limite de segurança */
+        }
+
+        .footer-info a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
+        
+        .whatsapp-float {
+            background: #25D366;
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 10px rgba(37, 211, 102, 0.4);
+            transition: transform 0.3s;
+            margin-top: 5px;
+        }
+        .whatsapp-float:hover { transform: scale(1.1); }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 200;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            padding: 25px;
+            border-radius: var(--radius);
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+        }
+        .close { position: absolute; right: 20px; top: 15px; font-size: 24px; cursor: pointer; color: #aaa; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Responsividade Grid */
+        @media (min-width: 768px) {
+            .grid-cols {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <img src="https://gabrielopsicologo.com/wp-content/uploads/2025/12/Design-sem-nome.png" alt="Logo PsicoQuest" class="header-logo">
+        <span class="app-title">PsicoQuest</span>
+        <button class="btn-manual" onclick="openManual()">
+            <i class="fa-solid fa-book-open"></i> <span style="display:none; @media(min-width:400px){display:inline;}">Manual</span>
+        </button>
+    </header>
+
+    <main>
+        <div class="intro-text">
+            <h1>Análise de Custo-Benefício</h1>
+            <p>Avalie racionalmente a utilidade dos seus pensamentos automáticos.</p>
+        </div>
+
+        <section class="section-card focus-thought">
+            <h2><i class="fa-solid fa-brain" style="color: var(--primary-color);"></i> Crença ou Pensamento</h2>
+            <p style="font-size: 0.9rem; color: #777; margin-bottom: 10px;">Qual pensamento está te incomodando?</p>
+            <textarea id="thought" rows="3" placeholder="Ex: Eu tenho que ser perfeito em tudo..."></textarea>
+        </section>
+
+        <div class="grid-cols">
+            
+            <section class="section-card focus-pros">
+                <h2><i class="fa-solid fa-thumbs-up" style="color: var(--success-color);"></i> Vantagens (Benefícios)</h2>
+                <p style="font-size: 0.85rem; color: #777; margin-bottom: 10px;">O que você ganha pensando assim?</p>
+                
+                <div id="list-pros" class="list-group">
+                    <div class="list-item"><input type="text" placeholder="Benefício 1"></div>
+                </div>
+                <button class="btn-action-small" onclick="addItem('list-pros')">+ Adicionar</button>
+
+                <div class="slider-wrapper">
+                    <div class="slider-header">
+                        <span>Peso dos Benefícios</span>
+                        <span id="val-pros" style="color: var(--success-color); font-weight:700;">50</span>
+                    </div>
+                    <input type="range" id="range-pros" min="0" max="100" value="50" oninput="updateVal('range-pros', 'val-pros')">
+                </div>
+            </section>
+
+            <section class="section-card focus-cons">
+                <h2><i class="fa-solid fa-thumbs-down" style="color: var(--danger-color);"></i> Desvantagens (Custos)</h2>
+                <p style="font-size: 0.85rem; color: #777; margin-bottom: 10px;">O que você perde (emocional/prático)?</p>
+                
+                <div id="list-cons" class="list-group">
+                    <div class="list-item"><input type="text" placeholder="Custo 1"></div>
+                </div>
+                <button class="btn-action-small" onclick="addItem('list-cons')">+ Adicionar</button>
+
+                <div class="slider-wrapper">
+                    <div class="slider-header">
+                        <span>Peso dos Custos</span>
+                        <span id="val-cons" style="color: var(--danger-color); font-weight:700;">50</span>
+                    </div>
+                    <input type="range" id="range-cons" min="0" max="100" value="50" oninput="updateVal('range-cons', 'val-cons')">
+                </div>
+            </section>
+        </div>
+
+        <div class="calc-btn-container">
+            <button class="btn-calc" onclick="calculateResult()">
+                <i class="fa-solid fa-calculator"></i> Analisar Resultado
+            </button>
+        </div>
+
+        <section id="result-section" class="section-card focus-calc result-display">
+            <h2><i class="fa-solid fa-chart-pie"></i> Resultado da Análise</h2>
+            
+            <div class="result-math" id="math-text"></div>
+
+            <div class="result-verdict" id="verdict-text"></div>
+
+            <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
+
+            <label style="font-weight: 600; font-size: 0.9rem; display:block; margin-bottom:8px;">Conclusão / Nova Perspectiva:</label>
+            <textarea rows="4" placeholder="Diante dessa análise, qual é uma forma mais saudável de ver a situação?"></textarea>
+            
+            <p style="font-size: 0.75rem; color: #aaa; margin-top: 15px; text-align: right;">
+                Ref: Leahy, R. L. (2019). Técnicas de Terapia Cognitiva.
+            </p>
+        </section>
+
+    </main>
+
+    <footer>
+        <div class="footer-info">
+            <img src="https://gabrielopsicologo.com/wp-content/uploads/2025/11/Logo_preta.png" alt="Logo Gabriel Psicólogo" class="footer-logo">
+            <span>© 2025 Todos os direitos reservados.</span>
+            <span>CRP 06/215890 | <a href="https://www.instagram.com/gabrielopsicologo/#" target="_blank">@gabrielopsicologo</a></span>
+            <span style="margin-top:5px; font-size:0.65rem; color:#aaa;">Recurso Terapêutico Digital</span>
+        </div>
+        <a href="https://api.whatsapp.com/message/WV34TWMSKTEEL1?autoload=1&app_absent=0" class="whatsapp-float" target="_blank" title="Suporte">
+            <i class="fa-brands fa-whatsapp"></i>
+        </a>
+    </footer>
+
+    <div id="manualModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeManual()">&times;</span>
+            <h3 style="color: var(--primary-color); margin-bottom: 15px;">Manual do Terapeuta</h3>
+            <p style="margin-bottom: 10px; line-height: 1.5;"><strong>Custo-Benefício (Leahy, 2019)</strong></p>
+            <ul style="padding-left: 20px; font-size: 0.9rem; color: #555; line-height: 1.6;">
+                <li>Peça ao paciente para listar todas as vantagens e desvantagens.</li>
+                <li>Utilize os sliders (0-100) para atribuir um peso subjetivo a cada grupo.</li>
+                <li>O cálculo ajuda a evidenciar a <strong>dissonância cognitiva</strong> e promove a flexibilidade mental.</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function updateVal(rangeId, displayId) {
+            document.getElementById(displayId).innerText = document.getElementById(rangeId).value;
+        }
+
+        function addItem(listId) {
+            const list = document.getElementById(listId);
+            const newItem = document.createElement('div');
+            newItem.className = 'list-item';
+            newItem.innerHTML = `<input type="text" placeholder="Novo item...">`;
+            list.appendChild(newItem);
+            newItem.querySelector('input').focus();
+        }
+
+        function calculateResult() {
+            const pros = parseInt(document.getElementById('range-pros').value);
+            const cons = parseInt(document.getElementById('range-cons').value);
+            const diff = cons - pros;
+
+            const mathDisplay = document.getElementById('math-text');
+            const verdictDisplay = document.getElementById('verdict-text');
+            const resultSection = document.getElementById('result-section');
+
+            resultSection.style.display = 'block';
+            
+            mathDisplay.innerHTML = `Custos (${cons}) - Benefícios (${pros}) = <strong>${diff}</strong>`;
+
+            // Lógica Atualizada (Mais acolhedora e funcional)
+            if (diff > 0) {
+                // Custos Maiores (Positivo para mudança)
+                verdictDisplay.innerHTML = `<span style="color: var(--success-color);">Resultado Favorável à Mudança</span><br>Os custos de manter esse pensamento são maiores que os ganhos. Isso indica uma motivação lógica para abandonar essa crença.`;
+            } else if (diff < 0) {
+                // Benefícios Maiores (Texto alterado conforme pedido)
+                verdictDisplay.innerHTML = `<span style="color: var(--primary-color);">Prevalência de Benefícios</span><br>Neste momento, você identifica mais vantagens do que custos neste pensamento. Isso sugere que ele desempenha uma função importante (talvez proteção ou preparação). Podemos investigar melhor essa função?`;
+            } else {
+                verdictDisplay.innerHTML = `<span style="color: #7f8c8d;">Equilíbrio</span><br>Há um equilíbrio entre custos e benefícios. Tente detalhar mais itens na lista para desempatar a análise.`;
+            }
+
+            resultSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function openManual() { document.getElementById('manualModal').style.display = 'flex'; }
+        function closeManual() { document.getElementById('manualModal').style.display = 'none'; }
+        
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('manualModal')) {
+                closeManual();
+            }
+        }
+    </script>
+</body>
+</html>

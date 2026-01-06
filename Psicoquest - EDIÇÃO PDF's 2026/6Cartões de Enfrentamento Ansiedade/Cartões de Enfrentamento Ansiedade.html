@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>PsicoQuest - Arquivo de Impressão (PDF)</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- Configurações de Papel --- */
+        @page {
+            size: A4 portrait;
+            margin: 0;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: #555; /* Fundo escuro na tela para realçar o papel */
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* --- Folha A4 --- */
+        .sheet {
+            width: 210mm;
+            height: 297mm;
+            background: white;
+            margin: 20px auto;
+            position: relative;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+            overflow: hidden;
+            page-break-after: always; /* Garante que cada .sheet seja uma página no PDF */
+        }
+
+        /* --- Estilos da Capa / Manual --- */
+        .manual-content {
+            padding: 20mm;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border: 10px solid #4A90E2; /* Borda decorativa */
+        }
+
+        .manual-header {
+            text-align: center;
+        }
+
+        .manual-logo-area {
+            margin-bottom: 10px;
+        }
+
+        .manual-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5rem;
+            color: #2D3748;
+            margin-bottom: 5px;
+        }
+
+        .manual-subtitle {
+            font-size: 1.2rem;
+            color: #FF8C66;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+
+        .manual-body {
+            flex: 1;
+            margin-top: 20mm;
+        }
+
+        .section-box {
+            background: #f8f9fa;
+            border-left: 5px solid #4A90E2;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .section-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.1rem;
+            color: #4A90E2;
+            margin-bottom: 10px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-text {
+            font-size: 0.9rem;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        .section-text ul {
+            padding-left: 20px;
+            margin: 0;
+        }
+
+        .section-text li {
+            margin-bottom: 5px;
+        }
+
+        .warning-box {
+            background: #fff5f5;
+            border-left: 5px solid #e53e3e;
+            padding: 15px;
+            margin-top: 10px;
+        }
+
+        .warning-text {
+            font-size: 0.8rem;
+            color: #c53030;
+            font-weight: 600;
+            text-align: justify;
+        }
+
+        /* --- Estilos das Cartas (Grid) --- */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(4, 1fr);
+            gap: 0;
+            height: 100%;
+            padding: 15mm; /* Margem de segurança */
+        }
+
+        .card-slot {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px dashed #ddd; /* Guia de corte leve */
+        }
+
+        .card {
+            width: 80mm;
+            height: 58mm;
+            border-radius: 4mm;
+            position: relative;
+            display: flex;
+            overflow: hidden;
+            border: 1px solid #ccc;
+        }
+
+        /* Frente */
+        .card-front {
+            background: linear-gradient(135deg, #ffffff 0%, #f0f4f8 100%);
+            flex-direction: row;
+            align-items: center;
+            padding: 0 6mm;
+            width: 100%;
+            justify-content: flex-start;
+            gap: 5mm;
+        }
+
+        .front-icon-box {
+            width: 14mm;
+            height: 14mm;
+            background: #eef4fc;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #4A90E2;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .front-text-box {
+            border-left: 2px solid #FF8C66;
+            padding-left: 4mm;
+        }
+
+        .category-tag {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #718096;
+            font-weight: 600;
+            margin-bottom: 1mm;
+        }
+
+        .main-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #2D3748;
+            line-height: 1.2;
+        }
+
+        /* Verso */
+        .card-back {
+            background: white;
+            flex-direction: column;
+            padding: 5mm;
+            width: 100%;
+            border-top: 4px solid #FF8C66;
+            justify-content: space-between;
+        }
+
+        .content-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .quote-text {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #2D3748;
+            margin-bottom: 3mm;
+            line-height: 1.3;
+        }
+
+        .instruction-text {
+            font-size: 0.75rem;
+            color: #555;
+            line-height: 1.4;
+        }
+
+        .copyright-vertical {
+            position: absolute;
+            left: 2mm;
+            bottom: 2mm;
+            font-size: 4pt;
+            color: #ddd;
+            transform: rotate(-90deg);
+            transform-origin: left bottom;
+            white-space: nowrap;
+        }
+
+        /* Modo de Impressão */
+        @media print {
+            body { background: none; }
+            .sheet { margin: 0; box-shadow: none; }
+            .card-slot { border-color: #eee; } /* Linhas muito sutis na impressão */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sheet">
+        <div class="manual-content">
+            <div class="manual-header">
+                <div class="manual-title">PsicoQuest</div>
+                <div class="manual-subtitle">Cartões de Enfrentamento: Ansiedade</div>
+            </div>
+
+            <div class="manual-body">
+                <div class="section-box">
+                    <div class="section-title"><i class="fa-solid fa-print"></i> Instruções de Impressão</div>
+                    <div class="section-text">
+                        <ul>
+                            <li><strong>Papel:</strong> Recomenda-se papel Couché ou Offset com gramatura 180g ou superior para maior durabilidade.</li>
+                            <li><strong>Configuração:</strong> Imprima em tamanho <strong>A4</strong>, escala <strong>100%</strong> (não ajustar à página).</li>
+                            <li><strong>Modo:</strong> Utilize impressão "Frente e Verso" (Virar na borda longa).</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section-box">
+                    <div class="section-title"><i class="fa-solid fa-user-doctor"></i> Como Utilizar</div>
+                    <div class="section-text">
+                        <p>Este recurso terapêutico utiliza princípios da TCC e ACT para auxiliar na reestruturação cognitiva.</p>
+                        <ul>
+                            <li><strong>Psicoeducação:</strong> Use as cartas para explicar distorções cognitivas.</li>
+                            <li><strong>Tarefa de Casa:</strong> O paciente pode carregar uma carta "talismã" durante a semana.</li>
+                            <li><strong>Momentos de Crise:</strong> As instruções no verso servem como roteiro de auto-regulação.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="warning-box">
+                    <div class="section-title" style="color:#c53030; font-size: 0.9rem;"><i class="fa-solid fa-triangle-exclamation"></i> Termos de Uso</div>
+                    <div class="warning-text">
+                        <p>Este material é um recurso terapêutico profissional. É absolutamente proibido compartilhar este arquivo digital em grupos de redes sociais, drives públicos ou realizar revenda. A distribuição ou alteração dos arquivos com intenção comercial é expressamente proibida. O uso é autorizado exclusivamente para aplicação com seus pacientes envolvidos em processo de psicoterapia.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; font-size: 0.8rem; color: #718096; border-top: 1px solid #eee; padding-top: 10px;">
+                <p><strong>Desenvolvido por Gabriel Psicólogo | CRP 06/215890</strong></p>
+                <p>© 2026 Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="sheet">
+        <div class="cards-grid">
+            <div class="card-slot"><div class="card card-front">
+                <div class="front-icon-box"><i class="fa-solid fa-cloud-sun"></i></div>
+                <div class="front-text-box">
+                    <div class="category-tag">Desfusão Cognitiva</div>
+                    <div class="main-title">Pensamentos vs Realidade</div>
+                </div>
+            </div></div>
+
+            <div class="card-slot"><div class="card card-front">
+                <div class="front-icon-box"><i class="fa-solid fa-stopwatch"></i></div>
+                <div class="front-text-box">
+                    <div class="category-tag">Manejo de Pânico</div>
+                    <div class="main-title">Temporalidade da Crise</div>
+                </div>
+            </div></div>
+
+            <div class="card-slot"><div class="card card-front">
+                <div class="front-icon-box"><i class="fa-solid fa-user-group"></i></div>
+                <div class="front-text-box">
+                    <div class="category-tag">Suporte Social</div>
+                    <div class="main-title">Quebrando o Isolamento</div>
+                </div>
+            </div></div>
+
+            <div class="card-slot"><div class="card card-front">
+                <div class="front-icon-box"><i class="fa-solid fa-shoe-prints"></i></div>
+                <div class="front-text-box">
+                    <div class="category-tag">Autocompaixão</div>
+                    <div class="main-title">Progresso Gradual</div>
+                </div>
+            </div></div>
+
+            <div class="card-slot"><div class="card card-front">
+                <div class="front-icon-box"><i class="fa-solid fa-heart-crack"></i></div>
+                <div class="front-text-box">
+                    <div class="category-tag">Regulação Emocional</div>
+                    <div class="main-title">Lidando com a Autocrítica</div>
+                </div>
+            </div></div>
+
+            <div class="card-slot"><div class="card card-front">
+                <div class="front-icon-box"><i class="fa-solid fa-scale-balanced"></i></div>
+                <div class="front-text-box">
+                    <div class="category-tag">Reestruturação</div>
+                    <div class="main-title">Distorção Cognitiva</div>
+                </div>
+            </div></div>
+
+            <div class="card-slot"><div class="card card-front">
+                <div class="front-icon-box"><i class="fa-solid fa-shield-heart"></i></div>
+                <div class="front-text-box">
+                    <div class="category-tag">Autoaceitação</div>
+                    <div class="main-title">Perfeccionismo</div>
+                </div>
+            </div></div>
+
+            <div class="card-slot"><div class="card card-front">
+                <div class="front-icon-box"><i class="fa-solid fa-person-walking-arrow-right"></i></div>
+                <div class="front-text-box">
+                    <div class="category-tag">Comportamento</div>
+                    <div class="main-title">Evitação e Enfrentamento</div>
+                </div>
+            </div></div>
+        </div>
+    </div>
+
+    <div class="sheet">
+        <div class="cards-grid">
+            <div class="card-slot"><div class="card card-back">
+                <div class="content-area">
+                    <div class="quote-text">"Pensamentos são apenas pensamentos. Eles não são a realidade."</div>
+                    <div class="instruction-text">Observe o pensamento como uma nuvem passando. Você não precisa acreditar nele ou agir sobre ele.</div>
+                </div>
+                <div class="copyright-vertical">PsicoQuest © Gabriel Psicólogo</div>
+            </div></div>
+
+            <div class="card-slot"><div class="card card-back">
+                <div class="content-area">
+                    <div class="quote-text">"Um ataque de pânico é sempre temporário. Vai passar."</div>
+                    <div class="instruction-text">Já sobrevivi a isso antes. Vou deixar meu corpo passar por essa onda sem lutar contra ela.</div>
+                </div>
+                <div class="copyright-vertical">PsicoQuest © Gabriel Psicólogo</div>
+            </div></div>
+
+            <div class="card-slot"><div class="card card-back">
+                <div class="content-area">
+                    <div class="quote-text">"Vou resistir ao impulso de me isolar."</div>
+                    <div class="instruction-text">Falarei com um amigo ou familiar. Posso não ter vontade agora, mas sei que me sentirei melhor depois.</div>
+                </div>
+                <div class="copyright-vertical">PsicoQuest © Gabriel Psicólogo</div>
+            </div></div>
+
+            <div class="card-slot"><div class="card card-back">
+                <div class="content-area">
+                    <div class="quote-text">"Dias difíceis não apagam o progresso que fiz."</div>
+                    <div class="instruction-text">"Uma jornada de mil quilômetros começa com o primeiro passo". Respeite seu ritmo.</div>
+                </div>
+                <div class="copyright-vertical">PsicoQuest © Gabriel Psicólogo</div>
+            </div></div>
+
+            <div class="card-slot"><div class="card card-back">
+                <div class="content-area">
+                    <div class="quote-text">"A autocrítica não ajuda, apenas me faz sentir pior."</div>
+                    <div class="instruction-text">Vou responder à minha crítica interna com a mesma gentileza que ofereço a um amigo querido.</div>
+                </div>
+                <div class="copyright-vertical">PsicoQuest © Gabriel Psicólogo</div>
+            </div></div>
+
+            <div class="card-slot"><div class="card card-back">
+                <div class="content-area">
+                    <div class="quote-text">"As coisas não estão tão ruins como estou fazendo parecer."</div>
+                    <div class="instruction-text">Estou catastrofizando? Quais são as evidências reais de que algo terrível vai acontecer?</div>
+                </div>
+                <div class="copyright-vertical">PsicoQuest © Gabriel Psicólogo</div>
+            </div></div>
+
+            <div class="card-slot"><div class="card card-back">
+                <div class="content-area">
+                    <div class="quote-text">"Ser perfeito não é possível. O meu melhor é suficiente."</div>
+                    <div class="instruction-text">Aceito que erros fazem parte do processo e não definem meu valor como pessoa.</div>
+                </div>
+                <div class="copyright-vertical">PsicoQuest © Gabriel Psicólogo</div>
+            </div></div>
+
+            <div class="card-slot"><div class="card card-back">
+                <div class="content-area">
+                    <div class="quote-text">"Resistirei aos impulsos de evitar situações."</div>
+                    <div class="instruction-text">Evitar alivia agora, mas piora a ansiedade depois. Enfrentar, mesmo com medo, me fortalece.</div>
+                </div>
+                <div class="copyright-vertical">PsicoQuest © Gabriel Psicólogo</div>
+            </div></div>
+        </div>
+    </div>
+
+</body>
+</html>

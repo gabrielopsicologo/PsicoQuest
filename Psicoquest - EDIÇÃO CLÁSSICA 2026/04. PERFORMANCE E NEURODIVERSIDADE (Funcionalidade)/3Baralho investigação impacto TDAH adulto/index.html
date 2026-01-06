@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PsicoQuest - Investigação TDAH Adulto</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="seguranca.js" defer></script>
+
+    <style>
+        :root {
+            --primary-color: #F8716B;
+            --primary-hover: #e05a54;
+            --background-color: #FDFBF7;
+            --card-bg: #ffffff;
+            --text-main: #333333;
+            --text-light: #666666;
+            --shadow-soft: 0 10px 30px rgba(0,0,0,0.08);
+            --shadow-hover: 0 15px 35px rgba(248, 113, 107, 0.2);
+            --border-radius: 20px;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* --- Header --- */
+        header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            padding: 15px 5%;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-logo {
+            height: 35px;
+            width: auto;
+        }
+
+        .app-title {
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 1.4rem;
+            line-height: 1.2;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .deck-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            font-weight: 500;
+            margin-top: 2px;
+        }
+
+        .manual-btn {
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .manual-btn:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* --- Main Content --- */
+        main {
+            flex: 1;
+            padding: 30px 5%;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* View: Category Grid */
+        #category-view {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 25px;
+            width: 100%;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .category-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 30px 20px;
+            box-shadow: var(--shadow-soft);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            border-bottom: 4px solid var(--primary-color);
+            height: 100%;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .cat-icon {
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            background: #fff0f0;
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .cat-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--text-main);
+        }
+
+        /* View: Game/Question */
+        #game-view {
+            display: none;
+            width: 100%;
+            max-width: 700px;
+            margin: 0 auto;
+            flex-direction: column;
+            animation: slideIn 0.4s ease-out;
+        }
+
+        .question-card {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 30px;
+            box-shadow: var(--shadow-soft);
+            text-align: center;
+            position: relative;
+            border: 1px solid #f0f0f0;
+            min-height: 400px; /* Aumentei um pouco para caber o slider */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card-header {
+            margin-bottom: 20px;
+        }
+
+        .card-counter {
+            background: var(--text-main);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .card-category-label {
+            display: block;
+            color: var(--primary-color);
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .question-text {
+            font-size: 1.4rem;
+            line-height: 1.5;
+            color: var(--text-main);
+            font-weight: 500;
+            margin: 20px 0;
+        }
+
+        .scale-prompt {
+            margin-top: auto;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            background: #f9f9f9;
+            padding: 20px 15px;
+            border-radius: 15px;
+            border: 1px dashed #ddd;
+        }
+
+        /* ESTILOS DO SLIDER */
+        .slider-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .impact-range {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 10px;
+            border-radius: 5px;
+            background: #e0e0e0;
+            outline: none;
+            opacity: 0.8;
+            transition: opacity .2s;
+        }
+
+        .impact-range:hover {
+            opacity: 1;
+        }
+
+        .impact-range::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: var(--transition);
+        }
+        
+        .impact-range::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+        }
+
+        .impact-range::-moz-range-thumb {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .slider-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            min-width: 40px;
+        }
+        /* FIM ESTILOS SLIDER */
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 14px 35px;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(248, 113, 107, 0.3);
+        }
+
+        .btn-secondary {
+            background-color: white;
+            color: var(--text-light);
+            border: 2px solid #eee;
+        }
+
+        .btn-secondary:hover {
+            border-color: #ddd;
+            background-color: #f8f8f8;
+        }
+
+        /* --- Footer --- */
+        footer {
+            background: white;
+            padding: 20px 5%;
+            font-size: 0.8rem;
+            color: #888;
+            border-top: 1px solid #eee;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .footer-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .footer-logo {
+            height: 30px;
+            opacity: 0.9;
+        }
+
+        .footer-text p { margin-bottom: 2px; }
+        .footer-text a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
+
+        .support-btn {
+            background: #25D366;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            transition: var(--transition);
+            box-shadow: 0 4px 10px rgba(37, 211, 102, 0.2);
+        }
+        .support-btn:hover { background: #1ebc57; transform: translateY(-2px); }
+
+        /* --- Modal --- */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 30px;
+            max-width: 500px;
+            width: 100%;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+            animation: zoomIn 0.3s ease;
+            border: 1px solid #eee;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: #aaa;
+            transition: color 0.2s;
+        }
+        .close-modal:hover { color: var(--primary-color); }
+
+        .modal h2 { color: var(--primary-color); margin-bottom: 20px; font-size: 1.5rem; text-align: center;}
+        .modal p, .modal ul { font-size: 1rem; line-height: 1.6; color: #555; margin-bottom: 15px; }
+        .modal ul { padding-left: 20px; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+        @keyframes zoomIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        /* Mobile Adjustments */
+        @media (max-width: 600px) {
+            header { padding: 15px; }
+            .app-title { font-size: 1.1rem; }
+            .deck-subtitle { font-size: 0.75rem; display: none; }
+            .question-card { padding: 30px 20px; min-height: auto; }
+            .question-text { font-size: 1.2rem; }
+            .footer-info { flex-direction: column; align-items: center; text-align: center; }
+            footer { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-content">
+            <div class="brand-container">
+                <img src="https://gabrielopsicologo.com/wp-content/uploads/2025/12/Design-sem-nome.png" alt="PsicoQuest Logo" class="header-logo">
+                <span class="app-title">PsicoQuest</span>
+            </div>
+            <div class="deck-subtitle">Baralho de Investigação do Impacto do TDAH Adulto</div>
+        </div>
+        <button class="manual-btn" onclick="toggleModal(true)" aria-label="Manual">?</button>
+    </header>
+
+    <main>
+        <div id="category-view">
+            </div>
+
+        <div id="game-view">
+            <div class="question-card">
+                <div class="card-header">
+                    <span id="card-counter" class="card-counter">1 / 3</span>
+                    <span class="card-category-label" id="card-label">Categoria</span>
+                </div>
+                
+                <p class="question-text" id="card-text">Carregando...</p>
+                
+                <div class="scale-prompt">
+                    <div>
+                        <i class="fas fa-ruler-horizontal"></i> Em uma escala de 0 a 10, o quanto este sintoma impacta sua vida?
+                    </div>
+                    <div class="slider-container">
+                        <input type="range" min="0" max="10" value="0" class="impact-range" id="impact-slider" oninput="updateSliderValue(this.value)">
+                        <span class="slider-value" id="slider-display">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button class="btn btn-secondary" onclick="returnToMenu()">
+                    <i class="fas fa-th-large"></i> Menu
+                </button>
+                <button class="btn btn-secondary" onclick="prevCard()">
+                    <i class="fas fa-arrow-left"></i> Anterior
+                </button>
+                <button class="btn btn-primary" onclick="nextCard()">
+                    Próxima <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-info">
+            <img src="https://gabrielopsicologo.com/wp-content/uploads/2025/11/Logo_preta.png" alt="Logo Gabriel" class="footer-logo">
+            <div class="footer-text">
+                <p>Recurso Terapêutico Digital | CRP 06/215890</p>
+                <p>Desenvolvido por <a href="https://www.instagram.com/gabrielopsicologo/#" target="_blank">@gabrielopsicologo</a></p>
+                <p>© 2025 Todos os direitos reservados.</p>
+            </div>
+        </div>
+        <a href="https://api.whatsapp.com/message/WV34TWMSKTEEL1?autoload=1&app_absent=0" target="_blank" class="support-btn">
+            <i class="fab fa-whatsapp"></i> Suporte
+        </a>
+    </footer>
+
+    <div class="modal" id="manualModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="toggleModal(false)">&times;</span>
+            <h2><i class="fas fa-book-open"></i> Manual do Terapeuta</h2>
+            <p><strong>Baralho de Investigação do Impacto do TDAH Adulto</strong></p>
+            <p>Este recurso visa mapear áreas funcionais da vida impactadas pelos sintomas do TDAH. As perguntas são desenhadas para promover insight e mensuração objetiva (escala 0-10).</p>
+            <p><strong>Como usar:</strong></p>
+            <ul>
+                <li>Selecione uma área da vida no menu principal.</li>
+                <li>Utilize as setas para navegar pelas perguntas da categoria.</li>
+                <li>Peça ao paciente para avaliar o impacto de 0 a 10 usando a barra deslizante.</li>
+                <li>Utilize o botão "Menu" para trocar de área.</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const deckData = [
+            {
+                id: 'relacoes',
+                title: 'Relações Afetivas',
+                icon: 'fa-heart',
+                questions: [
+                    "O TDAH afeta sua capacidade de prestar atenção às necessidades do seu parceiro?",
+                    "Você tem dificuldades para lembrar datas especiais ou compromissos com seu parceiro?",
+                    "Sente que a impulsividade interfere em seu relacionamento de alguma forma?"
+                ]
+            },
+            {
+                id: 'financas',
+                title: 'Finanças e Compras',
+                icon: 'fa-wallet',
+                questions: [
+                    "Você tem dificuldades em controlar seus gastos por impulsividade?",
+                    "O TDAH afeta sua capacidade de gerenciar suas finanças?",
+                    "Você faz compras impulsivas frequentemente?",
+                    "Como os sintomas de TDAH afetam seus hábitos de consumo?"
+                ]
+            },
+            {
+                id: 'comunicacao',
+                title: 'Comunicação',
+                icon: 'fa-comments',
+                questions: [
+                    "O TDAH interfere em sua habilidade de manter conversas produtivas?",
+                    "Você costuma interromper as pessoas durante as conversas?"
+                ]
+            },
+            {
+                id: 'projetos',
+                title: 'Projetos Pessoais',
+                icon: 'fa-lightbulb',
+                questions: [
+                    "Quais projetos pessoais você deixou inacabados devido ao TDAH?",
+                    "Como a desatenção afeta suas metas pessoais?"
+                ]
+            },
+            {
+                id: 'trabalho',
+                title: 'Trabalho e Estudos',
+                icon: 'fa-briefcase',
+                questions: [
+                    "Em que aspectos do seu trabalho ou estudos o TDAH se manifesta mais?",
+                    "Você costuma perder prazos devido à falta de organização?",
+                    "Como o TDAH influencia seu desempenho no trabalho ou nos estudos?"
+                ]
+            },
+            {
+                id: 'transito',
+                title: 'Trânsito e Segurança',
+                icon: 'fa-car',
+                questions: [
+                    "Você se distrai facilmente ao dirigir?",
+                    "Já teve problemas devido à impulsividade no trânsito?"
+                ]
+            },
+            {
+                id: 'lazer',
+                title: 'Tempo Livre e Hobbies',
+                icon: 'fa-gamepad',
+                questions: [
+                    "Você se sente desmotivado em relação a atividades de lazer e hobbies?",
+                    "O TDAH impacta seu aproveitamento do tempo livre?"
+                ]
+            },
+            {
+                id: 'procrastinacao',
+                title: 'Procrastinação',
+                icon: 'fa-clock',
+                questions: [
+                    "Quais tarefas ou atividades você tende a adiar devido à procrastinação?",
+                    "A procrastinação causa frustração em sua vida?"
+                ]
+            },
+            {
+                id: 'saude',
+                title: 'Saúde e Autocuidado',
+                icon: 'fa-heart-pulse',
+                questions: [
+                    "Você tem dificuldade em manter uma rotina de autocuidado, como exercícios, qualidade de sono e dieta?",
+                    "O TDAH influencia negativamente seus hábitos de saúde?"
+                ]
+            },
+            {
+                id: 'organizacao',
+                title: 'Organização Doméstica',
+                icon: 'fa-house',
+                questions: [
+                    "Como o TDAH afeta a organização da sua casa?",
+                    "Você luta para manter as tarefas domésticas em dia?"
+                ]
+            },
+            {
+                id: 'autoestima',
+                title: 'Autoestima e Emoções',
+                icon: 'fa-face-smile',
+                questions: [
+                    "Como o TDAH influencia sua autoestima e autoimagem?",
+                    "Você experimenta estresse ou ansiedade devido aos sintomas do TDAH?"
+                ]
+            },
+            {
+                id: 'objetivos',
+                title: 'Objetivos de Vida',
+                icon: 'fa-flag',
+                questions: [
+                    "Como o TDAH impacta seus objetivos de longo prazo?",
+                    "Você sente que precisa de suporte para alcançar seus objetivos?"
+                ]
+            }
+        ];
+
+        let currentCategory = null;
+        let currentQuestionIndex = 0;
+
+        function init() {
+            const container = document.getElementById('category-view');
+            container.innerHTML = '';
+            
+            deckData.forEach(cat => {
+                const card = document.createElement('div');
+                card.className = 'category-card';
+                card.innerHTML = `
+                    <div class="cat-icon"><i class="fas ${cat.icon}"></i></div>
+                    <div class="cat-title">${cat.title}</div>
+                `;
+                card.onclick = () => openCategory(cat);
+                container.appendChild(card);
+            });
+        }
+
+        function openCategory(category) {
+            currentCategory = category;
+            currentQuestionIndex = 0;
+            document.getElementById('category-view').style.display = 'none';
+            document.getElementById('game-view').style.display = 'flex';
+            updateCard();
+        }
+
+        function updateSliderValue(val) {
+            document.getElementById('slider-display').textContent = val;
+        }
+
+        function updateCard() {
+            if (!currentCategory) return;
+            
+            const cardElement = document.querySelector('.question-card');
+            
+            // Pequena animação de fade
+            cardElement.style.opacity = '0';
+            cardElement.style.transform = 'translateY(10px)';
+            
+            setTimeout(() => {
+                // Atualiza textos
+                document.getElementById('card-label').textContent = currentCategory.title;
+                document.getElementById('card-text').textContent = currentCategory.questions[currentQuestionIndex];
+                
+                // Atualiza Contador
+                document.getElementById('card-counter').textContent = 
+                    `Carta ${currentQuestionIndex + 1} de ${currentCategory.questions.length}`;
+
+                // RESETAR O SLIDER PARA 0 AO MUDAR DE CARTA
+                document.getElementById('impact-slider').value = 0;
+                document.getElementById('slider-display').textContent = '0';
+                
+                cardElement.style.opacity = '1';
+                cardElement.style.transform = 'translateY(0)';
+                cardElement.style.transition = 'all 0.3s ease';
+            }, 200);
+        }
+
+        function nextCard() {
+            if (!currentCategory) return;
+            if (currentQuestionIndex < currentCategory.questions.length - 1) {
+                currentQuestionIndex++;
+                updateCard();
+            } else {
+                // Opção de loop ou voltar ao menu? Vamos fazer loop
+                currentQuestionIndex = 0;
+                updateCard();
+            }
+        }
+
+        function prevCard() {
+            if (!currentCategory) return;
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                updateCard();
+            } else {
+                currentQuestionIndex = currentCategory.questions.length - 1;
+                updateCard();
+            }
+        }
+
+        function returnToMenu() {
+            document.getElementById('game-view').style.display = 'none';
+            document.getElementById('category-view').style.display = 'grid';
+            currentCategory = null;
+        }
+
+        function toggleModal(show) {
+            document.getElementById('manualModal').style.display = show ? 'flex' : 'none';
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('manualModal');
+            if (event.target == modal) {
+                toggleModal(false);
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>

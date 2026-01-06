@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ilha das Emoções: Jornada Terapêutica</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@400;600;800&family=Lora:wght@400;600&display=swap" rel="stylesheet">
+    
+    <script src="seguranca.js" defer></script>
+
+    <style>
+        :root {
+            --cor-areia: #fff8e1;
+            --cor-azul-mar: #1e3a8a;
+            --cor-texto: #374151;
+        }
+
+        /* ANIMAÇÕES */
+        @keyframes fade-in-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes island-pop { 0% { opacity: 0; transform: scale(0.9); } 100% { opacity: 1; transform: scale(1); } }
+        @keyframes gentle-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-image: url('https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/Background_Ilha.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            color: var(--cor-texto);
+        }
+
+        .font-cinzel { font-family: 'Cinzel', serif; }
+        .animate-fade-in { animation: fade-in-up 0.6s ease-out forwards; }
+        .animate-gentle-bounce { animation: gentle-float 3s ease-in-out infinite; }
+
+        /* CARD DA ILHA */
+        .island-card {
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border: 3px solid transparent;
+        }
+        .island-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+            border-color: white;
+        }
+        .island-card:active { transform: scale(0.98); }
+
+        /* ÁREA DE CONTEÚDO SEMITRANSPARENTE */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        /* RODAPÉ ESTÁTICO */
+        .static-footer {
+            width: 100%;
+            background: linear-gradient(to top, rgba(30, 58, 138, 0.95) 0%, rgba(30, 58, 138, 0.8) 100%);
+            color: rgba(255, 255, 255, 0.9);
+            text-align: center;
+            padding: 1.5rem 1rem;
+            margin-top: auto;
+            z-index: 20;
+            font-size: 0.75rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        @media (min-width: 768px) { .static-footer { font-size: 0.85rem; padding: 2rem 1rem; } }
+
+        .footer-link { color: #fbbf24; font-weight: 600; text-decoration: none; transition: 0.3s; }
+        .footer-link:hover { color: white; text-decoration: underline; }
+
+        /* Inputs Bonitos */
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <header class="w-full bg-blue-700/90 backdrop-blur-md text-white shadow-lg p-4 flex justify-between items-center fixed top-0 z-30 border-b border-blue-500/50">
+        <h1 class="text-lg md:text-2xl font-black tracking-wider flex items-center gap-2">
+            <i data-lucide="map" class="w-6 h-6"></i> Ilha das Emoções
+        </h1>
+        <div id="auth-info" class="text-xs md:text-sm opacity-90 text-right bg-blue-800/50 px-3 py-1 rounded-full border border-blue-400/30"></div>
+    </header>
+
+    <div class="pt-24 pb-10 px-4 flex-grow w-full max-w-6xl mx-auto flex flex-col justify-center">
+        <main id="content" class="w-full">
+            <div id="loading" class="text-center p-8 text-white font-bold bg-black/30 rounded-lg backdrop-blur-sm inline-block mx-auto"> 
+                <i data-lucide="loader-circle" class="w-8 h-8 mx-auto animate-spin mb-2"></i>
+                <p>Carregando mapa...</p>
+            </div>
+        </main>
+    </div>
+
+    <footer class="static-footer font-cinzel">
+        <div class="max-w-4xl mx-auto flex flex-col items-center justify-center gap-3">
+            <a href="https://www.instagram.com/gabrielopsicologo" target="_blank" class="hover:scale-105 transition-transform duration-300">
+                <img src="https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/Logo_branca.png" alt="Logo Gabriel Psicólogo" class="h-10 md:h-12 opacity-70 hover:opacity-100 transition-opacity duration-300 drop-shadow-sm">
+            </a>
+
+            <div class="flex flex-col md:flex-row items-center justify-center gap-1 md:gap-4 leading-tight">
+                <p>Desenvolvido por <a href="https://www.instagram.com/gabrielopsicologo" target="_blank" class="footer-link">@gabrielopsicologo</a></p>
+                <span class="hidden md:inline opacity-50">|</span>
+                <p>Gabriel Vinicius dos Santos Fernandes Vasconcelos - CRP 06/215890</p>
+            </div>
+            <div class="mt-1 opacity-50 font-sans text-[0.65rem] md:text-xs">
+                &copy; 2025 Todos os direitos reservados.
+            </div>
+        </div>
+    </footer>
+
+    <a href="https://wa.me/message/WV34TWMSKTEEL1" target="_blank" class="fixed bottom-24 md:bottom-28 right-4 md:right-6 z-40 bg-[#128C7E] text-white p-3 md:p-4 rounded-full shadow-xl hover:bg-[#075E54] transition-colors animate-gentle-bounce">
+        <i data-lucide="message-circle" class="w-6 h-6 md:w-7 md:h-7"></i>
+    </a>
+
+    <div id="instructionsModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 transition-opacity" onclick="window.hideInstructionsModal()">
+        <div class="bg-white rounded-xl shadow-2xl p-6 max-w-lg w-full transform transition-all scale-100 border-l-8 border-yellow-500" onclick="event.stopPropagation()">
+            <div class="flex items-center border-b pb-3 mb-4">
+                 <i data-lucide="info" class="w-6 h-6 text-yellow-600 mr-3"></i>
+                 <h3 class="text-xl font-bold text-gray-800">Guia do Terapeuta</h3> 
+            </div>
+            <ul class="space-y-3 text-gray-700 text-sm md:text-base list-none"> 
+                <li class="flex gap-2"><i data-lucide="check-circle" class="w-5 h-5 text-green-600 shrink-0"></i> <span><strong>Privacidade:</strong> Dados salvos apenas neste dispositivo (LocalStorage).</span></li>
+                <li class="flex gap-2"><i data-lucide="check-circle" class="w-5 h-5 text-green-600 shrink-0"></i> <span><strong>Uso:</strong> Ferramenta lúdica para explorar as 7 emoções universais.</span></li>
+                <li class="flex gap-2"><i data-lucide="check-circle" class="w-5 h-5 text-green-600 shrink-0"></i> <span><strong>Registro:</strong> Transfira anotações para o prontuário oficial.</span></li>
+            </ul>
+            <div class="mt-6 text-right">
+                <button onclick="window.hideInstructionsModal()" class="bg-blue-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-700 transition shadow-md">
+                    Entendi
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="image-export-container" style="position: absolute; left: -9999px; top: -9999px;"></div>
+
+    <script type="module">
+        let selectedPatientName = localStorage.getItem('lastPatientName') || null; 
+        let localSessions = [];
+        let currentPage = selectedPatientName ? 'map' : 'login';
+        let currentEmotion = null;
+
+        // --- CONFIGURAÇÃO DAS 7 EMOÇÕES ---
+        const EMOTIONS = {
+            ALEGRIA: {
+                name: "Alegria (Enseada Radiante)", 
+                color: "bg-yellow-500 hover:bg-yellow-600", 
+                textColor: "text-yellow-600", 
+                icon: "sun",
+                questions: [
+                    { id: "s-alegria", q: "Qual foi a situação que trouxe luz ao seu dia?" }, 
+                    { id: "t-alegria", q: "O que você pensou nesse momento? (Ex: 'Isso é ótimo!')" }, 
+                    { id: "b-alegria", q: "Como você celebrou ou expressou essa energia?" }, 
+                    { id: "a-alegria", q: "O que você pode fazer para visitar essa ilha mais vezes?" }
+                ]
+            },
+            TRISTEZA: {
+                name: "Tristeza (Gruta Solitária)", 
+                color: "bg-blue-600 hover:bg-blue-700", 
+                textColor: "text-blue-700", 
+                icon: "cloud-rain",
+                questions: [
+                    { id: "s-tristeza", q: "O que aconteceu que te fez sentir perda ou desânimo?" }, 
+                    { id: "t-tristeza", q: "Que pensamento veio à mente? (Ex: 'Nada dá certo')" }, 
+                    { id: "b-tristeza", q: "O que você deixou de fazer ou mudou na rotina?" }, 
+                    { id: "a-tristeza", q: "Qual pequeno gesto de autocuidado pode te acolher agora?" }
+                ]
+            },
+            RAIVA: {
+                name: "Raiva (Vulcão da Fúria)", 
+                color: "bg-red-600 hover:bg-red-700", 
+                textColor: "text-red-700", 
+                icon: "flame",
+                questions: [
+                    { id: "s-raiva", q: "O que aconteceu? (Gatilho, injustiça ou bloqueio)" }, 
+                    { id: "t-raiva", q: "Qual foi o pensamento quente? (Ex: 'Isso não é justo!')" }, 
+                    { id: "b-raiva", q: "Como seu corpo reagiu? Teve impulso de agir?" }, 
+                    { id: "a-raiva", q: "Como expressar essa força de forma assertiva e não destrutiva?" }
+                ]
+            },
+            MEDO: {
+                name: "Medo (Floresta das Sombras)", 
+                color: "bg-indigo-700 hover:bg-indigo-800", 
+                textColor: "text-indigo-700", 
+                icon: "eye-off",
+                questions: [
+                    { id: "s-medo", q: "Qual situação ou ameaça apareceu na sua frente?" }, 
+                    { id: "t-medo", q: "Qual foi a previsão catastrófica? (Ex: 'Vai dar tudo errado')" }, 
+                    { id: "b-medo", q: "Você evitou algo ou fugiu? O que fez para se proteger?" }, 
+                    { id: "a-medo", q: "Quais são as evidências reais contra esse medo?" }
+                ]
+            },
+            NOJO: {
+                name: "Nojo (Pântano da Repulsa)", 
+                color: "bg-green-600 hover:bg-green-700", 
+                textColor: "text-green-700", 
+                icon: "skull",
+                questions: [
+                    { id: "s-nojo", q: "O que te causou aversão ou desagrado (físico ou moral)?" }, 
+                    { id: "t-nojo", q: "O que você pensou? (Ex: 'Isso é tóxico', 'Não suporto isso')" }, 
+                    { id: "b-nojo", q: "Você se afastou ou fez alguma expressão facial?" }, 
+                    { id: "a-nojo", q: "Essa reação está te protegendo de algo realmente nocivo?" }
+                ]
+            },
+            SURPRESA: {
+                name: "Surpresa (Pico do Inesperado)", 
+                color: "bg-cyan-600 hover:bg-cyan-700", 
+                textColor: "text-cyan-700", 
+                icon: "zap",
+                questions: [
+                    { id: "s-surpresa", q: "O que aconteceu de repente que você não esperava?" }, 
+                    { id: "t-surpresa", q: "Qual foi seu primeiro pensamento? Foi bom ou ruim?" }, 
+                    { id: "b-surpresa", q: "Como seu corpo reagiu ao choque? (Paralisou, pulou?)" }, 
+                    { id: "a-surpresa", q: "Como você se adaptou a essa nova informação?" }
+                ]
+            },
+            DESPREZO: {
+                name: "Desprezo (Penhasco do Julgamento)", 
+                color: "bg-gray-600 hover:bg-gray-700", 
+                textColor: "text-gray-700", 
+                icon: "thumbs-down",
+                questions: [
+                    { id: "s-desprezo", q: "Quem ou o que você sentiu que era inferior ou indigno?" }, 
+                    { id: "t-desprezo", q: "Qual julgamento você fez? (Ex: 'Eu sou melhor que isso')" }, 
+                    { id: "b-desprezo", q: "Você se distanciou, revirou os olhos ou foi sarcástico?" }, 
+                    { id: "a-desprezo", q: "Esse julgamento ajuda ou atrapalha seus relacionamentos?" }
+                ]
+            }
+        };
+        
+        setTimeout(renderApp, 100); 
+
+        async function saveSession() {
+            if (!selectedPatientName) { displayMessage("Selecione um paciente!", 'bg-red-500'); return; }
+            
+            const form = document.getElementById('emotion-form');
+            const answers = {};
+            let isComplete = true;
+
+            EMOTIONS[currentEmotion].questions.forEach(q => {
+                const input = form.querySelector(`#${q.id}`);
+                const value = input ? input.value.trim() : '';
+                answers[q.id] = value;
+                if (!value) isComplete = false;
+            });
+
+            if (!isComplete) { displayMessage("Por favor, responda todas as perguntas.", 'bg-yellow-600'); return; }
+            
+            const newSession = {
+                patientName: selectedPatientName, emotion: currentEmotion, emotionName: EMOTIONS[currentEmotion].name, answers: answers, timestamp: new Date().toISOString()
+            };
+
+            const currentSavedSessions = JSON.parse(localStorage.getItem(`localSessions_${selectedPatientName}`)) || [];
+            currentSavedSessions.push(newSession);
+            localStorage.setItem(`localSessions_${selectedPatientName}`, JSON.stringify(currentSavedSessions));
+            localSessions = currentSavedSessions;
+            
+            displayMessage("Registro salvo com sucesso!", 'bg-green-600');
+            renderMap();
+        }
+
+        function loadAndDisplaySessions() { renderHistory(localSessions); }
+
+        function displayMessage(text, bgColor) {
+            const messageBox = document.createElement('div');
+            messageBox.className = `${bgColor} text-white p-4 rounded-lg shadow-xl mb-4 text-center fixed top-20 left-1/2 transform -translate-x-1/2 z-50 font-bold animate-fade-in`;
+            messageBox.innerHTML = `<div class="flex items-center gap-2"><i data-lucide="bell" class="w-5 h-5"></i> ${text}</div>`;
+            document.body.appendChild(messageBox);
+            lucide.createIcons();
+            setTimeout(() => { messageBox.remove(); }, 3000);
+        }
+
+        function renderApp() {
+            document.getElementById('loading')?.remove();
+            
+            if (!selectedPatientName) {
+                currentPage = 'login';
+            } else if (currentPage === 'login' && selectedPatientName) {
+                currentPage = 'map';
+            }
+
+            updateAuthInfo();
+            if (selectedPatientName) localSessions = JSON.parse(localStorage.getItem(`localSessions_${selectedPatientName}`)) || [];
+            
+            if (currentPage === 'login') renderPatientSelector();
+            else if (currentPage === 'map') renderMap();
+            else if (currentPage === 'island' && currentEmotion) renderIsland(currentEmotion);
+            
+            lucide.createIcons();
+        }
+        
+        function updateAuthInfo() {
+            const authInfoDiv = document.getElementById('auth-info');
+            if (selectedPatientName) {
+                authInfoDiv.innerHTML = `<span class="opacity-70 text-xs mr-1">Paciente:</span> <strong class="text-white">${selectedPatientName}</strong>`;
+            } else {
+                authInfoDiv.innerHTML = `<span>Início</span>`;
+            }
+        }
+
+        function renderPatientSelector() {
+            currentPage = 'login';
+            selectedPatientName = null;
+            localSessions = []; 
+            localStorage.removeItem('lastPatientName'); 
+            updateAuthInfo();
+            
+            document.getElementById('content').innerHTML = `
+                <div class="glass-panel p-8 rounded-xl shadow-2xl max-w-md mx-auto text-center animate-fade-in">
+                    <div class="bg-blue-100 p-4 rounded-full inline-block mb-4">
+                        <i data-lucide="user" class="w-10 h-10 text-blue-600"></i>
+                    </div>
+                    <h2 class="text-2xl font-extrabold text-gray-800 mb-2">Identificação</h2>
+                    <p class="text-gray-600 mb-6 text-sm">Insira o nome do paciente para carregar ou iniciar um novo diário.</p> 
+                    
+                    <form onsubmit="event.preventDefault(); window.setPatient()">
+                        <div class="mb-4 text-left">
+                            <label class="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Nome do Paciente</label>
+                            <input type="text" id="patientNameInput" class="w-full p-3 mt-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-800" required> 
+                        </div>
+                        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl shadow-lg transition flex items-center justify-center gap-2">
+                            <span>Iniciar Sessão</span> <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                        </button>
+                    </form>
+                    
+                    <button onclick="window.showInstructionsModal()" class="mt-6 text-xs text-gray-500 hover:text-blue-600 underline flex items-center justify-center mx-auto gap-1">
+                        <i data-lucide="info" class="w-3 h-3"></i> Informações para Terapeutas
+                    </button>
+                </div>`;
+            lucide.createIcons();
+        }
+
+        window.setPatient = function() {
+            const input = document.getElementById('patientNameInput');
+            const name = input.value.trim();
+            if (name) {
+                selectedPatientName = name;
+                localStorage.setItem('lastPatientName', name);
+                currentPage = 'map'; 
+                renderApp();
+            }
+        }
+
+        function renderMap() {
+            currentPage = 'map';
+            currentEmotion = null;
+            
+            const islandButtonsHtml = Object.entries(EMOTIONS).map(([key, emotion], index) => {
+                const nameParts = emotion.name.split('(');
+                return `
+                    <button onclick="window.selectEmotion('${key}')" class="island-card ${emotion.color} text-white p-5 rounded-2xl shadow-lg flex flex-col items-center justify-center text-center relative overflow-hidden group" style="animation: island-pop 0.5s ease-out ${index * 0.1}s backwards">
+                        <div class="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                        <i data-lucide="${emotion.icon}" class="w-10 h-10 mb-3 drop-shadow-md"></i>
+                        <span class="text-lg font-bold leading-tight drop-shadow">${nameParts[0].trim()}</span>
+                        <span class="text-xs opacity-80 mt-1 font-medium">${nameParts[1] ? nameParts[1].replace(')', '') : ''}</span> 
+                    </button>
+                `;
+            }).join('');
+
+            document.getElementById('content').innerHTML = `
+                <div class="space-y-6 animate-fade-in">
+                    <div class="glass-panel rounded-2xl shadow-2xl p-6 sm:p-8 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-400 via-yellow-400 to-red-400"></div>
+                        
+                        <div class="flex justify-between items-start mb-6">
+                            <div>
+                                <h2 class="text-2xl md:text-3xl font-black text-gray-800 flex items-center gap-2">
+                                    <i data-lucide="map" class="w-8 h-8 text-blue-600"></i> Mapa das Emoções
+                                </h2>
+                                <p class="text-gray-600 mt-1">Escolha um destino para explorar hoje.</p>
+                            </div>
+                            <button onclick="window.renderPatientSelector()" class="text-xs bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-2 rounded-lg flex items-center gap-1 transition">
+                                <i data-lucide="log-out" class="w-3 h-3"></i> Sair
+                            </button>
+                        </div>
+
+                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                            ${islandButtonsHtml}
+                        </div>
+                    </div>
+
+                    <div class="bg-white/90 backdrop-blur rounded-2xl shadow-lg p-6">
+                        <div class="flex justify-between items-center border-b border-gray-200 pb-4 mb-4">
+                            <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2">
+                                <i data-lucide="history" class="w-5 h-5 text-gray-500"></i> Diário de Bordo
+                            </h3>
+                            <button onclick="window.clearAllSessions()" class="text-xs text-red-600 hover:bg-red-50 px-3 py-1.5 rounded-md border border-red-200 transition flex items-center gap-1">
+                                <i data-lucide="trash-2" class="w-3 h-3"></i> Limpar Tudo
+                            </button>
+                        </div>
+                        <ul id="history-list" class="space-y-3"></ul> 
+                    </div>
+                </div>`;
+            
+            lucide.createIcons();
+            loadAndDisplaySessions();
+        }
+
+        function renderIsland(emotionKey) {
+            currentPage = 'island';
+            currentEmotion = emotionKey;
+            const emotion = EMOTIONS[emotionKey];
+            
+            document.getElementById('content').innerHTML = `
+                <div class="glass-panel p-6 sm:p-8 rounded-2xl shadow-2xl animate-fade-in max-w-3xl mx-auto relative">
+                    <button onclick="window.renderMap()" class="absolute top-6 right-6 text-gray-400 hover:text-gray-700 transition">
+                        <i data-lucide="x" class="w-6 h-6"></i>
+                    </button>
+
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="p-3 rounded-full ${emotion.color.split(' ')[0]} text-white shadow-md">
+                            <i data-lucide="${emotion.icon}" class="w-8 h-8"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-bold text-gray-800">${emotion.name}</h2>
+                            <p class="text-sm text-gray-500">Preencha o registro terapêutico</p>
+                        </div>
+                    </div>
+
+                    <form id="emotion-form" onsubmit="event.preventDefault(); window.saveSession()">
+                        <div class="space-y-5">
+                            ${emotion.questions.map(q => `
+                                <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 hover:border-blue-300 transition-colors">
+                                    <label for="${q.id}" class="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
+                                        <i data-lucide="help-circle" class="w-4 h-4 text-blue-400"></i> ${q.q}
+                                    </label> 
+                                    <textarea id="${q.id}" rows="3" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 resize-none text-gray-700 bg-white" placeholder="Escreva aqui..."></textarea> 
+                                </div>
+                            `).join('')}
+                        </div>
+                        
+                        <div class="flex gap-3 mt-8">
+                            <button type="button" onclick="window.renderMap()" class="flex-1 bg-gray-100 text-gray-700 font-bold py-3 rounded-xl hover:bg-gray-200 transition">
+                                Cancelar
+                            </button>
+                            <button type="submit" class="flex-[2] bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-700 shadow-lg hover:shadow-blue-500/30 transition flex items-center justify-center gap-2">
+                                <i data-lucide="save" class="w-5 h-5"></i> Salvar Registro
+                            </button>
+                        </div>
+                    </form>
+                </div>`;
+            lucide.createIcons();
+        }
+
+        function renderHistory(sessions) {
+            const historyList = document.getElementById('history-list');
+            if (!historyList) return;
+
+            if (!sessions || sessions.length === 0) {
+                historyList.innerHTML = `<li class="text-center py-8 text-gray-400 italic text-sm bg-gray-50 rounded-lg border border-dashed border-gray-300">Nenhum registro encontrado para este paciente.</li>`;
+                return;
+            }
+
+            sessions.sort((a, b) => (new Date(b.timestamp).getTime()) - (new Date(a.timestamp).getTime()));
+
+            historyList.innerHTML = sessions.map((session, index) => {
+                const date = new Date(session.timestamp).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', hour: '2-digit', minute: '2-digit' });
+                const emotionColor = EMOTIONS[session.emotion]?.textColor.replace('text-', 'bg-').replace('700', '100') || 'bg-gray-100';
+                const textColor = EMOTIONS[session.emotion]?.textColor || 'text-gray-700';
+                
+                const answersHtml = EMOTIONS[session.emotion]?.questions.map(q => `
+                    <div class="mb-2">
+                        <p class="text-xs font-bold text-gray-500 uppercase">${q.q}</p>
+                        <p class="text-sm text-gray-800 bg-white p-2 rounded border border-gray-100">${session.answers[q.id] || '-'}</p>
+                    </div>
+                `).join('');
+
+                return `
+                    <li class="bg-gray-50 rounded-xl p-4 border border-gray-200 hover:shadow-md transition">
+                        <details class="group">
+                            <summary class="flex items-center justify-between cursor-pointer list-none">
+                                <div class="flex items-center gap-3">
+                                    <div class="p-2 rounded-lg ${emotionColor}">
+                                        <i data-lucide="${EMOTIONS[session.emotion]?.icon || 'file-text'}" class="w-5 h-5 ${textColor}"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-gray-800 text-sm md:text-base">${session.emotionName.split('(')[0]}</h4>
+                                        <p class="text-xs text-gray-500">${date}</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <button onclick="window.exportHistoryEntryAsImage(${index})" class="text-xs bg-white border border-gray-300 hover:bg-green-50 hover:text-green-700 hover:border-green-200 px-3 py-1.5 rounded-md transition flex items-center gap-1" title="Baixar Imagem">
+                                        <i data-lucide="download" class="w-3 h-3"></i> <span class="hidden sm:inline">Baixar</span>
+                                    </button>
+                                    <i data-lucide="chevron-down" class="w-4 h-4 text-gray-400 group-open:rotate-180 transition-transform"></i>
+                                </div>
+                            </summary>
+                            <div class="mt-4 pl-2 border-l-2 border-gray-200 pt-2">
+                                ${answersHtml}
+                            </div>
+                        </details>
+                    </li>`;
+            }).join('');
+            lucide.createIcons();
+        }
+        
+        window.clearAllSessions = function() {
+            if (localSessions.length === 0) return;
+            if (confirm(`Apagar todo o histórico de ${selectedPatientName}?`)) {
+                localStorage.removeItem(`localSessions_${selectedPatientName}`);
+                localSessions = [];
+                renderMap();
+            }
+        }
+
+        window.generateSessionHtmlForExport = function(session) {
+            const emotion = EMOTIONS[session.emotion];
+            if (!emotion) return '';
+            const answersHtml = emotion.questions.map(q => `
+                <div class="mb-4 p-4 bg-gray-50 rounded-lg border-l-4 ${emotion.color.split(' ')[0]}">
+                    <h3 class="text-sm font-bold text-gray-600 uppercase mb-1">${q.q}</h3> 
+                    <p class="text-gray-800 font-medium">${session.answers[q.id] || 'Sem resposta.'}</p> 
+                </div>
+            `).join('');
+            
+            return `
+                <div class="p-10 bg-white rounded-xl" style="width: 800px; font-family: 'Inter', sans-serif;">
+                    <div class="flex justify-between items-center border-b-2 border-gray-100 pb-6 mb-6">
+                        <h2 class="text-3xl font-bold flex items-center ${emotion.textColor}">
+                            ${emotion.name}
+                        </h2>
+                        <div class="text-right">
+                            <p class="text-gray-500 text-sm">Paciente</p>
+                            <p class="text-xl font-bold text-gray-800">${session.patientName}</p>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        ${answersHtml}
+                    </div>
+                    <div class="mt-8 pt-6 border-t border-gray-100 flex justify-between items-center text-gray-400 text-sm">
+                        <p>Ilha das Emoções - Recurso Terapêutico</p>
+                        <p>${new Date(session.timestamp).toLocaleString('pt-BR')}</p>
+                    </div>
+                </div>
+            `;
+        }
+        
+        window.exportHistoryEntryAsImage = async function(sessionIndex) {
+            const session = localSessions[sessionIndex];
+            if (!session) return;
+            displayMessage('Gerando imagem...', 'bg-blue-600');
+            
+            const exportContainer = document.getElementById('image-export-container');
+            exportContainer.innerHTML = window.generateSessionHtmlForExport(session);
+            
+            try {
+                const canvas = await html2canvas(exportContainer.firstElementChild, { scale: 2, backgroundColor: '#ffffff' });
+                const link = document.createElement('a');
+                link.download = `${session.patientName}_${session.emotion}_${Date.now()}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            } catch (error) {
+                console.error(error);
+                displayMessage('Erro ao gerar imagem.', 'bg-red-500');
+            } finally {
+                exportContainer.innerHTML = '';
+            }
+        }
+
+        window.showInstructionsModal = () => document.getElementById('instructionsModal').classList.remove('hidden');
+        window.hideInstructionsModal = () => document.getElementById('instructionsModal').classList.add('hidden');
+
+        window.renderMap = renderMap;
+        window.selectEmotion = renderIsland;
+        window.saveSession = saveSession;
+        window.renderPatientSelector = renderPatientSelector; 
+        window.setPatient = setPatient;
+
+        window.onload = () => lucide.createIcons();
+    </script>
+</body>
+</html>

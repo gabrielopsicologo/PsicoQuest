@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PsicoQuest | Anamnese Profissional</title>
+    <script src="seguranca.js" defer></script>
+
+    <style>
+        /* --- 1. DESIGN VISUAL (MODO TELA) --- */
+        :root {
+            --primary: #2C3E50;
+            --secondary: #27AE60;
+            --danger: #E74C3C;
+            --bg: #F4F6F8;
+            --sidebar: #FFFFFF;
+            --text: #333;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            height: 100vh;
+            display: flex;
+            overflow: hidden; /* App mode */
+        }
+
+        /* SIDEBAR */
+        aside {
+            width: 260px;
+            background: var(--sidebar);
+            border-right: 1px solid #ddd;
+            display: flex; flex-direction: column;
+            padding: 20px;
+            z-index: 10;
+        }
+        
+        .logo-area { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; font-weight: bold; color: var(--primary); }
+        .logo-area img { height: 35px; }
+
+        nav button {
+            width: 100%; text-align: left; padding: 12px;
+            margin-bottom: 5px; border: none; background: none;
+            cursor: pointer; border-radius: 6px; color: #555; font-weight: 500;
+            transition: 0.2s; display: flex; align-items: center; gap: 10px;
+        }
+        nav button:hover { background: #f0f0f0; color: var(--primary); }
+        nav button.active { background: var(--primary); color: white; }
+
+        /* MAIN CONTENT */
+        main {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .btn {
+            padding: 10px 20px; border-radius: 6px; border: none; cursor: pointer; font-weight: bold;
+            display: inline-flex; align-items: center; gap: 8px; transition: 0.2s;
+        }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: #1a252f; }
+        .btn-outline { border: 1px solid var(--primary); color: var(--primary); background: white; }
+
+        /* ABAS E FORMULÁRIO */
+        .section { display: none; animation: fadeIn 0.3s; }
+        .section.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        .card {
+            background: white; padding: 30px; border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border-left: 5px solid var(--secondary);
+            margin-bottom: 20px;
+        }
+
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; color: #444; }
+        
+        input, select, textarea {
+            width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px;
+            background: #fafafa; font-size: 1rem; font-family: inherit;
+        }
+        input:focus, textarea:focus, select:focus {
+            border-color: var(--secondary); background: white; box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.1);
+        }
+        textarea { min-height: 100px; resize: vertical; }
+
+        .row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+        /* AÇÕES DO MÓDULO */
+        .actions { margin-top: 20px; display: flex; gap: 10px; }
+        .btn-add { flex: 1; border: 2px dashed #ccc; background: #f9f9f9; color: #666; }
+        .btn-add:hover { border-color: var(--secondary); color: var(--secondary); }
+        .btn-clear { border: 1px solid var(--danger); color: var(--danger); background: white; }
+        .btn-clear:hover { background: var(--danger); color: white; }
+
+        /* --- 2. ÁREA DE IMPRESSÃO OCULTA --- */
+        #print-container {
+            display: none; /* Invisível na tela */
+        }
+
+        /* --- 3. MODO IMPRESSÃO (CSS) --- */
+        @media print {
+            @page { margin: 1.5cm; size: A4; }
+            
+            /* Esconde TUDO da tela */
+            body > *:not(#print-container) { display: none !important; }
+            
+            /* Mostra APENAS o container de impressão */
+            body { 
+                background: white; height: auto; overflow: visible; display: block;
+            }
+            
+            #print-container {
+                display: block !important;
+                font-family: 'Georgia', serif; 
+                color: #000;
+                width: 100%;
+            }
+
+            .print-header {
+                text-align: center; border-bottom: 2px solid #000; 
+                padding-bottom: 15px; margin-bottom: 20px;
+            }
+            .print-section { 
+                margin-bottom: 25px; page-break-inside: avoid; 
+            }
+            .print-section h3 {
+                background: #f0f0f0; padding: 5px 10px; 
+                border-left: 5px solid #000; margin-bottom: 10px; font-size: 14pt;
+            }
+            .print-item {
+                margin-bottom: 15px; /* Mais espaço entre itens */
+            }
+            .print-label {
+                font-weight: bold; font-size: 10pt; text-transform: uppercase; color: #444; display: block; margin-bottom: 3px;
+            }
+            
+            /* AQUI ESTÁ A CORREÇÃO DO TEXTO CORTADO */
+            .print-value {
+                font-size: 12pt; 
+                line-height: 1.5; 
+                text-align: justify;
+                border-bottom: 1px dotted #ccc; 
+                padding-bottom: 2px;
+                display: block;
+                white-space: pre-wrap;      /* Mantém quebra de linha do enter */
+                word-wrap: break-word;      /* Quebra palavras longas */
+                overflow-wrap: break-word;  /* Padrão moderno */
+                word-break: break-word;     /* Força bruta para strings sem espaço */
+                width: 100%;                /* Garante largura total */
+            }
+            
+            .print-footer {
+                margin-top: 50px; border-top: 1px solid #000; 
+                padding-top: 10px; font-size: 9pt; text-align: center;
+            }
+        }
+
+        /* Mobile */
+        @media(max-width: 768px) {
+            body { flex-direction: column; height: auto; overflow: visible; }
+            aside { width: 100%; height: auto; overflow-x: auto; flex-direction: row; align-items: center; }
+            nav { display: flex; gap: 10px; }
+            nav button { white-space: nowrap; width: auto; }
+            .row { grid-template-columns: 1fr; }
+        }
+        
+         .whatsapp-float {
+            position: fixed; bottom: 20px; right: 20px; background: #25D366; color: white;
+            width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center;
+            justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 100;
+        }
+    </style>
+</head>
+<body>
+
+    <aside>
+        <div class="logo-area">
+            <img src="https://gabrielopsicologo.com/wp-content/uploads/2025/12/Design-sem-nome.png" alt="Logo">
+            PsicoQuest
+        </div>
+        <nav>
+            <button onclick="setTab('pessoal')" class="active">👤 Pessoal</button>
+            <button onclick="setTab('objetivos')">🎯 Objetivos</button>
+            <button onclick="setTab('estilo')">🏃 Estilo de Vida</button>
+            <button onclick="setTab('saude')">🏥 Saúde</button>
+            <button onclick="setTab('infancia')">🧸 Infância</button>
+            <button onclick="setTab('trabalho')">💼 Profissional</button>
+            <button onclick="setTab('relacoes')">❤️ Relacionamentos</button>
+            <button onclick="setTab('emocoes')">🧠 Emoções</button>
+        </nav>
+    </aside>
+
+    <main>
+        <header>
+            <h2 id="page-title" style="color:var(--primary)">Informações Pessoais</h2>
+            <button class="btn btn-primary" onclick="generateAndPrint()">🖨️ Gerar PDF Completo</button>
+        </header>
+
+        <div id="form-container">
+            
+            <div id="pessoal" class="section active" data-title="Informações Pessoais">
+                <div class="card">
+                    <div class="row">
+                        <div class="form-group"><label>Nome Completo</label><input type="text"></div>
+                        <div class="form-group"><label>Data Nascimento</label><input type="date"></div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group"><label>Endereço</label><input type="text"></div>
+                        <div class="form-group"><label>CPF</label><input type="text"></div>
+                    </div>
+                    <div class="form-group"><label>Contato Emergência</label><input type="text"></div>
+                </div>
+                <div class="actions">
+                    <button class="btn btn-add" onclick="addField(this)">+ Adicionar Pergunta</button>
+                    <button class="btn btn-clear" onclick="clearTab(this)">🗑️ Limpar Aba</button>
+                </div>
+            </div>
+
+            <div id="objetivos" class="section" data-title="Objetivos Terapêuticos">
+                <div class="card">
+                    <div class="form-group">
+                        <label>Demanda Principal</label>
+                        <textarea placeholder="Motivo da consulta..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Expectativas</label>
+                        <textarea></textarea>
+                    </div>
+                </div>
+                <div class="actions">
+                    <button class="btn btn-add" onclick="addField(this)">+ Adicionar Pergunta</button>
+                    <button class="btn btn-clear" onclick="clearTab(this)">🗑️ Limpar Aba</button>
+                </div>
+            </div>
+
+            <div id="estilo" class="section" data-title="Estilo de Vida">
+                <div class="card">
+                    <div class="row">
+                        <div class="form-group"><label>Sono</label><input type="text"></div>
+                        <div class="form-group"><label>Atividade Física</label>
+                            <select><option>Sedentário</option><option>Leve</option><option>Moderado</option><option>Intenso</option></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Rotina Diária</label>
+                        <textarea></textarea>
+                    </div>
+                </div>
+                <div class="actions">
+                    <button class="btn btn-add" onclick="addField(this)">+ Adicionar Pergunta</button>
+                    <button class="btn btn-clear" onclick="clearTab(this)">🗑️ Limpar Aba</button>
+                </div>
+            </div>
+
+            <div id="saude" class="section" data-title="Histórico de Saúde">
+                <div class="card">
+                    <div class="form-group"><label>Medicamentos</label><textarea></textarea></div>
+                    <div class="form-group"><label>Histórico Psiquiátrico</label><textarea></textarea></div>
+                    <div class="form-group"><label style="color:red">Risco / Ideação Suicida</label>
+                        <select><option>Não relatado</option><option>Ideação Passiva</option><option>Ativa</option><option>Tentativa Prévia</option></select>
+                    </div>
+                </div>
+                <div class="actions">
+                    <button class="btn btn-add" onclick="addField(this)">+ Adicionar Pergunta</button>
+                    <button class="btn btn-clear" onclick="clearTab(this)">🗑️ Limpar Aba</button>
+                </div>
+            </div>
+
+            <div id="infancia" class="section" data-title="Infância e Escola">
+                <div class="card">
+                    <div class="form-group"><label>Histórico Escolar</label><textarea></textarea></div>
+                    <div class="form-group"><label>Dinâmica Familiar</label><textarea></textarea></div>
+                </div>
+                <div class="actions">
+                    <button class="btn btn-add" onclick="addField(this)">+ Adicionar Pergunta</button>
+                    <button class="btn btn-clear" onclick="clearTab(this)">🗑️ Limpar Aba</button>
+                </div>
+            </div>
+
+            <div id="trabalho" class="section" data-title="Vida Profissional">
+                <div class="card">
+                    <div class="form-group"><label>Ocupação Atual</label><textarea></textarea></div>
+                    <div class="form-group"><label>Relações no Trabalho</label><textarea></textarea></div>
+                </div>
+                <div class="actions">
+                    <button class="btn btn-add" onclick="addField(this)">+ Adicionar Pergunta</button>
+                    <button class="btn btn-clear" onclick="clearTab(this)">🗑️ Limpar Aba</button>
+                </div>
+            </div>
+
+            <div id="relacoes" class="section" data-title="Relacionamentos">
+                <div class="card">
+                    <div class="row">
+                        <div class="form-group"><label>Pai</label><input type="text"></div>
+                        <div class="form-group"><label>Mãe</label><input type="text"></div>
+                    </div>
+                    <div class="form-group"><label>Amoroso</label><textarea></textarea></div>
+                </div>
+                <div class="actions">
+                    <button class="btn btn-add" onclick="addField(this)">+ Adicionar Pergunta</button>
+                    <button class="btn btn-clear" onclick="clearTab(this)">🗑️ Limpar Aba</button>
+                </div>
+            </div>
+
+            <div id="emocoes" class="section" data-title="Emoções e Futuro">
+                <div class="card">
+                    <div class="form-group"><label>Emoções Predominantes</label><input type="text"></div>
+                    <div class="form-group"><label>Visão de Futuro</label><textarea></textarea></div>
+                </div>
+                <div class="actions">
+                    <button class="btn btn-add" onclick="addField(this)">+ Adicionar Pergunta</button>
+                    <button class="btn btn-clear" onclick="clearTab(this)">🗑️ Limpar Aba</button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <div id="print-container"></div>
+    
+     <a href="https://api.whatsapp.com/message/WV34TWMSKTEEL1?autoload=1&app_absent=0" target="_blank" class="whatsapp-float">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382C17.112 14.382 16.752 14.382 16.392 14.382C16.356 14.382 16.32 14.382 16.284 14.382C16.14 14.382 16.032 14.454 15.96 14.598C15.852 14.814 15.744 15.03 15.6 15.246C15.456 15.462 15.348 15.678 15.204 15.894C15.096 16.038 14.952 16.074 14.808 16.002C14.484 15.858 14.16 15.714 13.872 15.534C12.9 14.958 12.072 14.238 11.388 13.374C10.956 12.834 10.596 12.258 10.308 11.646C10.236 11.466 10.308 11.322 10.416 11.178C10.524 11.034 10.632 10.89 10.74 10.746C10.848 10.602 10.956 10.458 11.064 10.314C11.208 10.134 11.208 9.954 11.064 9.774C10.884 9.558 10.704 9.342 10.524 9.126C10.344 8.91 10.164 8.694 9.984 8.478C9.876 8.334 9.768 8.19 9.66 8.046C9.552 7.902 9.408 7.902 9.264 7.938C8.904 8.046 8.544 8.19 8.256 8.442C7.932 8.73 7.716 9.09 7.644 9.522C7.572 10.134 7.716 10.71 8.004 11.25C8.4 12.006 8.976 12.654 9.624 13.266C10.848 14.418 12.252 15.318 13.8 15.966C14.412 16.218 15.024 16.362 15.672 16.29C16.176 16.218 16.572 15.93 16.86 15.534C17.004 15.318 17.148 15.102 17.292 14.886C17.364 14.778 17.436 14.67 17.508 14.562C17.58 14.454 17.544 14.382 17.472 14.382Z"/></svg>
+    </a>
+
+    <script>
+        // NAVEGAÇÃO
+        function setTab(id) {
+            // Remove ativos
+            document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('nav button').forEach(el => el.classList.remove('active'));
+            
+            // Ativa novo
+            document.getElementById(id).classList.add('active');
+            event.target.classList.add('active');
+            document.getElementById('page-title').innerText = document.getElementById(id).dataset.title;
+        }
+
+        // LIMPAR ABA
+        function clearTab(btn) {
+            if(confirm('Limpar esta seção?')) {
+                const section = btn.closest('.section');
+                section.querySelectorAll('input, textarea').forEach(el => el.value = '');
+            }
+        }
+
+        // ADICIONAR CAMPO
+        function addField(btn) {
+            const card = btn.closest('.section').querySelector('.card');
+            const div = document.createElement('div');
+            div.className = 'form-group';
+            div.innerHTML = `
+                <input type="text" placeholder="Escreva a nova pergunta..." style="font-weight:bold; color:var(--primary); margin-bottom:5px;">
+                <textarea placeholder="Resposta..."></textarea>
+            `;
+            card.appendChild(div);
+        }
+
+        // ========================================================
+        // GERAÇÃO DE PDF
+        // ========================================================
+        function generateAndPrint() {
+            const printContainer = document.getElementById('print-container');
+            let html = '';
+
+            // Cabeçalho
+            html += `
+                <div class="print-header">
+                    <h2>RELATÓRIO DE ANAMNESE - PSICOQUEST</h2>
+                    <p>Documento confidencial gerado em ${new Date().toLocaleDateString()}</p>
+                </div>
+            `;
+
+            const sections = document.querySelectorAll('.section');
+            
+            sections.forEach(section => {
+                const title = section.dataset.title;
+                html += `<div class="print-section"><h3>${title}</h3>`;
+                
+                const groups = section.querySelectorAll('.form-group');
+                let hasContent = false;
+
+                groups.forEach(group => {
+                    let label = "Pergunta Adicional";
+                    const labelEl = group.querySelector('label');
+                    const inputTitle = group.querySelector('input[type="text"]'); 
+
+                    if (labelEl) label = labelEl.innerText;
+                    else if (inputTitle && inputTitle.placeholder.includes("nova pergunta")) label = inputTitle.value || "Pergunta sem título";
+
+                    let value = "";
+                    const inputEl = group.querySelector('input:not([placeholder*="nova pergunta"]), textarea, select');
+                    
+                    if (inputEl) value = inputEl.value;
+
+                    if (value && value.trim() !== "") {
+                        html += `
+                            <div class="print-item">
+                                <span class="print-label">${label}</span>
+                                <span class="print-value">${value}</span>
+                            </div>
+                        `;
+                        hasContent = true;
+                    }
+                });
+
+                if (!hasContent) {
+                    html += `<p style="color:#999; font-style:italic; font-size:10pt;">Nenhum dado registrado nesta seção.</p>`;
+                }
+
+                html += `</div>`;
+            });
+
+            // RODAPÉ CORRIGIDO (APENAS PSICOQUEST)
+            html += `
+                <div class="print-footer">
+                    Psicoquest<br>
+                    © 2025 Todos os direitos reservados.
+                </div>
+            `;
+
+            printContainer.innerHTML = html;
+            window.print();
+        }
+    </script>
+</body>
+</html>

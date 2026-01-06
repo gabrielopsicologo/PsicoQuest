@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PsicoQuest - Jornada da Autoestima</title>
+    
+    <script src="seguranca.js" defer></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        bgPink: '#ff9a9e',
+                        bgPeach: '#fad0c4',
+                        orbGold: '#d69e2e',
+                        orbPurple: '#9f7aea',
+                        orbTeal: '#38b2ac',
+                        orbPink: '#ed64a6',
+                        orbGreen: '#48bb78',
+                    },
+                    fontFamily: {
+                        display: ['Fredoka', 'cursive'],
+                        body: ['Nunito', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'orb': 'inset -5px -5px 10px rgba(0,0,0,0.2), inset 5px 5px 10px rgba(255,255,255,0.4), 0 5px 10px rgba(0,0,0,0.3)',
+                        'orb-pressed': 'inset 5px 5px 10px rgba(0,0,0,0.3)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Estilo das Esferas (Casas do Tabuleiro) */
+        .orb {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Fredoka', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.2s, filter 0.2s;
+            position: relative;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+
+        @media (min-width: 768px) {
+            .orb { width: 60px; height: 60px; font-size: 1.2rem; }
+        }
+
+        .orb:hover { transform: scale(1.1) translateY(-5px); z-index: 10; filter: brightness(1.1); }
+        .orb:active { transform: scale(0.95); }
+        
+        /* Cores */
+        .orb-gold { background: radial-gradient(circle at 30% 30%, #ecc94b, #b7791f); }
+        .orb-teal { background: radial-gradient(circle at 30% 30%, #4fd1c5, #285e61); }
+        .orb-purple { background: radial-gradient(circle at 30% 30%, #b794f4, #553c9a); }
+        .orb-pink { background: radial-gradient(circle at 30% 30%, #f687b3, #97266d); }
+        .orb-green { background: radial-gradient(circle at 30% 30%, #68d391, #276749); }
+        
+        /* Estado de Concluído */
+        .orb.completed::after {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            font-size: 1.5rem;
+            color: #fff;
+            text-shadow: 0 0 5px rgba(0,0,0,0.5);
+        }
+        .orb.completed span { display: none; }
+
+        /* Grid do Tabuleiro */
+        .board-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        @media (min-width: 768px) { .board-grid { gap: 20px; } }
+
+    </style>
+</head>
+<body class="text-gray-800 font-body antialiased">
+
+    <header class="w-full p-4 bg-white/30 backdrop-blur-md shadow-sm border-b border-white/40 sticky top-0 z-30">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            
+            <div class="flex items-center gap-3">
+                <img src="https://gabrielopsicologo.com/wp-content/uploads/2025/12/Design-sem-nome.png" alt="PsicoQuest Logo" class="h-10 md:h-12 object-contain drop-shadow-sm">
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-display font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 tracking-wide">
+                        PsicoQuest
+                    </h1>
+                </div>
+            </div>
+
+            <button onclick="toggleModal('manualModal')" class="text-pink-700 hover:text-purple-700 hover:bg-white/50 p-2 rounded-full transition duration-300 flex items-center gap-2 font-bold text-sm" title="Manual do Terapeuta">
+                <i class="fa-solid fa-book-open text-xl"></i>
+                <span class="hidden md:inline">Manual</span>
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-grow w-full max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-10 p-6">
+        
+        <div class="flex flex-row md:flex-col gap-4 order-2 md:order-1 items-center">
+            <button onclick="resetGame()" class="group w-16 h-16 md:w-20 md:h-20 rounded-full bg-white shadow-orb border-2 border-pink-200 flex flex-col items-center justify-center text-pink-500 hover:bg-pink-50 hover:scale-105 transition">
+                <i class="fa-solid fa-rotate-right text-xl md:text-2xl group-hover:rotate-180 transition duration-500"></i>
+                <span class="text-[10px] font-bold uppercase mt-1">Reiniciar</span>
+            </button>
+        </div>
+
+        <div class="order-1 md:order-2 bg-white/20 p-6 rounded-[2rem] backdrop-blur-sm shadow-xl border border-white/40 w-full">
+            <h2 class="text-center text-white font-bold font-display text-xl mb-4 drop-shadow-md">Jornada da Autoestima</h2>
+            <div class="board-grid" id="game-board">
+                </div>
+        </div>
+
+    </main>
+
+    <footer class="bg-white text-gray-500 py-4 px-6 text-xs border-t border-pink-100">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            
+            <div class="flex items-center gap-3 text-center md:text-left">
+                <img src="https://gabrielopsicologo.com/wp-content/uploads/2025/11/Logo_preta.png" alt="Logo Gabriel" class="h-8 md:h-10 opacity-90">
+                <div>
+                    <p class="font-bold text-pink-600">Recurso terapêutico digital</p>
+                    <p>Desenvolvido por <a href="https://www.instagram.com/gabrielopsicologo/#" target="_blank" class="text-purple-600 font-bold hover:underline">@gabrielopsicologo</a></p>
+                    <p class="text-[10px]">CRP 06/215890</p>
+                </div>
+            </div>
+
+            <div class="text-center opacity-70">
+                <p>&copy; 2026 Todos os direitos reservados.</p>
+            </div>
+
+            <a href="https://api.whatsapp.com/message/WV34TWMSKTEEL1?autoload=1&app_absent=0" target="_blank" class="bg-green-100 text-green-700 px-5 py-2 rounded-full hover:bg-green-200 transition flex items-center gap-2 font-bold border border-green-200 shadow-sm text-sm">
+                <i class="fa-brands fa-whatsapp text-lg"></i> Suporte
+            </a>
+        </div>
+    </footer>
+
+    <div id="questModal" class="fixed inset-0 bg-black/60 z-40 hidden flex items-center justify-center p-4 backdrop-blur-sm transition-opacity">
+        <div class="bg-white rounded-[2rem] max-w-md w-full p-8 shadow-2xl relative border-4 border-pink-300">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition text-xl"><i class="fa-solid fa-times"></i></button>
+
+            <div class="text-center">
+                <div class="w-16 h-16 bg-pink-100 rounded-full mx-auto flex items-center justify-center mb-4 text-pink-500 text-2xl shadow-sm">
+                    <i id="modal-icon" class="fa-solid fa-star"></i>
+                </div>
+                <h2 id="modal-title" class="text-2xl font-display font-bold text-gray-800 mb-2">Título</h2>
+                <div class="mt-4 bg-orange-50 p-4 rounded-xl border border-orange-100 text-left">
+                    <p id="modal-desc" class="text-gray-600 leading-relaxed font-medium">...</p>
+                </div>
+                <button onclick="completeQuest()" class="w-full mt-6 py-3 rounded-xl bg-gradient-to-r from-green-400 to-green-600 text-white font-bold shadow-lg hover:scale-105 transition">
+                    Concluir Tarefa <i class="fa-solid fa-check ml-1"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="manualModal" class="fixed inset-0 bg-purple-900/40 z-50 hidden flex items-center justify-center p-4 backdrop-blur-md">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-8 shadow-2xl relative border-t-8 border-purple-500">
+            <button onclick="toggleModal('manualModal')" class="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition"><i class="fa-solid fa-times text-xl"></i></button>
+            
+            <div class="flex items-center gap-3 mb-4">
+                <i class="fa-solid fa-book-open text-3xl text-purple-600"></i>
+                <h3 class="text-xl font-bold text-gray-800 font-display">Manual do Recurso</h3>
+            </div>
+
+            <div class="space-y-4 text-gray-600 text-sm leading-relaxed">
+                <p class="font-bold text-purple-700 text-lg">Seja Bem-Vindo à Jornada da Autoestima.</p>
+                <p>Este recurso terapêutico tem como propósito fortalecer a autoconfiança e promover o autocuidado através de um percurso interativo e lúdico.</p>
+                <p>Acompanhado por micro-tarefas baseadas em TCC, busca-se estimular a reflexão positiva, a gratidão e a mudança de pequenos hábitos diários.</p>
+                
+                <div class="bg-purple-50 p-4 rounded-lg border border-purple-100 mt-4">
+                    <p class="font-bold text-purple-800 mb-1"><i class="fa-solid fa-computer-mouse mr-1"></i> Instruções:</p>
+                    <p>Basta clicar em uma casa numerada para revelar o desafio. Ao concluir a tarefa (na sessão ou como tarefa de casa), o botão muda de cor, indicando progresso visual.</p>
+                </div>
+            </div>
+            
+            <button onclick="toggleModal('manualModal')" class="w-full mt-6 bg-purple-600 text-white py-3 rounded-xl font-bold hover:bg-purple-700 transition">Entendi</button>
+        </div>
+    </div>
+
+    <script>
+        // --- CONTEÚDO DA JORNADA (30 Passos) ---
+        const quests = [
+            { title: "O Início", desc: "Olhe no espelho e diga 3 qualidades suas em voz alta.", icon: "fa-regular fa-face-smile" },
+            { title: "Respira", desc: "Faça 5 respirações profundas. Puxe o ar contando até 4, segure 2, solte em 6.", icon: "fa-solid fa-lungs" },
+            { title: "Gratidão", desc: "Escreva no celular ou papel uma coisa boa que aconteceu hoje.", icon: "fa-solid fa-pen" },
+            { title: "Postura", desc: "Ajuste sua postura agora! Coluna reta passa confiança para o cérebro.", icon: "fa-solid fa-person" },
+            { title: "Água", desc: "Beba um copo d'água. Hidratação ajuda a pensar melhor!", icon: "fa-solid fa-glass-water" },
+            { title: "O Elogio", desc: "Elogie alguém da sua casa hoje. Veja como eles reagem.", icon: "fa-solid fa-heart" },
+            { title: "Conexão", desc: "Pergunte a um amigo como ele está realmente se sentindo.", icon: "fa-solid fa-comments" },
+            { title: "Offline", desc: "Fique 15 minutos sem telas. Apenas observe o mundo ao redor.", icon: "fa-solid fa-mobile-screen-button" },
+            { title: "Sorriso", desc: "Sorria para você mesmo no espelho por 10 segundos.", icon: "fa-regular fa-face-grin-beam" },
+            { title: "Não", desc: "Lembre-se: Você tem o direito de dizer 'não' se não quiser fazer algo.", icon: "fa-solid fa-hand" },
+            { title: "O Crítico", desc: "Dê um nome engraçado para aquela voz na cabeça que te critica.", icon: "fa-solid fa-mask" },
+            { title: "Perdão", desc: "Errou hoje? Tudo bem. Diga 'Eu aprendo com meus erros'.", icon: "fa-solid fa-eraser" },
+            { title: "Música", desc: "Ouça sua música favorita e cante junto.", icon: "fa-solid fa-music" },
+            { title: "Movimento", desc: "Faça 10 polichinelos ou pule corda imaginária. Mova a energia!", icon: "fa-solid fa-person-running" },
+            { title: "Talento", desc: "Pratique algo que você gosta por 10 minutos.", icon: "fa-solid fa-star" },
+            { title: "Ajuda", desc: "Pedir ajuda não é fraqueza. Você precisa de ajuda hoje?", icon: "fa-solid fa-handshake" },
+            { title: "Sonho", desc: "Imagine onde você quer estar daqui a 1 ano.", icon: "fa-solid fa-cloud" },
+            { title: "Organização", desc: "Arrume sua cama ou sua mesa. Ordem externa traz paz interna.", icon: "fa-solid fa-broom" },
+            { title: "Natureza", desc: "Olhe para o céu ou toque em uma planta.", icon: "fa-solid fa-leaf" },
+            { title: "Gentileza", desc: "Se trate como você trataria seu melhor amigo.", icon: "fa-solid fa-user-group" },
+            { title: "Medo", desc: "Do que você tem medo? Escreva. O medo diminui quando o nomeamos.", icon: "fa-solid fa-ghost" },
+            { title: "Coragem", desc: "Faça uma pequena coisa que te dá vergonha.", icon: "fa-solid fa-bolt" },
+            { title: "Hobbies", desc: "Dedique tempo hoje para lazer sem culpa.", icon: "fa-solid fa-gamepad" },
+            { title: "Limites", desc: "Se algo te chateou, fale com respeito.", icon: "fa-solid fa-shield" },
+            { title: "Descanse", desc: "Não faça nada por 5 minutos.", icon: "fa-solid fa-couch" },
+            { title: "Memória", desc: "Qual foi a melhor coisa deste mês até agora?", icon: "fa-solid fa-camera" },
+            { title: "Futuro", desc: "O que você vai fazer amanhã para ser feliz?", icon: "fa-solid fa-calendar-day" },
+            { title: "Eu Sou", desc: "Complete a frase: 'Eu sou uma pessoa...'", icon: "fa-solid fa-pen-fancy" },
+            { title: "Abraço", desc: "Dê um abraço apertado em alguém (ou em você mesmo).", icon: "fa-solid fa-hands-holding-circle" },
+            { title: "VENCEDOR", desc: "Parabéns! Você completou a jornada!", icon: "fa-solid fa-trophy" }
+        ];
+
+        // --- RENDERIZAÇÃO ---
+        const board = document.getElementById('game-board');
+        let currentActiveQuestIndex = null;
+
+        function getOrbColor(index) {
+            if (index === 29) return 'orb-gold scale-110 border-4 border-yellow-200';
+            if (index === 13) return 'orb-pink scale-110 border-4 border-pink-200';
+            const colors = ['orb-gold', 'orb-teal', 'orb-purple', 'orb-pink', 'orb-green'];
+            return colors[index % colors.length];
+        }
+
+        quests.forEach((quest, index) => {
+            const orb = document.createElement('div');
+            orb.className = `orb ${getOrbColor(index)} shadow-orb hover:shadow-orb-pressed`;
+            orb.innerHTML = `<span>${index + 1}</span>`;
+            orb.id = `orb-${index}`;
+            orb.onclick = () => openQuest(index);
+            board.appendChild(orb);
+        });
+
+        // --- LÓGICA DE MODAIS ---
+        const questModal = document.getElementById('questModal');
+
+        function openQuest(index) {
+            currentActiveQuestIndex = index;
+            const data = quests[index];
+            document.getElementById('modal-title').innerText = data.title;
+            document.getElementById('modal-desc').innerText = data.desc;
+            document.getElementById('modal-icon').className = `${data.icon}`;
+            questModal.classList.remove('hidden');
+        }
+
+        function closeModal() { questModal.classList.add('hidden'); }
+        
+        function completeQuest() {
+            if (currentActiveQuestIndex !== null) {
+                const orb = document.getElementById(`orb-${currentActiveQuestIndex}`);
+                orb.classList.add('completed');
+                orb.classList.add('opacity-60');
+                closeModal();
+            }
+        }
+
+        function resetGame() {
+            if(confirm("Deseja reiniciar todo o progresso do tabuleiro?")) {
+                document.querySelectorAll('.orb').forEach(orb => {
+                    orb.classList.remove('completed', 'opacity-60');
+                });
+            }
+        }
+
+        function toggleModal(id) { document.getElementById(id).classList.toggle('hidden'); }
+        
+        window.onclick = function(event) {
+            if (event.target == questModal) closeModal();
+            if (event.target == document.getElementById('manualModal')) toggleModal('manualModal');
+        }
+
+    </script>
+</body>
+</html>

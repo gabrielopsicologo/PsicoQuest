@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PsicoQuest - Quadro de Evidências Premium</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script src="seguranca.js" defer></script>
+
+    <style>
+        :root {
+            --primary-dark: #1e293b;
+            --primary-text: #334155;
+            --secondary-text: #64748b;
+            --accent-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); /* Roxo/Azul Moderno */
+            --gold-gradient: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); /* Ouro Rico */
+            --card-surface: #ffffff;
+            --bg-surface: #f8fafc;
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
+            --radius-xl: 24px;
+            --radius-md: 16px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-surface);
+            color: var(--primary-text);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
+            background-size: 24px 24px; /* Textura sutil de pontos */
+        }
+
+        /* --- Header Glassmorphism --- */
+        header {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.6);
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-logo { height: 38px; width: auto; object-fit: contain; }
+        
+        .app-title {
+            font-weight: 800;
+            background: var(--primary-dark);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.2rem;
+            letter-spacing: -0.5px;
+            display: none;
+        }
+        @media (min-width: 768px) { .app-title { display: block; } }
+
+        .btn-manual {
+            background: white;
+            border: 1px solid #e2e8f0;
+            color: var(--secondary-text);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+        }
+        .btn-manual:hover { border-color: #cbd5e1; transform: translateY(-1px); color: var(--primary-dark); }
+
+        /* --- Main Content --- */
+        main {
+            flex: 1;
+            width: 100%;
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        .intro-text { text-align: center; margin-bottom: 40px; }
+        .intro-text h1 { 
+            font-size: 2rem; 
+            font-weight: 800; 
+            color: var(--primary-dark); 
+            letter-spacing: -1px; 
+            margin-bottom: 8px;
+        }
+        .intro-text p { color: var(--secondary-text); font-size: 1rem; max-width: 600px; margin: 0 auto; line-height: 1.6; }
+
+        /* --- Belief Card (Hero) --- */
+        .belief-card {
+            background: var(--card-surface);
+            border-radius: var(--radius-xl);
+            padding: 35px;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.8);
+            margin-bottom: 40px;
+        }
+        
+        /* Detalhe Dourado Decorativo */
+        .belief-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 6px;
+            background: var(--gold-gradient);
+        }
+
+        .label-belief {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 700;
+            color: #d97706; /* Dourado escuro */
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        textarea.main-belief-input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            padding: 10px 0;
+            resize: none;
+            line-height: 1.4;
+            font-family: inherit;
+        }
+        textarea.main-belief-input::placeholder { color: #cbd5e1; font-weight: 400; }
+
+        /* --- Input Section --- */
+        .input-card {
+            background: var(--card-surface);
+            border-radius: var(--radius-xl);
+            padding: 30px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid #f1f5f9;
+            margin-bottom: 40px;
+        }
+
+        .form-grid {
+            display: grid;
+            gap: 25px;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+            color: var(--primary-dark);
+        }
+
+        textarea.input-field {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid #f1f5f9;
+            border-radius: var(--radius-md);
+            background: #f8fafc;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: var(--transition);
+            resize: vertical;
+        }
+        textarea.input-field:focus {
+            background: #fff;
+            border-color: #6366f1; /* Cor de acento */
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+
+        .btn-add {
+            background: var(--primary-dark);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: var(--radius-md);
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            transition: var(--transition);
+            width: 100%;
+            margin-top: 10px;
+            box-shadow: 0 10px 15px -3px rgba(30, 41, 59, 0.2);
+        }
+        .btn-add:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 20px 25px -5px rgba(30, 41, 59, 0.3);
+        }
+        .btn-add:active { transform: scale(0.98); }
+
+        @media (min-width: 768px) {
+            .form-grid { grid-template-columns: 1fr 1fr; align-items: end; }
+            .btn-add { grid-column: span 2; width: auto; justify-self: end; padding-left: 40px; padding-right: 40px;}
+        }
+
+        /* --- Evidence List --- */
+        .evidence-board {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .evidence-item {
+            background: var(--card-surface);
+            border-radius: var(--radius-md);
+            padding: 25px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid #f1f5f9;
+            position: relative;
+            animation: slideUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+            transition: var(--transition);
+        }
+
+        .evidence-item:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+        }
+
+        /* Decoration line on left */
+        .evidence-item::after {
+            content: '';
+            position: absolute;
+            left: 0; top: 25px; bottom: 25px;
+            width: 4px;
+            border-radius: 0 4px 4px 0;
+            background: var(--accent-gradient);
+        }
+
+        .evidence-content {
+            display: grid;
+            gap: 15px;
+        }
+
+        .ev-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: #94a3b8;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .ev-text {
+            font-size: 1.05rem;
+            color: var(--primary-dark);
+            line-height: 1.5;
+        }
+
+        .ev-meaning-box {
+            background: #f0f9ff; /* Azul bem claro */
+            padding: 15px;
+            border-radius: 12px;
+            color: #0369a1;
+            font-weight: 500;
+        }
+
+        .delete-btn {
+            position: absolute;
+            top: 20px; right: 20px;
+            background: transparent;
+            border: none;
+            color: #ef4444;
+            opacity: 0.3;
+            cursor: pointer;
+            transition: 0.2s;
+            padding: 5px;
+        }
+        .delete-btn:hover { opacity: 1; background: #fee2e2; border-radius: 8px; }
+
+        @media (min-width: 768px) {
+            .evidence-content { 
+                grid-template-columns: 1fr auto 1fr; 
+                align-items: center; 
+            }
+            .connector-icon {
+                color: #cbd5e1;
+                font-size: 1.2rem;
+            }
+        }
+        
+        /* Mobile connector */
+        .connector-icon { text-align: center; color: #cbd5e1; margin: 5px 0; }
+        @media (max-width: 767px) { .connector-icon i { transform: rotate(90deg); } }
+
+
+        /* --- Confidence Slider --- */
+        .confidence-section {
+            margin-top: 50px;
+            text-align: center;
+            padding: 40px;
+            background: white;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .range-wrapper {
+            position: relative;
+            padding: 20px 0;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            appearance: none;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            appearance: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--gold-gradient);
+            box-shadow: 0 4px 6px rgba(245, 158, 11, 0.4);
+            cursor: pointer;
+            border: 3px solid white;
+            transition: transform 0.2s;
+        }
+        input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); }
+
+        .confidence-val {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        /* --- Footer --- */
+        footer {
+            background: white;
+            border-top: 1px solid #f1f5f9;
+            padding: 30px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-top: auto;
+        }
+
+        .footer-logo { height: 32px; width: auto; margin-bottom: 10px; }
+        .footer-info { display: flex; flex-direction: column; gap: 5px; font-size: 0.8rem; color: #94a3b8; }
+        .footer-info a { color: var(--primary-dark); font-weight: 700; text-decoration: none; }
+        
+        .whatsapp-float {
+            background: #25D366;
+            color: white;
+            width: 48px; height: 48px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.6rem;
+            box-shadow: 0 10px 20px rgba(37, 211, 102, 0.3);
+            transition: transform 0.3s;
+        }
+        .whatsapp-float:hover { transform: scale(1.1) rotate(10deg); }
+
+        /* --- Modal --- */
+        .modal {
+            display: none; position: fixed; z-index: 200; left: 0; top: 0;
+            width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            align-items: center; justify-content: center;
+            animation: fadeIn 0.3s;
+        }
+        .modal-content {
+            background: white; padding: 40px;
+            border-radius: var(--radius-xl);
+            width: 90%; max-width: 550px;
+            position: relative;
+            box-shadow: var(--shadow-lg);
+        }
+        .close { position: absolute; right: 25px; top: 20px; font-size: 1.5rem; color: #94a3b8; cursor: pointer; }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <img src="https://gabrielopsicologo.com/wp-content/uploads/2025/12/Design-sem-nome.png" alt="Logo PsicoQuest" class="header-logo">
+        <span class="app-title">PsicoQuest</span>
+        <button class="btn-manual" onclick="openManual()">
+            <i class="fa-solid fa-book-open"></i> <span style="display:none; @media(min-width:400px){display:inline;}">Manual</span>
+        </button>
+    </header>
+
+    <main>
+        <div class="intro-text">
+            <h1>Quadro de Evidências</h1>
+            <p>Colete provas da sua evolução e reescreva sua narrativa.</p>
+        </div>
+
+        <section class="belief-card">
+            <span class="label-belief"><i class="fa-solid fa-gem"></i> Nova Crença Central</span>
+            <textarea id="mainBelief" class="main-belief-input" rows="2" placeholder="Digite aqui a nova crença positiva que você está construindo..."></textarea>
+        </section>
+
+        <section class="input-card">
+            <div class="form-grid">
+                <div class="input-group">
+                    <label>Fato / Experiência Real</label>
+                    <textarea id="eventInput" class="input-field" rows="3" placeholder="O que aconteceu? Descreva um fato, mesmo que pequeno."></textarea>
+                </div>
+                <div class="input-group">
+                    <label>Significado Pessoal</label>
+                    <textarea id="meaningInput" class="input-field" rows="3" placeholder="O que esse fato prova sobre você?"></textarea>
+                </div>
+                <button class="btn-add" onclick="addEvidence()">
+                    <i class="fa-solid fa-plus"></i> Adicionar Evidência
+                </button>
+            </div>
+        </section>
+
+        <div id="evidenceList" class="evidence-board">
+            </div>
+
+        <section class="confidence-section" id="confidenceSection" style="display:none;">
+            <h3 style="color: var(--primary-dark); margin-bottom: 10px;">Nível de Crença</h3>
+            <p style="color: var(--secondary-text); margin-bottom: 20px;">Com base nas evidências acima, o quanto essa nova crença parece verdadeira hoje?</p>
+            
+            <div class="range-wrapper">
+                <input type="range" id="confidenceRange" min="0" max="100" value="50" oninput="updateConfidence(this.value)">
+            </div>
+            <div class="confidence-val"><span id="confidenceValue">50</span>%</div>
+            
+            <p style="font-size: 0.75rem; color: #cbd5e1; margin-top: 30px;">
+                Beck, J. S. (2022). Terapia Cognitivo-Comportamental. Artmed, p. 303.
+            </p>
+        </section>
+
+    </main>
+
+    <footer>
+        <div class="footer-info">
+            <img src="https://gabrielopsicologo.com/wp-content/uploads/2025/11/Logo_preta.png" alt="Gabriel Psicólogo" class="footer-logo">
+            <span>© 2025 Todos os direitos reservados.</span>
+            <span>CRP 06/215890 | <a href="https://www.instagram.com/gabrielopsicologo/#" target="_blank">@gabrielopsicologo</a></span>
+            <span style="margin-top:6px; font-size:0.7rem; color:#cbd5e1;">Recurso Terapêutico Digital Premium</span>
+        </div>
+        <a href="https://api.whatsapp.com/message/WV34TWMSKTEEL1?autoload=1&app_absent=0" class="whatsapp-float" target="_blank" title="Suporte">
+            <i class="fa-brands fa-whatsapp"></i>
+        </a>
+    </footer>
+
+    <div id="manualModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeManual()">&times;</span>
+            <h3 style="color: var(--primary-dark); font-size: 1.5rem; margin-bottom: 20px;">Manual do Terapeuta</h3>
+            <div style="line-height: 1.8; color: var(--secondary-text);">
+                <p><strong>Técnica: Quadro de Evidências (Beck)</strong></p>
+                <p>Este recurso visa combater o viés de confirmação negativo.</p>
+                <ul style="margin-top: 15px; padding-left: 20px;">
+                    <li><strong>A Crença (Hero):</strong> Deve ser formulada no positivo (ex: "Sou capaz" em vez de "Não sou inútil").</li>
+                    <li><strong>As Evidências:</strong> Ajudam a criar "trilhas neurais" novas. O design em cartões valoriza cada pequena vitória.</li>
+                    <li><strong>Significado:</strong> É a parte mais importante. Transforma o fato neutro em prova de valor pessoal.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function addEvidence() {
+            const eventTxt = document.getElementById('eventInput').value.trim();
+            const meaningTxt = document.getElementById('meaningInput').value.trim();
+            const container = document.getElementById('evidenceList');
+            const confidenceSec = document.getElementById('confidenceSection');
+
+            if (!eventTxt || !meaningTxt) {
+                alert("Por favor, preencha os dois campos para fortalecer sua crença.");
+                return;
+            }
+
+            const item = document.createElement('div');
+            item.className = 'evidence-item';
+            
+            item.innerHTML = `
+                <button class="delete-btn" onclick="this.closest('.evidence-item').remove()"><i class="fa-solid fa-trash-can"></i></button>
+                <div class="evidence-content">
+                    <div>
+                        <span class="ev-label">O que aconteceu</span>
+                        <div class="ev-text">${eventTxt}</div>
+                    </div>
+                    
+                    <div class="connector-icon">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                    
+                    <div class="ev-meaning-box">
+                        <span class="ev-label" style="color: #38bdf8;">Diz sobre mim</span>
+                        ${meaningTxt}
+                    </div>
+                </div>
+            `;
+
+            container.prepend(item);
+            
+            // Limpa e foca
+            document.getElementById('eventInput').value = '';
+            document.getElementById('meaningInput').value = '';
+            document.getElementById('eventInput').focus();
+            
+            confidenceSec.style.display = 'block';
+        }
+
+        function updateConfidence(val) {
+            document.getElementById('confidenceValue').innerText = val;
+        }
+
+        function openManual() { 
+            document.getElementById('manualModal').style.display = 'flex'; 
+        }
+        function closeManual() { 
+            document.getElementById('manualModal').style.display = 'none'; 
+        }
+        
+        window.onclick = function(e) {
+            if (e.target == document.getElementById('manualModal')) closeManual();
+        }
+    </script>
+</body>
+</html>

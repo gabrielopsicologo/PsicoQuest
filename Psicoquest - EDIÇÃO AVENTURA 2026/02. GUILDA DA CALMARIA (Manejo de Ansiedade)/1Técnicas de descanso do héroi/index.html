@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PsicoQuest - Academia de Heróis</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #6C5CE7;
+            --secondary: #00CEC9;
+            --accent: #FD79A8;
+            --success: #00B894;
+            --dark: #2D3436;
+            --light: #DFE6E9;
+            --card-bg: #FFFFFF;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #74b9ff;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            color: var(--dark);
+        }
+
+        /* --- TELA DE INTRODUÇÃO (LOGIN) --- */
+        #introScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #6C5CE7, #0984e3);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+
+        .game-logo {
+            font-family: 'Bungee', cursive;
+            font-size: 3rem;
+            color: #fff;
+            text-shadow: 4px 4px 0px #000;
+            margin-bottom: 20px;
+        }
+
+        .avatar-selector {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            z-index: 10000;
+        }
+
+        .avatar-option {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: white;
+            border: 4px solid transparent;
+            cursor: pointer;
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            user-select: none;
+        }
+
+        .avatar-option:active { transform: scale(0.9); }
+
+        .avatar-option.selected {
+            border-color: var(--secondary);
+            transform: scale(1.2);
+            box-shadow: 0 0 20px var(--secondary);
+            background: #e0fbfc;
+        }
+
+        .hero-input {
+            padding: 15px;
+            border-radius: 30px;
+            border: none;
+            font-size: 1.2rem;
+            text-align: center;
+            width: 100%;
+            max-width: 300px;
+            margin-bottom: 20px;
+            font-weight: 700;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .start-btn {
+            background: var(--secondary);
+            color: var(--dark);
+            font-family: 'Bungee', cursive;
+            font-size: 1.5rem;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 8px 0 #00b894, 0 15px 20px rgba(0,0,0,0.2);
+            transition: all 0.1s;
+            z-index: 10000;
+        }
+
+        .start-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 4px 0 #00b894;
+        }
+
+        /* --- HUD (TOPO) --- */
+        header {
+            height: 80px;
+            background: rgba(255, 255, 255, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            border-bottom: 4px solid var(--primary);
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* Botão de Voltar */
+        .back-btn {
+            background: white;
+            border: 2px solid var(--dark);
+            border-radius: 12px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #b2bec3;
+            transition: transform 0.1s;
+            color: var(--primary);
+        }
+
+        .back-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 0 0 transparent;
+        }
+
+        .player-info { display: flex; align-items: center; gap: 10px; }
+        .player-avatar {
+            font-size: 2rem;
+            background: #dfe6e9;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid var(--primary);
+        }
+
+        .player-name-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .xp-container { width: 120px; }
+        .xp-bar-bg {
+            background: #b2bec3;
+            height: 12px;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 2px solid var(--dark);
+        }
+        .xp-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #fdcb6e, #fab1a0);
+            width: 0%;
+            transition: width 0.5s;
+        }
+
+        /* --- AREA DE JOGO --- */
+        main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            padding: 0 40px;
+            gap: 30px;
+        }
+
+        .mission-card {
+            flex: 0 0 auto;
+            width: 260px;
+            height: 400px;
+            background: white;
+            border-radius: 20px;
+            scroll-snap-align: center;
+            position: relative;
+            cursor: pointer;
+            border: 4px solid var(--dark);
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: transform 0.2s;
+        }
+        
+        .mission-card:active { transform: scale(0.98); }
+
+        .card-header-bg {
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #eee;
+        }
+
+        .card-body {
+            padding: 20px;
+            text-align: center;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card-title { font-family: 'Bungee'; margin-bottom: 10px; font-size: 1.1rem; line-height: 1.2;}
+        .play-btn-card {
+            background: var(--dark);
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+            font-weight: 800;
+            margin-top: 10px;
+        }
+
+        /* --- MODAL --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .modal-overlay.active { display: flex; animation: fadeIn 0.3s; }
+
+        @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
+
+        .mission-panel {
+            background: white;
+            width: 100%;
+            max-width: 500px;
+            border-radius: 20px;
+            padding: 25px;
+            position: relative;
+            text-align: center;
+            border: 5px solid var(--primary);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .close-mission {
+            position: absolute;
+            top: 10px; right: 10px;
+            background: #ff7675;
+            color: white;
+            width: 35px; height: 35px;
+            border-radius: 50%;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .mission-content {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 15px;
+            text-align: left;
+            margin: 15px 0;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+        
+        .mission-content li { margin-bottom: 8px; }
+
+        .complete-btn {
+            background: var(--success);
+            color: white;
+            font-family: 'Bungee';
+            font-size: 1.2rem;
+            padding: 15px;
+            width: 100%;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 0 #00947e;
+        }
+        
+        .complete-btn:active { transform: translateY(3px); box-shadow: 0 2px 0 #00947e; }
+
+        /* --- FOOTER --- */
+        footer { 
+            text-align: center; 
+            padding: 15px; 
+            font-size: 0.75rem; 
+            background: white; 
+            margin-top: auto;
+            border-top: 2px solid #eee;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .insta-link {
+            color: var(--primary);
+            font-weight: 800;
+            text-decoration: none;
+        }
+        .insta-link:hover { text-decoration: underline; }
+
+        .support-btn {
+            background: #25D366;
+            color: white;
+            text-decoration: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-family: 'Bungee', cursive;
+            font-size: 0.8rem;
+            box-shadow: 0 4px 0 #128C7E;
+            transition: transform 0.1s;
+        }
+
+        .support-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #128C7E;
+        }
+        
+        /* Canvas de Confete */
+        #confettiCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 3000; }
+
+        @media(max-width: 480px) {
+            .mission-card { width: 80vw; height: 55vh; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="introScreen">
+        <div class="game-logo">PsicoQuest<br>Heroes</div>
+        <p style="color: white; font-weight: 700; margin-bottom: 20px;">QUEM É VOCÊ?</p>
+        
+        <div class="avatar-selector">
+            <div class="avatar-option selected" onclick="window.selectAvatar('🧙‍♂️', this)">🧙‍♂️</div>
+            <div class="avatar-option" onclick="window.selectAvatar('🥷', this)">🥷</div>
+            <div class="avatar-option" onclick="window.selectAvatar('🤖', this)">🤖</div>
+            <div class="avatar-option" onclick="window.selectAvatar('🦊', this)">🦊</div>
+            <div class="avatar-option" onclick="window.selectAvatar('🦄', this)">🦄</div>
+        </div>
+
+        <input type="text" id="heroName" class="hero-input" placeholder="Seu Nome de Herói">
+        <button class="start-btn" onclick="window.startGame()">INICIAR MISSÃO</button>
+    </div>
+
+    <header>
+        <div class="header-left">
+            <button class="back-btn" onclick="window.exitGame()" title="Trocar Herói">🔙</button>
+            <div class="player-info">
+                <div class="player-avatar" id="displayAvatar">?</div>
+                <div class="player-name-box">
+                    <div style="font-weight: 800; font-size: 1.1rem;" id="displayName">Jogador</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="xp-container">
+            <div style="font-size:0.7rem; font-weight:bold; color:var(--primary)">XP</div>
+            <div class="xp-bar-bg"><div class="xp-bar-fill" id="xpBar"></div></div>
+        </div>
+    </header>
+
+    <main id="gameContainer"></main>
+
+    <footer>
+        <div>
+            Recurso Terapêutico Digital - PsicoQuest<br>
+            CRP 06/215890 - <a href="https://www.instagram.com/gabrielopsicologo/#" target="_blank" class="insta-link">@gabrielopsicologo</a>
+        </div>
+        <a href="https://api.whatsapp.com/message/WV34TWMSKTEEL1?autoload=1&app_absent=0" target="_blank" class="support-btn">
+            💬 SUPORTE / AJUDA
+        </a>
+    </footer>
+
+    <div class="modal-overlay" id="missionModal">
+        <div class="mission-panel">
+            <button class="close-mission" onclick="window.closeMission()">X</button>
+            <h2 id="missionTitle" style="color: var(--primary); font-family: 'Bungee';"></h2>
+            <div style="font-size: 3rem; margin: 10px;" id="missionIcon"></div>
+            <div class="mission-content" id="missionBody"></div>
+            <button class="complete-btn" onclick="window.completeMission()">MISSÃO CUMPRIDA!</button>
+        </div>
+    </div>
+
+    <canvas id="confettiCanvas"></canvas>
+
+    <script src="seguranca.js" defer></script>
+
+    <script>
+        // --- DADOS DAS MISSÕES ---
+        const missions = [
+            {
+                id: 1, title: "Radar dos Sentidos", icon: "📡", color: "#ff7675",
+                desc: "Ative seus sensores para sair da tempestade!",
+                content: `<p><strong>O que procurar:</strong></p><ul><li>👁️ 5 coisas coloridas</li><li>✋ 4 coisas texturizadas</li><li>👂 3 barulhos diferentes</li><li>👃 2 cheiros</li><li>😋 1 sabor imaginário</li></ul>`
+            },
+            {
+                id: 2, title: "Mão Estelar", icon: "✋", color: "#74b9ff",
+                desc: "Desenhe a estrela da calma.",
+                content: `<p>Use o dedo indicador para contornar sua outra mão.</p><p><strong>Subindo o dedo:</strong> Inspire (enche o peito)</p><p><strong>Descendo o dedo:</strong> Expire (solta o ar)</p><p>Faça a mão completa!</p>`
+            },
+            {
+                id: 3, title: "Baú Monstro", icon: "📦", color: "#a29bfe",
+                desc: "Prenda suas preocupações.",
+                content: `<p>Escreva em um papel o que está te chateando.</p><p>Agora, amasse esse papel com força e jogue no lixo como se fosse uma bola de basquete!</p>`
+            },
+            {
+                id: 4, title: "Modo Tartaruga", icon: "🐢", color: "#55efc4",
+                desc: "Esconda-se e relaxe.",
+                content: `<p>Encolha os ombros nas orelhas e aperte tudo por 5 segundos...</p><p>Agora SOLTE de uma vez e vire gelatina!</p><p>Repita 3 vezes.</p>`
+            },
+            {
+                id: 5, title: "Respiração do Dragão", icon: "🐉", color: "#fab1a0",
+                desc: "Controle seu fogo.",
+                content: `<p>Cheire a flor (Nariz) contando até 4...</p><p>Segure...</p><p>Assopre a vela (Boca) contando até 6.</p>`
+            }
+        ];
+
+        // --- ESTADO DO JOGO ---
+        let currentAvatar = "🧙‍♂️";
+        let currentXP = 0;
+
+        // --- FUNÇÕES GLOBAIS ---
+        
+        window.selectAvatar = function(emoji, el) {
+            currentAvatar = emoji;
+            document.querySelectorAll('.avatar-option').forEach(opt => {
+                opt.classList.remove('selected');
+                opt.style.background = 'white';
+            });
+            el.classList.add('selected');
+        }
+
+        window.startGame = function() {
+            const nameInput = document.getElementById('heroName').value;
+            const finalName = nameInput.trim() !== "" ? nameInput : "Super Herói";
+            
+            document.getElementById('displayName').innerText = finalName;
+            document.getElementById('displayAvatar').innerText = currentAvatar;
+            
+            // Ocultar Intro
+            const intro = document.getElementById('introScreen');
+            intro.style.transform = "translateY(-150%)";
+            
+            renderCards();
+        }
+
+        // Função Nova: Voltar ao menu principal
+        window.exitGame = function() {
+            const intro = document.getElementById('introScreen');
+            intro.style.transform = "translateY(0%)";
+        }
+
+        function renderCards() {
+            const container = document.getElementById('gameContainer');
+            container.innerHTML = "";
+            
+            missions.forEach(m => {
+                const card = document.createElement('div');
+                card.className = "mission-card";
+                card.style.borderColor = m.color;
+                card.innerHTML = `
+                    <div class="card-header-bg" style="background:${m.color}30;">
+                        <div style="font-size:3rem;">${m.icon}</div>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">${m.title}</h3>
+                        <p style="font-size:0.9rem; color:#666;">${m.desc}</p>
+                        <div class="play-btn-card" style="background:${m.color}">ABRIR MISSÃO</div>
+                    </div>
+                `;
+                card.onclick = function() { window.openMission(m); };
+                container.appendChild(card);
+            });
+        }
+
+        window.openMission = function(mission) {
+            document.getElementById('missionTitle').innerText = mission.title;
+            document.getElementById('missionIcon').innerText = mission.icon;
+            document.getElementById('missionBody').innerHTML = mission.content;
+            
+            const modal = document.getElementById('missionModal');
+            modal.classList.add('active');
+        }
+
+        window.closeMission = function() {
+            document.getElementById('missionModal').classList.remove('active');
+        }
+
+        window.completeMission = function() {
+            currentXP += 25;
+            if(currentXP > 100) currentXP = 100;
+            document.getElementById('xpBar').style.width = currentXP + "%";
+            
+            fireConfetti();
+            
+            setTimeout(() => {
+                window.closeMission();
+                if(currentXP >= 100) {
+                    // Reset simples para continuar brincando
+                    alert("PARABÉNS! VOCÊ SUBIU DE NÍVEL!");
+                    currentXP = 0;
+                    document.getElementById('xpBar').style.width = "0%";
+                }
+            }, 2000);
+        }
+
+        // --- SISTEMA DE CONFETES ---
+        const canvas = document.getElementById("confettiCanvas");
+        const ctx = canvas.getContext("2d");
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function fireConfetti() {
+            particles = [];
+            for(let i=0; i<100; i++) {
+                particles.push({
+                    x: window.innerWidth/2,
+                    y: window.innerHeight/2,
+                    vx: (Math.random()-0.5)*15,
+                    vy: (Math.random()-0.5)*15,
+                    color: `hsl(${Math.random()*360}, 100%, 50%)`,
+                    size: Math.random()*10+5
+                });
+            }
+            requestAnimationFrame(updateConfetti);
+        }
+
+        function updateConfetti() {
+            ctx.clearRect(0,0, canvas.width, canvas.height);
+            let active = false;
+            
+            particles.forEach(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.5;
+                p.vx *= 0.95;
+                
+                ctx.fillStyle = p.color;
+                ctx.fillRect(p.x, p.y, p.size, p.size);
+                
+                if(p.y < canvas.height) active = true;
+            });
+
+            if(active) requestAnimationFrame(updateConfetti);
+        }
+    </script>
+</body>
+</html>

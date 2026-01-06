@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>PsicoQuest - Baralho para Impressão</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- CONFIGURAÇÕES DE IMPRESSÃO --- */
+        :root {
+            --azul-grafite: #1E2A3A;
+            --laranja: #FF6B35;
+            --lavanda-escuro: #8B5CF6;
+            --lavanda-claro: #EDE9FE;
+            --branco: #ffffff;
+            --cinza-texto: #475569;
+        }
+
+        @page {
+            size: A4;
+            margin: 1cm;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-print-color-adjust: exact; /* Garante cores exatas na impressão */
+            print-color-adjust: exact;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #fff; /* Fundo branco para economizar tinta fora das cartas */
+            margin: 0;
+            padding: 20px;
+            color: var(--azul-grafite);
+        }
+
+        /* --- CABEÇALHO DA PÁGINA --- */
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--lavanda-claro);
+            padding-bottom: 20px;
+        }
+
+        .logo {
+            height: 50px;
+            object-fit: contain;
+        }
+
+        .header-info h1 {
+            font-size: 1.5rem;
+            margin: 0;
+            line-height: 1.1;
+        }
+
+        .header-info span {
+            color: var(--laranja);
+            font-weight: 700;
+        }
+
+        .header-info p {
+            margin: 5px 0 0 0;
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
+        /* --- GRID DE CARTAS --- */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* 2 cartas por linha */
+            gap: 20px;
+            page-break-inside: avoid;
+        }
+
+        /* --- DESIGN DA CARTA (OTIMIZADO PARA PAPEL) --- */
+        .print-card {
+            border: 2px solid var(--azul-grafite);
+            border-radius: 16px;
+            overflow: hidden;
+            background: #fff;
+            page-break-inside: avoid; /* Evita cortar a carta no meio da página */
+            display: flex;
+            flex-direction: column;
+            box-shadow: none; /* Remove sombras pesadas para impressão */
+        }
+
+        /* Cabeçalho da Carta */
+        .card-header {
+            background-color: var(--azul-grafite);
+            color: var(--branco);
+            padding: 12px 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-category {
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            background: var(--laranja);
+            padding: 4px 10px;
+            border-radius: 4px;
+        }
+
+        .card-icon {
+            font-size: 1.5rem;
+        }
+
+        /* Corpo da Carta */
+        .card-body {
+            padding: 15px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .thought-section {
+            background: var(--lavanda-claro);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid var(--lavanda-escuro);
+        }
+
+        .thought-text {
+            font-size: 1.1rem;
+            font-weight: 700;
+            font-style: italic;
+            margin: 0;
+            color: var(--azul-grafite);
+        }
+
+        .context-text {
+            font-size: 0.85rem;
+            color: var(--cinza-texto);
+            margin-top: 5px;
+        }
+
+        /* Área de Avaliação (Questionamento) */
+        .evaluation-section {
+            border: 1px dashed var(--azul-grafite);
+            border-radius: 10px;
+            padding: 12px;
+        }
+
+        .evaluation-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--laranja);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .question-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .question-list li {
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: flex-start;
+            gap: 6px;
+            line-height: 1.3;
+        }
+
+        .question-list li::before {
+            content: '•';
+            color: var(--lavanda-escuro);
+            font-weight: bold;
+        }
+
+        /* Rodapé da Carta (Copyright Sutil) */
+        .card-footer {
+            background: #f8fafc;
+            border-top: 1px solid #e2e8f0;
+            padding: 6px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-logo {
+            height: 12px;
+            opacity: 0.7;
+        }
+
+        .copyright-text {
+            font-size: 0.6rem;
+            color: #94a3b8;
+        }
+
+        /* --- RODAPÉ DA PÁGINA (LINKS) --- */
+        .page-footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--cinza-texto);
+            border-top: 1px solid #ccc;
+            padding-top: 15px;
+            page-break-before: auto;
+        }
+
+        .page-footer a {
+            color: var(--laranja);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Quebra de página a cada 6 cartas para ficar bonito no A4 */
+        .break-page {
+            page-break-after: always;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header class="page-header">
+        <img src="https://gabrielopsicologo.com/wp-content/uploads/2025/12/Design-sem-nome.png" alt="Logo" class="logo">
+        <div class="header-info">
+            <h1><span style="color: var(--azul-grafite);">Psico</span><span>Quest</span></h1>
+            <p>Baralho Desafio Cognitivo para TDAH Adulto • Material de Apoio</p>
+        </div>
+    </header>
+
+    <div class="cards-grid" id="printableGrid">
+        </div>
+
+    <footer class="page-footer">
+        <p><strong>Recurso terapêutico digital</strong></p>
+        <p>Desenvolvido por <a href="https://www.instagram.com/gabrielopsicologo/#">@gabrielopsicologo</a> | CRP 06/215890</p>
+        <p>© 2025 Todos os direitos reservados.</p>
+        <p>Suporte: <a href="https://api.whatsapp.com/message/WV34TWMSKTEEL1?autoload=1&app_absent=0">WhatsApp Oficial</a></p>
+    </footer>
+
+    <script>
+        const cardsData = [
+            { icon: "🌪️", category: "Foco", thought: '"Não consigo me concentrar em nada."', context: "Contexto: Durante o trabalho ou estudo.", questions: ["Isso é 100% verdade ou já houve momentos de foco?", "O ambiente ajuda ou atrapalha agora?"] },
+            { icon: "😴", category: "Motivação", thought: '"Isso é chato, não vou conseguir terminar."', context: "Contexto: Iniciando uma tarefa longa.", questions: ["Posso fazer isso por apenas 5 minutos?", "Como vou me sentir ao terminar uma etapa?"] },
+            { icon: "⏰", category: "Ansiedade", thought: '"Vou chegar atrasado de novo."', context: "Contexto: Antes de um compromisso.", questions: ["Me culpar ajuda a chegar mais rápido?", "Qual o primeiro passo concreto agora?"] },
+            { icon: "🧊", category: "Paralisia", thought: '"Não posso lidar com isso."', context: "Contexto: Enfrentando um desafio.", questions: ["Já superei algo difícil antes?", "Quem pode me ajudar a dividir o problema?"] },
+            { icon: "🚧", category: "Inacabado", thought: '"Sempre deixo as coisas pela metade."', context: "Contexto: Ao olhar tarefas inacabadas.", questions: ["A palavra 'sempre' é justa?", "Posso terminar uma pequena parte hoje?"] },
+            { icon: "🧩", category: "Organização", thought: '"Eu sou desorganizado e ineficaz."', context: "Contexto: Tentando se organizar.", questions: ["Ser desorganizado define meu valor?", "Qual sistema simples já funcionou antes?"] },
+            { icon: "🚦", category: "Impulso", thought: '"Não tenho autocontrole."', context: "Contexto: Quando sente impulsividade.", questions: ["Perdi o controle ou tive um deslize?", "O que aprendo com esse gatilho?"] },
+            { icon: "🔮", category: "Futuro", thought: '"Nunca vou superar o TDAH."', context: "Contexto: Pensando sobre o transtorno.", questions: ["O objetivo é 'superar' ou lidar melhor?", "Quais estratégias já ajudaram antes?"] },
+            // Quebra sugerida para impressão (pode ser automática pelo CSS, mas bom ter dados)
+            { icon: "😔", category: "Autoestima", thought: '"Eu sou incompetente."', context: "Contexto: Lidando com tarefas difíceis.", questions: ["Eu falhei na tarefa ou eu SOU uma falha?", "O que eu diria a um amigo agora?"] },
+            { icon: "🗣️", category: "Social", thought: '"Ninguém entende o que passo."', context: "Contexto: Conversando com outros.", questions: ["Eu expliquei claramente como me sinto?", "Eles não entendem ou não sabem ajudar?"] },
+            { icon: "💊", category: "Tratamento", thought: '"Nada funciona para mim."', context: "Contexto: Testando estratégias.", questions: ["Tentei tempo suficiente?", "Existe algum ajuste que não tentei?"] },
+            { icon: "👀", category: "Julgamento", thought: '"Acham que sou preguiçoso."', context: "Contexto: Interagindo socialmente.", questions: ["Tenho evidências reais ou é leitura mental?", "A opinião deles define quem sou?"] },
+            { icon: "💔", category: "Culpa", thought: '"Eu sou uma decepção."', context: "Contexto: Após cometer erros.", questions: ["Errar faz parte do aprendizado?", "Quais são minhas qualidades além dos erros?"] },
+            { icon: "⚖️", category: "Comparação", thought: '"Deveria ser capaz de fazer isso."', context: "Contexto: Comparado aos outros.", questions: ["É justo me comparar com neurotípicos?", "Qual é o MEU ritmo ideal?"] },
+            { icon: "💣", category: "Pressão", thought: '"Estou sempre sob pressão."', context: "Contexto: Lutando com prazos.", questions: ["A pressão é externa ou interna?", "O que posso delegar ou adiar?"] },
+            { icon: "📉", category: "Vida", thought: '"Estou ficando para trás."', context: "Contexto: Refletindo sobre a vida.", questions: ["Para trás de quem? Existe cronograma?", "Quais conquistas estou ignorando?"] }
+        ];
+
+        const container = document.getElementById('printableGrid');
+
+        cardsData.forEach((card, index) => {
+            // Renderiza o HTML de cada carta
+            const cardHTML = `
+                <div class="print-card">
+                    <div class="card-header">
+                        <span class="card-icon">${card.icon}</span>
+                        <span class="card-category">${card.category}</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="thought-section">
+                            <p class="thought-text">${card.thought}</p>
+                            <p class="context-text">${card.context}</p>
+                        </div>
+                        <div class="evaluation-section">
+                            <div class="evaluation-title">🧠 Avaliação do Pensamento</div>
+                            <ul class="question-list">
+                                ${card.questions.map(q => `<li>${q}</li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <img src="https://gabrielopsicologo.com/wp-content/uploads/2025/11/Logo_preta.png" class="footer-logo">
+                        <span class="copyright-text">© 2025 Gabriel O Psicólogo - CRP 06/215890</span>
+                    </div>
+                </div>
+            `;
+            container.innerHTML += cardHTML;
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>PsicoQuest - Ferramentas Clínicas (Impressão)</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #5D9C96; /* Verde Terapêutico */
+            --primary-light: #E0F2F1;
+            --text-dark: #2C3E50;
+            --text-grey: #546E7A;
+            --border-color: #CFD8DC;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: #f5f5f5; /* Cinza na tela */
+            font-family: 'Inter', sans-serif;
+            color: var(--text-dark);
+            font-size: 11pt;
+        }
+
+        /* Configuração A4 */
+        .page {
+            width: 210mm;
+            height: 297mm;
+            background: white;
+            margin: 20px auto;
+            padding: 15mm;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        @media print {
+            body { background: none; margin: 0; }
+            .page { margin: 0; box-shadow: none; page-break-after: always; }
+        }
+
+        /* --- Header --- */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .brand-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .brand-subtitle {
+            font-size: 0.8rem;
+            color: var(--text-grey);
+            text-align: right;
+        }
+
+        /* --- Grid de Cartas (3x2 = 6 cartas por página) --- */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* 2 Colunas */
+            grid-template-rows: repeat(3, 1fr); /* 3 Linhas */
+            gap: 15px;
+            flex: 1;
+        }
+
+        .card {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 15px;
+            position: relative;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* Marcador de corte discreto */
+        .card::after {
+            content: '';
+            position: absolute;
+            top: -1px; left: -1px; right: -1px; bottom: -1px;
+            border: 1px dashed #ccc;
+            z-index: -1;
+            pointer-events: none;
+            display: none; /* Ative se quiser linhas pontilhadas visíveis */
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid var(--primary-light);
+            padding-bottom: 8px;
+        }
+
+        .card-icon {
+            font-size: 1.4rem;
+            color: var(--primary);
+            width: 30px;
+            text-align: center;
+        }
+
+        .card-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            text-transform: uppercase;
+        }
+
+        .card-body {
+            font-size: 0.8rem;
+            line-height: 1.4;
+            color: var(--text-grey);
+            flex: 1;
+        }
+
+        .card-body strong {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .card-body ul, .card-body ol {
+            padding-left: 18px;
+            margin: 5px 0;
+        }
+
+        .card-body li {
+            margin-bottom: 4px;
+        }
+
+        .note-box {
+            margin-top: 8px;
+            background: var(--primary-light);
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            color: var(--primary);
+            font-style: italic;
+        }
+
+        /* --- Footer --- */
+        .footer {
+            margin-top: auto;
+            border-top: 1px solid var(--border-color);
+            padding-top: 10px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.65rem;
+            color: #999;
+        }
+
+        .footer-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page">
+        <header class="header">
+            <div class="brand-title">PsicoQuest</div>
+            <div class="brand-subtitle">
+                Recursos Terapêuticos<br>
+                Estratégias de Regulação Emocional
+            </div>
+        </header>
+
+        <div class="cards-grid">
+            
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">⚓</div>
+                    <div class="card-title">Técnica de Grounding</div>
+                </div>
+                <div class="card-body">
+                    <p>Utilize esta técnica para se reconectar ao momento presente durante picos de ansiedade.</p>
+                    <ul>
+                        <li><strong>5</strong> Coisas que você pode ver.</li>
+                        <li><strong>4</strong> Coisas que você pode tocar.</li>
+                        <li><strong>3</strong> Coisas que você pode ouvir.</li>
+                        <li><strong>2</strong> Coisas que você pode cheirar.</li>
+                        <li><strong>1</strong> Coisa que você pode degustar.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">🌬️</div>
+                    <div class="card-title">Respiração 4-2-6</div>
+                </div>
+                <div class="card-body">
+                    <p>Controle fisiológico imediato da resposta de estresse.</p>
+                    <ol>
+                        <li>Fique confortável e feche os olhos.</li>
+                        <li>Concentre-se apenas no ar entrando e saindo.</li>
+                        <li><strong>Inspire</strong> pelo nariz contando até 4.</li>
+                        <li><strong>Prenda</strong> a respiração por 2 segundos.</li>
+                        <li><strong>Expire</strong> pela boca lentamente contando até 6.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">📝</div>
+                    <div class="card-title">Tempo de Preocupação</div>
+                </div>
+                <div class="card-body">
+                    <p>Externalize pensamentos ruminativos para limpar a mente.</p>
+                    <ol>
+                        <li>Escreva uma lista do que está te preocupando.</li>
+                        <li>Dê permissão para se preocupar com isso por <strong>1 minuto</strong> cronometrado.</li>
+                        <li>Após o tempo, volte à tarefa atual.</li>
+                    </ol>
+                    <div class="note-box">Objetivo: Adiar a preocupação, não eliminá-la.</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">✋</div>
+                    <div class="card-title">Respiração Tátil</div>
+                </div>
+                <div class="card-body">
+                    <p>Coordenação motora e respiratória para foco.</p>
+                    <ul>
+                        <li>Abra uma mão em forma de estrela.</li>
+                        <li>Use o indicador da outra mão para contornar os dedos.</li>
+                        <li>Subindo o dedo: <strong>Inspire</strong>.</li>
+                        <li>Descendo o dedo: <strong>Expire</strong>.</li>
+                        <li>Percorra toda a mão lentamente.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">🌊</div>
+                    <div class="card-title">Visualização do Mar</div>
+                </div>
+                <div class="card-body">
+                    <p>Deite-se confortavelmente.</p>
+                    <p>Imagine-se flutuando no mar, seguro(a) perto da margem.</p>
+                    <ul>
+                        <li>Ao <strong>inspirar</strong>, flutue suavemente para trás.</li>
+                        <li>Ao <strong>expirar</strong>, flutue para frente.</li>
+                    </ul>
+                    <p>Deixe o ritmo da respiração imitar as ondas.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">🛡️</div>
+                    <div class="card-title">A.C.A.L.M.E.-S.E.</div>
+                </div>
+                <div class="card-body">
+                    <ul>
+                        <li><strong>A</strong>ceite sua ansiedade.</li>
+                        <li><strong>C</strong>ontemple as coisas ao redor.</li>
+                        <li><strong>A</strong>ja como se não estivesse ansioso.</li>
+                        <li><strong>L</strong>ibere o ar dos pulmões.</li>
+                        <li><strong>M</strong>antenha os passos anteriores.</li>
+                        <li><strong>E</strong>xamine seus pensamentos.</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+        <footer class="footer">
+            <div>
+                © 2026 PsicoQuest. Todos os direitos reservados.
+            </div>
+            <div style="text-align: right;">
+                Desenvolvido por <a href="https://www.instagram.com/gabrielopsicologo/#" class="footer-link">@gabrielopsicologo</a><br>
+                CRP 06/215890
+            </div>
+        </footer>
+    </div>
+
+    <div class="page">
+        <header class="header">
+            <div class="brand-title">PsicoQuest</div>
+            <div class="brand-subtitle">
+                Recursos Terapêuticos<br>
+                Reestruturação Cognitiva
+            </div>
+        </header>
+
+        <div class="cards-grid">
+            
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">✨</div>
+                    <div class="card-title">Reorientação Positiva</div>
+                </div>
+                <div class="card-body">
+                    <p>Combata o viés negativo identificando 3 fatos:</p>
+                    <ul>
+                        <li>O que deu certo hoje? (Mesmo que pequeno).</li>
+                        <li>Algo pelo qual sou grato.</li>
+                        <li>Algo que espero com otimismo.</li>
+                    </ul>
+                    <div class="note-box">Dica: Escreva isso antes de dormir.</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">💪</div>
+                    <div class="card-title">Relaxamento Progressivo</div>
+                </div>
+                <div class="card-body">
+                    <ol>
+                        <li>Escolha um grupo muscular (ex: ombros).</li>
+                        <li><strong>Contraia</strong> com força por 5 segundos.</li>
+                        <li><strong>Libere</strong> subitamente a tensão.</li>
+                        <li>Observe a sensação de alívio por 10 segundos.</li>
+                        <li>Repita em outros grupos musculares.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">🏖️</div>
+                    <div class="card-title">Transição de Papéis</div>
+                </div>
+                <div class="card-body">
+                    <p>Ao encerrar o trabalho, crie um ritual antes de entrar em "modo casa".</p>
+                    <p>Feche os olhos e visualize seu lugar favorito de relaxamento por 2 minutos. Deixe o estresse profissional "na porta" antes de assumir suas responsabilidades pessoais.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">🔍</div>
+                    <div class="card-title">Atenção Plena (Foco)</div>
+                </div>
+                <div class="card-body">
+                    <p>Escolha um objeto próximo.</p>
+                    <p>Dedique total atenção a ele como se fosse a primeira vez que o vê.</p>
+                    <ul>
+                        <li>Observe a cor e reflexos.</li>
+                        <li>Sinta a textura e temperatura.</li>
+                        <li>Note formas e imperfeições.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">🫂</div>
+                    <div class="card-title">Autocompaixão</div>
+                </div>
+                <div class="card-body">
+                    <p>Técnica de contenção física para sensação de segurança.</p>
+                    <ol>
+                        <li>Abra bem os braços e o peito.</li>
+                        <li>Cruze os braços envolvendo a si mesmo firmemente.</li>
+                        <li>Abaixe o queixo em direção ao peito.</li>
+                        <li>Respire fundo e balance suavemente.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">😌</div>
+                    <div class="card-title">A Arte de Não Fazer Nada</div>
+                </div>
+                <div class="card-body">
+                    <p>Não é necessário ser produtivo 100% do tempo.</p>
+                    <p>Reserve 5 minutos hoje para apenas deitar ou sentar sem celular, sem livros e sem metas. Apenas exista e observe como seu corpo se sente no repouso.</p>
+                </div>
+            </div>
+
+        </div>
+
+        <footer class="footer">
+            <div>
+                © 2026 PsicoQuest. Todos os direitos reservados.
+            </div>
+            <div style="text-align: right;">
+                Desenvolvido por <a href="https://www.instagram.com/gabrielopsicologo/#" class="footer-link">@gabrielopsicologo</a><br>
+                CRP 06/215890
+            </div>
+        </footer>
+    </div>
+
+</body>
+</html>

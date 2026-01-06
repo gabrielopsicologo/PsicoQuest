@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Log Pose da Responsabilidade</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Rye&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --accent-gold: #FFC107;
+            --text-dark: #3D2B1F;
+            --bg-parchment: #FFF8E1;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-image: url('https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/Background_OP.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--text-dark);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .pirate-font { font-family: 'Rye', serif; }
+
+        /* Painel de Vidro/Pergaminho */
+        .glass-panel {
+            background: rgba(255, 248, 240, 0.94);
+            border: 2px solid #8B4513;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(8px);
+        }
+
+        /* Input de Texto (Tempestade) */
+        .main-input {
+            background: rgba(255, 255, 255, 0.7);
+            border: 2px solid rgba(139, 69, 19, 0.3);
+            transition: all 0.3s;
+        }
+        .main-input:focus {
+            background: #fff;
+            border-color: #1565C0;
+            outline: none;
+        }
+
+        /* Input Numérico Pequeno */
+        .number-input {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(139, 69, 19, 0.3);
+            border-radius: 6px;
+            padding: 4px 8px;
+            font-family: 'Inter', sans-serif;
+            font-weight: bold;
+            width: 70px;
+            text-align: center;
+            transition: border 0.2s;
+        }
+        .number-input:focus {
+            border-color: #1565C0;
+            outline: none;
+            background: #fff;
+        }
+        /* Remove setinhas do input number */
+        .number-input::-webkit-outer-spin-button,
+        .number-input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Slider Customizado */
+        input[type=range] {
+            -webkit-appearance: none;
+            background: transparent; 
+            height: 24px; /* Altura da área de toque */
+            cursor: pointer;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 18px;
+            width: 18px;
+            border-radius: 50%;
+            background: #fff;
+            border: 4px solid currentColor;
+            margin-top: -7px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            transition: transform 0.1s;
+        }
+        input[type=range]:active::-webkit-slider-thumb {
+            transform: scale(1.2);
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            background: rgba(0,0,0,0.1);
+            border-radius: 4px;
+        }
+
+        /* Footer */
+        .pirate-footer {
+            background: rgba(62, 39, 35, 0.98);
+            border-top: 3px solid var(--accent-gold);
+            color: #FFF8E1;
+            margin-top: auto;
+        }
+        .footer-link {
+            color: var(--accent-gold);
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .footer-link:hover { color: #FFF; text-decoration: underline; }
+
+        #vertical-credits, #crp-vertical { display: none !important; }
+    </style>
+<script src="seguranca.js" defer></script>
+</head>
+<body>
+
+    <a href="https://wa.me/message/WV34TWMSKTEEL1" target="_blank" class="fixed bottom-24 right-5 z-50 bg-[#25D366] text-white p-3 rounded-full shadow-xl hover:scale-110 transition-transform border-2 border-white">
+        <i data-lucide="message-circle" width="24"></i>
+    </a>
+
+    <main class="flex-grow flex items-center justify-center p-4 md:p-6 w-full">
+        <div class="glass-panel w-full max-w-5xl rounded-2xl p-6 relative">
+            
+            <header class="text-center mb-8 border-b-2 border-[#8B4513] border-dashed pb-4">
+                <h1 class="text-2xl md:text-4xl font-bold text-[#8B4513] mb-2 pirate-font drop-shadow-sm flex items-center justify-center gap-2">
+                    <i data-lucide="compass" class="text-[#1565C0]"></i>
+                    Log Pose da Responsabilidade
+                </h1>
+                <p class="text-gray-700 text-sm md:text-base max-w-2xl mx-auto font-medium">
+                    Capitão, ajuste os pesos de cada influência. O gráfico se ajustará automaticamente à proporção das forças!
+                </p>
+            </header>
+
+            <div class="mb-8">
+                <label class="block text-lg font-bold text-[#8B4513] mb-2 pirate-font">Qual foi a tempestade?</label>
+                <input type="text" class="main-input w-full rounded-lg px-4 py-3 text-gray-800 font-semibold" placeholder="Ex: Falhei em um projeto importante...">
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                
+                <div class="flex flex-col items-center">
+                    <div class="relative w-[280px] h-[280px] sm:w-[320px] sm:h-[320px]">
+                        <div class="absolute inset-0 rounded-full border-4 border-[#5D4037] bg-[#FFF8E1] shadow-inner flex items-center justify-center opacity-90">
+                            <div class="absolute inset-2 border border-dashed border-[#8B4513] rounded-full opacity-50"></div>
+                            <div class="absolute top-2 font-bold text-[#8B4513] opacity-40 text-xs">N</div>
+                            <div class="absolute bottom-2 font-bold text-[#8B4513] opacity-40 text-xs">S</div>
+                            <div class="absolute left-2 font-bold text-[#8B4513] opacity-40 text-xs">W</div>
+                            <div class="absolute right-2 font-bold text-[#8B4513] opacity-40 text-xs">E</div>
+                        </div>
+
+                        <canvas id="chartCanvas" class="absolute inset-0 z-10 w-full h-full"></canvas>
+
+                        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 w-4 h-4 bg-[#3E2723] rounded-full border-2 border-white shadow-md"></div>
+                    </div>
+
+                    <div class="mt-6 px-6 py-3 rounded-lg border-2 border-[#8B4513]/30 bg-white/50 font-bold text-lg flex items-center gap-3 shadow-sm text-[#8B4513]">
+                        <span>Soma Total:</span>
+                        <span id="total-value">0</span>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-1">*O gráfico mostra a proporção de cada força.</p>
+                </div>
+
+                <div class="flex flex-col h-full">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xl font-bold text-[#8B4513] pirate-font">Forças & Influências</h2>
+                    </div>
+
+                    <div id="inputs-list" class="space-y-3 flex-grow overflow-y-auto pr-2 max-h-[400px]">
+                        </div>
+
+                    <div class="mt-6 pt-4 border-t border-[#8B4513]/20 flex gap-2">
+                        <input type="text" id="new-factor" class="flex-1 bg-white/80 border border-[#8B4513]/30 rounded px-3 py-2 text-sm focus:outline-none focus:border-[#1565C0]" placeholder="Nova influência (Ex: Sorte)">
+                        <button id="btn-add" class="bg-[#1565C0] hover:bg-[#0D47A1] text-white px-4 py-2 rounded font-bold transition-colors shadow-md flex items-center">
+                            <i data-lucide="plus" width="18"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="pirate-footer py-6 px-4">
+        <div class="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 text-sm">
+            <div class="flex items-center gap-4">
+                <a href="https://www.instagram.com/gabrielopsicologo" target="_blank" class="hover:scale-105 transition-transform">
+                    <img src="https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/Logo_branca.png" alt="Logo" class="h-12 drop-shadow-md">
+                </a>
+                <div class="text-center md:text-left">
+                    <span class="block font-bold text-[#FFC107] text-lg pirate-font leading-tight">Recurso Terapêutico Digital</span>
+                    <span class="text-xs bg-white/10 px-2 py-0.5 rounded border border-white/10">CRP 06/215890</span>
+                </div>
+            </div>
+            
+            <div class="text-center md:text-right">
+                <div>Desenvolvido por <a href="https://www.instagram.com/gabrielopsicologo" target="_blank" class="footer-link">@gabrielopsicologo</a></div>
+                <div class="opacity-50 text-xs mt-1">&copy; 2025 Todos os direitos reservados.</div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        const canvas = document.getElementById('chartCanvas');
+        const ctx = canvas.getContext('2d');
+        const inputsList = document.getElementById('inputs-list');
+        const totalValue = document.getElementById('total-value');
+        const newFactorInput = document.getElementById('new-factor');
+        const btnAdd = document.getElementById('btn-add');
+
+        const COLORS = ['#D32F2F', '#1976D2', '#388E3C', '#FFA000', '#7B1FA2', '#0097A7', '#5D4037', '#E64A19'];
+        
+        let data = [
+            { name: 'Minhas Ações (Eu)', value: 50, color: COLORS[0] },
+            { name: 'Ações de Outros', value: 25, color: COLORS[1] },
+            { name: 'O Acaso (Grand Line)', value: 25, color: COLORS[2] }
+        ];
+
+        function resizeCanvas() {
+            const size = 320;
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = size * dpr;
+            canvas.height = size * dpr;
+            ctx.scale(dpr, dpr);
+            drawChart();
+        }
+
+        function drawChart() {
+            const size = 320;
+            const center = size / 2;
+            const radius = (size / 2) - 15;
+            
+            // Calcula o total para normalização
+            const total = data.reduce((acc, curr) => acc + curr.value, 0);
+            let startAngle = -0.5 * Math.PI;
+
+            ctx.clearRect(0, 0, size, size);
+
+            if (total === 0) {
+                // Desenha círculo vazio se tudo for 0
+                ctx.beginPath();
+                ctx.arc(center, center, radius, 0, Math.PI * 2);
+                ctx.fillStyle = "rgba(0,0,0,0.05)";
+                ctx.fill();
+                return;
+            }
+
+            data.forEach(slice => {
+                if (slice.value > 0) {
+                    // Normalização: (Valor / Total) * 360 graus
+                    // Isso garante que o gráfico sempre feche 100% visualmente
+                    const sliceAngle = (slice.value / total) * (Math.PI * 2);
+                    const endAngle = startAngle + sliceAngle;
+
+                    ctx.beginPath();
+                    ctx.moveTo(center, center);
+                    ctx.arc(center, center, radius, startAngle, endAngle);
+                    ctx.closePath();
+                    
+                    ctx.fillStyle = slice.color;
+                    ctx.globalAlpha = 0.85;
+                    ctx.fill();
+                    
+                    ctx.globalAlpha = 1;
+                    ctx.lineWidth = 2;
+                    ctx.strokeStyle = '#FFF8E1';
+                    ctx.stroke();
+
+                    startAngle = endAngle;
+                }
+            });
+        }
+
+        function renderInputs() {
+            inputsList.innerHTML = '';
+            let total = data.reduce((acc, curr) => acc + curr.value, 0);
+            totalValue.textContent = total;
+
+            data.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = "bg-white/60 p-3 rounded-lg border border-[#8B4513]/10 shadow-sm transition-all hover:shadow-md flex flex-col gap-2";
+                div.style.borderLeft = `4px solid ${item.color}`;
+                
+                div.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-gray-800 text-sm sm:text-base">${item.name}</span>
+                        <input type="number" min="0" value="${item.value}" data-index="${index}" 
+                            class="number-input text-lg" style="color: ${item.color}" onchange="updateValueFromInput(this)">
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <input type="range" min="0" max="100" value="${item.value}" data-index="${index}" 
+                            class="w-full" style="color: ${item.color}" oninput="updateValueFromSlider(this)">
+                        
+                        ${index >= 3 ? `
+                            <button onclick="removeItem(${index})" class="text-red-500 hover:text-red-700 transition-colors p-1">
+                                <i data-lucide="trash-2" width="18"></i>
+                            </button>
+                        ` : ''}
+                    </div>
+                `;
+                inputsList.appendChild(div);
+            });
+
+            lucide.createIcons();
+            drawChart();
+        }
+
+        // Função unificada para atualizar valores
+        window.updateValue = (index, val) => {
+            let numVal = parseInt(val);
+            if (isNaN(numVal) || numVal < 0) numVal = 0;
+            data[index].value = numVal;
+            
+            // Atualiza apenas o gráfico e o total visualmente para performance
+            // (Não recriamos os inputs para não perder foco)
+            let total = data.reduce((acc, curr) => acc + curr.value, 0);
+            totalValue.textContent = total;
+            
+            // Sincroniza slider e number input do mesmo índice
+            const container = inputsList.children[index];
+            const numInput = container.querySelector('input[type="number"]');
+            const slider = container.querySelector('input[type="range"]');
+            
+            if (numInput.value != numVal) numInput.value = numVal;
+            if (slider.value != numVal) slider.value = numVal;
+
+            drawChart();
+        };
+
+        window.updateValueFromInput = (el) => window.updateValue(el.dataset.index, el.value);
+        window.updateValueFromSlider = (el) => window.updateValue(el.dataset.index, el.value);
+
+        window.removeItem = (index) => {
+            data.splice(index, 1);
+            data.forEach((item, i) => item.color = COLORS[i % COLORS.length]);
+            renderInputs(); // Recria lista pois removeu item
+        }
+
+        btnAdd.addEventListener('click', () => {
+            const name = newFactorInput.value.trim();
+            if (name && data.length < COLORS.length) {
+                data.push({ 
+                    name: name, 
+                    value: 10, // Inicia com um valor para aparecer no gráfico
+                    color: COLORS[data.length % COLORS.length] 
+                });
+                newFactorInput.value = '';
+                renderInputs();
+            } else if (data.length >= COLORS.length) {
+                alert("O Log Pose está cheio!");
+            }
+        });
+
+        // Inicialização
+        resizeCanvas();
+        renderInputs();
+
+        // Proteção
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.onkeydown = function(e) {
+            if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) || (e.ctrlKey && e.key === 'u')) return false;
+        };
+    </script>
+</body>
+</html>

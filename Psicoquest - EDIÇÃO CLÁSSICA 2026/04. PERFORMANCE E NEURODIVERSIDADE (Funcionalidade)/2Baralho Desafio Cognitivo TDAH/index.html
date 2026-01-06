@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PsicoQuest | Baralho Desafio Cognitivo para TDAH Adulto</title>
+    
+    <script src="seguranca.js" defer></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- VARIÁVEIS DA PALETA --- */
+        :root {
+            --azul-grafite: #1E2A3A;
+            --laranja: #FF6B35;
+            --lavanda-escuro: #8B5CF6;
+            --lavanda-medio: #A78BFA;
+            --lavanda-claro: #EDE9FE;
+            --branco: #ffffff;
+            --cinza-fundo: #F8FAFC;
+            --sombra-card: 0 10px 30px rgba(30, 42, 58, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            height: 100%; /* Garante altura total */
+            width: 100%;
+            overflow: hidden; /* Impede rolagem da página */
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--cinza-fundo);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            color: var(--azul-grafite);
+        }
+
+        /* --- CABEÇALHO --- */
+        header {
+            background: var(--branco);
+            height: 70px; /* Altura fixa otimizada */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            z-index: 20;
+            flex-shrink: 0; /* Não encolhe */
+            border-bottom: 2px solid var(--lavanda-claro);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            max-width: 80%;
+        }
+
+        .logo {
+            height: 40px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .header-text {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .header-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin: 0;
+            line-height: 1;
+        }
+
+        .header-subtitle {
+            font-size: 0.75rem;
+            color: #64748b;
+            font-weight: 500;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Botão Manual Sutil */
+        .btn-manual {
+            background: transparent;
+            border: 1px solid var(--lavanda-medio);
+            color: var(--azul-grafite);
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .btn-manual:hover {
+            background: var(--lavanda-claro);
+            color: var(--laranja);
+            border-color: var(--laranja);
+        }
+
+        /* --- ÁREA PRINCIPAL (PALCO) --- */
+        main {
+            flex: 1; /* Ocupa todo o espaço sobrando entre header e footer */
+            min-height: 0; /* Permite que o flex container encolha se necessário */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            background: radial-gradient(circle at center, var(--lavanda-claro) 0%, transparent 70%);
+            padding: 10px 0;
+        }
+
+        .carousel-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center; /* Centraliza verticalmente */
+            overflow-x: auto;
+            overflow-y: hidden;
+            scroll-behavior: smooth;
+            padding: 0 50px; /* Espaço para as setas */
+            gap: 25px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        .carousel-container::-webkit-scrollbar { display: none; }
+
+        /* --- O CARTÃO (DIMENSIONAMENTO INTELIGENTE) --- */
+        .card-wrapper {
+            /* A mágica acontece aqui: A altura é baseada na viewport (60vh),
+               respeitando um máximo e um mínimo, e a largura segue a proporção */
+            height: 62vh; 
+            max-height: 500px; 
+            min-height: 320px;
+            aspect-ratio: 2/3; /* Mantém formato de carta */
+            width: auto; /* A largura se ajusta à altura */
+            
+            perspective: 1200px;
+            flex-shrink: 0; /* Não deixa espremer */
+            margin: auto 0; /* Centraliza se sobrar espaço */
+        }
+
+        .card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+        }
+
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 20px; /* Arredondamento um pouco menor para economizar espaço visual */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            box-shadow: var(--sombra-card);
+            border: 1px solid rgba(255,255,255,0.8);
+            background: var(--branco);
+            overflow: hidden; /* Garante que nada saia da carta */
+        }
+
+        /* FRENTE */
+        .front {
+            background: linear-gradient(135deg, var(--azul-grafite) 0%, #2a3b50 100%);
+            color: var(--branco);
+        }
+
+        .front::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: 20px;
+            border: 2px solid var(--lavanda-medio);
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .icon-box {
+            /* Tamanho relativo à altura da carta */
+            font-size: 3rem; 
+            height: 25%; /* Ocupa 25% da altura */
+            aspect-ratio: 1/1;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--laranja);
+            box-shadow: 0 0 20px rgba(255, 107, 53, 0.3);
+            margin-top: 10%;
+        }
+
+        .category-tag {
+            background: var(--lavanda-escuro);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .front-title {
+            font-size: clamp(1rem, 4vh, 1.4rem); /* Fonte dinâmica */
+            font-weight: 600;
+            color: var(--lavanda-claro);
+            margin: 0;
+            text-align: center;
+        }
+
+        .tap-instruction {
+            margin-bottom: 10px;
+            font-size: 0.8rem;
+            opacity: 0.7;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* VERSO */
+        .back {
+            transform: rotateY(180deg);
+            color: var(--azul-grafite);
+            border-top: 6px solid var(--laranja);
+        }
+
+        .thought-bubble {
+            background: var(--lavanda-claro);
+            padding: 15px;
+            border-radius: 12px;
+            width: 100%;
+            position: relative;
+            margin-top: 5px;
+            flex-grow: 0;
+        }
+        
+        .thought-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 20px;
+            border-width: 8px 8px 0;
+            border-style: solid;
+            border-color: var(--lavanda-claro) transparent;
+        }
+
+        .thought-content {
+            font-size: clamp(0.95rem, 3.5vh, 1.15rem); /* Fonte dinâmica */
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        .context-area {
+            width: 100%;
+            text-align: left;
+            padding-left: 10px;
+            border-left: 3px solid var(--lavanda-medio);
+            margin-top: 15px;
+            margin-bottom: auto; /* Empurra o botão para baixo */
+        }
+
+        .label-small {
+            font-size: 0.7rem;
+            color: #888;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .context-text {
+            font-size: clamp(0.85rem, 3vh, 0.95rem);
+            font-style: italic;
+            color: #555;
+            margin-top: 3px;
+        }
+
+        .btn-challenge {
+            background: var(--azul-grafite);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: clamp(10px, 3vh, 14px);
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: clamp(0.85rem, 3vh, 1rem);
+            box-shadow: 0 4px 15px rgba(30, 42, 58, 0.2);
+            margin-top: 10px;
+        }
+
+        .btn-challenge:hover {
+            background: var(--laranja);
+            transform: translateY(-2px);
+        }
+
+        /* --- CONTROLES LATERAIS --- */
+        .nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--azul-grafite);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 1px solid #eee;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            font-size: 1.2rem;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .nav-btn:hover {
+            background: var(--laranja);
+            color: white;
+            border-color: var(--laranja);
+        }
+        .nav-prev { left: 10px; }
+        .nav-next { right: 10px; }
+
+        /* --- WHATSAPP FLUTUANTE --- */
+        .fab-whatsapp {
+            position: fixed;
+            bottom: 75px; /* Acima do rodapé */
+            right: 15px;
+            width: 50px;
+            height: 50px;
+            background-color: #25D366;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+            transition: transform 0.3s;
+            z-index: 100;
+        }
+        .fab-whatsapp:hover { transform: scale(1.1); }
+        .fab-whatsapp svg { width: 28px; height: 28px; fill: white; }
+
+        /* --- RODAPÉ FIXO --- */
+        footer {
+            background: var(--branco);
+            border-top: 1px solid #eee;
+            padding: 8px 15px;
+            text-align: center;
+            font-size: 0.7rem;
+            color: #666;
+            flex-shrink: 0; /* Não encolhe */
+            z-index: 30;
+            height: auto;
+        }
+        
+        footer p { margin: 2px 0; }
+        footer a { color: var(--laranja); text-decoration: none; font-weight: 600; }
+
+        /* --- MODAIS --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(30, 42, 58, 0.9);
+            backdrop-filter: blur(5px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            padding: 20px;
+        }
+
+        .modal-card {
+            background: var(--branco);
+            width: 100%;
+            max-width: 450px;
+            max-height: 90vh; /* Evita que o modal estoure a tela */
+            overflow-y: auto; /* Rolagem dentro do modal se necessário */
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .manual-title { color: var(--azul-grafite); font-size: 1rem; font-weight: 800; text-transform: uppercase; margin: 0 0 10px 0; }
+        .manual-welcome { color: var(--laranja); font-size: 1.2rem; margin-bottom: 15px; font-weight: 600; }
+        .manual-body { font-size: 0.95rem; color: #555; line-height: 1.5; margin-bottom: 20px; text-align: justify; }
+        .manual-footer { font-size: 0.85rem; color: var(--lavanda-escuro); font-weight: 600; margin-bottom: 15px; }
+
+        .modal-title { color: var(--laranja); font-size: 1.3rem; font-weight: 800; margin-bottom: 15px; }
+        .question-box { background: var(--cinza-fundo); border-radius: 10px; padding: 12px; margin-bottom: 8px; text-align: left; border-left: 4px solid var(--lavanda-escuro); font-size: 0.95rem; }
+        .close-modal { background: var(--azul-grafite); color: white; border: none; padding: 12px; border-radius: 50px; font-weight: bold; margin-top: 15px; cursor: pointer; width: 100%; font-size: 0.95rem; }
+
+        /* --- RESPONSIVIDADE MOBILE --- */
+        @media (max-width: 768px) {
+            header { padding: 0 15px; }
+            .header-title { font-size: 1.2rem; }
+            .header-subtitle { display: none; } /* Oculta subtítulo no mobile para economizar espaço */
+            .btn-manual span { display: none; } /* Oculta texto "Manual", deixa só ícone */
+            
+            main { padding: 5px 0; }
+
+            .carousel-container {
+                padding: 0 25px;
+                gap: 15px;
+                scroll-snap-type: x mandatory;
+            }
+            
+            .card-wrapper {
+                height: 65vh; /* Um pouco maior no mobile */
+                max-height: none; /* Remove limite pixel */
+                width: 75vw; /* Largura baseada na tela */
+                scroll-snap-align: center;
+                margin-right: 0;
+            }
+
+            .nav-btn { display: none; }
+            .fab-whatsapp { bottom: 70px; right: 10px; width: 45px; height: 45px; }
+        }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <img src="https://gabrielopsicologo.com/wp-content/uploads/2025/12/Design-sem-nome.png" alt="Gabriel O Psicólogo" class="logo">
+            <div class="header-text">
+                <h1 class="header-title">
+                    <span style="color: var(--azul-grafite);">Psico</span><span style="color: var(--laranja);">Quest</span>
+                </h1>
+                <span class="header-subtitle">
+                    Baralho Desafio Cognitivo para TDAH Adulto
+                </span>
+            </div>
+        </div>
+        
+        <button class="btn-manual" onclick="openManual()">
+            <span>📖</span> <span>Manual</span>
+        </button>
+    </header>
+
+    <main>
+        <button class="nav-btn nav-prev" onclick="scrollCarousel(-1)">❮</button>
+
+        <div class="carousel-container" id="cardsTrack">
+            </div>
+
+        <button class="nav-btn nav-next" onclick="scrollCarousel(1)">❯</button>
+    </main>
+
+    <div class="modal-overlay" id="rigidityModal">
+        <div class="modal-card">
+            <div style="font-size: 2.5rem; margin-bottom: 10px;">🧠</div>
+            <h3 class="modal-title">Avaliando o Pensamento</h3>
+            <p style="margin-bottom: 15px; color: #666; font-size: 0.9rem;">Questione este pensamento automático:</p>
+            <div id="questionsContainer"></div>
+            <button class="close-modal" onclick="closeModal('rigidityModal')">Refletir e Fechar</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="manualModal">
+        <div class="modal-card">
+            <div class="manual-header">
+                <h4 class="manual-title">BARALHO DESAFIO COGNITIVO</h4>
+                <p style="font-size: 0.8rem; color: #888; margin: 0;">PARA TDAH ADULTO</p>
+            </div>
+            <div class="manual-welcome">Seja Bem-Vindo!</div>
+            <p class="manual-body">
+                Este baralho tem como propósito explorar pensamentos automáticos comuns em pessoas que lidam com o TDAH. Acompanhado por perguntas específicas, busca-se avaliar e reformular esses pensamentos, promovendo respostas mais adaptativas diante das situações.
+            </p>
+            <p class="manual-footer">✨ Basta clicar em uma carta para revelar seu conteúdo.</p>
+            <button class="close-modal" onclick="closeModal('manualModal')">Entendi, vamos lá!</button>
+        </div>
+    </div>
+
+    <a href="https://api.whatsapp.com/message/WV34TWMSKTEEL1?autoload=1&app_absent=0" target="_blank" class="fab-whatsapp" title="Suporte">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7 .9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
+    </a>
+
+    <footer>
+        <p style="font-weight: 800; color: var(--azul-grafite); margin-bottom: 3px;">Recurso terapêutico digital</p>
+        <p>Desenvolvido por <a href="https://www.instagram.com/gabrielopsicologo/#" target="_blank">@gabrielopsicologo</a></p>
+        <p>CRP 06/215890 | © 2025 Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+        const cardsData = [
+            { icon: "🌪️", category: "Foco", thought: '"Não consigo me concentrar em nada."', context: "Durante o trabalho ou estudo.", questions: ["Isso é 100% verdade ou já houve momentos em que me concentrei?", "O ambiente está ajudando ou atrapalhando agora?"] },
+            { icon: "😴", category: "Motivação", thought: '"Isso é tão chato, não vou conseguir terminar."', context: "Iniciando uma tarefa longa.", questions: ["Posso fazer isso por apenas 5 minutos?", "Como vou me sentir depois que terminar essa etapa?"] },
+            { icon: "⏰", category: "Ansiedade", thought: '"Vou chegar atrasado de novo."', context: "Antes de um compromisso.", questions: ["Me culpar agora vai fazer eu chegar mais rápido?", "Qual é o primeiro passo concreto que posso dar agora?"] },
+            { icon: "🧊", category: "Paralisia", thought: '"Não posso lidar com isso."', context: "Enfrentando um desafio inesperado.", questions: ["Já enfrentei algo difícil antes e superei?", "Quem poderia me ajudar a dividir esse problema?"] },
+            { icon: "🚧", category: "Inacabado", thought: '"Sempre deixo as coisas pela metade."', context: "Ao olhar para tarefas inacabadas.", questions: ["A palavra 'sempre' é justa? O que eu já concluí na vida?", "Posso terminar apenas uma pequena parte hoje?"] },
+            { icon: "🧩", category: "Organização", thought: '"Eu sou desorganizado e ineficaz."', context: "Tentando se organizar sem sucesso.", questions: ["Ser desorganizado define todo o meu valor?", "Qual sistema simples funcionou para mim no passado?"] },
+            { icon: "🚦", category: "Impulso", thought: '"Não tenho autocontrole."', context: "Quando sente impulsividade.", questions: ["Eu perdi o controle ou apenas tive um deslize?", "O que posso aprender com esse gatilho específico?"] },
+            { icon: "🔮", category: "Futuro", thought: '"Nunca vou superar o TDAH."', context: "Pensando sobre o transtorno.", questions: ["O objetivo é 'superar' ou aprender a lidar melhor?", "Quais estratégias já funcionaram um pouco antes?"] },
+            { icon: "😔", category: "Autoestima", thought: '"Eu sou incompetente."', context: "Lidando com tarefas difíceis.", questions: ["Eu falhei na tarefa ou eu SOU uma falha? (Diferencie)", "O que eu diria a um amigo nessa situação?"] },
+            { icon: "🗣️", category: "Social", thought: '"Ninguém entende o que estou passando."', context: "Conversando com amigos ou familiares.", questions: ["Eu expliquei claramente como me sinto?", "Será que eles não entendem ou só não sabem como ajudar?"] },
+            { icon: "💊", category: "Tratamento", thought: '"Nada funciona para mim."', context: "Experimentando estratégias novas.", questions: ["Eu tentei tempo suficiente para ver resultado?", "Existe algum pequeno ajuste que eu não tentei ainda?"] },
+            { icon: "👀", category: "Julgamento", thought: '"As pessoas pensam que sou preguiçoso."', context: "Interagindo socialmente.", questions: ["Eu tenho evidências reais disso ou é leitura mental?", "O quanto a opinião dos outros define quem eu sou?"] },
+            { icon: "💔", category: "Culpa", thought: '"Eu sou uma decepção."', context: "Após cometer erros.", questions: ["Errar faz parte do processo de aprendizado?", "Quais são minhas qualidades além dos meus erros?"] },
+            { icon: "⚖️", category: "Comparação", thought: '"Eu deveria ser capaz de fazer isso."', context: "Comparado aos outros.", questions: ["É justo comparar meu cérebro neurodivergente com típicos?", "Qual é o MEU ritmo ideal?"] },
+            { icon: "💣", category: "Pressão", thought: '"Estou sempre sob pressão."', context: "Lutando com prazos.", questions: ["Essa pressão é externa ou interna?", "O que posso delegar ou adiar agora?"] },
+            { icon: "📉", category: "Vida", thought: '"Estou ficando para trás na vida."', context: "Refletindo sobre realizações.", questions: ["Para trás de quem? Existe um cronograma universal?", "Quais conquistas minhas eu estou ignorando?"] }
+        ];
+
+        const track = document.getElementById('cardsTrack');
+        
+        function renderDeck() {
+            cardsData.forEach((data, index) => {
+                const cardHTML = `
+                    <div class="card-wrapper">
+                        <div class="card" onclick="flipCard(this)">
+                            <div class="face front">
+                                <div class="category-tag">${data.category}</div>
+                                <div class="icon-box">${data.icon}</div>
+                                <h3 class="front-title">Pensamento Automático</h3>
+                                <div class="tap-instruction"><span>Toque para revelar</span><span>👆</span></div>
+                            </div>
+                            <div class="face back">
+                                <div style="width:100%">
+                                    <div class="label-small">O pensamento é:</div>
+                                    <div class="thought-bubble"><div class="thought-content">${data.thought}</div></div>
+                                    <div class="context-area">
+                                        <div class="label-small">Contexto:</div>
+                                        <div class="context-text">${data.context}</div>
+                                    </div>
+                                </div>
+                                <button class="btn-challenge" onclick="openModal(event, ${index})">
+                                    <span>🧠</span> Avaliar pensamento
+                                </button>
+                            </div>
+                        </div>
+                    </div>`;
+                track.innerHTML += cardHTML;
+            });
+        }
+
+        function flipCard(element) {
+            if(event.target.closest('.btn-challenge')) return;
+            element.classList.toggle('flipped');
+        }
+
+        const rigidityModal = document.getElementById('rigidityModal');
+        const qContainer = document.getElementById('questionsContainer');
+
+        function openModal(e, index) {
+            e.stopPropagation();
+            const questions = cardsData[index].questions;
+            qContainer.innerHTML = '';
+            questions.forEach(q => {
+                qContainer.innerHTML += `<div class="question-box"><strong>🤔</strong> ${q}</div>`;
+            });
+            rigidityModal.style.display = 'flex';
+        }
+
+        function openManual() {
+            document.getElementById('manualModal').style.display = 'flex';
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal-overlay')) {
+                event.target.style.display = 'none';
+            }
+        }
+
+        function scrollCarousel(direction) {
+            const wrapper = document.querySelector('.card-wrapper');
+            if(wrapper) {
+                const scrollAmount = wrapper.offsetWidth + 25; // Largura + gap
+                track.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
+            }
+        }
+
+        renderDeck();
+        setTimeout(openManual, 800); // Abre o manual automaticamente ao carregar (opcional)
+
+    </script>
+</body>
+</html>

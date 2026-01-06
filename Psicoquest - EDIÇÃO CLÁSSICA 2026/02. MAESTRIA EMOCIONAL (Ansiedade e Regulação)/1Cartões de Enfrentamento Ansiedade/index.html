@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PsicoQuest | Enfrentamento da Ansiedade</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #4A90E2;
+            --accent-color: #FF8C66;
+            --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-dark: #2D3748;
+            --text-light: #718096;
+            --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --radius-lg: 20px;
+            --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-dark);
+            min-height: 100vh; /* Permite crescimento */
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto; /* Rolagem ativada */
+            overflow-x: hidden;
+        }
+
+        /* --- Header Sticky --- */
+        header {
+            padding: 15px 5%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .brand-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-logo {
+            height: 40px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .app-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--text-dark);
+        }
+        
+        .app-title span { color: var(--primary-color); }
+
+        .manual-btn {
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .manual-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* --- Main Grid Area --- */
+        main {
+            flex: 1;
+            padding: 40px 5%;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .intro-text {
+            text-align: center;
+            margin-bottom: 40px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .intro-text h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: var(--text-dark);
+        }
+
+        .intro-text p {
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        /* GRID SYSTEM */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            padding-bottom: 40px;
+        }
+
+        .card-wrapper {
+            position: relative;
+            height: 400px; /* Altura fixa necessária para o flip */
+            cursor: pointer;
+            perspective: 1000px;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+        }
+
+        .card-wrapper.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 25px;
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        /* Front Styling */
+        .card-front {
+            background: linear-gradient(135deg, #ffffff 0%, #f4f7fb 100%);
+        }
+
+        .card-front:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-5px); /* Efeito hover sutil apenas na frente */
+            transition: transform 0.3s ease;
+        }
+
+        .card-icon {
+            font-size: 3.5rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            filter: drop-shadow(0 4px 6px rgba(74, 144, 226, 0.2));
+        }
+
+        .card-category {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-light);
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .card-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            line-height: 1.4;
+        }
+        
+        .tap-hint {
+            margin-top: 20px;
+            font-size: 0.75rem;
+            color: #999;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Back Styling */
+        .card-back {
+            transform: rotateY(180deg);
+            background: linear-gradient(135deg, #fff 0%, #fffbf9 100%);
+            border-top: 5px solid var(--accent-color);
+            justify-content: space-between;
+        }
+
+        .card-quote {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .card-instruction {
+            font-size: 0.9rem;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .card-source {
+            font-size: 0.7rem;
+            color: #ccc;
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        /* --- Footer --- */
+        footer {
+            background: #fff;
+            padding: 30px 5%;
+            border-top: 1px solid rgba(0,0,0,0.05);
+            margin-top: auto; /* Empurra rodapé para baixo se pouco conteúdo */
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .footer-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .footer-logo {
+            height: 35px;
+            width: auto;
+        }
+
+        .footer-info p {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-bottom: 4px;
+        }
+        
+        .footer-info a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .support-btn {
+            background-color: #25D366;
+            color: white;
+            padding: 10px 24px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
+            transition: var(--transition);
+        }
+
+        .support-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(37, 211, 102, 0.4);
+        }
+
+        /* --- Modal --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            z-index: 2000;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: white;
+            width: 100%;
+            max-width: 500px;
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            position: relative;
+            transform: translateY(20px);
+            transition: var(--transition);
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: var(--text-light);
+        }
+
+        .modal-title {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.4rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .modal-text p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            header { padding: 15px 20px; }
+            .app-title { font-size: 1.1rem; }
+            .header-logo { height: 30px; }
+            .manual-btn span { display: none; }
+            .manual-btn { padding: 8px; border-radius: 50%; }
+            
+            .intro-text h2 { font-size: 1.5rem; }
+            
+            /* Ajuste de Grid para Mobile */
+            .cards-grid {
+                grid-template-columns: 1fr; /* 1 coluna */
+                gap: 20px;
+            }
+            .card-wrapper { height: 380px; }
+
+            footer { padding: 25px 20px; }
+            .footer-content {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+            .footer-left { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand-container">
+            <img src="https://gabrielopsicologo.com/wp-content/uploads/2025/12/Design-sem-nome.png" alt="PsicoQuest Logo" class="header-logo">
+            <h1 class="app-title">PsicoQuest <span>Ansiedade</span></h1>
+        </div>
+        <button class="manual-btn" onclick="toggleModal()">
+            <i class="fa-solid fa-book-medical"></i>
+            <span>Manual</span>
+        </button>
+    </header>
+
+    <main>
+        <div class="intro-text">
+            <h2>Cartões de Enfrentamento</h2>
+            <p>Selecione um cartão abaixo para revelar estratégias de enfrentamento e reestruturação cognitiva.</p>
+        </div>
+
+        <div class="cards-grid" id="gridContainer">
+            </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-left">
+                <img src="https://gabrielopsicologo.com/wp-content/uploads/2025/11/Logo_preta.png" alt="Gabriel Psicólogo" class="footer-logo">
+                <div class="footer-info">
+                    <p>Recurso Terapêutico Digital | CRP 06/215890</p>
+                    <p>Desenvolvido por <a href="https://www.instagram.com/gabrielopsicologo/#" target="_blank">@gabrielopsicologo</a></p>
+                    <p style="font-size: 0.75rem; color: #999;">© 2026 Todos os direitos reservados.</p>
+                </div>
+            </div>
+            
+            <a href="https://api.whatsapp.com/message/WV34TWMSKTEEL1?autoload=1&app_absent=0" target="_blank" class="support-btn">
+                <i class="fa-brands fa-whatsapp"></i> Suporte
+            </a>
+        </div>
+    </footer>
+
+    <div class="modal-overlay" id="manualModal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="toggleModal()">&times;</button>
+            <h2 class="modal-title"><i class="fa-solid fa-brain"></i> Manual Clínico</h2>
+            <div class="modal-text">
+                <p><strong>Recurso:</strong> Cartões de Enfrentamento em Grade.</p>
+                <p><strong>Objetivo:</strong> Permitir que o paciente visualize e escolha ativamente qual distorção cognitiva ou sintoma deseja trabalhar no momento.</p>
+                <p><strong>Instruções:</strong>
+                    <br>1. Apresente a tela ao paciente (presencial ou online).
+                    <br>2. Peça que ele identifique qual título ressoa com seu sentimento atual.
+                    <br>3. Clique no cartão para virar e discutir a estratégia de enfrentamento proposta.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script src="seguranca.js" defer></script>
+
+    <script>
+        // Dados dos Cartões (Baseados no PDF - Acalmando a Ansiedade)
+        const cardsData = [
+            {
+                icon: "fa-solid fa-cloud-sun",
+                category: "Desfusão Cognitiva",
+                title: "Pensamentos vs Realidade",
+                quote: "Pensamentos são apenas pensamentos. Eles não são a realidade.",
+                instruction: "Observe o pensamento como uma nuvem passando no céu. Você não precisa acreditar nele ou agir sobre ele.",
+                source: "Ref: "
+            },
+            {
+                icon: "fa-solid fa-stopwatch",
+                category: "Manejo de Pânico",
+                title: "Temporalidade",
+                quote: "Um ataque de pânico é sempre temporário. Vai passar.",
+                instruction: "Já sobrevivi a isso antes e vou sobreviver agora. Vou deixar meu corpo passar por essa onda sem lutar contra ela.",
+                source: "Ref: "
+            },
+            {
+                icon: "fa-solid fa-user-group",
+                category: "Suporte Social",
+                title: "Quebrando o Isolamento",
+                quote: "Vou resistir ao impulso de me isolar.",
+                instruction: "Falarei com um amigo ou familiar. Posso não ter vontade agora, mas sei que me sentirei melhor depois.",
+                source: "Ref: "
+            },
+            {
+                icon: "fa-solid fa-shoe-prints",
+                category: "Autocompaixão",
+                title: "Progresso Gradual",
+                quote: "Dias difíceis não apagam o progresso que fiz.",
+                instruction: "Como diz o provérbio: 'Uma jornada de mil quilômetros começa com o primeiro passo'. Respeite seu ritmo.",
+                source: "Ref: "
+            },
+            {
+                icon: "fa-solid fa-heart-crack",
+                category: "Regulação Emocional",
+                title: "Autocrítica",
+                quote: "A autocrítica não ajuda, apenas me faz sentir pior.",
+                instruction: "Vou tentar responder à minha crítica interna com a mesma gentileza que ofereço a um amigo querido.",
+                source: "Ref: "
+            },
+            {
+                icon: "fa-solid fa-scale-balanced",
+                category: "Reestruturação",
+                title: "Distorção Cognitiva",
+                quote: "As coisas não estão tão ruins como estou fazendo parecer.",
+                instruction: "Estou catastrofizando? Quais são as evidências reais de que algo terrível vai acontecer?",
+                source: "Ref: "
+            },
+            {
+                icon: "fa-solid fa-shield-heart",
+                category: "Autoaceitação",
+                title: "Perfeccionismo",
+                quote: "Ser perfeito não é possível. O meu melhor é suficiente.",
+                instruction: "Aceito que erros fazem parte do processo e não definem meu valor como pessoa.",
+                source: "Ref: "
+            },
+            {
+                icon: "fa-solid fa-person-walking-arrow-right",
+                category: "Comportamento",
+                title: "Evitação",
+                quote: "Resistirei aos impulsos de evitar situações que provocam ansiedade.",
+                instruction: "Evitar alivia agora, mas piora a ansiedade depois. Enfrentar, mesmo com medo, me fortalece.",
+                source: "Ref: "
+            }
+        ];
+
+        const gridContainer = document.getElementById('gridContainer');
+
+        // Renderização dos Cartões
+        function renderGrid() {
+            gridContainer.innerHTML = '';
+            
+            cardsData.forEach(data => {
+                // Criação do elemento wrapper
+                const cardWrapper = document.createElement('div');
+                cardWrapper.className = 'card-wrapper';
+                cardWrapper.onclick = function() { this.classList.toggle('flipped'); };
+
+                // Estrutura interna (Front e Back)
+                cardWrapper.innerHTML = `
+                    <div class="card-inner">
+                        <div class="card-face card-front">
+                            <i class="card-icon ${data.icon}"></i>
+                            <div class="card-category">${data.category}</div>
+                            <div class="card-title">${data.title}</div>
+                            <div class="tap-hint"><i class="fa-solid fa-hand-pointer"></i> Toque para revelar</div>
+                        </div>
+                        <div class="card-face card-back">
+                            <div style="flex:1; display:flex; flex-direction:column; justify-content:center;">
+                                <div class="card-quote">"${data.quote}"</div>
+                                <div class="card-instruction">${data.instruction}</div>
+                            </div>
+                            <div class="card-source">${data.source}</div>
+                        </div>
+                    </div>
+                `;
+
+                gridContainer.appendChild(cardWrapper);
+            });
+        }
+
+        // Modal Logic
+        function toggleModal() {
+            const modal = document.getElementById('manualModal');
+            modal.classList.toggle('active');
+        }
+
+        // Iniciar
+        renderGrid();
+    </script>
+</body>
+</html>

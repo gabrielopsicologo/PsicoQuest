@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PsicoQuest - Autoconhecimento e Equilíbrio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="seguranca.js" defer></script>
+
+    <style>
+        :root {
+            /* Paleta Verde Sálvia (Equilíbrio e Crescimento) */
+            --primary-color: #588157; 
+            --primary-hover: #3A5A40;
+            --background-color: #F5F7F5; /* Fundo off-white esverdeado */
+            --card-bg: #ffffff;
+            --text-main: #344E41;
+            --text-light: #5F7368;
+            --shadow-soft: 0 10px 30px rgba(88, 129, 87, 0.08);
+            --shadow-hover: 0 15px 35px rgba(88, 129, 87, 0.2);
+            --border-radius: 20px;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* --- Header --- */
+        header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            padding: 15px 5%;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 3px solid var(--primary-color);
+        }
+
+        .header-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-logo {
+            height: 35px;
+            width: auto;
+        }
+
+        .app-title {
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 1.4rem;
+            line-height: 1.2;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .deck-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            font-weight: 500;
+            margin-top: 2px;
+        }
+
+        .manual-btn {
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .manual-btn:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* --- Main Content --- */
+        main {
+            flex: 1;
+            padding: 30px 5%;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* View: Category Grid */
+        #category-view {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 25px;
+            width: 100%;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .category-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 30px 20px;
+            box-shadow: var(--shadow-soft);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            border-bottom: 4px solid var(--primary-color);
+            height: 100%;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .cat-icon {
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            background: #EDF7EF; /* Fundo verde muito claro */
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .cat-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--text-main);
+        }
+
+        /* View: Game/Question */
+        #game-view {
+            display: none;
+            width: 100%;
+            max-width: 700px;
+            margin: 0 auto;
+            flex-direction: column;
+            animation: slideIn 0.4s ease-out;
+        }
+
+        .question-card {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 30px;
+            box-shadow: var(--shadow-soft);
+            text-align: center;
+            position: relative;
+            border: 1px solid #e0e0e0;
+            min-height: 450px; /* Aumentei para caber textarea e slider */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card-header {
+            margin-bottom: 20px;
+        }
+
+        .card-counter {
+            background: var(--text-main);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .card-category-label {
+            display: block;
+            color: var(--primary-color);
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .question-text {
+            font-size: 1.4rem;
+            line-height: 1.5;
+            color: var(--text-main);
+            font-weight: 500;
+            margin: 15px 0 25px 0;
+        }
+
+        /* AREA DE RESPOSTA */
+        .input-area {
+            width: 100%;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .input-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 8px;
+            display: block;
+            margin-left: 5px;
+        }
+
+        .response-input {
+            width: 100%;
+            height: 100px;
+            padding: 15px;
+            border-radius: 15px;
+            border: 1px solid #ddd;
+            background-color: #fafafa;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.95rem;
+            color: var(--text-main);
+            resize: none; /* Impede redimensionar manual */
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .response-input:focus {
+            border-color: var(--primary-color);
+            background-color: white;
+            box-shadow: 0 0 0 3px rgba(88, 129, 87, 0.1);
+        }
+        .response-input::placeholder {
+            color: #aaa;
+        }
+
+        /* SLIDER AREA */
+        .scale-prompt {
+            margin-top: auto;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            background: #F0F4F1;
+            padding: 20px 15px;
+            border-radius: 15px;
+            border: 1px dashed #A3B18A;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .impact-range {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #d1dacd;
+            outline: none;
+            transition: opacity .2s;
+        }
+
+        .impact-range::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: var(--transition);
+        }
+        
+        .impact-range::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+            background: var(--primary-hover);
+        }
+
+        .impact-range::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            cursor: pointer;
+        }
+
+        .slider-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            min-width: 40px;
+        }
+
+        /* CONTROLS */
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 14px 35px;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(88, 129, 87, 0.3);
+        }
+
+        .btn-secondary {
+            background-color: white;
+            color: var(--text-light);
+            border: 2px solid #e0e0e0;
+        }
+
+        .btn-secondary:hover {
+            border-color: #ccc;
+            background-color: #f9f9f9;
+        }
+
+        /* --- Footer --- */
+        footer {
+            background: white;
+            padding: 20px 5%;
+            font-size: 0.8rem;
+            color: #888;
+            border-top: 1px solid #eee;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .footer-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .footer-logo {
+            height: 30px;
+            opacity: 0.9;
+        }
+
+        .footer-text p { margin-bottom: 2px; }
+        .footer-text a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
+
+        .support-btn {
+            background: #25D366;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            transition: var(--transition);
+            box-shadow: 0 4px 10px rgba(37, 211, 102, 0.2);
+        }
+        .support-btn:hover { background: #1ebc57; transform: translateY(-2px); }
+
+        /* --- Modal --- */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 30px;
+            max-width: 500px;
+            width: 100%;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+            animation: zoomIn 0.3s ease;
+            border: 1px solid #eee;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: #aaa;
+            transition: color 0.2s;
+        }
+        .close-modal:hover { color: var(--primary-color); }
+
+        .modal h2 { color: var(--primary-color); margin-bottom: 20px; font-size: 1.5rem; text-align: center;}
+        .modal p, .modal ul { font-size: 1rem; line-height: 1.6; color: #555; margin-bottom: 15px; }
+        .modal ul { padding-left: 20px; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+        @keyframes zoomIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        /* Mobile Adjustments */
+        @media (max-width: 600px) {
+            header { padding: 15px; }
+            .app-title { font-size: 1.1rem; }
+            .deck-subtitle { font-size: 0.75rem; display: none; }
+            .question-card { padding: 30px 20px; min-height: auto; }
+            .question-text { font-size: 1.2rem; }
+            .footer-info { flex-direction: column; align-items: center; text-align: center; }
+            footer { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-content">
+            <div class="brand-container">
+                <img src="https://gabrielopsicologo.com/wp-content/uploads/2025/12/Design-sem-nome.png" alt="PsicoQuest Logo" class="header-logo">
+                <span class="app-title">PsicoQuest</span>
+            </div>
+            <div class="deck-subtitle">Baralho de Autoconhecimento e Equilíbrio Emocional</div>
+        </div>
+        <button class="manual-btn" onclick="toggleModal(true)" aria-label="Manual">?</button>
+    </header>
+
+    <main>
+        <div id="category-view">
+            </div>
+
+        <div id="game-view">
+            <div class="question-card">
+                <div class="card-header">
+                    <span id="card-counter" class="card-counter">1 / 3</span>
+                    <span class="card-category-label" id="card-label">Categoria</span>
+                </div>
+                
+                <p class="question-text" id="card-text">Carregando...</p>
+                
+                <div class="input-area">
+                    <label class="input-label">Sua Reflexão:</label>
+                    <textarea id="user-response" class="response-input" placeholder="Escreva aqui seus pensamentos, sentimentos ou insights sobre esta pergunta..."></textarea>
+                </div>
+
+                <div class="scale-prompt">
+                    <div>
+                        <i class="fas fa-scale-balanced"></i> De 0 a 10, quão satisfeito você está nesta área?
+                    </div>
+                    <div class="slider-container">
+                        <input type="range" min="0" max="10" value="0" class="impact-range" id="impact-slider" oninput="updateSliderValue(this.value)">
+                        <span class="slider-value" id="slider-display">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button class="btn btn-secondary" onclick="returnToMenu()">
+                    <i class="fas fa-th-large"></i> Menu
+                </button>
+                <button class="btn btn-secondary" onclick="prevCard()">
+                    <i class="fas fa-arrow-left"></i> Anterior
+                </button>
+                <button class="btn btn-primary" onclick="nextCard()">
+                    Próxima <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-info">
+            <img src="https://gabrielopsicologo.com/wp-content/uploads/2025/11/Logo_preta.png" alt="Logo Gabriel" class="footer-logo">
+            <div class="footer-text">
+                <p>Recurso Terapêutico Digital | CRP 06/215890</p>
+                <p>Desenvolvido por <a href="https://www.instagram.com/gabrielopsicologo/#" target="_blank">@gabrielopsicologo</a></p>
+                <p>© 2025 Todos os direitos reservados.</p>
+            </div>
+        </div>
+        <a href="https://api.whatsapp.com/message/WV34TWMSKTEEL1?autoload=1&app_absent=0" target="_blank" class="support-btn">
+            <i class="fab fa-whatsapp"></i> Suporte
+        </a>
+    </footer>
+
+    <div class="modal" id="manualModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="toggleModal(false)">&times;</span>
+            <h2><i class="fas fa-spa"></i> Manual do Terapeuta</h2>
+            <p><strong>Baralho de Autoconhecimento e Equilíbrio Emocional</strong></p>
+            <p>Este recurso foi desenvolvido para a população geral, visando promover o autoconhecimento e a inteligência emocional.</p>
+            <p><strong>Como usar:</strong></p>
+            <ul>
+                <li>Selecione uma área da vida no menu principal.</li>
+                <li>Leia a pergunta reflexiva.</li>
+                <li><strong>Escreva</strong> seus insights no campo de texto.</li>
+                <li><strong>Avalie</strong> sua satisfação (0-10) usando a barra deslizante.</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Dados do Baralho (Versão Neurotípica/Geral)
+        const deckData = [
+            {
+                id: 'autoconhecimento',
+                title: 'Autoconhecimento e Valores',
+                icon: 'fa-fingerprint',
+                questions: [
+                    "Quais são os 3 valores mais importantes para você hoje e você está vivendo de acordo com eles?",
+                    "O que você faria hoje se não tivesse medo de falhar ou ser julgado?",
+                    "Quais são seus pontos fortes e como você os utiliza no dia a dia?",
+                    "Qual foi o último momento em que você se sentiu verdadeiramente orgulhoso de si mesmo?"
+                ]
+            },
+            {
+                id: 'estresse',
+                title: 'Gestão do Estresse',
+                icon: 'fa-bolt',
+                questions: [
+                    "Quais são os seus principais gatilhos de estresse atualmente?",
+                    "O que você faz para recarregar suas energias quando se sente esgotado?",
+                    "Você consegue identificar os sinais físicos que seu corpo dá quando você precisa de uma pausa?",
+                    "Como você lida com imprevistos ou situações fora do seu controle?"
+                ]
+            },
+            {
+                id: 'relacionamentos',
+                title: 'Relacionamentos',
+                icon: 'fa-user-group',
+                questions: [
+                    "Você se sente ouvido(a) e compreendido(a) nas suas relações mais próximas?",
+                    "Existe alguma conversa difícil que você está evitando ter? Por quê?",
+                    "Você consegue estabelecer limites saudáveis e dizer 'não' quando necessário?",
+                    "Como você demonstra afeto e como gosta de receber afeto?"
+                ]
+            },
+            {
+                id: 'carreira',
+                title: 'Carreira e Propósito',
+                icon: 'fa-briefcase',
+                questions: [
+                    "Você sente que seu trabalho atual está alinhado com seus objetivos de vida?",
+                    "Como está o seu equilíbrio entre vida profissional e pessoal?",
+                    "O que motiva você a levantar da cama todos os dias?",
+                    "Você se sente valorizado(a) profissionalmente?"
+                ]
+            },
+            {
+                id: 'emocoes',
+                title: 'Inteligência Emocional',
+                icon: 'fa-heart-circle-check',
+                questions: [
+                    "Você costuma guardar suas emoções para si ou consegue expressá-las de forma saudável?",
+                    "Qual emoção você tem mais dificuldade de lidar ou aceitar?",
+                    "Como você reage quando recebe uma crítica construtiva?",
+                    "Você é gentil consigo mesmo quando comete um erro?"
+                ]
+            },
+            {
+                id: 'rotina',
+                title: 'Rotina e Hábitos',
+                icon: 'fa-clock-rotate-left',
+                questions: [
+                    "Sua rotina atual te aproxima ou te afasta dos seus objetivos?",
+                    "Qual hábito você gostaria de incluir na sua vida, mas ainda não conseguiu?",
+                    "Você dedica tempo suficiente para o lazer e atividades que te dão prazer?",
+                    "Como é a qualidade do seu sono e da sua alimentação atualmente?"
+                ]
+            },
+            {
+                id: 'futuro',
+                title: 'Visão de Futuro',
+                icon: 'fa-compass',
+                questions: [
+                    "Onde você gostaria de estar daqui a 5 anos e o que precisa fazer hoje para chegar lá?",
+                    "Qual é o maior obstáculo entre você e seus sonhos atualmente?",
+                    "Se você pudesse mudar uma decisão do passado, qual seria? O que aprendeu com ela?"
+                ]
+            }
+        ];
+
+        let currentCategory = null;
+        let currentQuestionIndex = 0;
+
+        function init() {
+            const container = document.getElementById('category-view');
+            container.innerHTML = '';
+            
+            deckData.forEach(cat => {
+                const card = document.createElement('div');
+                card.className = 'category-card';
+                card.innerHTML = `
+                    <div class="cat-icon"><i class="fas ${cat.icon}"></i></div>
+                    <div class="cat-title">${cat.title}</div>
+                `;
+                card.onclick = () => openCategory(cat);
+                container.appendChild(card);
+            });
+        }
+
+        function openCategory(category) {
+            currentCategory = category;
+            currentQuestionIndex = 0;
+            document.getElementById('category-view').style.display = 'none';
+            document.getElementById('game-view').style.display = 'flex';
+            updateCard();
+        }
+
+        function updateSliderValue(val) {
+            document.getElementById('slider-display').textContent = val;
+        }
+
+        function updateCard() {
+            if (!currentCategory) return;
+            
+            const cardElement = document.querySelector('.question-card');
+            
+            // Pequena animação de fade
+            cardElement.style.opacity = '0';
+            cardElement.style.transform = 'translateY(10px)';
+            
+            setTimeout(() => {
+                // Atualiza textos
+                document.getElementById('card-label').textContent = currentCategory.title;
+                document.getElementById('card-text').textContent = currentCategory.questions[currentQuestionIndex];
+                
+                // Atualiza Contador
+                document.getElementById('card-counter').textContent = 
+                    `Carta ${currentQuestionIndex + 1} de ${currentCategory.questions.length}`;
+                
+                // RESETAR CAMPOS
+                document.getElementById('impact-slider').value = 0;
+                document.getElementById('slider-display').textContent = '0';
+                document.getElementById('user-response').value = ''; // Limpa o texto
+
+                cardElement.style.opacity = '1';
+                cardElement.style.transform = 'translateY(0)';
+                cardElement.style.transition = 'all 0.3s ease';
+            }, 200);
+        }
+
+        function nextCard() {
+            if (!currentCategory) return;
+            if (currentQuestionIndex < currentCategory.questions.length - 1) {
+                currentQuestionIndex++;
+                updateCard();
+            } else {
+                currentQuestionIndex = 0;
+                updateCard();
+            }
+        }
+
+        function prevCard() {
+            if (!currentCategory) return;
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                updateCard();
+            } else {
+                currentQuestionIndex = currentCategory.questions.length - 1;
+                updateCard();
+            }
+        }
+
+        function returnToMenu() {
+            document.getElementById('game-view').style.display = 'none';
+            document.getElementById('category-view').style.display = 'grid';
+            currentCategory = null;
+        }
+
+        function toggleModal(show) {
+            document.getElementById('manualModal').style.display = show ? 'flex' : 'none';
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('manualModal');
+            if (event.target == modal) {
+                toggleModal(false);
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>

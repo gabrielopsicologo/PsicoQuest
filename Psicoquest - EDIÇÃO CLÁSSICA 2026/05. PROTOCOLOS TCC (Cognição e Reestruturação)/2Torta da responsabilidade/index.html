@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Torta da Responsabilidade - TCC Clássico</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-blue: #2563EB;
+            --secondary-blue: #60A5FA;
+            --text-main: #1E293B;
+            --bg-gradient-start: #F0F9FF;
+            --bg-gradient-end: #E0F2FE;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Card com efeito de vidro sutil e sombra suave */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            backdrop-filter: blur(12px);
+        }
+
+        /* Inputs Modernos */
+        .classic-input {
+            background: #FFFFFF;
+            border: 1px solid #CBD5E1;
+            transition: all 0.2s ease;
+        }
+        .classic-input:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+            outline: none;
+        }
+
+        /* Sliders */
+        input[type=range] {
+            -webkit-appearance: none;
+            background: transparent; 
+            height: 24px; 
+            cursor: pointer;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 18px;
+            width: 18px;
+            border-radius: 50%;
+            background: #fff;
+            border: 2px solid currentColor;
+            margin-top: -7px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            transition: transform 0.1s;
+        }
+        input[type=range]:active::-webkit-slider-thumb { transform: scale(1.15); }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            background: #E2E8F0;
+            border-radius: 4px;
+        }
+
+        /* Footer Moderno (Clássico) */
+        .modern-footer {
+            background: rgba(255, 255, 255, 0.8);
+            border-top: 1px solid rgba(0,0,0,0.05);
+            margin-top: auto;
+            backdrop-filter: blur(10px);
+        }
+        .footer-link {
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+        .footer-link:hover { color: #1E40AF; text-decoration: underline; }
+
+        /* Animações */
+        .fade-in { animation: fadeIn 0.5s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    </style>
+<script src="seguranca.js" defer></script>
+</head>
+<body>
+
+    <a href="https://wa.me/message/WV34TWMSKTEEL1" target="_blank" class="fixed bottom-24 right-5 z-50 bg-[#128C7E] text-white p-3 rounded-full shadow-lg hover:bg-[#0E6F63] hover:scale-105 transition-all duration-300 border-2 border-white">
+        <i data-lucide="message-circle" width="24"></i>
+    </a>
+
+    <main class="flex-grow flex items-center justify-center p-4 md:p-8 w-full fade-in">
+        <div class="glass-card w-full max-w-5xl rounded-2xl p-6 md:p-10 relative">
+            
+            <header class="text-center mb-10 border-b border-gray-200 pb-6">
+                <h1 class="text-2xl md:text-4xl font-extrabold text-gray-800 mb-3 flex items-center justify-center gap-3">
+                    <i data-lucide="pie-chart" class="text-blue-600 w-8 h-8"></i>
+                    Torta da Responsabilidade
+                </h1>
+                <p class="text-gray-600 text-sm md:text-base max-w-2xl mx-auto">
+                    Vamos analisar a situação de forma justa? Distribua os fatores para entender o peso real de cada parte (Você, Outros e as Circunstâncias).
+                </p>
+            </header>
+
+            <div class="mb-10 bg-blue-50/50 p-6 rounded-xl border border-blue-100">
+                <label class="block text-lg font-bold text-gray-700 mb-2 flex items-center gap-2">
+                    <i data-lucide="alert-circle" class="w-5 h-5 text-blue-500"></i>
+                    Qual evento ou situação estamos analisando?
+                </label>
+                <input type="text" class="classic-input w-full rounded-lg px-4 py-3 text-gray-800 font-medium text-lg placeholder-gray-400" placeholder="Ex: Não entreguei o relatório no prazo...">
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                
+                <div class="flex flex-col items-center bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+                    <h2 class="text-lg font-bold text-gray-700 mb-6">Visão Proporcional</h2>
+                    
+                    <div class="relative w-[260px] h-[260px] sm:w-[300px] sm:h-[300px]">
+                        <canvas id="chartCanvas" class="absolute inset-0 z-10 w-full h-full"></canvas>
+                        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-white rounded-full shadow-sm flex items-center justify-center border border-gray-100">
+                            <span class="text-xs text-gray-400 font-bold">%</span>
+                        </div>
+                    </div>
+
+                    <div id="total-display" class="mt-8 flex items-center justify-between w-full px-6 py-3 bg-gray-50 rounded-lg border border-gray-200 transition-colors duration-300">
+                        <span class="font-semibold text-gray-600">Soma Atribuída:</span>
+                        <span id="total-value" class="font-bold text-xl text-blue-600">0%</span>
+                    </div>
+                    <p class="text-xs text-gray-400 mt-2 text-center">
+                        *O gráfico ajusta visualmente as fatias para preencher 100% do círculo.
+                    </p>
+                </div>
+
+                <div class="flex flex-col h-full">
+                    <div class="flex justify-between items-end mb-4">
+                        <h2 class="text-xl font-bold text-gray-800 flex items-center gap-2">
+                            <i data-lucide="list-checks" class="w-5 h-5 text-blue-600"></i>
+                            Fatores Contribuintes
+                        </h2>
+                    </div>
+
+                    <div id="inputs-list" class="space-y-3 flex-grow overflow-y-auto pr-2 max-h-[450px]">
+                        </div>
+
+                    <div class="mt-6 pt-4 border-t border-gray-200 flex gap-2">
+                        <input type="text" id="new-factor" class="classic-input flex-1 rounded-lg px-4 py-2 text-sm" placeholder="Adicionar fator (Ex: Trânsito, Imprevisto)">
+                        <button id="btn-add" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-bold transition-all shadow-sm flex items-center gap-2">
+                            <i data-lucide="plus" width="18"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="modern-footer py-6 px-4 text-gray-600">
+        <div class="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 text-sm">
+            <div class="flex items-center gap-4">
+                <a href="https://www.instagram.com/gabrielopsicologo" target="_blank" class="hover:opacity-80 transition-opacity">
+                    <img src="https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/Logo_preta.png" alt="Logo Gabriel Psicólogo" class="h-12 drop-shadow-sm">
+                </a>
+                <div class="text-center md:text-left">
+                    <span class="block font-bold text-gray-800 text-lg leading-tight">Recurso Terapêutico Digital</span>
+                    <span class="text-xs bg-gray-100 px-2 py-0.5 rounded border border-gray-200 text-gray-500">CRP 06/215890</span>
+                </div>
+            </div>
+            
+            <div class="text-center md:text-right">
+                <div>Desenvolvido por <a href="https://www.instagram.com/gabrielopsicologo" target="_blank" class="footer-link">@gabrielopsicologo</a></div>
+                <div class="opacity-60 text-xs mt-1">&copy; 2025 Todos os direitos reservados.</div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        const canvas = document.getElementById('chartCanvas');
+        const ctx = canvas.getContext('2d');
+        const inputsList = document.getElementById('inputs-list');
+        const totalValue = document.getElementById('total-value');
+        const totalDisplay = document.getElementById('total-display');
+        const newFactorInput = document.getElementById('new-factor');
+        const btnAdd = document.getElementById('btn-add');
+
+        // Paleta Clássica e Profissional
+        const COLORS = ['#2563EB', '#10B981', '#F59E0B', '#8B5CF6', '#EF4444', '#64748B', '#06B6D4'];
+        
+        let data = [
+            { name: 'Minha Responsabilidade (Eu)', value: 60, color: COLORS[0] },
+            { name: 'Outras Pessoas', value: 20, color: COLORS[1] },
+            { name: 'Circunstâncias / Acaso', value: 20, color: COLORS[2] }
+        ];
+
+        function resizeCanvas() {
+            const size = 300;
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = size * dpr;
+            canvas.height = size * dpr;
+            ctx.scale(dpr, dpr);
+            drawChart();
+        }
+
+        function drawChart() {
+            const size = 300;
+            const center = size / 2;
+            const radius = (size / 2) - 10;
+            
+            const total = data.reduce((acc, curr) => acc + curr.value, 0);
+            let startAngle = -0.5 * Math.PI;
+
+            ctx.clearRect(0, 0, size, size);
+
+            if (total === 0) {
+                ctx.beginPath();
+                ctx.arc(center, center, radius, 0, Math.PI * 2);
+                ctx.fillStyle = "#F1F5F9"; // Cinza claro
+                ctx.fill();
+                return;
+            }
+
+            data.forEach(slice => {
+                if (slice.value > 0) {
+                    // Normalização para fechar o círculo visualmente
+                    const sliceAngle = (slice.value / total) * (Math.PI * 2);
+                    const endAngle = startAngle + sliceAngle;
+
+                    ctx.beginPath();
+                    ctx.moveTo(center, center);
+                    ctx.arc(center, center, radius, startAngle, endAngle);
+                    ctx.closePath();
+                    
+                    ctx.fillStyle = slice.color;
+                    ctx.fill();
+                    
+                    ctx.lineWidth = 2;
+                    ctx.strokeStyle = '#FFF';
+                    ctx.stroke();
+
+                    startAngle = endAngle;
+                }
+            });
+        }
+
+        function renderInputs() {
+            inputsList.innerHTML = '';
+            let total = data.reduce((acc, curr) => acc + curr.value, 0);
+            totalValue.textContent = total + '%';
+
+            // Feedback visual se o total for 100%
+            if (total === 100) {
+                totalDisplay.className = "mt-8 flex items-center justify-between w-full px-6 py-3 bg-green-50 rounded-lg border border-green-200 transition-colors duration-300";
+                document.getElementById('total-value').className = "font-bold text-xl text-green-600";
+            } else {
+                totalDisplay.className = "mt-8 flex items-center justify-between w-full px-6 py-3 bg-gray-50 rounded-lg border border-gray-200 transition-colors duration-300";
+                document.getElementById('total-value').className = "font-bold text-xl text-blue-600";
+            }
+
+            data.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = "bg-white p-4 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all flex flex-col gap-3";
+                div.style.borderLeft = `4px solid ${item.color}`;
+                
+                div.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-gray-700 text-sm sm:text-base truncate pr-2" title="${item.name}">${item.name}</span>
+                        <div class="flex items-center bg-gray-50 rounded-md px-2 py-1 border border-gray-200">
+                            <input type="number" min="0" value="${item.value}" data-index="${index}" 
+                                class="bg-transparent w-[50px] text-right font-bold text-gray-700 focus:outline-none" 
+                                onchange="updateValueFromInput(this)">
+                            <span class="text-gray-400 text-sm ml-1">%</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <input type="range" min="0" max="100" value="${item.value}" data-index="${index}" 
+                            class="w-full" style="color: ${item.color}" oninput="updateValueFromSlider(this)">
+                        
+                        ${index >= 3 ? `
+                            <button onclick="removeItem(${index})" class="text-gray-400 hover:text-red-500 transition-colors p-1">
+                                <i data-lucide="trash-2" width="18"></i>
+                            </button>
+                        ` : ''}
+                    </div>
+                `;
+                inputsList.appendChild(div);
+            });
+
+            lucide.createIcons();
+            drawChart();
+        }
+
+        window.updateValue = (index, val) => {
+            let numVal = parseInt(val);
+            if (isNaN(numVal) || numVal < 0) numVal = 0;
+            data[index].value = numVal;
+            
+            // Sincronia visual otimizada
+            const container = inputsList.children[index];
+            const numInput = container.querySelector('input[type="number"]');
+            const slider = container.querySelector('input[type="range"]');
+            
+            if (numInput.value != numVal) numInput.value = numVal;
+            if (slider.value != numVal) slider.value = numVal;
+
+            // Atualiza totais e gráfico
+            let total = data.reduce((acc, curr) => acc + curr.value, 0);
+            totalValue.textContent = total + '%';
+            
+            if (total === 100) {
+                totalDisplay.classList.remove('bg-gray-50', 'border-gray-200');
+                totalDisplay.classList.add('bg-green-50', 'border-green-200');
+                document.getElementById('total-value').classList.replace('text-blue-600', 'text-green-600');
+            } else {
+                totalDisplay.classList.add('bg-gray-50', 'border-gray-200');
+                totalDisplay.classList.remove('bg-green-50', 'border-green-200');
+                document.getElementById('total-value').classList.replace('text-green-600', 'text-blue-600');
+            }
+
+            drawChart();
+        };
+
+        window.updateValueFromInput = (el) => window.updateValue(el.dataset.index, el.value);
+        window.updateValueFromSlider = (el) => window.updateValue(el.dataset.index, el.value);
+
+        window.removeItem = (index) => {
+            data.splice(index, 1);
+            data.forEach((item, i) => item.color = COLORS[i % COLORS.length]);
+            renderInputs();
+        }
+
+        btnAdd.addEventListener('click', () => {
+            const name = newFactorInput.value.trim();
+            if (name && data.length < COLORS.length) {
+                data.push({ 
+                    name: name, 
+                    value: 10, 
+                    color: COLORS[data.length % COLORS.length] 
+                });
+                newFactorInput.value = '';
+                renderInputs();
+            } else if (data.length >= COLORS.length) {
+                alert("Limite de fatias atingido para manter a visibilidade.");
+            }
+        });
+
+        resizeCanvas();
+        renderInputs();
+
+        // Proteções
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.onkeydown = function(e) {
+            if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) || (e.ctrlKey && e.key === 'u')) return false;
+        };
+    </script>
+</body>
+</html>

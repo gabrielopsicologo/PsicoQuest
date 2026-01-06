@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PsicoQuest - Missão Detetive</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script src="seguranca.js" defer></script>
+
+    <style>
+        /* --- VARIÁVEIS LÚDICAS --- */
+        :root {
+            --primary: #6C5CE7; /* Roxo vibrante (Game) */
+            --secondary: #00B894; /* Verde Menta (Sucesso) */
+            --accent: #FF7675; /* Coral (Ação) */
+            --bg-color: #F0F3F8; /* Fundo claro */
+            --card-bg: #FFFFFF;
+            --text-main: #2D3436;
+            --radius: 24px;
+            --shadow-pop: 0 10px 0 rgba(0,0,0,0.1); /* Sombra dura estilo cartoon */
+            --bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#dfe6e9 15%, transparent 16%), radial-gradient(#dfe6e9 15%, transparent 16%);
+            background-size: 60px 60px;
+            background-position: 0 0, 30px 30px;
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* HEADER GAMIFICADO */
+        header {
+            background: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 4px solid #dfe6e9;
+            z-index: 100;
+        }
+
+        .game-logo { display: flex; align-items: center; gap: 10px; }
+        .game-logo img { height: 40px; }
+        .game-title { font-family: 'Fredoka', sans-serif; font-size: 1.4rem; color: var(--primary); }
+
+        /* XP BAR */
+        .xp-container {
+            position: fixed;
+            top: 75px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 600px;
+            background: rgba(255,255,255,0.9);
+            padding: 8px;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            z-index: 90;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .xp-label { font-weight: 800; color: var(--primary); font-size: 0.8rem; }
+        
+        .progress-bar {
+            flex: 1;
+            height: 12px;
+            background: #dfe6e9;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #fd79a8, #6c5ce7);
+            transition: width 0.5s var(--bounce);
+        }
+
+        /* MAIN GAME AREA */
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 80px 20px 40px; /* Padding top maior por causa da XP bar */
+            width: 100%;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* AVATAR SELECTION (PRIMEIRA TELA) */
+        .avatar-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+            width: 100%;
+        }
+
+        .avatar-option {
+            background: white;
+            border: 3px solid transparent;
+            border-radius: 20px;
+            padding: 10px;
+            cursor: pointer;
+            transition: transform 0.2s var(--bounce);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .avatar-option img { width: 60px; height: 60px; margin-bottom: 5px; }
+        .avatar-option.selected { border-color: var(--primary); transform: scale(1.1); background: #f0f3ff; }
+
+        /* GAME CARD */
+        .game-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: 0 8px 0 rgba(0,0,0,0.05), 0 20px 40px rgba(0,0,0,0.1);
+            padding: 30px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            animation: slideUp 0.5s ease;
+            border: 2px solid #f1f2f6;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card-icon-big {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            display: inline-block;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .card-title {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .card-question {
+            font-size: 1.1rem;
+            color: #636e72;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        /* INPUTS DIVERTIDOS */
+        .fun-input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 3px solid #dfe6e9;
+            border-radius: 18px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 1rem;
+            color: var(--text-main);
+            background: #fafafa;
+            transition: all 0.3s;
+            resize: none;
+            min-height: 100px;
+        }
+
+        .fun-input:focus {
+            outline: none;
+            border-color: var(--secondary);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(0, 184, 148, 0.2);
+        }
+
+        /* SLIDER DE EMOÇÃO */
+        .slider-container { margin: 30px 0; }
+        .emoji-display { font-size: 3rem; margin-bottom: 10px; display: block; transition: transform 0.2s; }
+        input[type=range] {
+            width: 100%;
+            -webkit-appearance: none;
+            height: 15px;
+            background: #dfe6e9;
+            border-radius: 10px;
+            outline: none;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 30px;
+            height: 30px;
+            background: var(--primary);
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        /* BOTÕES DE AÇÃO */
+        .action-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 50px;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin-top: 20px;
+            box-shadow: 0 6px 0 #5849be; /* Efeito 3D */
+            transition: transform 0.1s;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .action-btn:active {
+            transform: translateY(6px);
+            box-shadow: none;
+        }
+        
+        .action-btn:disabled {
+            background: #b2bec3;
+            box-shadow: 0 6px 0 #95a5a6;
+            cursor: not-allowed;
+        }
+
+        .helper-btn {
+            background: transparent;
+            color: var(--text-main);
+            border: 2px dashed #b2bec3;
+            margin-top: 15px;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        /* MODAL MANUAL */
+        .modal-overlay {
+            background: rgba(108, 92, 231, 0.9); /* Roxo translúcido */
+            backdrop-filter: blur(5px);
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 2000; display: none; align-items: center; justify-content: center;
+        }
+        .modal-content {
+            background: white; width: 90%; max-width: 500px; padding: 30px;
+            border-radius: 30px; text-align: left; position: relative;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border: 4px solid #fd79a8;
+        }
+
+        /* FOOTER (Compacto e limpo) */
+        footer {
+            background: white;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #eee;
+            margin-top: auto;
+        }
+        .footer-logo { max-width: 100px; opacity: 0.8; }
+        .crp-badge { background: #dfe6e9; padding: 3px 8px; border-radius: 5px; font-size: 0.7rem; font-weight: 800; color: #636e72; }
+        
+        /* WHATSAPP */
+        .support-fab {
+            position: fixed; bottom: 20px; right: 20px;
+            background: #00b894; color: white; width: 55px; height: 55px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 1.8rem; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: transform 0.2s var(--bounce); z-index: 99;
+        }
+        .support-fab:hover { transform: scale(1.1) rotate(10deg); }
+
+        /* RESPONSIVO */
+        @media(max-width: 600px) {
+            .game-title { display: none; }
+            .xp-container { top: 65px; }
+            main { padding-top: 90px; }
+            .card-title { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="game-logo">
+            <img src="https://gabrielopsicologo.com/wp-content/uploads/2025/12/Design-sem-nome.png" alt="Logo">
+            <span class="game-title">PsicoQuest: Heróis da Mente</span>
+        </div>
+        <button class="helper-btn" onclick="toggleManual()">
+            <i class="fa-solid fa-circle-info"></i> Guia do Terapeuta
+        </button>
+    </header>
+
+    <div class="xp-container">
+        <span class="xp-label">XP:</span>
+        <div class="progress-bar">
+            <div class="progress-fill" id="xpBar"></div>
+        </div>
+        <span class="xp-label"><i class="fa-solid fa-star" style="color: gold;"></i></span>
+    </div>
+
+    <main id="gameStage">
+        </main>
+
+    <footer>
+        <img src="https://gabrielopsicologo.com/wp-content/uploads/2025/11/Logo_preta.png" class="footer-logo">
+        <div style="font-size: 0.75rem; color: #aaa; margin-top: 10px;">
+            <p>Criado por @gabrielopsicologo | <span class="crp-badge">CRP 06/215890</span></p>
+        </div>
+    </footer>
+
+    <a href="https://api.whatsapp.com/message/WV34TWMSKTEEL1?autoload=1&app_absent=0" class="support-fab">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
+
+    <div class="modal-overlay" id="manualModal" onclick="if(event.target===this) toggleManual()">
+        <div class="modal-content">
+            <h2 style="font-family: 'Fredoka', sans-serif; color: var(--primary); margin-bottom: 15px;">Guia de Gamificação 🎮</h2>
+            <p style="margin-bottom: 10px;"><strong>Adaptação Lúdica:</strong> As perguntas da TCC foram traduzidas para metáforas de aventura.</p>
+            <ul style="font-size: 0.9rem; margin-left: 20px; line-height: 1.5; color: #555;">
+                <li><strong>Monstro:</strong> O pensamento ansioso.</li>
+                <li><strong>Detetive/Lupa:</strong> Busca por evidências.</li>
+                <li><strong>Poderes:</strong> Estratégias de enfrentamento.</li>
+            </ul>
+            <p style="margin-top: 15px; font-size: 0.8rem; color: #888;">Use o entusiasmo! Leia as cartas com entonação de narrador de histórias.</p>
+            <button class="action-btn" onclick="toggleManual()" style="margin-top: 20px; padding: 10px;">Entendi!</button>
+        </div>
+    </div>
+
+    <script>
+        // ESTADO DO JOGO
+        let currentStep = 0;
+        let heroName = "Viajante";
+        let heroAvatar = "🦸";
+
+        // DADOS DA AVENTURA (Adaptação da linguagem para Kids/Teens)
+        const adventureData = [
+            {
+                type: 'avatar',
+                title: "Quem é você?",
+                text: "Antes de começarmos nossa missão, escolha seu avatar de herói!"
+            },
+            {
+                type: 'input',
+                icon: "👻",
+                title: "O Monstro do Medo",
+                text: "Todo herói enfrenta desafios. O que o 'Monstro da Preocupação' está sussurrando no seu ouvido agora?",
+                placeholder: "Ex: Ele diz que vou tirar zero na prova..."
+            },
+            {
+                type: 'input',
+                icon: "⛈️",
+                title: "A Tempestade Imaginária",
+                text: "Se esse monstro estivesse certo, qual seria a pior coisa do mundo que poderia acontecer? (Imagine a tempestade!)",
+                placeholder: "Ex: Todo mundo ia rir e eu repetiria de ano..."
+            },
+            {
+                type: 'input',
+                icon: "🕵️‍♂️",
+                title: "Lupa da Verdade",
+                text: "Agora ative seu Modo Detetive! Existem provas REAIS de que isso vai acontecer? Ou é só fofoca do monstro?",
+                placeholder: "Ex: Na verdade eu estudei bastante e..."
+            },
+            {
+                type: 'slider',
+                icon: "🌡️",
+                title: "Termômetro do Exagero",
+                text: "Sendo sincero: Qual a chance real dessa tempestade acontecer? (Mova a bolinha)",
+                minLabel: "Impossível",
+                maxLabel: "Vai Acontecer!"
+            },
+            {
+                type: 'input',
+                icon: "🎒",
+                title: "Mochila de Ferramentas",
+                text: "Se o pior acontecesse, que 'poder' ou ajuda você tem na sua mochila para resolver o problema?",
+                placeholder: "Ex: Eu poderia pedir ajuda para a professora ou..."
+            },
+            {
+                type: 'input',
+                icon: "🌈",
+                title: "Final Feliz (Realista)",
+                text: "Respire fundo. O que provavelmente vai acontecer de verdade? (Nem horrível, nem perfeito... apenas real).",
+                placeholder: "Ex: Vou ficar nervoso, mas vou conseguir fazer a prova."
+            }
+        ];
+
+        const stage = document.getElementById('gameStage');
+        const xpBar = document.getElementById('xpBar');
+
+        // INICIALIZAÇÃO
+        function initGame() {
+            renderCard(0);
+            updateXP();
+        }
+
+        // RENDERIZADOR DE CARTAS
+        function renderCard(index) {
+            stage.innerHTML = ''; // Limpa palco
+            const data = adventureData[index];
+            const card = document.createElement('div');
+            card.className = 'game-card';
+
+            let contentHTML = '';
+
+            // Lógica de Renderização por Tipo
+            if (data.type === 'avatar') {
+                contentHTML = `
+                    <div class="card-icon-big">🎭</div>
+                    <h2 class="card-title">${data.title}</h2>
+                    <p class="card-question">${data.text}</p>
+                    <div class="avatar-grid">
+                        <div class="avatar-option" onclick="selectAvatar('🦸‍♂️', this)"><div style="font-size:3rem">🦸‍♂️</div><span>Forte</span></div>
+                        <div class="avatar-option" onclick="selectAvatar('🧙‍♀️', this)"><div style="font-size:3rem">🧙‍♀️</div><span>Sábio</span></div>
+                        <div class="avatar-option" onclick="selectAvatar('🥷', this)"><div style="font-size:3rem">🥷</div><span>Ágil</span></div>
+                    </div>
+                    <button id="nextBtn" class="action-btn" onclick="nextStep()" disabled>Começar Missão</button>
+                `;
+            } else if (data.type === 'slider') {
+                contentHTML = `
+                    <div class="card-icon-big">${data.icon}</div>
+                    <h2 class="card-title">${data.title}</h2>
+                    <p class="card-question">${data.text}</p>
+                    <div class="slider-container">
+                        <span id="emojiFeedback" class="emoji-display">🤔</span>
+                        <input type="range" min="0" max="100" value="50" oninput="updateEmoji(this.value)">
+                        <div style="display:flex; justify-content:space-between; font-size:0.8rem; color:#888; margin-top:10px;">
+                            <span>${data.minLabel}</span>
+                            <span>${data.maxLabel}</span>
+                        </div>
+                    </div>
+                    <button class="action-btn" onclick="nextStep()">Confirmar</button>
+                `;
+            } else if (data.type === 'input') {
+                contentHTML = `
+                    <div class="card-icon-big">${data.icon}</div>
+                    <h2 class="card-title">${data.title}</h2>
+                    <p class="card-question">${data.text}</p>
+                    <textarea class="fun-input" placeholder="${data.placeholder}"></textarea>
+                    <button class="action-btn" onclick="nextStep()">Próximo Desafio</button>
+                `;
+            }
+
+            card.innerHTML = contentHTML;
+            stage.appendChild(card);
+        }
+
+        // LÓGICA DO AVATAR
+        function selectAvatar(emoji, element) {
+            document.querySelectorAll('.avatar-option').forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+            heroAvatar = emoji;
+            document.getElementById('nextBtn').disabled = false;
+        }
+
+        // LÓGICA DO EMOJI SLIDER
+        function updateEmoji(val) {
+            const display = document.getElementById('emojiFeedback');
+            if(val < 20) display.innerText = "😌"; // Tranquilo
+            else if(val < 40) display.innerText = "😐"; // Neutro
+            else if(val < 60) display.innerText = "🤔"; // Duvidoso
+            else if(val < 80) display.innerText = "😰"; // Preocupado
+            else display.innerText = "😱"; // Pânico
+        }
+
+        // NAVEGAÇÃO E XP
+        function nextStep() {
+            currentStep++;
+            updateXP();
+            
+            if (currentStep < adventureData.length) {
+                renderCard(currentStep);
+            } else {
+                finishGame();
+            }
+        }
+
+        function updateXP() {
+            const percentage = (currentStep / adventureData.length) * 100;
+            xpBar.style.width = `${percentage}%`;
+        }
+
+        function finishGame() {
+            stage.innerHTML = `
+                <div class="game-card">
+                    <div class="card-icon-big" style="font-size: 5rem;">🏆</div>
+                    <h2 class="card-title">Missão Cumprida!</h2>
+                    <p class="card-question">Parabéns, ${heroAvatar}! Você usou seus poderes mentais para desvendar o mistério e acalmar o monstro.</p>
+                    <button class="action-btn" onclick="location.reload()">Jogar Novamente</button>
+                </div>
+            `;
+            // Disparar Confetes
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#6C5CE7', '#00B894', '#FF7675']
+            });
+        }
+
+        function toggleManual() {
+            const modal = document.getElementById('manualModal');
+            modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
+        }
+
+        // Iniciar
+        initGame();
+
+    </script>
+</body>
+</html>

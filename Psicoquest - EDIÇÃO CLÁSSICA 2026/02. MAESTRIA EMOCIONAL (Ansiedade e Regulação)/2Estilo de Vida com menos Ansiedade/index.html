@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PsicoQuest | Estilo de Vida</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            /* Paleta Premium & Acolhedora */
+            --primary: #2C5F58; /* Verde Petróleo Profundo */
+            --secondary: #5F9EA0; /* Azul Cadete Calmante */
+            --accent: #E8F3F1; /* Off-White Esverdeado */
+            --text-dark: #2D3436;
+            --text-light: #636E72;
+            --white: #FFFFFF;
+            --shadow-soft: 0 10px 30px rgba(44, 95, 88, 0.08);
+            --shadow-hover: 0 15px 35px rgba(44, 95, 88, 0.15);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F7F9F9;
+            color: var(--text-dark);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* --- Header --- */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.03);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            height: 80px;
+        }
+
+        .brand-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-header {
+            height: 45px;
+            object-fit: contain;
+        }
+
+        .app-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: -0.5px;
+        }
+
+        .manual-btn {
+            background: var(--accent);
+            color: var(--primary);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
+
+        .manual-btn:hover {
+            background: var(--primary);
+            color: var(--white);
+            transform: rotate(15deg);
+        }
+
+        /* --- Main Content --- */
+        main {
+            flex: 1;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden; /* Evita scroll na main container */
+        }
+
+        /* Grid Container (Desktop) / Scroll Container (Mobile) */
+        .cards-container {
+            width: 100%;
+            max-width: 1200px;
+            height: 100%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            padding: 1rem;
+            overflow-y: auto; /* Scroll interno se necessário no desktop */
+            scrollbar-width: thin;
+            scrollbar-color: var(--secondary) transparent;
+        }
+
+        /* Card Styles */
+        .card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            box-shadow: var(--shadow-soft);
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid rgba(0,0,0,0.02);
+            position: relative;
+            overflow: hidden;
+            min-height: 220px;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg, var(--secondary), var(--primary));
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+            background: var(--accent);
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            line-height: 1.4;
+        }
+
+        .card-cta {
+            margin-top: 1rem;
+            font-size: 0.8rem;
+            color: var(--primary);
+            font-weight: 600;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: var(--transition);
+        }
+
+        .card:hover .card-cta {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Footer --- */
+        footer {
+            background: var(--white);
+            padding: 1.5rem 2rem;
+            border-top: 1px solid #eee;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .dev-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-text {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            text-decoration: none;
+            line-height: 1.5;
+        }
+
+        .footer-text strong {
+            color: var(--primary);
+        }
+
+        .footer-logo {
+            height: 30px;
+            opacity: 0.8;
+        }
+
+        .btn-support {
+            background-color: #25D366;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+            box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
+        }
+
+        .btn-support:hover {
+            transform: scale(1.05);
+            background-color: #20BA5A;
+        }
+
+        /* --- Modals (Focus Mode) --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(45, 52, 54, 0.6);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: var(--white);
+            width: 100%;
+            max-width: 500px;
+            border-radius: 24px;
+            padding: 2.5rem;
+            position: relative;
+            transform: scale(0.9);
+            transition: var(--transition);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+            text-align: left;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #F0F2F5;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .close-modal:hover {
+            background: #e1e4e8;
+            color: var(--primary);
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .modal-icon {
+            font-size: 2rem;
+            color: var(--primary);
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .modal-body p {
+            font-size: 1rem;
+            color: var(--text-dark);
+            line-height: 1.6;
+            margin-bottom: 1.2rem;
+        }
+
+        .modal-highlight {
+            background: var(--accent);
+            padding: 1rem;
+            border-radius: 12px;
+            border-left: 4px solid var(--secondary);
+            font-size: 0.95rem;
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        /* --- Mobile Adaptations (Horizontal Scroll) --- */
+        @media (max-width: 768px) {
+            .app-title {
+                display: none; /* Simplifica o header no mobile */
+            }
+
+            .brand-container::after {
+                content: 'PsicoQuest';
+                font-weight: 700;
+                color: var(--primary);
+                font-size: 1.2rem;
+            }
+            
+            main {
+                padding: 1rem 0; /* Full width swipe area */
+                justify-content: flex-start;
+            }
+
+            .cards-container {
+                display: flex; /* Mudança para flex row no mobile */
+                flex-direction: row;
+                overflow-x: auto;
+                overflow-y: hidden;
+                scroll-snap-type: x mandatory;
+                gap: 1rem;
+                padding: 1rem 2rem; /* Espaço lateral para o swipe */
+                align-items: center;
+                height: auto;
+                min-height: 60vh; /* Ocupa boa parte da tela */
+            }
+
+            .card {
+                min-width: 280px; /* Largura fixa para o card no mobile */
+                max-width: 280px;
+                height: 380px; /* Altura fixa */
+                scroll-snap-align: center;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            }
+
+            .card-cta {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            footer {
+                padding: 1rem;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .dev-info {
+                flex-direction: column;
+                gap: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand-container">
+            <img src="https://gabrielopsicologo.com/wp-content/uploads/2025/12/Design-sem-nome.png" alt="PsicoQuest Logo" class="logo-header">
+            <span class="app-title">PsicoQuest</span>
+        </div>
+        <button class="manual-btn" id="openManual" title="Manual do Terapeuta">
+            <i class="fa-solid fa-book-open"></i>
+        </button>
+    </header>
+
+    <main>
+        <div class="cards-container" id="cardsGrid">
+            </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="dev-info">
+                <a href="https://www.instagram.com/gabrielopsicologo/#" target="_blank" class="footer-text">
+                    Desenvolvido por <strong>@gabrielopsicologo</strong>
+                </a>
+                <span class="footer-text">| CRP 06/215890</span>
+            </div>
+            
+            <img src="https://gabrielopsicologo.com/wp-content/uploads/2025/11/Logo_preta.png" alt="Gabriel Logo" class="footer-logo">
+            
+            <a href="https://api.whatsapp.com/message/WV34TWMSKTEEL1?autoload=1&app_absent=0" target="_blank" class="btn-support">
+                <i class="fa-brands fa-whatsapp"></i> Suporte
+            </a>
+        </div>
+        <div class="footer-text" style="font-size: 0.75rem; opacity: 0.6;">
+            © 2026 Todos os direitos reservados. Recurso terapêutico digital.
+        </div>
+    </footer>
+
+    <div class="modal-overlay" id="cardModal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeCardModal"><i class="fa-solid fa-times"></i></button>
+            <div class="modal-header">
+                <div class="modal-icon" id="modalIcon"></div>
+                <h2 class="modal-title" id="modalTitle"></h2>
+            </div>
+            <div class="modal-body" id="modalBody">
+                </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="manualModal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeManualModal"><i class="fa-solid fa-times"></i></button>
+            <div class="modal-header">
+                <i class="fa-solid fa-circle-info modal-icon"></i>
+                <h2 class="modal-title">Manual do Terapeuta</h2>
+            </div>
+            <div class="modal-body">
+                <p><strong>Seja Bem-Vindo ao Baralho "Estilo de Vida com Menos Ansiedade".</strong></p>
+                <p>Este recurso digital foi desenvolvido para trabalhar a <strong>Ativação Comportamental</strong> e a reestruturação da rotina em pacientes com quadros de Ansiedade e TDAH.</p>
+                <p>O objetivo não é buscar perfeição, mas introduzir micro-hábitos funcionais.</p>
+                <div class="modal-highlight">
+                    <i class="fa-solid fa-lightbulb"></i> <strong>Como usar:</strong> Clique em uma carta com o paciente. Explore a sugestão prática e discuta barreiras e facilitadores para implementar aquela pequena mudança na semana.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="seguranca.js" defer></script>
+    <script>
+        // Dados das Cartas (Baseado no PDF fornecido, adaptado para linguagem TCC Pragmática)
+        const cardsData = [
+            {
+                id: 1,
+                title: "Nutra seu Corpo",
+                icon: "fa-carrot",
+                text: "Pequenas mudanças na alimentação impactam diretamente a química cerebral.",
+                detail: "Comece mudando aos poucos. Não se trata de dieta restritiva, mas de 'combustível' de qualidade. Tente introduzir uma fruta no café da manhã ou beber mais água. Cuidar do que você come é um ato concreto de autorregulação."
+            },
+            {
+                id: 2,
+                title: "Higiene do Sono",
+                icon: "fa-bed",
+                text: "O sono é o 'reset' do cérebro. Sem ele, a regulação emocional falha.",
+                detail: "Sintomas de ansiedade pioram com a privação de sono. Pratique a higiene do sono: evite telas 1 hora antes de deitar, mantenha o quarto escuro e crie uma rotina consistente. Dormir bem melhora a concentração e diminui a irritabilidade."
+            },
+            {
+                id: 3,
+                title: "Conexões Sociais",
+                icon: "fa-users",
+                text: "Pessoas de confiança funcionam como 'escudo' contra o estresse.",
+                detail: "A qualidade importa mais que a quantidade. Cultivar relacionamentos onde você se sente seguro reduz a percepção de ameaça do cérebro ansioso. Mande uma mensagem hoje para alguém que te faz bem."
+            },
+            {
+                id: 4,
+                title: "Movimente-se",
+                icon: "fa-person-running",
+                text: "A atividade física metaboliza os hormônios do estresse.",
+                detail: "Encontre algo compatível com sua rotina, não precisa ser academia pesada. Uma caminhada de 15 minutos já libera endorfinas que combatem a ansiedade. O objetivo é tirar o corpo do estado de inércia."
+            },
+            {
+                id: 5,
+                title: "Tenha um Hobby",
+                icon: "fa-palette",
+                text: "Atividades prazerosas são âncoras para o momento presente.",
+                detail: "Hobbies autocalmantes ajudam a mente a desconectar das preocupações futuras. Seja pintar, jogar, ler ou cozinhar: reserve um tempo inegociável para fazer algo apenas pelo prazer de fazer, sem cobrança de produtividade."
+            },
+            {
+                id: 6,
+                title: "Escrita Terapêutica",
+                icon: "fa-pen-nib",
+                text: "Tirar os pensamentos da cabeça e colocá-los no papel organiza a mente.",
+                detail: "Não se preocupe com gramática. Apenas escreva o que vier à mente. A escrita ajuda a identificar padrões de pensamento e libera a 'memória RAM' do seu cérebro, reduzindo a sensação de sobrecarga mental."
+            },
+            {
+                id: 7,
+                title: "Prática da Gratidão",
+                icon: "fa-sun",
+                text: "Treine seu cérebro para identificar segurança e positividade.",
+                detail: "Liste 3 coisas simples que aconteceram hoje. Isso não é 'pensamento positivo mágico', é treino cognitivo: você ensina seu cérebro a focar no que funcionou, diminuindo o viés de negatividade comum na ansiedade."
+            },
+            {
+                id: 8,
+                title: "Ambiente Organizado",
+                icon: "fa-box-open",
+                text: "Ambiente externo caótico contribui para o caos interno.",
+                detail: "Pratique o hábito de destralhar. Mantenha as coisas em seus lugares para reduzir a carga cognitiva de ter que procurar objetos. Um ambiente visualmente limpo facilita o foco e reduz a ansiedade visual."
+            },
+            {
+                id: 9,
+                title: "Desintoxicação Digital",
+                icon: "fa-mobile-screen-button",
+                text: "O excesso de estímulos digitais mantém o cérebro em alerta constante.",
+                detail: "Defina horários para checar notificações ao invés de ficar disponível 24h. O uso moderado do celular libera tempo para viver o mundo real e diminui a comparação social, que é um gatilho para ansiedade."
+            },
+            {
+                id: 10,
+                title: "Mini Pausas",
+                icon: "fa-mug-hot",
+                text: "Descanso produtivo: recarregar evita o esgotamento (Burnout).",
+                detail: "Não espere 'pifar' para parar. Faça pausas de 5 minutos a cada hora. Ressignifique o descanso: ele é manutenção preventiva da sua saúde mental, não perda de tempo."
+            }
+        ];
+
+        // Elementos do DOM
+        const cardsGrid = document.getElementById('cardsGrid');
+        const cardModal = document.getElementById('cardModal');
+        const closeCardModal = document.getElementById('closeCardModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalBody = document.getElementById('modalBody');
+        const modalIcon = document.getElementById('modalIcon');
+        
+        const manualModal = document.getElementById('manualModal');
+        const openManual = document.getElementById('openManual');
+        const closeManualModal = document.getElementById('closeManualModal');
+
+        // Renderizar Cartas
+        function renderCards() {
+            cardsGrid.innerHTML = '';
+            cardsData.forEach(card => {
+                const cardElement = document.createElement('div');
+                cardElement.className = 'card';
+                cardElement.innerHTML = `
+                    <div class="card-icon"><i class="fa-solid ${card.icon}"></i></div>
+                    <h3 class="card-title">${card.title}</h3>
+                    <div class="card-cta">Ver estratégia <i class="fa-solid fa-arrow-right"></i></div>
+                `;
+                
+                // Evento de Clique
+                cardElement.addEventListener('click', () => openCard(card));
+                
+                cardsGrid.appendChild(cardElement);
+            });
+        }
+
+        // Abrir Carta
+        function openCard(card) {
+            modalTitle.textContent = card.title;
+            modalIcon.innerHTML = `<i class="fa-solid ${card.icon}"></i>`;
+            modalBody.innerHTML = `
+                <p><strong>Conceito:</strong> ${card.text}</p>
+                <div class="modal-highlight">
+                    ${card.detail}
+                </div>
+            `;
+            cardModal.classList.add('active');
+        }
+
+        // Fechar Modais
+        function closeModal(modal) {
+            modal.classList.remove('active');
+        }
+
+        // Event Listeners
+        closeCardModal.addEventListener('click', () => closeModal(cardModal));
+        
+        // Fechar ao clicar fora
+        cardModal.addEventListener('click', (e) => {
+            if (e.target === cardModal) closeModal(cardModal);
+        });
+
+        // Manual
+        openManual.addEventListener('click', () => manualModal.classList.add('active'));
+        closeManualModal.addEventListener('click', () => closeModal(manualModal));
+        manualModal.addEventListener('click', (e) => {
+            if (e.target === manualModal) closeModal(manualModal);
+        });
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', renderCards);
+
+    </script>
+</body>
+</html>

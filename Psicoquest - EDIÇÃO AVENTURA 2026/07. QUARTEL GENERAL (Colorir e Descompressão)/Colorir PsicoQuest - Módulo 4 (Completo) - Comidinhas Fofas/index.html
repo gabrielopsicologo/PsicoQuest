@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PsicoQuest - Módulo 4 (Completo)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&family=Fredoka+One&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        food: { pink: '#F472B6', yellow: '#FBBF24', green: '#34D399', blue: '#60A5FA', brown: '#78350F', cream: '#FFF7ED', purple: '#A78BFA', orange: '#FB923C', red: '#EF4444' },
+                        paper: '#FFF7ED',
+                        gray: { text: '#4B5563' }
+                    },
+                    fontFamily: {
+                        sans: ['Nunito', 'sans-serif'],
+                        kawaii: ['"Fredoka One"', 'cursive'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { margin: 0; padding: 0; background: #333; }
+        
+        .page {
+            width: 210mm;
+            height: 297mm;
+            background: #FFF7ED; /* Creme suave */
+            margin: 20px auto;
+            position: relative;
+            box-sizing: border-box;
+            padding: 15mm;
+            display: flex;
+            flex-direction: column;
+            page-break-after: always;
+        }
+
+        .svg-draw {
+            fill: white;
+            stroke: #78350F; /* Marrom chocolate para contornos fofos */
+            stroke-width: 3; /* Traço mais gordinho estilo Kawaii */
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            width: 100%;
+            height: 100%;
+            max-height: 170mm; 
+            z-index: 10;
+        }
+
+        .copyright-label {
+            position: absolute;
+            bottom: 8px;
+            right: 12px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 800;
+            color: #FCA5A5;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            pointer-events: none;
+            background: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .frame-border {
+            border: 4px dashed #F472B6;
+            border-radius: 2rem;
+            position: relative;
+            background: white;
+            box-shadow: 0 0 0 4px white, 0 0 0 8px #FBCFE8; /* Borda dupla fofa */
+        }
+
+        .mood-circle {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #F472B6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .mood-face {
+            fill: none;
+            stroke: #F472B6;
+            stroke-width: 2;
+            stroke-linecap: round;
+        }
+        
+        .kawaii-text {
+            font-family: 'Fredoka One', cursive;
+            letter-spacing: 1px;
+        }
+
+        @media print {
+            body { background: none; }
+            .page { 
+                margin: 0; 
+                border: none; 
+                width: 100%; 
+                height: 100vh; 
+            }
+            .no-print { display: none; }
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========================================== -->
+    <!-- PÁGINA 37: O PRATO ARCO-ÍRIS               -->
+    <!-- ========================================== -->
+    <div class="page">
+        <header class="border-b-4 border-food-green pb-4 mb-4 flex justify-between items-start">
+            <div class="flex items-center gap-3">
+                <div class="bg-food-green text-white p-2 rounded-2xl shadow-sm transform -rotate-3">
+                    <i data-lucide="utensils" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="kawaii-text text-food-brown text-lg">Comidinhas Fofas</h1>
+                    <p class="text-[10px] font-bold text-food-green uppercase tracking-widest font-sans">PsicoQuest • Módulo 04</p>
+                </div>
+            </div>
+            
+            <div class="text-right flex flex-col items-end">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="text-[10px] font-bold text-gray-400 uppercase font-sans">Fome de quê?</span>
+                    <div class="flex gap-2">
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,12 Q10,17 15,12" /></svg></div>
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,14 L15,14" /></svg></div>
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,16 Q10,11 15,16" /></svg></div>
+                        <div class="mood-circle"></div>
+                    </div>
+                </div>
+                <div class="w-32 border-b border-food-green text-[10px] text-right text-gray-text font-sans">Data: ___/___</div>
+            </div>
+        </header>
+
+        <main class="flex-grow frame-border p-6 flex flex-col items-center justify-center">
+            <div class="absolute top-4 left-6 bg-food-green px-4 py-1 rounded-full border-2 border-white shadow transform rotate-2">
+                <h2 class="kawaii-text text-white text-sm">37. PRATO ARCO-ÍRIS</h2>
+            </div>
+            <div class="copyright-label">© PsicoQuest</div>
+
+            <svg viewBox="0 0 300 300" class="svg-draw">
+                <!-- O Prato Redondo -->
+                <circle cx="150" cy="150" r="100" fill="white" stroke-width="3" />
+                <circle cx="150" cy="150" r="90" fill="none" stroke-width="1" stroke-dasharray="4" /> <!-- Decoração interna -->
+                
+                <!-- Divisórias do Prato -->
+                <line x1="150" y1="50" x2="150" y2="250" stroke-width="2" /> <!-- Vertical -->
+                <line x1="50" y1="150" x2="250" y2="150" stroke-width="2" /> <!-- Horizontal -->
+                
+                <!-- Comidinhas Kawaii em cada setor -->
+                <!-- 1. Brócolis (Verdes) -->
+                <path d="M90,90 Q80,70 100,70 Q110,60 120,70 Q130,70 120,90 L115,110 L95,110 Z" fill="white" stroke-width="2" />
+                <circle cx="100" cy="85" r="2" fill="#78350F" stroke="none" />
+                <circle cx="110" cy="85" r="2" fill="#78350F" stroke="none" />
+                <path d="M103,90 Q105,92 107,90" stroke-width="1" fill="none" /> <!-- Sorriso -->
+                
+                <!-- 2. Cenoura (Laranja) -->
+                <path d="M180,70 L200,70 L190,120 Z" fill="white" stroke-width="2" />
+                <path d="M185,70 L180,60 M190,70 L190,55 M195,70 L200,60" stroke-width="1.5" /> <!-- Folhinhas -->
+                <circle cx="187" cy="85" r="2" fill="#78350F" stroke="none" />
+                <circle cx="193" cy="85" r="2" fill="#78350F" stroke="none" />
+                
+                <!-- 3. Arroz/Feijão (Grãos fofos) -->
+                <ellipse cx="90" cy="190" rx="10" ry="6" fill="white" stroke-width="2" />
+                <ellipse cx="110" cy="180" rx="10" ry="6" fill="white" stroke-width="2" />
+                <ellipse cx="100" cy="200" rx="10" ry="6" fill="white" stroke-width="2" />
+                <circle cx="110" cy="180" r="1" fill="#78350F" stroke="none" />
+                
+                <!-- 4. Franguinho/Carne -->
+                <path d="M180,180 Q220,170 230,200 Q220,230 180,220 Q170,200 180,180" fill="white" stroke-width="2" />
+                <path d="M230,200 L240,200" stroke-width="2" /> <!-- Osso -->
+                <circle cx="200" cy="200" r="2" fill="#78350F" stroke="none" />
+                <circle cx="210" cy="200" r="2" fill="#78350F" stroke="none" />
+                
+                <!-- Talheres ao lado -->
+                <path d="M30,100 L30,200 M20,100 Q30,130 40,100" stroke-width="3" fill="none" /> <!-- Garfo simples -->
+                <path d="M270,100 L270,200 M270,200 Q270,210 270,200" stroke-width="3" fill="none" /> <!-- Faca simples -->
+                <path d="M270,100 Q260,150 270,200" fill="white" />
+            </svg>
+        </main>
+
+        <footer class="mt-4 bg-food-green/10 p-3 rounded-2xl border-l-4 border-food-green">
+            <p class="text-xs text-gray-600 font-medium font-sans">
+                <strong class="text-food-green uppercase kawaii-text text-[10px]">Missão:</strong>
+                <br>Quanto mais colorido, mais forte você fica! Pinte cada parte do prato com uma cor diferente.
+            </p>
+        </footer>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PÁGINA 38: A FRUTA FELIZ (ESCOLHAS)        -->
+    <!-- ========================================== -->
+    <div class="page">
+        <header class="border-b-4 border-food-pink pb-4 mb-4 flex justify-between items-start">
+            <div class="flex items-center gap-3">
+                <div class="bg-food-pink text-white p-2 rounded-2xl shadow-sm transform rotate-3">
+                    <i data-lucide="apple" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="kawaii-text text-food-brown text-lg">Comidinhas Fofas</h1>
+                    <p class="text-[10px] font-bold text-food-pink uppercase tracking-widest font-sans">PsicoQuest • Módulo 04</p>
+                </div>
+            </div>
+            
+            <div class="text-right flex flex-col items-end">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="text-[10px] font-bold text-gray-400 uppercase font-sans">Fome de quê?</span>
+                    <div class="flex gap-2">
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,12 Q10,17 15,12" /></svg></div>
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,14 L15,14" /></svg></div>
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,16 Q10,11 15,16" /></svg></div>
+                        <div class="mood-circle"></div>
+                    </div>
+                </div>
+                <div class="w-32 border-b border-food-pink text-[10px] text-right text-gray-text font-sans">Data: ___/___</div>
+            </div>
+        </header>
+
+        <main class="flex-grow frame-border p-6 flex flex-col items-center justify-center">
+            <div class="absolute top-4 left-6 bg-food-pink px-4 py-1 rounded-full border-2 border-white shadow transform -rotate-2">
+                <h2 class="kawaii-text text-white text-sm">38. A FRUTA FELIZ</h2>
+            </div>
+            <div class="copyright-label">© PsicoQuest</div>
+
+            <svg viewBox="0 0 300 300" class="svg-draw">
+                <!-- Melancia Fofa -->
+                <path d="M50,100 L250,100 Q250,250 150,250 Q50,250 50,100 Z" fill="white" stroke-width="3" />
+                
+                <!-- Casca da Melancia -->
+                <path d="M55,100 L245,100 Q240,230 150,230 Q60,230 55,100 Z" fill="none" stroke-width="3" stroke-dasharray="0" />
+                <path d="M65,100 Q70,210 150,210 Q230,210 235,100" fill="none" stroke-width="1.5" stroke-dasharray="4" />
+                
+                <!-- Sementes -->
+                <ellipse cx="100" cy="140" rx="3" ry="6" fill="#78350F" stroke="none" />
+                <ellipse cx="200" cy="140" rx="3" ry="6" fill="#78350F" stroke="none" />
+                <ellipse cx="120" cy="180" rx="3" ry="6" fill="#78350F" stroke="none" />
+                <ellipse cx="180" cy="180" rx="3" ry="6" fill="#78350F" stroke="none" />
+                <ellipse cx="150" cy="120" rx="3" ry="6" fill="#78350F" stroke="none" />
+                
+                <!-- Rosto Kawaii -->
+                <circle cx="130" cy="160" r="8" fill="#78350F" stroke="none" />
+                <circle cx="133" cy="157" r="2" fill="white" stroke="none" /> <!-- Brilho olho -->
+                
+                <circle cx="170" cy="160" r="8" fill="#78350F" stroke="none" />
+                <circle cx="173" cy="157" r="2" fill="white" stroke="none" /> <!-- Brilho olho -->
+                
+                <path d="M145,165 Q150,175 155,165" fill="none" stroke-width="2" /> <!-- Boca -->
+                
+                <!-- Bochechas -->
+                <circle cx="120" cy="170" r="5" fill="none" stroke="#F472B6" stroke-width="1" />
+                <circle cx="180" cy="170" r="5" fill="none" stroke="#F472B6" stroke-width="1" />
+                
+                <!-- Estrelinhas ao redor -->
+                <path d="M250,80 L255,70 L260,80 L270,85 L260,90 L255,100 L250,90 L240,85 Z" fill="none" stroke-width="1" />
+                <path d="M50,80 L55,70 L60,80 L70,85 L60,90 L55,100 L50,90 L40,85 Z" fill="none" stroke-width="1" />
+            </svg>
+        </main>
+
+        <footer class="mt-4 bg-food-pink/10 p-3 rounded-2xl border-l-4 border-food-pink">
+            <p class="text-xs text-gray-600 font-medium font-sans">
+                <strong class="text-food-pink uppercase kawaii-text text-[10px]">Missão:</strong>
+                <br>Frutas são doces que nascem em árvores! Pinte a melancia de vermelho e verde. Qual sua fruta favorita?
+            </p>
+        </footer>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PÁGINA 39: O COPO DE ÁGUA (HIDRATAÇÃO)     -->
+    <!-- ========================================== -->
+    <div class="page">
+        <header class="border-b-4 border-food-blue pb-4 mb-4 flex justify-between items-start">
+            <div class="flex items-center gap-3">
+                <div class="bg-food-blue text-white p-2 rounded-2xl shadow-sm transform -rotate-3">
+                    <i data-lucide="droplet" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="kawaii-text text-food-brown text-lg">Comidinhas Fofas</h1>
+                    <p class="text-[10px] font-bold text-food-blue uppercase tracking-widest font-sans">PsicoQuest • Módulo 04</p>
+                </div>
+            </div>
+            
+            <div class="text-right flex flex-col items-end">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="text-[10px] font-bold text-gray-400 uppercase font-sans">Fome de quê?</span>
+                    <div class="flex gap-2">
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,12 Q10,17 15,12" /></svg></div>
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,14 L15,14" /></svg></div>
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,16 Q10,11 15,16" /></svg></div>
+                        <div class="mood-circle"></div>
+                    </div>
+                </div>
+                <div class="w-32 border-b border-food-blue text-[10px] text-right text-gray-text font-sans">Data: ___/___</div>
+            </div>
+        </header>
+
+        <main class="flex-grow frame-border p-6 flex flex-col items-center justify-center">
+            <div class="absolute top-4 left-6 bg-food-blue px-4 py-1 rounded-full border-2 border-white shadow transform rotate-2">
+                <h2 class="kawaii-text text-white text-sm">39. O COPO FELIZ</h2>
+            </div>
+            <div class="copyright-label">© PsicoQuest</div>
+
+            <svg viewBox="0 0 300 300" class="svg-draw">
+                <!-- Copo Grande -->
+                <path d="M80,50 L100,250 Q150,260 200,250 L220,50" fill="white" stroke-width="3" stroke-linecap="round" />
+                <ellipse cx="150" cy="50" rx="70" ry="10" fill="white" stroke-width="3" />
+                
+                <!-- Nível da Água -->
+                <path d="M90,150 Q150,130 210,150 L215,100 Q150,80 85,100 Z" fill="none" stroke-width="2" stroke-dasharray="4" opacity="0.5" /> <!-- Nível baixo (tracejado) -->
+                
+                <path d="M85,100 Q150,80 215,100 L205,230 Q150,240 95,230 Z" fill="white" stroke-width="2" /> <!-- Água principal -->
+                
+                <!-- Canudinho -->
+                <path d="M120,200 L180,20" fill="none" stroke-width="6" stroke-linecap="round" stroke="#F472B6" />
+                <path d="M120,200 L180,20" fill="none" stroke-width="2" stroke-linecap="round" stroke="white" stroke-dasharray="10 10" /> <!-- Listra do canudo -->
+                
+                <!-- Rosto no Copo -->
+                <circle cx="130" cy="160" r="10" fill="#78350F" stroke="none" />
+                <circle cx="134" cy="156" r="3" fill="white" stroke="none" />
+                
+                <circle cx="170" cy="160" r="10" fill="#78350F" stroke="none" />
+                <circle cx="174" cy="156" r="3" fill="white" stroke="none" />
+                
+                <path d="M145,170 Q150,180 155,170" fill="none" stroke-width="2" />
+                
+                <!-- Bolhas (Felicidade/Gás) -->
+                <circle cx="100" cy="120" r="5" fill="none" stroke-width="1.5" />
+                <circle cx="180" cy="200" r="8" fill="none" stroke-width="1.5" />
+                <circle cx="120" cy="220" r="4" fill="none" stroke-width="1.5" />
+                
+                <!-- Gotas suando (Refrescante) -->
+                <path d="M225,100 Q230,110 225,120" fill="none" stroke-width="1.5" />
+                <path d="M220,150 Q225,160 220,170" fill="none" stroke-width="1.5" />
+            </svg>
+        </main>
+
+        <footer class="mt-4 bg-food-blue/10 p-3 rounded-2xl border-l-4 border-food-blue">
+            <p class="text-xs text-gray-600 font-medium font-sans">
+                <strong class="text-food-blue uppercase kawaii-text text-[10px]">Missão:</strong>
+                <br>Água faz o corpo funcionar direitinho. Pinte o líquido de azul. Você já bebeu água hoje?
+            </p>
+        </footer>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PÁGINA 40: O HAMBÚRGUER (CAMADAS)          -->
+    <!-- ========================================== -->
+    <div class="page">
+        <header class="border-b-4 border-food-yellow pb-4 mb-4 flex justify-between items-start">
+            <div class="flex items-center gap-3">
+                <div class="bg-food-yellow text-white p-2 rounded-2xl shadow-sm transform rotate-3">
+                    <i data-lucide="sandwich" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="kawaii-text text-food-brown text-lg">Comidinhas Fofas</h1>
+                    <p class="text-[10px] font-bold text-food-yellow uppercase tracking-widest font-sans">PsicoQuest • Módulo 04</p>
+                </div>
+            </div>
+            
+            <div class="text-right flex flex-col items-end">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="text-[10px] font-bold text-gray-400 uppercase font-sans">Fome de quê?</span>
+                    <div class="flex gap-2">
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,12 Q10,17 15,12" /></svg></div>
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,14 L15,14" /></svg></div>
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,16 Q10,11 15,16" /></svg></div>
+                        <div class="mood-circle"></div>
+                    </div>
+                </div>
+                <div class="w-32 border-b border-food-yellow text-[10px] text-right text-gray-text font-sans">Data: ___/___</div>
+            </div>
+        </header>
+
+        <main class="flex-grow frame-border p-6 flex flex-col items-center justify-center">
+            <div class="absolute top-4 left-6 bg-food-yellow px-4 py-1 rounded-full border-2 border-white shadow transform -rotate-2">
+                <h2 class="kawaii-text text-white text-sm">40. O HAMBÚRGUER</h2>
+            </div>
+            <div class="copyright-label">© PsicoQuest</div>
+
+            <svg viewBox="0 0 300 300" class="svg-draw">
+                <!-- Pão de Cima -->
+                <path d="M50,120 Q150,50 250,120 L250,140 Q150,150 50,140 Z" fill="white" stroke-width="3" />
+                <!-- Gergelim -->
+                <path d="M100,90 L105,95 M130,80 L135,85 M160,85 L165,90 M190,95 L195,100" stroke-width="2" stroke-linecap="round" />
+                
+                <!-- Alface (Ondulado) -->
+                <path d="M45,140 Q60,130 75,150 Q90,130 105,150 Q120,130 135,150 Q150,130 165,150 Q180,130 195,150 Q210,130 225,150 Q240,130 255,145" fill="white" stroke-width="2" />
+                
+                <!-- Queijo (Triângulos) -->
+                <path d="M50,150 L250,150 L240,170 L210,150 L180,170 L150,150 L120,170 L90,150 L60,170 L50,150" fill="white" stroke-width="2" />
+                
+                <!-- Carne (Retângulo Arredondado) -->
+                <rect x="50" y="165" width="200" height="30" rx="10" fill="white" stroke-width="3" />
+                
+                <!-- Tomate (Linha) -->
+                <rect x="55" y="195" width="190" height="15" rx="5" fill="white" stroke-width="2" />
+                
+                <!-- Pão de Baixo -->
+                <path d="M50,210 L250,210 L250,230 Q150,260 50,230 Z" fill="white" stroke-width="3" />
+                
+                <!-- Rosto no Pão de Cima -->
+                <circle cx="130" cy="120" r="3" fill="#78350F" stroke="none" />
+                <circle cx="170" cy="120" r="3" fill="#78350F" stroke="none" />
+                <path d="M145,125 Q150,130 155,125" stroke-width="1.5" fill="none" />
+                
+                <!-- Rosto no Pão de Baixo (Porque sim, é Kawaii!) -->
+                <circle cx="130" cy="230" r="2" fill="#78350F" stroke="none" />
+                <circle cx="170" cy="230" r="2" fill="#78350F" stroke="none" />
+                <path d="M145,235 Q150,240 155,235" stroke-width="1" fill="none" />
+                
+                <!-- Setas indicando camadas -->
+                <path d="M30,120 L40,120" stroke-width="1" />
+                <path d="M30,175 L40,175" stroke-width="1" />
+                <path d="M30,220 L40,220" stroke-width="1" />
+            </svg>
+        </main>
+
+        <footer class="mt-4 bg-food-yellow/10 p-3 rounded-2xl border-l-4 border-food-yellow">
+            <p class="text-xs text-gray-600 font-medium font-sans">
+                <strong class="text-food-yellow uppercase kawaii-text text-[10px]">Missão:</strong>
+                <br>Tudo tem camadas, igual a gente! Somos feitos de sentimentos, pensamentos e corpo. Pinte cada camada de uma cor.
+            </p>
+        </footer>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PÁGINA 41: O SORVETE (SENSORIAL)           -->
+    <!-- ========================================== -->
+    <div class="page">
+        <header class="border-b-4 border-food-pink pb-4 mb-4 flex justify-between items-start">
+            <div class="flex items-center gap-3">
+                <div class="bg-food-pink text-white p-2 rounded-2xl shadow-sm transform -rotate-3">
+                    <i data-lucide="ice-cream" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="kawaii-text text-food-brown text-lg">Comidinhas Fofas</h1>
+                    <p class="text-[10px] font-bold text-food-pink uppercase tracking-widest font-sans">PsicoQuest • Módulo 04</p>
+                </div>
+            </div>
+            
+            <div class="text-right flex flex-col items-end">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="text-[10px] font-bold text-gray-400 uppercase font-sans">Fome de quê?</span>
+                    <div class="flex gap-2">
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,12 Q10,17 15,12" /></svg></div>
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,14 L15,14" /></svg></div>
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,16 Q10,11 15,16" /></svg></div>
+                        <div class="mood-circle"></div>
+                    </div>
+                </div>
+                <div class="w-32 border-b border-food-pink text-[10px] text-right text-gray-text font-sans">Data: ___/___</div>
+            </div>
+        </header>
+
+        <main class="flex-grow frame-border p-6 flex flex-col items-center justify-center">
+            <div class="absolute top-4 left-6 bg-food-pink px-4 py-1 rounded-full border-2 border-white shadow transform rotate-2">
+                <h2 class="kawaii-text text-white text-sm">41. SORVETE SENSORIAL</h2>
+            </div>
+            <div class="copyright-label">© PsicoQuest</div>
+
+            <svg viewBox="0 0 300 300" class="svg-draw">
+                <!-- Casquinha -->
+                <path d="M100,200 L150,290 L200,200" fill="white" stroke-width="3" />
+                <!-- Textura da Casquinha (Waffle) -->
+                <line x1="110" y1="200" x2="150" y2="280" stroke-width="1.5" />
+                <line x1="130" y1="200" x2="160" y2="260" stroke-width="1.5" />
+                <line x1="190" y1="200" x2="150" y2="280" stroke-width="1.5" />
+                <line x1="170" y1="200" x2="140" y2="260" stroke-width="1.5" />
+                
+                <!-- Bola de Baixo -->
+                <circle cx="150" cy="190" r="55" fill="white" stroke-width="3" />
+                <path d="M100,200 Q150,210 200,200" stroke-width="3" fill="none" /> <!-- Borda da casca -->
+                <!-- Drip (Derretendo) -->
+                <path d="M190,190 Q200,220 190,230 Q180,220 180,200" fill="white" stroke-width="2" />
+
+                <!-- Bola do Meio -->
+                <circle cx="150" cy="140" r="50" fill="white" stroke-width="3" />
+                
+                <!-- Bola do Topo -->
+                <circle cx="150" cy="90" r="45" fill="white" stroke-width="3" />
+                
+                <!-- Cereja no topo -->
+                <circle cx="150" cy="45" r="10" fill="white" stroke-width="2" />
+                <path d="M150,35 Q160,20 170,30" fill="none" stroke-width="2" /> <!-- Cabinho -->
+                
+                <!-- Rostos Kawaii em cada bola -->
+                <!-- Topo -->
+                <circle cx="140" cy="90" r="2" fill="#78350F" stroke="none" />
+                <circle cx="160" cy="90" r="2" fill="#78350F" stroke="none" />
+                <path d="M148,95 Q150,98 152,95" stroke-width="1.5" fill="none" />
+                
+                <!-- Meio -->
+                <path d="M135,140 L140,145 L135,150" fill="none" stroke-width="1.5" /> <!-- Olho piscando -->
+                <circle cx="165" cy="145" r="2" fill="#78350F" stroke="none" />
+                <path d="M148,150 Q150,155 152,150" stroke-width="1.5" fill="none" />
+
+                <!-- Baixo -->
+                <circle cx="130" cy="190" r="2" fill="#78350F" stroke="none" />
+                <circle cx="170" cy="190" r="2" fill="#78350F" stroke="none" />
+                <circle cx="130" cy="200" r="3" fill="none" stroke="#F472B6" stroke-width="1" /> <!-- Bochecha -->
+                <circle cx="170" cy="200" r="3" fill="none" stroke="#F472B6" stroke-width="1" /> <!-- Bochecha -->
+                <path d="M145,195 Q150,190 155,195" stroke-width="1.5" fill="none" /> <!-- Boca sorrindo -->
+
+                <!-- Granulados (Sprinkles) -->
+                <path d="M130,50 L135,55 M160,60 L165,55 M140,70 L145,70" stroke-width="2" stroke-linecap="round" />
+            </svg>
+        </main>
+
+        <footer class="mt-4 bg-food-pink/10 p-3 rounded-2xl border-l-4 border-food-pink">
+            <p class="text-xs text-gray-600 font-medium font-sans">
+                <strong class="text-food-pink uppercase kawaii-text text-[10px]">Missão:</strong>
+                <br>Imagine o sabor! Pinte cada bola pensando em uma sensação: Frio (azul), Doce (rosa), Azedinho (amarelo).
+            </p>
+        </footer>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PÁGINA 42: O BRÓCOLIS FORTE (ENERGIA)      -->
+    <!-- ========================================== -->
+    <div class="page">
+        <header class="border-b-4 border-food-green pb-4 mb-4 flex justify-between items-start">
+            <div class="flex items-center gap-3">
+                <div class="bg-food-green text-white p-2 rounded-2xl shadow-sm transform rotate-3">
+                    <i data-lucide="dumbbell" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="kawaii-text text-food-brown text-lg">Comidinhas Fofas</h1>
+                    <p class="text-[10px] font-bold text-food-green uppercase tracking-widest font-sans">PsicoQuest • Módulo 04</p>
+                </div>
+            </div>
+            
+            <div class="text-right flex flex-col items-end">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="text-[10px] font-bold text-gray-400 uppercase font-sans">Fome de quê?</span>
+                    <div class="flex gap-2">
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,12 Q10,17 15,12" /></svg></div>
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,14 L15,14" /></svg></div>
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,16 Q10,11 15,16" /></svg></div>
+                        <div class="mood-circle"></div>
+                    </div>
+                </div>
+                <div class="w-32 border-b border-food-green text-[10px] text-right text-gray-text font-sans">Data: ___/___</div>
+            </div>
+        </header>
+
+        <main class="flex-grow frame-border p-6 flex flex-col items-center justify-center">
+            <div class="absolute top-4 left-6 bg-food-green px-4 py-1 rounded-full border-2 border-white shadow transform -rotate-2">
+                <h2 class="kawaii-text text-white text-sm">42. O BRÓCOLIS FORTE</h2>
+            </div>
+            <div class="copyright-label">© PsicoQuest</div>
+
+            <svg viewBox="0 0 300 300" class="svg-draw">
+                <!-- Cabeça do Brócolis (Cabelo Afro/Nuvem) -->
+                <path d="M100,120 Q80,100 80,70 Q80,40 110,30 Q130,10 170,10 Q210,10 230,40 Q260,50 260,80 Q260,110 240,130 Q220,150 180,140" fill="white" stroke-width="3" />
+                
+                <!-- Caule (Corpo) -->
+                <path d="M120,130 L110,220 Q110,250 130,250 L210,250 Q230,250 230,220 L220,130" fill="white" stroke-width="3" />
+                
+                <!-- Braços Musculosos (Flexing) -->
+                <path d="M110,160 Q80,150 70,120 Q60,100 80,90" fill="white" stroke-width="3" stroke-linecap="round" /> <!-- Braço Esq -->
+                <circle cx="70" cy="110" r="10" fill="white" stroke-width="2" /> <!-- Mão -->
+                
+                <path d="M230,160 Q260,150 270,120 Q280,100 260,90" fill="white" stroke-width="3" stroke-linecap="round" /> <!-- Braço Dir -->
+                <circle cx="270" cy="110" r="10" fill="white" stroke-width="2" /> <!-- Mão -->
+                
+                <!-- Faixa de Ginástica na Cabeça -->
+                <path d="M110,60 Q170,40 230,60" fill="none" stroke-width="4" stroke="#F472B6" />
+                <path d="M110,60 Q170,40 230,60" fill="none" stroke-width="2" stroke="white" stroke-dasharray="2 4" />
+                
+                <!-- Rosto Determinado -->
+                <path d="M140,90 L160,100" stroke-width="2" /> <!-- Sobrancelha -->
+                <path d="M200,90 L180,100" stroke-width="2" /> <!-- Sobrancelha -->
+                
+                <circle cx="150" cy="110" r="3" fill="#78350F" />
+                <circle cx="190" cy="110" r="3" fill="#78350F" />
+                
+                <path d="M160,120 L180,120" stroke-width="2" /> <!-- Boca séria/concentrada -->
+                
+                <!-- Gotinha de Suor (Malhando) -->
+                <path d="M240,80 Q245,90 240,100" fill="none" stroke="#60A5FA" stroke-width="2" />
+                
+                <!-- Halteres no chão -->
+                <rect x="50" y="240" width="40" height="15" rx="5" fill="white" stroke-width="2" />
+                <line x1="70" y1="240" x2="70" y2="255" stroke-width="1" />
+                <rect x="250" y="240" width="40" height="15" rx="5" fill="white" stroke-width="2" />
+            </svg>
+        </main>
+
+        <footer class="mt-4 bg-food-green/10 p-3 rounded-2xl border-l-4 border-food-green">
+            <p class="text-xs text-gray-600 font-medium font-sans">
+                <strong class="text-food-green uppercase kawaii-text text-[10px]">Missão:</strong>
+                <br>Comida de verdade dá energia para brincar! O brócolis é forte. Pinte o cabelo dele de verde escuro.
+            </p>
+        </footer>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PÁGINA 43: O CHÁZINHO DA CALMA             -->
+    <!-- ========================================== -->
+    <div class="page">
+        <header class="border-b-4 border-food-purple pb-4 mb-4 flex justify-between items-start">
+            <div class="flex items-center gap-3">
+                <div class="bg-food-purple text-white p-2 rounded-2xl shadow-sm transform rotate-3">
+                    <i data-lucide="coffee" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="kawaii-text text-food-brown text-lg">Comidinhas Fofas</h1>
+                    <p class="text-[10px] font-bold text-food-purple uppercase tracking-widest font-sans">PsicoQuest • Módulo 04</p>
+                </div>
+            </div>
+            
+            <div class="text-right flex flex-col items-end">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="text-[10px] font-bold text-gray-400 uppercase font-sans">Fome de quê?</span>
+                    <div class="flex gap-2">
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,12 Q10,17 15,12" /></svg></div>
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,14 L15,14" /></svg></div>
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,16 Q10,11 15,16" /></svg></div>
+                        <div class="mood-circle"></div>
+                    </div>
+                </div>
+                <div class="w-32 border-b border-food-purple text-[10px] text-right text-gray-text font-sans">Data: ___/___</div>
+            </div>
+        </header>
+
+        <main class="flex-grow frame-border p-6 flex flex-col items-center justify-center">
+            <div class="absolute top-4 left-6 bg-food-purple px-4 py-1 rounded-full border-2 border-white shadow transform -rotate-2">
+                <h2 class="kawaii-text text-white text-sm">43. CHÁ DA CALMA</h2>
+            </div>
+            <div class="copyright-label">© PsicoQuest</div>
+
+            <svg viewBox="0 0 300 300" class="svg-draw">
+                <!-- Pires -->
+                <ellipse cx="150" cy="240" rx="90" ry="20" fill="white" stroke-width="3" />
+                
+                <!-- Xícara Gordinha -->
+                <path d="M80,120 L80,180 Q80,230 150,230 Q220,230 220,180 L220,120" fill="white" stroke-width="3" />
+                <ellipse cx="150" cy="120" rx="70" ry="20" fill="white" stroke-width="3" />
+                
+                <!-- Alça -->
+                <path d="M220,140 Q260,130 260,160 Q260,190 215,200" fill="white" stroke-width="3" />
+                
+                <!-- Saquinho de Chá -->
+                <path d="M120,120 L110,160" stroke-width="2" /> <!-- Cordão -->
+                <rect x="100" y="160" width="20" height="25" fill="white" stroke-width="2" /> <!-- Etiqueta -->
+                <path d="M105,170 L110,175 L115,170" stroke-width="1" fill="none" /> <!-- Coração na etiqueta -->
+                <path d="M105,170 Q110,165 115,170" stroke-width="1" fill="none" />
+                
+                <!-- Fumaça (Calma) -->
+                <path d="M120,80 Q130,60 120,40" fill="none" stroke-width="2" opacity="0.6" />
+                <path d="M150,90 Q160,70 150,50" fill="none" stroke-width="2" opacity="0.6" />
+                <path d="M180,80 Q190,60 180,40" fill="none" stroke-width="2" opacity="0.6" />
+                
+                <!-- Rosto Dormindo (Sleepy) -->
+                <path d="M120,180 Q130,190 140,180" fill="none" stroke-width="2" /> <!-- Olho U -->
+                <path d="M160,180 Q170,190 180,180" fill="none" stroke-width="2" /> <!-- Olho U -->
+                
+                <path d="M150,195 Q152,200 154,195" fill="none" stroke-width="1.5" /> <!-- Boca pequena -->
+                
+                <path d="M230,80 L240,70 L250,80 L250,90" fill="none" stroke-width="1.5" /> <!-- Zzz -->
+                <path d="M250,60 L260,50 L270,60" fill="none" stroke-width="1" /> <!-- Zzz menor -->
+            </svg>
+        </main>
+
+        <footer class="mt-4 bg-food-purple/10 p-3 rounded-2xl border-l-4 border-food-purple">
+            <p class="text-xs text-gray-600 font-medium font-sans">
+                <strong class="text-food-purple uppercase kawaii-text text-[10px]">Missão:</strong>
+                <br>Hora de desacelerar. O chá está quentinho. Imagine o cheirinho dele para relaxar antes de dormir.
+            </p>
+        </footer>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PÁGINA 44: O POTE DE BISCOITOS (EMOÇÕES)   -->
+    <!-- ========================================== -->
+    <div class="page">
+        <header class="border-b-4 border-food-yellow pb-4 mb-4 flex justify-between items-start">
+            <div class="flex items-center gap-3">
+                <div class="bg-food-yellow text-white p-2 rounded-2xl shadow-sm transform rotate-3">
+                    <i data-lucide="cookie" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="kawaii-text text-food-brown text-lg">Comidinhas Fofas</h1>
+                    <p class="text-[10px] font-bold text-food-yellow uppercase tracking-widest font-sans">PsicoQuest • Módulo 04</p>
+                </div>
+            </div>
+            
+            <div class="text-right flex flex-col items-end">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="text-[10px] font-bold text-gray-400 uppercase font-sans">Fome de quê?</span>
+                    <div class="flex gap-2">
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,12 Q10,17 15,12" /></svg></div>
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,14 L15,14" /></svg></div>
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,16 Q10,11 15,16" /></svg></div>
+                        <div class="mood-circle"></div>
+                    </div>
+                </div>
+                <div class="w-32 border-b border-food-yellow text-[10px] text-right text-gray-text font-sans">Data: ___/___</div>
+            </div>
+        </header>
+
+        <main class="flex-grow frame-border p-6 flex flex-col items-center justify-center">
+            <div class="absolute top-4 left-6 bg-food-yellow px-4 py-1 rounded-full border-2 border-white shadow transform -rotate-2">
+                <h2 class="kawaii-text text-white text-sm">44. POTE DE EMOÇÕES</h2>
+            </div>
+            <div class="copyright-label">© PsicoQuest</div>
+
+            <svg viewBox="0 0 300 300" class="svg-draw">
+                <!-- Pote de Vidro (Jar) -->
+                <path d="M80,80 L80,220 Q80,260 150,260 Q220,260 220,220 L220,80" fill="white" stroke-width="3" />
+                <!-- Tampa -->
+                <rect x="70" y="50" width="160" height="30" rx="5" fill="white" stroke-width="3" />
+                <rect x="90" y="40" width="120" height="10" rx="2" fill="white" stroke-width="3" />
+                
+                <!-- Biscoitos dentro do Pote -->
+                <!-- Biscoito Redondo (Comum) -->
+                <circle cx="150" cy="200" r="25" fill="white" stroke-width="2" />
+                <circle cx="145" cy="195" r="2" fill="#78350F" />
+                <circle cx="155" cy="205" r="2" fill="#78350F" />
+                <circle cx="160" cy="190" r="2" fill="#78350F" />
+                <path d="M140,205 Q150,215 160,205" fill="none" stroke-width="1" /> <!-- Sorriso -->
+                
+                <!-- Biscoito Estrela -->
+                <path d="M100,150 L110,140 L120,150 L130,140 L125,160 L135,170 L115,170 L110,185 L105,170 L85,170 L95,160 L90,140 Z" fill="white" stroke-width="2" transform="scale(0.8) translate(50, 50)" />
+                <circle cx="130" cy="160" r="20" fill="white" stroke-width="2" />
+                <path d="M125,155 L125,165 M135,155 L135,165" stroke-width="1.5" /> <!-- Olhos linha -->
+                
+                <!-- Biscoito Coração -->
+                <path d="M190,130 L190,130 L180,120 Q170,110 180,100 Q190,90 200,110 Q210,90 220,100 Q230,110 220,120 L200,140" fill="white" stroke-width="2" transform="translate(-10, 20)" />
+                
+                <!-- Biscoito Quadrado (Wafer) -->
+                <rect x="100" y="100" width="40" height="30" fill="white" stroke-width="2" />
+                <line x1="100" y1="110" x2="140" y2="110" stroke-width="1" />
+                <line x1="100" y1="120" x2="140" y2="120" stroke-width="1" />
+                
+                <!-- Reflexo no Vidro -->
+                <path d="M90,100 Q100,150 90,200" fill="none" stroke-width="1" opacity="0.5" />
+                <path d="M210,100 Q200,150 210,200" fill="none" stroke-width="1" opacity="0.5" />
+                
+                <!-- Etiqueta no Pote -->
+                <rect x="110" y="130" width="80" height="40" fill="white" stroke-width="2" transform="rotate(-5 150 150)" />
+                <text x="125" y="155" font-family="'Fredoka One', cursive" font-size="12" fill="#78350F" stroke="none" transform="rotate(-5 150 150)">Cookies</text>
+            </svg>
+        </main>
+
+        <footer class="mt-4 bg-food-yellow/10 p-3 rounded-2xl border-l-4 border-food-yellow">
+            <p class="text-xs text-gray-600 font-medium font-sans">
+                <strong class="text-food-yellow uppercase kawaii-text text-[10px]">Missão:</strong>
+                <br>Somos um pote cheio de coisas diferentes. Às vezes doce, às vezes crocante. Pinte seu biscoito favorito.
+            </p>
+        </footer>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PÁGINA 45: A HORTA MÁGICA (CRESCIMENTO)    -->
+    <!-- ========================================== -->
+    <div class="page">
+        <header class="border-b-4 border-food-orange pb-4 mb-4 flex justify-between items-start">
+            <div class="flex items-center gap-3">
+                <div class="bg-food-orange text-white p-2 rounded-2xl shadow-sm transform rotate-3">
+                    <i data-lucide="sprout" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="kawaii-text text-food-brown text-lg">Comidinhas Fofas</h1>
+                    <p class="text-[10px] font-bold text-food-orange uppercase tracking-widest font-sans">PsicoQuest • Módulo 04</p>
+                </div>
+            </div>
+            
+            <div class="text-right flex flex-col items-end">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="text-[10px] font-bold text-gray-400 uppercase font-sans">Fome de quê?</span>
+                    <div class="flex gap-2">
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,12 Q10,17 15,12" /></svg></div>
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,14 L15,14" /></svg></div>
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,16 Q10,11 15,16" /></svg></div>
+                        <div class="mood-circle"></div>
+                    </div>
+                </div>
+                <div class="w-32 border-b border-food-orange text-[10px] text-right text-gray-text font-sans">Data: ___/___</div>
+            </div>
+        </header>
+
+        <main class="flex-grow frame-border p-6 flex flex-col items-center justify-center">
+            <div class="absolute top-4 left-6 bg-food-orange px-4 py-1 rounded-full border-2 border-white shadow transform -rotate-2">
+                <h2 class="kawaii-text text-white text-sm">45. A HORTA MÁGICA</h2>
+            </div>
+            <div class="copyright-label">© PsicoQuest</div>
+
+            <svg viewBox="0 0 300 300" class="svg-draw">
+                <!-- Solo -->
+                <path d="M20,200 Q150,220 280,200" fill="none" stroke-width="3" />
+                <path d="M20,200 L20,300 L280,300 L280,200" fill="white" stroke-width="2" />
+                
+                <!-- Cenoura Enterrada -->
+                <path d="M70,200 L90,200 L80,260 Z" fill="white" stroke-width="2" stroke-dasharray="2 2" /> <!-- Parte enterrada -->
+                <!-- Folhas Cenoura -->
+                <path d="M80,200 L70,160 Q80,140 90,160 L80,200" fill="white" stroke-width="2" />
+                <path d="M80,200 L60,170 Q70,150 80,170" fill="white" stroke-width="2" />
+                <path d="M80,200 L100,170 Q90,150 80,170" fill="white" stroke-width="2" />
+
+                <!-- Rabanete Enterrado -->
+                <circle cx="220" cy="220" r="15" fill="white" stroke-width="2" stroke-dasharray="2 2" /> <!-- Parte enterrada -->
+                <!-- Folhas Rabanete -->
+                <path d="M220,205 L210,170 Q220,150 230,170 L220,205" fill="white" stroke-width="2" />
+                
+                <!-- Regador Kawaii -->
+                <path d="M120,80 L180,80 L190,150 L110,150 Z" fill="white" stroke-width="3" />
+                <path d="M190,100 L220,80" stroke-width="4" stroke-linecap="round" /> <!-- Bico -->
+                <path d="M220,80 L225,75 M220,80 L225,85" stroke-width="2" /> <!-- Bico ponta -->
+                
+                <path d="M115,100 Q90,90 90,115 Q90,140 112,130" fill="none" stroke-width="3" /> <!-- Alça -->
+                
+                <!-- Rosto no Regador -->
+                <circle cx="140" cy="120" r="2" fill="#78350F" stroke="none" />
+                <circle cx="160" cy="120" r="2" fill="#78350F" stroke="none" />
+                <path d="M145,125 Q150,130 155,125" stroke-width="1.5" fill="none" />
+
+                <!-- Gotas de Água caindo -->
+                <path d="M220,90 Q215,110 200,130" fill="none" stroke-width="1" stroke-dasharray="3" />
+                <path d="M225,90 Q235,110 240,130" fill="none" stroke-width="1" stroke-dasharray="3" />
+                <circle cx="200" cy="140" r="3" fill="none" stroke-width="1" />
+                <circle cx="240" cy="140" r="3" fill="none" stroke-width="1" />
+                
+                <!-- Sol Feliz no canto -->
+                <circle cx="250" cy="50" r="30" fill="white" stroke-width="3" />
+                <path d="M250,10 L250,20 M250,80 L250,90 M290,50 L280,50 M210,50 L220,50" stroke-width="2" />
+                <path d="M225,25 L230,30 M275,75 L270,70" stroke-width="2" />
+                <path d="M275,25 L270,30 M225,75 L230,70" stroke-width="2" />
+                <path d="M245,55 L255,55" stroke-width="2" /> <!-- Óculos de sol linha -->
+                <path d="M250,60 Q250,65 250,60" stroke-width="1" /> <!-- Sorriso -->
+            </svg>
+        </main>
+
+        <footer class="mt-4 bg-food-orange/10 p-3 rounded-2xl border-l-4 border-food-orange">
+            <p class="text-xs text-gray-600 font-medium font-sans">
+                <strong class="text-food-orange uppercase kawaii-text text-[10px]">Missão:</strong>
+                <br>Para a cenoura crescer, ela precisa de tempo e água. Nós também! Pinte o regador com sua cor favorita.
+            </p>
+        </footer>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PÁGINA 46: BENTO BOX (ORGANIZAÇÃO)         -->
+    <!-- ========================================== -->
+    <div class="page">
+        <header class="border-b-4 border-food-red pb-4 mb-4 flex justify-between items-start">
+            <div class="flex items-center gap-3">
+                <div class="bg-food-red text-white p-2 rounded-2xl shadow-sm transform rotate-3">
+                    <i data-lucide="box" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="kawaii-text text-food-brown text-lg">Comidinhas Fofas</h1>
+                    <p class="text-[10px] font-bold text-food-red uppercase tracking-widest font-sans">PsicoQuest • Módulo 04</p>
+                </div>
+            </div>
+            
+            <div class="text-right flex flex-col items-end">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="text-[10px] font-bold text-gray-400 uppercase font-sans">Fome de quê?</span>
+                    <div class="flex gap-2">
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,12 Q10,17 15,12" /></svg></div>
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,14 L15,14" /></svg></div>
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,16 Q10,11 15,16" /></svg></div>
+                        <div class="mood-circle"></div>
+                    </div>
+                </div>
+                <div class="w-32 border-b border-food-red text-[10px] text-right text-gray-text font-sans">Data: ___/___</div>
+            </div>
+        </header>
+
+        <main class="flex-grow frame-border p-6 flex flex-col items-center justify-center">
+            <div class="absolute top-4 left-6 bg-food-red px-4 py-1 rounded-full border-2 border-white shadow transform -rotate-2">
+                <h2 class="kawaii-text text-white text-sm">46. BENTO BOX (MARMITA)</h2>
+            </div>
+            <div class="copyright-label">© PsicoQuest</div>
+
+            <svg viewBox="0 0 300 300" class="svg-draw">
+                <!-- Caixa de Marmita (Bento) -->
+                <rect x="50" y="80" width="200" height="150" rx="20" fill="white" stroke-width="3" />
+                
+                <!-- Divisória Interna -->
+                <line x1="140" y1="80" x2="140" y2="230" stroke-width="2" />
+                
+                <!-- Lado Esquerdo (Arroz Onigiri) -->
+                <!-- Onigiri 1 -->
+                <path d="M70,160 L95,120 L120,160 Q95,170 70,160 Z" fill="white" stroke-width="2" />
+                <path d="M80,150 L110,150 L105,163 L85,163 Z" fill="#333" stroke="none" /> <!-- Nori (Alga) - Pinte de preto -->
+                <rect x="80" y="150" width="30" height="12" fill="white" stroke-width="1.5" /> <!-- Contorno do Nori -->
+                <!-- Rosto Onigiri -->
+                <circle cx="88" cy="140" r="2" fill="#78350F" stroke="none" />
+                <circle cx="102" cy="140" r="2" fill="#78350F" stroke="none" />
+                <path d="M92,142 Q95,145 98,142" stroke-width="1" fill="none" />
+
+                <!-- Onigiri 2 (Embaixo) -->
+                <path d="M70,200 L95,160 L120,200 Q95,210 70,200 Z" fill="white" stroke-width="2" />
+                <rect x="80" y="190" width="30" height="12" fill="white" stroke-width="1.5" /> <!-- Nori -->
+                
+                <!-- Lado Direito (Acompanhamentos) -->
+                <!-- Salsicha Polvo (Octopus Sausage) -->
+                <path d="M160,110 L160,140 Q160,150 150,150 M180,110 L180,140 Q180,150 190,150" stroke-width="2" fill="none" /> <!-- Tentáculos -->
+                <path d="M160,110 Q170,90 180,110 L180,140 L160,140 Z" fill="white" stroke-width="2" /> <!-- Cabeça -->
+                <circle cx="165" cy="120" r="1" fill="#78350F" stroke="none" />
+                <circle cx="175" cy="120" r="1" fill="#78350F" stroke="none" />
+                <path d="M168,125 Q170,128 172,125" stroke-width="1" fill="none" />
+
+                <!-- Tomatinho Cereja -->
+                <circle cx="210" cy="130" r="15" fill="white" stroke-width="2" />
+                <path d="M210,115 L205,110 M210,115 L215,110" stroke-width="1.5" /> <!-- Folhinha -->
+                
+                <!-- Ovos Cozidos (Metades) -->
+                <path d="M160,180 Q160,160 180,160 Q200,160 200,180 L160,180 Z" fill="white" stroke-width="2" />
+                <circle cx="180" cy="175" r="8" fill="white" stroke-width="1.5" /> <!-- Gema -->
+                
+                <!-- Brócolis pequeno -->
+                <path d="M200,200 Q190,190 200,180 Q210,180 220,190 Q230,200 220,210 Q210,220 200,200" fill="white" stroke-width="2" />
+                <rect x="205" y="210" width="10" height="10" fill="white" stroke-width="2" />
+                
+                <!-- Tampa da Marmita (Atrás/Levantada) -->
+                <path d="M60,70 L240,70 L230,50 L70,50 Z" fill="white" stroke-width="2" stroke-dasharray="4" />
+                
+                <!-- Hashi (Pauzinhos) -->
+                <path d="M260,100 L260,200" stroke-width="2" stroke-linecap="round" />
+                <path d="M270,100 L270,200" stroke-width="2" stroke-linecap="round" />
+                <rect x="255" y="110" width="20" height="10" fill="white" stroke-width="1.5" /> <!-- Pretor -->
+            </svg>
+        </main>
+
+        <footer class="mt-4 bg-food-red/10 p-3 rounded-2xl border-l-4 border-food-red">
+            <p class="text-xs text-gray-600 font-medium font-sans">
+                <strong class="text-food-red uppercase kawaii-text text-[10px]">Missão:</strong>
+                <br>Organizar a comida deixa tudo mais gostoso. Pinte o polvo de vermelho e o brócolis de verde.
+            </p>
+        </footer>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PÁGINA 47: MESTRE CUCA (TRANSFORMAÇÃO)     -->
+    <!-- ========================================== -->
+    <div class="page">
+        <header class="border-b-4 border-food-blue pb-4 mb-4 flex justify-between items-start">
+            <div class="flex items-center gap-3">
+                <div class="bg-food-blue text-white p-2 rounded-2xl shadow-sm transform rotate-3">
+                    <i data-lucide="chef-hat" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="kawaii-text text-food-brown text-lg">Comidinhas Fofas</h1>
+                    <p class="text-[10px] font-bold text-food-blue uppercase tracking-widest font-sans">PsicoQuest • Módulo 04</p>
+                </div>
+            </div>
+            
+            <div class="text-right flex flex-col items-end">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="text-[10px] font-bold text-gray-400 uppercase font-sans">Fome de quê?</span>
+                    <div class="flex gap-2">
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,12 Q10,17 15,12" /></svg></div>
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,14 L15,14" /></svg></div>
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,16 Q10,11 15,16" /></svg></div>
+                        <div class="mood-circle"></div>
+                    </div>
+                </div>
+                <div class="w-32 border-b border-food-blue text-[10px] text-right text-gray-text font-sans">Data: ___/___</div>
+            </div>
+        </header>
+
+        <main class="flex-grow frame-border p-6 flex flex-col items-center justify-center">
+            <div class="absolute top-4 left-6 bg-food-blue px-4 py-1 rounded-full border-2 border-white shadow transform -rotate-2">
+                <h2 class="kawaii-text text-white text-sm">47. MESTRE CUCA</h2>
+            </div>
+            <div class="copyright-label">© PsicoQuest</div>
+
+            <svg viewBox="0 0 300 300" class="svg-draw">
+                <!-- Tigela Grande (Bowl) -->
+                <path d="M50,180 L80,250 Q150,280 220,250 L250,180 Z" fill="white" stroke-width="3" />
+                <ellipse cx="150" cy="180" rx="100" ry="30" fill="white" stroke-width="3" />
+                <ellipse cx="150" cy="180" rx="90" ry="25" fill="none" stroke-width="1" stroke-dasharray="4" /> <!-- Borda interna -->
+                
+                <!-- Fue (Whisk) Batendo -->
+                <path d="M180,100 L160,160" stroke-width="3" stroke-linecap="round" /> <!-- Cabo -->
+                <path d="M160,160 Q140,180 150,200 Q160,210 170,200 Q180,180 160,160" fill="none" stroke-width="2" /> <!-- Aramado 1 -->
+                <path d="M160,160 Q150,190 160,210 Q170,190 160,160" fill="none" stroke-width="2" /> <!-- Aramado 2 -->
+                
+                <!-- Ingredientes Voando/Misturando -->
+                <circle cx="100" cy="150" r="10" fill="white" stroke-width="2" /> <!-- Ovo -->
+                <path d="M120,130 L130,120 L140,130 L130,140 Z" fill="white" stroke-width="2" /> <!-- Manteiga -->
+                <path d="M200,140 Q210,130 220,140" stroke-width="2" fill="none" /> <!-- Farinha -->
+                <circle cx="190" cy="160" r="3" fill="#78350F" stroke="none" /> <!-- Gotas chocolate -->
+                <circle cx="210" cy="170" r="3" fill="#78350F" stroke="none" />
+                
+                <!-- Chapéu de Chef flutuando -->
+                <path d="M80,80 Q70,50 100,40 Q120,20 150,30 Q180,20 200,40 Q230,50 220,80" fill="white" stroke-width="3" />
+                <path d="M80,80 L220,80 L220,100 L80,100 Z" fill="white" stroke-width="3" />
+                
+                <!-- Rosto na Tigela -->
+                <circle cx="120" cy="220" r="3" fill="#78350F" stroke="none" />
+                <circle cx="180" cy="220" r="3" fill="#78350F" stroke="none" />
+                <path d="M140,230 Q150,240 160,230" fill="none" stroke-width="2" />
+                <circle cx="110" cy="230" r="5" fill="none" stroke="#F472B6" stroke-width="1" />
+                <circle cx="190" cy="230" r="5" fill="none" stroke="#F472B6" stroke-width="1" />
+                
+                <!-- Movimento (Speed lines) -->
+                <path d="M180,120 Q200,110 210,120" stroke-width="1" fill="none" />
+                <path d="M175,130 Q190,125 200,130" stroke-width="1" fill="none" />
+            </svg>
+        </main>
+
+        <footer class="mt-4 bg-food-blue/10 p-3 rounded-2xl border-l-4 border-food-blue">
+            <p class="text-xs text-gray-600 font-medium font-sans">
+                <strong class="text-food-blue uppercase kawaii-text text-[10px]">Missão:</strong>
+                <br>Cozinhar é misturar coisas diferentes para criar algo novo. Pinte a tigela com sua cor favorita.
+            </p>
+        </footer>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PÁGINA 48: O PIQUENIQUE (CELEBRAÇÃO)       -->
+    <!-- ========================================== -->
+    <div class="page">
+        <header class="border-b-4 border-food-green pb-4 mb-4 flex justify-between items-start">
+            <div class="flex items-center gap-3">
+                <div class="bg-food-green text-white p-2 rounded-2xl shadow-sm transform rotate-3">
+                    <i data-lucide="sun" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="kawaii-text text-food-brown text-lg">Comidinhas Fofas</h1>
+                    <p class="text-[10px] font-bold text-food-green uppercase tracking-widest font-sans">PsicoQuest • Módulo 04</p>
+                </div>
+            </div>
+            
+            <div class="text-right flex flex-col items-end">
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="text-[10px] font-bold text-gray-400 uppercase font-sans">Fome de quê?</span>
+                    <div class="flex gap-2">
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,12 Q10,17 15,12" /></svg></div>
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,14 L15,14" /></svg></div>
+                        <div class="mood-circle"><svg width="16" height="16" viewBox="0 0 20 20"><path class="mood-face" d="M5,8 L5,8 M15,8 L15,8 M5,16 Q10,11 15,16" /></svg></div>
+                        <div class="mood-circle"></div>
+                    </div>
+                </div>
+                <div class="w-32 border-b border-food-green text-[10px] text-right text-gray-text font-sans">Data: ___/___</div>
+            </div>
+        </header>
+
+        <main class="flex-grow frame-border p-6 flex flex-col items-center justify-center">
+            <div class="absolute top-4 left-6 bg-food-green px-4 py-1 rounded-full border-2 border-white shadow transform -rotate-2">
+                <h2 class="kawaii-text text-white text-sm">48. O PIQUENIQUE</h2>
+            </div>
+            <div class="copyright-label">© PsicoQuest</div>
+
+            <svg viewBox="0 0 300 300" class="svg-draw">
+                <!-- Toalha Xadrez (Base) -->
+                <path d="M30,200 L150,280 L270,200 L150,120 Z" fill="white" stroke-width="3" />
+                <line x1="90" y1="160" x2="210" y2="240" stroke-width="1" /> <!-- Linhas xadrez -->
+                <line x1="60" y1="180" x2="180" y2="260" stroke-width="1" />
+                <line x1="90" y1="240" x2="210" y2="160" stroke-width="1" />
+                <line x1="60" y1="220" x2="180" y2="140" stroke-width="1" />
+                
+                <!-- Cesta de Vime -->
+                <rect x="100" y="80" width="100" height="80" rx="10" fill="white" stroke-width="3" />
+                <path d="M100,100 L200,100 M100,120 L200,120 M100,140 L200,140" stroke-width="1.5" /> <!-- Textura vime -->
+                <path d="M120,160 L120,80 M140,160 L140,80 M160,160 L160,80 M180,160 L180,80" stroke-width="1.5" />
+                
+                <!-- Alça da Cesta -->
+                <path d="M100,90 Q150,20 200,90" fill="none" stroke-width="4" />
+                
+                <!-- Comidas em cima da toalha -->
+                <!-- Maçã -->
+                <circle cx="80" cy="200" r="15" fill="white" stroke-width="2" />
+                <path d="M80,185 L80,175" stroke-width="1" />
+                
+                <!-- Sanduíche Triângulo -->
+                <path d="M220,200 L250,220 L220,240 Z" fill="white" stroke-width="2" />
+                
+                <!-- Suquinho de caixinha -->
+                <rect x="190" y="230" width="20" height="30" fill="white" stroke-width="2" />
+                <line x1="200" y1="230" x2="205" y2="220" stroke-width="1" /> <!-- Canudo -->
+                
+                <!-- Formiguinha convidada (Kawaii) -->
+                <circle cx="50" cy="250" r="5" fill="#78350F" stroke="none" />
+                <circle cx="60" cy="250" r="4" fill="#78350F" stroke="none" />
+                <path d="M45,245 L40,240 M55,245 L60,240" stroke-width="1" /> <!-- Antenas -->
+                
+                <!-- Sol e Nuvens -->
+                <path d="M250,50 Q270,30 290,50 Q300,50 300,70 Q280,90 260,70" fill="white" stroke-width="2" />
+                <circle cx="50" cy="50" r="20" fill="white" stroke-width="2" />
+                <path d="M50,20 L50,10 M20,50 L10,50 M80,50 L90,50" stroke-width="2" /> <!-- Raios -->
+                
+                <!-- Texto Final -->
+                <text x="150" y="290" font-family="'Fredoka One', cursive" font-size="12" fill="#78350F" stroke="none" text-anchor="middle">FIM!</text>
+            </svg>
+        </main>
+
+        <footer class="mt-4 bg-food-green/10 p-3 rounded-2xl border-l-4 border-food-green">
+            <p class="text-xs text-gray-600 font-medium font-sans">
+                <strong class="text-food-green uppercase kawaii-text text-[10px]">Missão:</strong>
+                <br>Comer com quem a gente ama é uma festa. Parabéns por completar o PsicoQuest!
+            </p>
+        </footer>
+    </div>
+
+</body>
+</html>

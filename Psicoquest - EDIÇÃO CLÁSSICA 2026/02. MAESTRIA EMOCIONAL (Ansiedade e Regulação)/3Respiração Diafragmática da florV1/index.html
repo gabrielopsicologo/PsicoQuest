@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Respira & Reseta: Flor e Vela Visual</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Paleta de Cores para o tema Flor e Vela */
+            --bg-neutral: #1A232E; /* Fundo neutro e escuro (Noite calma) */
+            --bg-card: #263238;    /* Fundo do card, um pouco mais claro */
+            --primary-text: #ECEFF1; /* Texto principal claro */
+
+            --color-flower-start: #66BB6A; /* Verde suave para flor (base do círculo) */
+            --color-flower-end: #388E3C;   /* Verde mais profundo */
+            
+            --color-hold: #FFD54F;        /* Amarelo para segurar (base do círculo) */
+
+            --color-candle-start: #FF7043; /* Laranja para a chama (base do círculo) */
+            --color-candle-end: #E64A19;   /* Vermelho mais intenso */
+            
+            --border-color: #455A64; /* Borda sutil */
+            
+            --inhale-time: 4s;
+            --hold-time: 4s;
+            --exhale-time: 6s;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-neutral);
+            color: var(--primary-text);
+            margin: 0;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-y: auto;
+            transition: background-color 2s ease-in-out;  
+        }
+
+        .container {
+            background-color: var(--bg-card);
+            border-radius: 20px;
+            padding: 30px;
+            /* --- MUDANÇA (Layout Horizontal) --- */
+            max-width: 1000px; /* Aumentado para comportar as colunas */
+            width: 100%;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+            transition: background-color 1s ease-in-out, box-shadow 0.5s ease-out;
+        }
+        
+        header h1 {
+            font-size: 2.4em;
+            font-weight: 700;
+            margin: 0 0 8px 0;
+            background: linear-gradient(90deg, var(--color-flower-start), var(--color-candle-start));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        header p {
+            font-size: 1.1em;
+            margin-top: 5px;
+            opacity: 0.9;
+            margin-bottom: 35px;
+        }
+
+        /* --- MUDANÇA (Layout Horizontal) --- */
+        /* 'main' agora é um container flexível para as colunas */
+        main {
+            display: flex;
+            flex-wrap: wrap; /* Permite empilhar em telas pequenas */
+            gap: 30px;
+            justify-content: center;
+            align-items: flex-start; /* Alinha as colunas no topo */
+        }
+        
+        /* Coluna da Esquerda (Visual) */
+        .breathing-guide {
+            flex: 1; /* Ocupa metade do espaço */
+            min-width: 300px; /* Largura mínima */
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Centraliza o círculo e texto */
+        }
+        
+        /* Coluna da Direita (Textos) */
+        .text-content-wrapper {
+            flex: 1; /* Ocupa a outra metade */
+            min-width: 320px; /* Largura mínima */
+            display: flex;
+            flex-direction: column;
+            gap: 25px; /* Espaço entre 'tips' e 'why' */
+        }
+        /* --- FIM DA MUDANÇA --- */
+
+
+        .breathing-visuals {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px; 
+        }
+
+        .animation-container {
+            position: relative;
+            width: 280px;
+            height: 280px;
+            margin: 0;
+            overflow: hidden;  
+            border-radius: 50%;
+        }
+
+        .circle-bg {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--bg-card) 50%, transparent 70%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.4) inset;
+        }
+        
+        .breathing-shape {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;  
+            background: var(--bg-card);  
+            box-shadow: 0 0 30px rgba(0,0,0,0.5), inset 0 0 12px rgba(255,255,255,0.2);
+            animation: breathe-animation calc(var(--inhale-time) + var(--hold-time) + var(--exhale-time)) infinite ease-in-out;
+            transition: box-shadow 0.7s ease-in-out;  
+            z-index: 2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @keyframes breathe-animation {
+            0% { transform: scale(0.65); opacity: 0.7; }  
+            30% { transform: scale(0.95); opacity: 1; }  
+            70% { transform: scale(0.95); opacity: 1; }  
+            100% { transform: scale(0.65); opacity: 0.7; }  
+        }
+
+        .breathing-shape img {
+            position: absolute;
+            max-width: 80%;
+            max-height: 80%;
+            object-fit: contain;  
+            opacity: 0;  
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+            transform: scale(0.8);
+            z-index: 3; 
+        }
+
+        .breathing-shape img.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .instruction-text {
+            color: var(--primary-text);  
+            font-size: 1.8em; 
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            white-space: nowrap;
+            transition: color 0.4s ease-out;
+            margin-top: 15px; 
+            margin-bottom: 25px; 
+            text-align: center;
+        }
+
+        /* Seções de dicas */
+        .tips-section {
+            /* --- MUDANÇA (Layout Horizontal) --- */
+            margin-top: 0; /* Removido para layout horizontal */
+            padding-top: 0; /* Removido para layout horizontal */
+            border-top: none; /* Removido para layout horizontal */
+            /* --- FIM DA MUDANÇA --- */
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: 1fr;  
+            gap: 20px;
+            text-align: left;
+        }
+
+        .tip-card {
+            background-color: var(--bg-neutral);
+            padding: 18px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .tip-card h3 {
+            margin: 0 0 8px 0;
+            color: var(--color-flower-start);  
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+        }
+        
+        .tip-card h3 .icon {
+            font-size: 1.3em;
+            margin-right: 10px;
+            color: var(--color-hold);  
+        }
+        
+        .tip-card p {
+            margin: 0;
+            font-size: 0.9em;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+        
+        .why-section {
+            /* --- MUDANÇA (Layout Horizontal) --- */
+            margin-top: 0; /* Removido para layout horizontal */
+            /* --- FIM DA MUDANÇA --- */
+            background-color: var(--bg-neutral);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .why-section h2 {
+            font-size: 1.3em;
+            margin: 0 0 15px 0;
+            color: var(--color-hold);
+        }
+        
+        .why-section ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            font-size: 0.9em;
+            opacity: 0.9;
+            text-align: left;
+        }
+        
+        .why-section li {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+        }
+        .why-section li::before {
+            content: '✓';  
+            color: var(--color-flower-start);
+            margin-right: 8px;
+            font-weight: bold;
+        }
+
+        /* Botões flutuantes (mantidos) */
+        .logo-psicologo {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            z-index: 50;
+            transition: transform 0.3s ease;
+        }
+        .logo-psicologo:hover {
+            transform: scale(1.1);
+        }
+        .logo-psicologo img {
+            height: 90px;  
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.4));
+        }
+
+        .whatsapp-button {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background-color: #128C7E;
+            color: white;
+            width: 50px;  
+            height: 50px;  
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 14px 0 rgba(0,0,0,0.25);
+            transition: background-color 0.3s ease;
+            z-index: 50;
+        }
+        .whatsapp-button:hover {
+            background-color: #075E54;
+        }
+        .whatsapp-button svg {
+            width: 22px;  
+            height: 22px;  
+        }
+        
+        #vertical-credits {
+            position: fixed;
+            bottom: 110px;  
+            right: 15px;  
+            writing-mode: vertical-rl;  
+            z-index: 50;  
+            color: rgba(255, 255, 255, 0.6);  
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.7);  
+            font-size: 0.7rem;
+            pointer-events: none;
+            white-space: nowrap;  
+        }
+        #vertical-credits a {
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.8);
+            transition: color 0.2s ease;
+            pointer-events: all;
+        }
+        #vertical-credits a:hover {
+            color: white;
+        }
+
+        #crp-vertical {
+            position: fixed;
+            bottom: 350px;  
+            right: 15px;  
+            writing-mode: vertical-rl;
+            z-index: 50;  
+            color: rgba(255, 255, 255, 0.6);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+            font-size: 0.7rem;
+            pointer-events: none;
+            white-space: nowrap;  
+        }
+
+        /* --- MUDANÇA (Layout Horizontal) --- */
+        /* Novo Media Query para empilhar as colunas em telas médias/pequenas */
+        @media (max-width: 800px) {
+            main {
+                flex-direction: column;
+                align-items: center; /* Centraliza as colunas empilhadas */
+            }
+            .breathing-guide, .text-content-wrapper {
+                width: 100%;
+                max-width: 500px; /* Limita a largura no modo empilhado (similar ao container original) */
+            }
+            /* Devolve as margens/bordas removidas */
+             .tips-section {
+                margin-top: 40px;
+                padding-top: 30px;
+                border-top: 1px solid var(--border-color);
+            }
+            .why-section {
+                 margin-top: 35px;
+            }
+        }
+        /* --- FIM DA MUDANÇA --- */
+
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            #vertical-credits, #crp-vertical {
+                display: none;
+            }
+            .logo-psicologo img {
+                height: 70px;  
+            }
+        }
+
+        @media (max-width: 550px) {
+            .container {
+                padding: 25px;
+            }
+            header h1 {
+                font-size: 2em;
+            }
+            .animation-container {
+                width: 220px;
+                height: 220px;
+            }
+            
+            /* Ajustes de margem/padding para telas bem pequenas */
+            .tips-section {
+                margin-top: 30px;
+                padding-top: 20px;
+            }
+            .why-section {
+                margin-top: 25px;
+            }
+        }
+    </style>
+<script src="seguranca.js" defer></script>
+</head>
+<body>
+    
+    <a href="https://www.instagram.com/gabrielopsicologo" target="_blank" class="logo-psicologo">
+        <img src="https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/Logo_branca.png" alt="Logo Gabriel Psicólogo">
+    </a>
+
+    <a href="https://wa.me/message/WV34TWMSKTEEL1" target="_blank" title="Precisa de Ajuda?" class="whatsapp-button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        </svg>
+    </a>
+    
+    <div id="vertical-credits">
+        Recurso terapêutico por 
+        <a href="https://www.instagram.com/gabrielopsicologo" target="_blank">
+            @gabrielopsicologo
+        </a>
+    </div>
+    <div id="crp-vertical">
+        CRP 06/215890
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>O Poder da Calma: Flor e Vela</h1>
+            <p>Respire para florescer a serenidade e apagar a agitação da mente.</p>
+        </header>
+
+        <main>
+            <section class="breathing-guide">
+                <div class="breathing-visuals">
+                    <div class="animation-container">
+                        <div class="circle-bg">
+                            <div class="breathing-shape" id="breathingShape">
+                                
+                                <img id="flowerImage" src="https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/Flor.png" alt="Flor Delicada" class="breathing-asset">
+                                
+                                <img id="candleImage" src="https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/Vela.png" alt="Vela Acesa" class="breathing-asset">
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="instruction-text" id="instruction">Preparar...</div>
+            </section>
+
+            <div class="text-content-wrapper">
+                <section class="tips-section">
+                    <div class="tips-grid">
+                        <div class="tip-card">
+                            <h3><span class="icon">🌸</span> Cheire a Flor</h3>
+                            <p>Inspire profundamente pelo nariz, lenta e suavemente. Imagine o perfume da flor enchendo sua barriga de calma.</p>
+                        </div>
+                        <div class="tip-card">
+                            <h3><span class="icon">🧘‍♀️</span> Segure o Perfume</h3>
+                            <p>Mantenha o ar por um breve momento. Sinta a plenitude sem tensão, apenas a pausa da serenidade.</p>
+                        </div>
+                        <div class="tip-card">
+                            <h3><span class="icon">🕯️</span> Assopre a Vela</h3>
+                            <p>Solte o ar lentamente pela boca, como se assoprasse uma velinha longe. Deixe a tensão se esvair, suavemente.</p>
+                        </div>
+                    </div>
+                </section>
+                
+                <section class="why-section">
+                    <h2>Por que isso funciona? (Foco e Atenção Plena)</h2>
+                    <ul>
+                        <li>Ancoragem: A metáfora visual e as instruções claras ajudam a manter sua atenção no presente.</li>
+                        <li>Regulação Emocional: A respiração profunda e controlada ativa o sistema parassimpático, acalmando o corpo e a mente.</li>
+                        <li>Conexão Corpo-Mente: Permite que você sinta e entenda como a respiração influencia diretamente seu estado interno.</li>
+                        <li>Habilidade Prática: Transforma uma técnica em uma ferramenta lúdica e acessível para o autocuidado diário.</li>
+                    </ul>
+                </section>
+            </div>
+        </main>
+        </div>
+
+    <script>
+        const instruction = document.getElementById('instruction');
+        const breathingShape = document.getElementById('breathingShape');
+        const flowerImage = document.getElementById('flowerImage');
+        const candleImage = document.getElementById('candleImage');
+        
+        const INHALE_TIME = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--inhale-time')) * 1000;
+        const HOLD_TIME = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--hold-time')) * 1000;
+        const EXHALE_TIME = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--exhale-time')) * 1000;
+        const TOTAL_TIME = INHALE_TIME + HOLD_TIME + EXHALE_TIME;
+        
+        const BG_NEUTRAL = 'var(--bg-neutral)';
+        const BG_FLOWER_SCENE = '#33691E';  
+        const BG_HOLD_SCENE = '#FFC107';    
+        const BG_CANDLE_SCENE = '#D32F2F';  
+        
+        const COLOR_FLOWER_TEXT = 'var(--color-flower-start)';
+        const COLOR_HOLD_TEXT = 'var(--color-hold)';
+        const COLOR_CANDLE_TEXT = 'var(--color-candle-start)';
+
+        function updateInstruction(text, color) {
+            instruction.textContent = text;
+            instruction.style.color = color; // O texto agora também muda de cor
+        }
+
+        function setBodyBackground(color) {
+            document.body.style.backgroundColor = color;
+        }
+
+        function showAsset(asset) {
+            flowerImage.classList.remove('active');
+            candleImage.classList.remove('active');
+            asset.classList.add('active');
+        }
+
+        function breathingCycle() {
+            // --- FASE 1: INSPIRAÇÃO (Cheirar a Flor) ---
+            updateInstruction('CHEIRE A FLOR', COLOR_FLOWER_TEXT);
+            breathingShape.style.boxShadow = `0 0 30px var(--color-flower-start), inset 0 0 12px rgba(255,255,255,0.5)`;
+            showAsset(flowerImage);  
+            setBodyBackground(BG_FLOWER_SCENE);  
+
+            // --- FASE 2: SEGURAR (Segurar o Perfume) ---
+            setTimeout(() => {
+                updateInstruction('SEGURE O PERFUME', COLOR_HOLD_TEXT);
+                breathingShape.style.boxShadow = `0 0 30px var(--color-hold), inset 0 0 12px rgba(255,255,255,0.5)`;
+                showAsset(flowerImage);  
+                setBodyBackground(BG_HOLD_SCENE);  
+            }, INHALE_TIME);
+
+            // --- FASE 3: EXPIRAÇÃO (Assoprar a Vela) ---
+            setTimeout(() => {
+                updateInstruction('ASSOPRE A VELA', COLOR_CANDLE_TEXT);
+                breathingShape.style.boxShadow = `0 0 30px var(--color-candle-start), inset 0 0 12px #FFEB3B`;
+                showAsset(candleImage);  
+                setBodyBackground(BG_CANDLE_SCENE);  
+            }, INHALE_TIME + HOLD_TIME);
+
+            // Reinicia o fundo padrão e esconde as imagens (Preparar para o próximo ciclo)
+            setTimeout(() => {
+                setBodyBackground(BG_NEUTRAL);  
+                flowerImage.classList.remove('active');
+                candleImage.classList.remove('active');
+            }, TOTAL_TIME - 500);  
+        }
+
+        // Inicia e repete o ciclo
+        breathingCycle();
+        setInterval(breathingCycle, TOTAL_TIME);
+    </script>
+    
+    <script>
+        // Funções para desabilitar o clique direito e DevTools (Mantidas)
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.onkeydown = function(e) {
+            if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) || (e.ctrlKey && (e.key === 'u' || e.key === 'U'))) {
+                return false;
+            }
+        };
+
+        // --- MUDANÇA (Preload) ---
+        // Preload images (com as novas URLs)
+        (function() {
+            const logo = new Image();
+            logo.src = 'https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/Logo_branca.png';
+            
+            const flower = new Image();
+            flower.src = 'https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/Flor.png?'; // <-- ATUALIZADO
+            
+            const candle = new Image();
+            candle.src = 'https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/Vela.png'; // <-- ATUALIZADO
+        })();
+        // --- FIM DA MUDANÇA ---
+    </script>
+
+</body>
+</html>

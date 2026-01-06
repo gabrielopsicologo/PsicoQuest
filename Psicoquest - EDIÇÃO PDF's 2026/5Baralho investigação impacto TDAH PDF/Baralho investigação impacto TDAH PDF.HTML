@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>PsicoQuest - Versão para Impressão</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #F8716B;
+            --text-main: #333;
+            --text-light: #666;
+            --border-cut: #e0e0e0; /* Cor suave para linhas de corte */
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #ccc; /* Fundo cinza apenas na tela para destacar a folha */
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        /* Configuração da Folha A4 */
+        .page {
+            background: white;
+            width: 210mm;
+            min-height: 297mm;
+            padding: 10mm;
+            margin: 20px auto;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- CAPA E MANUAL (Primeira Página) --- */
+        .cover-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            border: 2px solid var(--primary-color);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 20px;
+        }
+
+        .cover-logo { height: 60px; margin-bottom: 20px; }
+        .cover-title { font-size: 2.5rem; color: var(--primary-color); text-transform: uppercase; margin-bottom: 10px; }
+        .cover-subtitle { font-size: 1.2rem; color: var(--text-light); margin-bottom: 40px; }
+        
+        .manual-box {
+            background: #fff5f5;
+            padding: 30px;
+            border-radius: 15px;
+            border-left: 5px solid var(--primary-color);
+            text-align: left;
+            width: 100%;
+            margin-bottom: 40px;
+        }
+        
+        .manual-box h3 { color: var(--primary-color); margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .manual-box p, .manual-box li { font-size: 0.95rem; line-height: 1.6; color: #444; margin-bottom: 10px; }
+
+        .cover-footer {
+            font-size: 0.9rem;
+            color: #888;
+            margin-top: auto;
+        }
+
+        /* --- GRID DE CARTAS --- */
+        /* Layout: 2 colunas x 4 linhas = 8 cartas por página (Tamanho bom para leitura) */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr; 
+            grid-template-rows: repeat(4, 1fr);
+            gap: 0; /* Sem espaço entre elas para facilitar o corte */
+            border: 1px dashed var(--border-cut); /* Borda externa do grid */
+            height: 270mm; /* Ocupa quase toda a altura A4 */
+        }
+
+        /* Design da Carta Individual */
+        .card-item {
+            border: 1px dashed var(--border-cut); /* Linhas de corte */
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            background: white;
+            page-break-inside: avoid;
+        }
+
+        /* Área Segura (Margem interna da carta para não cortar texto) */
+        .card-safe-area {
+            border: 1px solid #f0f0f0;
+            border-radius: 12px;
+            height: 100%;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            background: #fff;
+        }
+
+        .card-header {
+            width: 100%;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .card-icon {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        .card-category {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: var(--primary-color);
+            letter-spacing: 1px;
+        }
+
+        .card-question {
+            font-size: 1rem;
+            font-weight: 500;
+            line-height: 1.4;
+            color: var(--text-main);
+            flex: 1; /* Ocupa o espaço central */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-footer {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .scale-box {
+            background: #fdfbf7;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 8px;
+            font-size: 0.65rem;
+            color: var(--text-light);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .copyright {
+            font-size: 0.5rem;
+            color: #aaa;
+            text-align: center;
+            width: 100%;
+        }
+
+        /* --- BOTÃO DE IMPRESSÃO (Escondido na impressão) --- */
+        .print-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--primary-color);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            cursor: pointer;
+            z-index: 999;
+            border: none;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: transform 0.2s;
+        }
+        .print-btn:hover { transform: scale(1.05); background: #e05a54; }
+
+        /* --- MODO IMPRESSÃO --- */
+        @media print {
+            body { background: white; }
+            .page { margin: 0; box-shadow: none; width: 100%; height: 100%; page-break-after: always; }
+            .print-btn { display: none; }
+            /* Garante que a última página não gere uma folha em branco extra se não precisar */
+            .page:last-child { page-break-after: auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <button class="print-btn" onclick="window.print()">
+        <i class="fas fa-print"></i> IMPRIMIR / SALVAR PDF
+    </button>
+
+    <div class="page">
+        <div class="cover-content">
+            <img src="https://gabrielopsicologo.com/wp-content/uploads/2025/12/Design-sem-nome.png" alt="Logo" class="cover-logo">
+            <h1 class="cover-title">PsicoQuest</h1>
+            <p class="cover-subtitle">Baralho de Investigação do Impacto do TDAH Adulto</p>
+
+            <div class="manual-box">
+                <h3><i class="fas fa-book-open"></i> Manual do Terapeuta</h3>
+                <p><strong>Objetivo:</strong> Explorar pensamentos automáticos e impactos funcionais comuns em adultos com TDAH. As cartas buscam avaliar prejuízos e promover a reformulação cognitiva para respostas mais adaptativas.</p>
+                <p><strong>Modo de Uso Sugerido:</strong></p>
+                <ul>
+                    <li>1. Imprima e recorte as cartas nas linhas pontilhadas.</li>
+                    <li>2. Em sessão, peça para o paciente sortear uma carta ou escolha uma categoria específica.</li>
+                    <li>3. Leia a pergunta e utilize a "Escala de Impacto" (0-10) para mensurar a dificuldade.</li>
+                    <li>4. Utilize a resposta como ponto de partida para a reestruturação cognitiva ou resolução de problemas.</li>
+                </ul>
+            </div>
+
+            <div class="cover-footer">
+                <p>Recurso Terapêutico Digital e Impresso</p>
+                <p>Desenvolvido por <strong>@gabrielopsicologo</strong> | CRP 06/215890</p>
+                <p>https://www.instagram.com/gabrielopsicologo/</p>
+                <p>© 2025 Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="cards-container"></div>
+
+    <script>
+        // Dados do Baralho (Mesmos dados da versão digital)
+        const deckData = [
+            { id: 'relacoes', title: 'Relações Afetivas', icon: 'fa-heart', questions: ["O TDAH afeta sua capacidade de prestar atenção às necessidades do seu parceiro?", "Você tem dificuldades para lembrar datas especiais ou compromissos com seu parceiro?", "Sente que a impulsividade interfere em seu relacionamento de alguma forma?"] },
+            { id: 'financas', title: 'Finanças e Compras', icon: 'fa-wallet', questions: ["Você tem dificuldades em controlar seus gastos por impulsividade?", "O TDAH afeta sua capacidade de gerenciar suas finanças?", "Você faz compras impulsivas frequentemente?", "Como os sintomas de TDAH afetam seus hábitos de consumo?"] },
+            { id: 'comunicacao', title: 'Comunicação', icon: 'fa-comments', questions: ["O TDAH interfere em sua habilidade de manter conversas produtivas?", "Você costuma interromper as pessoas durante as conversas?"] },
+            { id: 'projetos', title: 'Projetos Pessoais', icon: 'fa-lightbulb', questions: ["Quais projetos pessoais você deixou inacabados devido ao TDAH?", "Como a desatenção afeta suas metas pessoais?"] },
+            { id: 'trabalho', title: 'Trabalho e Estudos', icon: 'fa-briefcase', questions: ["Em que aspectos do seu trabalho ou estudos o TDAH se manifesta mais?", "Você costuma perder prazos devido à falta de organização?", "Como o TDAH influencia seu desempenho no trabalho ou nos estudos?"] },
+            { id: 'transito', title: 'Trânsito e Segurança', icon: 'fa-car', questions: ["Você se distrai facilmente ao dirigir?", "Já teve problemas devido à impulsividade no trânsito?"] },
+            { id: 'lazer', title: 'Tempo Livre e Hobbies', icon: 'fa-gamepad', questions: ["Você se sente desmotivado em relação a atividades de lazer e hobbies?", "O TDAH impacta seu aproveitamento do tempo livre?"] },
+            { id: 'procrastinacao', title: 'Procrastinação', icon: 'fa-clock', questions: ["Quais tarefas ou atividades você tende a adiar devido à procrastinação?", "A procrastinação causa frustração em sua vida?"] },
+            { id: 'saude', title: 'Saúde e Autocuidado', icon: 'fa-heart-pulse', questions: ["Você tem dificuldade em manter uma rotina de autocuidado (exercícios, sono, dieta)?", "O TDAH influencia negativamente seus hábitos de saúde?"] },
+            { id: 'organizacao', title: 'Organização Doméstica', icon: 'fa-house', questions: ["Como o TDAH afeta a organização da sua casa?", "Você luta para manter as tarefas domésticas em dia?"] },
+            { id: 'autoestima', title: 'Autoestima', icon: 'fa-face-smile', questions: ["Como o TDAH influencia sua autoestima e autoimagem?", "Você experimenta estresse ou ansiedade devido aos sintomas do TDAH?"] },
+            { id: 'objetivos', title: 'Objetivos de Vida', icon: 'fa-flag', questions: ["Como o TDAH impacta seus objetivos de longo prazo?", "Você sente que precisa de suporte para alcançar seus objetivos?"] }
+        ];
+
+        // Configuração
+        const CARDS_PER_PAGE = 8; // 2x4 Grid
+
+        function generatePrintLayout() {
+            // 1. Achatar todas as perguntas em um único array de objetos "Card"
+            let allCards = [];
+            deckData.forEach(cat => {
+                cat.questions.forEach(q => {
+                    allCards.push({
+                        category: cat.title,
+                        icon: cat.icon,
+                        text: q
+                    });
+                });
+            });
+
+            const container = document.getElementById('cards-container');
+            let currentPage = null;
+            let currentGrid = null;
+
+            // 2. Criar páginas dinamicamente
+            allCards.forEach((card, index) => {
+                // Se for o início ou múltiplo de CARDS_PER_PAGE, cria nova página
+                if (index % CARDS_PER_PAGE === 0) {
+                    currentPage = document.createElement('div');
+                    currentPage.className = 'page';
+                    
+                    currentGrid = document.createElement('div');
+                    currentGrid.className = 'cards-grid';
+                    
+                    currentPage.appendChild(currentGrid);
+                    container.appendChild(currentPage);
+                }
+
+                // Cria o HTML da carta
+                const cardHTML = document.createElement('div');
+                cardHTML.className = 'card-item';
+                cardHTML.innerHTML = `
+                    <div class="card-safe-area">
+                        <div class="card-header">
+                            <i class="fas ${card.icon} card-icon"></i>
+                            <span class="card-category">${card.category}</span>
+                        </div>
+                        <div class="card-question">
+                            ${card.text}
+                        </div>
+                        <div class="card-footer">
+                            <div class="scale-box">
+                                ESCALA DE IMPACTO: 0 a 10
+                            </div>
+                            <div class="copyright">
+                                © Gabriel Psicólogo | CRP 06/215890
+                            </div>
+                        </div>
+                    </div>
+                `;
+                currentGrid.appendChild(cardHTML);
+            });
+        }
+
+        // Executar
+        generatePrintLayout();
+    </script>
+</body>
+</html>

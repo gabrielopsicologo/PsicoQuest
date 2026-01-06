@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O Próximo Rei dos Piratas - One Piece</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Rye&display=swap'); /* Fonte estilo Pirata */
+        
+        body {
+            font-family: 'Poppins', sans-serif; 
+            /* Fundo com a imagem do seu código anterior */
+            background-image: url('https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/Background_OP.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-color: #0b1a2b;
+        }
+
+        .pirate-font {
+            font-family: 'Rye', serif;
+        }
+
+        /* Animações Suaves */
+        .transition-content {
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+        .fade-out {
+            opacity: 0;
+            transform: translateX(-20px) scale(0.95);
+        }
+        .fade-in {
+            opacity: 1;
+            transform: translateX(0) scale(1);
+        }
+
+        /* Rodapé Estilo Vidro */
+        .glass-footer {
+            background: rgba(11, 26, 43, 0.9);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(255, 215, 0, 0.3); /* Borda dourada sutil */
+        }
+
+        /* Estilo do Cartão */
+        .wanted-poster-feel {
+            background-image: url('https://www.transparenttextures.com/patterns/aged-paper.png');
+            background-color: #fffbf0; /* Papel envelhecido */
+        }
+    </style>
+    <script src="seguranca.js" defer></script>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <a href="https://wa.me/message/WV34TWMSKTEEL1" target="_blank" title="Enviar Mensagem via Den Den Mushi" class="fixed bottom-24 right-4 md:bottom-28 md:right-6 bg-[#25D366] text-white p-3 md:p-4 rounded-full shadow-xl hover:bg-[#20bd5a] transition-all z-50 hover:-translate-y-1 hover:shadow-green-500/50">
+        <i data-lucide="message-circle" class="w-6 h-6 md:w-7 md:h-7"></i>
+    </a>
+
+    <main class="flex-grow flex items-center justify-center p-4 md:p-8 w-full">
+        <div id="app" class="w-full max-w-4xl flex flex-col gap-5">
+            
+            <header class="bg-gradient-to-r from-blue-900 to-blue-800 text-white p-5 rounded-xl shadow-lg flex justify-between items-center border-b-4 border-yellow-500 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+                
+                <h1 class="text-lg md:text-2xl font-black tracking-wide flex items-center z-10 pirate-font text-yellow-400 drop-shadow-md">
+                    <i data-lucide="anchor" class="hidden md:block w-6 h-6 mr-3"></i>
+                    <span class="md:hidden"><i data-lucide="anchor" class="inline w-5 h-5 mr-1"></i></span>
+                    O Próximo Rei dos Piratas
+                </h1>
+                <span id="slide-counter" class="text-xs md:text-sm bg-black/50 px-3 py-1 rounded-full font-bold border border-yellow-500/50 z-10">
+                    Log Pose...
+                </span>
+            </header>
+
+            <div id="card-container" class="wanted-poster-feel rounded-xl shadow-2xl overflow-hidden min-h-[450px] flex flex-col md:flex-row transition-content fade-in border-2 border-[#8B4513]">
+                </div>
+
+            <div class="flex justify-between items-center gap-4 mt-2">
+                <button id="prev-btn" onclick="changeSlide(-1)" class="flex-1 md:flex-none bg-gray-700 text-white px-6 py-3 rounded-xl shadow-md hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-95 flex items-center justify-center font-bold border-b-4 border-gray-900">
+                    <i data-lucide="arrow-left" class="w-5 h-5 mr-2"></i>
+                    Voltar
+                </button>
+                <button id="next-btn" onclick="changeSlide(1)" class="flex-[2] md:flex-none bg-red-600 text-white px-8 py-3 rounded-xl shadow-lg hover:bg-red-500 transition-all active:scale-95 flex items-center justify-center font-bold border-b-4 border-red-800 hover:border-red-700">
+                    Próximo
+                    <i data-lucide="ship-wheel" class="w-5 h-5 ml-2"></i>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="glass-footer text-white p-6 mt-auto w-full z-10">
+        <div class="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 text-sm opacity-90">
+            
+            <div class="flex flex-col md:flex-row items-center gap-4 text-center md:text-left">
+                <a href="https://www.instagram.com/gabrielopsicologo" target="_blank" class="hover:scale-110 transition-transform duration-300 shrink-0">
+                    <img src="https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/Logo_branca.png" alt="Logo Gabriel Psicólogo" class="h-14 md:h-16 drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">
+                </a>
+                <div>
+                    <span class="font-bold text-base md:text-lg text-yellow-400 block leading-tight pirate-font tracking-wide">Recurso Terapêutico Digital</span>
+                    <span class="text-xs text-blue-200"></span>
+                </div>
+            </div>
+            
+            <div class="flex flex-col items-center md:items-end text-center md:text-right">
+                <span>Capitão: <a href="https://www.instagram.com/gabrielopsicologo" target="_blank" class="font-bold text-yellow-400 hover:text-white transition-colors underline decoration-dotted">@gabrielopsicologo</a></span>
+                <span class="text-xs mt-1 bg-blue-900/50 px-3 py-0.5 rounded-full font-medium border border-blue-500/30">CRP 06/215890</span>
+            </div>
+        </div>
+        <div class="mt-6 pt-4 border-t border-white/10 text-center text-[10px] text-gray-400 font-mono">
+            &copy; 2025 Todos os direitos reservados na Grand Line.
+        </div>
+    </footer>
+
+    <script type="text/javascript">
+        // URLs Originais do seu código
+        const IMAGE_URLS = {
+            luffy: "https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/C_Luffy.jpg",
+            zoro: "https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/C_Zoro.jpg",
+            nami: "https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/C_Nami.jpg",
+            robin: "https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/C_Robin.jpg",
+            barbanegra: "https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/C_barbanegra.png",
+            self: "https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/mapa_pessoal.jpg"
+        };
+
+        const CREW_DATA = [
+            {
+                name: "Monkey D. Luffy",
+                role: "O Capitão da Liberdade",
+                description: "O pirata guiado pela busca incessante pela Liberdade e pelo Propósito. Simboliza o foco inabalável no objetivo e a Confiança básica no grupo, mesmo que pareça ingênuo.",
+                imageUrl: IMAGE_URLS.luffy,
+                colorClass: 'border-red-600 text-red-700', 
+                haki: ["Foco inabalável no objetivo", "Resiliência e Recuperação", "Confiança Básica e Lealdade"],
+                sea_challenges: ["Impulsividade (Sem pensar)", "Reatividade a ameaças", "Ingenuidade excessiva"]
+            },
+            {
+                name: "Roronoa Zoro",
+                role: "A Disciplina Focada",
+                description: "O espadachim guiado pelo compromisso e Disciplina. Representa o Foco excessivo no Desempenho e o sacrifício pessoal em prol de um juramento.",
+                imageUrl: IMAGE_URLS.zoro,
+                colorClass: 'border-green-700 text-green-800', 
+                haki: ["Disciplina e Foco Extremo", "Tolerância à dor (Altruísmo)", "Senso de responsabilidade"],
+                sea_challenges: ["Perfeccionismo e Cobrança", "Dificuldade em pedir ajuda", "Déficit atencional em detalhes"]
+            },
+            {
+                name: "Nami",
+                role: "A Estrategista do Risco",
+                description: "A navegadora que equilibra a inteligência e o planejamento. Simboliza a importância do Planejamento Estratégico e a superação de Esquemas de Abandono/Privação.",
+                imageUrl: IMAGE_URLS.nami,
+                colorClass: 'border-orange-500 text-orange-600', 
+                haki: ["Inteligência Lógica", "Planejamento e Organização", "Valorização da segurança"],
+                sea_challenges: ["Medo da escassez (Privação)", "Desconfiança em novos laços", "Insegurança financeira"]
+            },
+            {
+                name: "Nico Robin",
+                role: "O Passado Sombrio",
+                description: "A arqueóloga que carregava o peso da Culpa e do Isolamento. Representa a superação do Esquema de Defeito/Vergonha e a necessidade de Pertença.",
+                imageUrl: IMAGE_URLS.robin,
+                colorClass: 'border-purple-800 text-purple-900', 
+                haki: ["Conhecimento e Inteligência", "Autocontrole emocional", "Capacidade de recomeço"],
+                sea_challenges: ["Isolamento Social (Exclusão)", "Tendência ao auto-sacrifício", "Dificuldade em expressar necessidades"]
+            },
+            {
+                name: "Barba Negra",
+                role: "O Antagonista",
+                description: "O pirata guiado pelo Oportunismo e ambição desmedida. Representa o Descontrole e o Esquema de Superioridade/Arrogância, sem Respeito por Regras.",
+                imageUrl: IMAGE_URLS.barbanegra,
+                colorClass: 'border-yellow-700 text-yellow-900', 
+                haki: ["Oportunismo Estratégico", "Convicção e Motivação", "Extrema adaptabilidade"],
+                sea_challenges: ["Comportamento Manipulador", "Narcisismo e Megalomania", "Falta absoluta de Empatia"]
+            },
+            {
+                name: "Você (O Próximo Rei)",
+                role: "Seu Cartaz de Procurado",
+                description: "Agora é a sua vez de olhar para o seu próprio Mar. Qual é a sua Fruta do Diabo? Quais são seus maiores recursos e os desafios da Grand Line que você precisa enfrentar?",
+                imageUrl: IMAGE_URLS.self,
+                colorClass: 'border-blue-600 text-blue-800', 
+                haki: ["Escreva seus 3 maiores recursos..."],
+                sea_challenges: ["Escreva seus 3 maiores desafios..."]
+            }
+        ];
+
+        let currentSlide = 0;
+        const container = document.getElementById('card-container');
+
+        function changeSlide(direction) {
+            const nextIndex = currentSlide + direction;
+            if (nextIndex < 0 || nextIndex >= CREW_DATA.length) return;
+
+            // Animação de Saída
+            container.classList.remove('fade-in');
+            container.classList.add('fade-out');
+
+            // Troca de conteúdo
+            setTimeout(() => {
+                currentSlide = nextIndex;
+                renderContent(currentSlide);
+                
+                // Animação de Entrada
+                container.classList.remove('fade-out');
+                container.classList.add('fade-in');
+            }, 350); 
+        }
+
+        function renderContent(index) {
+            const data = CREW_DATA[index];
+            const isReflection = index === CREW_DATA.length - 1;
+            const counterElement = document.getElementById('slide-counter');
+            
+            counterElement.textContent = `Ilha ${index + 1}/${CREW_DATA.length}`;
+
+            // HTML Dinâmico
+            let htmlContent = `
+                <div class="p-6 md:w-5/12 flex flex-col items-center justify-center bg-[#f0e6d2] border-b-2 md:border-b-0 md:border-r-2 border-[#8B4513] relative">
+                    <h3 class="text-2xl md:text-3xl font-bold text-gray-800 mb-1 text-center pirate-font uppercase tracking-widest">WANTED</h3>
+                    <p class="text-xs md:text-sm text-gray-600 mb-3 text-center font-serif uppercase w-full border-b border-gray-400 pb-1 max-w-[200px]">${isReflection ? 'DEAD OR ALIVE' : 'ONLY ALIVE'}</p>
+                    
+                    <div class="w-48 h-48 md:w-60 md:h-60 rounded-md border-4 border-gray-800 shadow-xl mb-4 overflow-hidden relative group bg-gray-200">
+                         <img src="${data.imageUrl}" alt="${data.name}" class="w-full h-full object-cover sepia-[.15] transition-transform duration-700 group-hover:scale-110 group-hover:sepia-0">
+                    </div>
+                    
+                    <h2 class="text-xl font-bold text-center text-[#3D2B1F] pirate-font mt-2 leading-none">${data.name}</h2>
+                    <p class="text-xs font-bold text-red-700 uppercase tracking-widest mt-2">${data.role}</p>
+                </div>
+
+                <div class="p-6 md:p-8 md:w-7/12 flex flex-col gap-5 bg-white/60">
+                    <div>
+                        <h4 class="text-lg font-bold ${data.colorClass.split(' ')[1]} flex items-center mb-2 uppercase tracking-wide">
+                            <i data-lucide="scroll" class="w-5 h-5 mr-2"></i>
+                            Análise
+                        </h4>
+                        ${isReflection 
+                            ? `<textarea class="w-full p-4 bg-[#fffbf0] border-2 border-[#d4c5a9] rounded-lg focus:ring-2 focus:ring-yellow-500 outline-none resize-none text-sm shadow-inner font-serif" rows="3" placeholder="${data.description}"></textarea>`
+                            : `<p class="text-gray-700 leading-relaxed text-sm md:text-base font-medium">${data.description}</p>`
+                        }
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
+                        <div class="bg-blue-50/80 p-4 rounded-lg border border-blue-200 relative overflow-hidden group hover:shadow-md transition-shadow">
+                            <div class="absolute right-0 top-0 opacity-10 -mr-4 -mt-4"><i data-lucide="zap" class="w-16 h-16 text-blue-500"></i></div>
+                            <h4 class="text-sm font-bold text-blue-800 flex items-center mb-3 uppercase relative z-10">
+                                <i data-lucide="swords" class="w-4 h-4 mr-2"></i> Pontos Fortes
+                            </h4>
+                            ${isReflection 
+                                ? `<textarea class="w-full p-2 text-sm border border-blue-200 rounded focus:border-blue-500 outline-none bg-white/80" rows="4" placeholder="Quais são seus poderes especiais?"></textarea>`
+                                : `<ul class="list-disc list-inside space-y-2 text-xs md:text-sm text-gray-700 relative z-10 font-medium">${data.haki.map(s => `<li>${s}</li>`).join('')}</ul>`
+                            }
+                        </div>
+
+                        <div class="bg-red-50/80 p-4 rounded-lg border border-red-200 relative overflow-hidden group hover:shadow-md transition-shadow">
+                             <div class="absolute right-0 top-0 opacity-10 -mr-4 -mt-4"><i data-lucide="skull" class="w-16 h-16 text-red-500"></i></div>
+                            <h4 class="text-sm font-bold text-red-800 flex items-center mb-3 uppercase relative z-10">
+                                <i data-lucide="waves" class="w-4 h-4 mr-2"></i> Desafios
+                            </h4>
+                            ${isReflection 
+                                ? `<textarea class="w-full p-2 text-sm border border-red-200 rounded focus:border-red-500 outline-none bg-white/80" rows="4" placeholder="Quais monstros você precisa enfrentar?"></textarea>`
+                                : `<ul class="list-disc list-inside space-y-2 text-xs md:text-sm text-gray-700 relative z-10 font-medium">${data.sea_challenges.map(i => `<li>${i}</li>`).join('')}</ul>`
+                            }
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            container.innerHTML = htmlContent;
+            
+            // Lógica dos Botões
+            document.getElementById('prev-btn').disabled = index === 0;
+            const nextBtn = document.getElementById('next-btn');
+            
+            if (isReflection) {
+                nextBtn.innerHTML = 'Zarpar! <i data-lucide="anchor" class="w-5 h-5 ml-2"></i>';
+                nextBtn.className = "flex-[2] md:flex-none bg-green-600 text-white px-8 py-3 rounded-xl shadow-lg hover:bg-green-500 transition-all active:scale-95 flex items-center justify-center font-bold border-b-4 border-green-800 hover:border-green-700";
+                nextBtn.onclick = () => alert('Sua tripulação está pronta! O One Piece te espera.');
+            } else {
+                nextBtn.innerHTML = 'Próximo <i data-lucide="ship-wheel" class="w-5 h-5 ml-2"></i>';
+                nextBtn.className = "flex-[2] md:flex-none bg-red-600 text-white px-8 py-3 rounded-xl shadow-lg hover:bg-red-500 transition-all active:scale-95 flex items-center justify-center font-bold border-b-4 border-red-800 hover:border-red-700";
+                nextBtn.onclick = () => changeSlide(1);
+            }
+
+            lucide.createIcons();
+        }
+
+        // Inicialização
+        window.onload = () => {
+            renderContent(0);
+            // Preload das imagens originais
+            Object.values(IMAGE_URLS).forEach(src => (new Image()).src = src);
+        };
+    </script>
+    
+    <script>
+        // Proteções
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.onkeydown = function(e) {
+            if (e.keyCode == 123) return false;
+            if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) return false;
+            if (e.ctrlKey && e.key === 'u') return false;
+        };
+    </script>
+</body>
+</html>

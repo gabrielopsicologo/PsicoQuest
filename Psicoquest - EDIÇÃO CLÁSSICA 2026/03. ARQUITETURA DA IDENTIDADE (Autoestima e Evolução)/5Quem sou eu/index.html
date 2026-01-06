@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sua Jornada Pessoal: Mapeando Crenças</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif; 
+            background-image: url('https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/background.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-color: #1a3b61;
+        }
+
+        /* Animações Suaves */
+        .transition-content {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .fade-out {
+            opacity: 0;
+            transform: translateX(-10px);
+        }
+        .fade-in {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Vidro Fosco para o Rodapé */
+        .glass-footer {
+            background: rgba(0, 0, 0, 0.5); /* Um pouco mais escuro para contraste da logo */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+    <script src="seguranca.js" defer></script>
+</head>
+<body class="flex flex-col min-h-screen text-gray-800">
+
+    <a href="https://wa.me/message/WV34TWMSKTEEL1" target="_blank" title="Precisa de Ajuda?" class="fixed bottom-4 right-4 md:bottom-6 md:right-6 bg-[#25D366] text-white p-3 md:p-4 rounded-full shadow-xl hover:bg-[#20bd5a] transition-all z-50 hover:-translate-y-1">
+        <i data-lucide="message-circle" class="w-6 h-6 md:w-7 md:h-7"></i>
+    </a>
+
+    <main class="flex-grow flex items-center justify-center p-4 md:p-8 w-full my-4">
+        <div id="app" class="w-full max-w-4xl flex flex-col gap-4">
+            
+            <header class="bg-blue-800 text-white p-4 md:p-5 rounded-xl shadow-lg flex justify-between items-center border-b-4 border-blue-900">
+                <h1 class="text-lg md:text-2xl font-black tracking-wide flex items-center leading-tight">
+                    <i data-lucide="users-round" class="hidden md:block w-6 h-6 mr-2 text-yellow-300"></i>
+                    <span class="md:hidden"><i data-lucide="users-round" class="inline w-5 h-5 mr-1 text-yellow-300"></i></span>
+                    Análise de Crenças
+                </h1>
+                <span id="slide-counter" class="text-xs md:text-sm bg-black/40 px-3 py-1 rounded-full font-bold shadow-inner border border-white/20 whitespace-nowrap">
+                    Loading...
+                </span>
+            </header>
+
+            <div id="card-container" class="bg-white rounded-xl shadow-2xl overflow-hidden min-h-[400px] flex flex-col md:flex-row transition-content fade-in">
+                </div>
+
+            <div class="flex justify-between items-center gap-4 mt-2">
+                <button id="prev-btn" onclick="changeSlide(-1)" class="flex-1 md:flex-none bg-gray-600 text-white px-6 py-3 rounded-xl shadow-md hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-95 flex items-center justify-center font-bold">
+                    <i data-lucide="arrow-left" class="w-5 h-5 mr-2"></i>
+                    Anterior
+                </button>
+                <button id="next-btn" onclick="changeSlide(1)" class="flex-[2] md:flex-none bg-blue-700 text-white px-8 py-3 rounded-xl shadow-lg hover:bg-blue-600 hover:shadow-blue-500/30 transition-all active:scale-95 flex items-center justify-center font-bold">
+                    Próximo
+                    <i data-lucide="arrow-right" class="w-5 h-5 ml-2"></i>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="glass-footer text-white p-6 mt-auto w-full z-10">
+        <div class="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 text-sm opacity-90">
+            
+            <div class="flex flex-col md:flex-row items-center gap-4 text-center md:text-left">
+                <a href="https://www.instagram.com/gabrielopsicologo" target="_blank" class="hover:scale-105 transition-transform shrink-0">
+                    <img src="https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/Logo_branca.png" alt="Logo Gabriel Psicólogo" class="h-14 md:h-16 drop-shadow-sm">
+                </a>
+                <div>
+                    <span class="font-bold text-base md:text-lg text-yellow-300 block leading-tight">Recurso terapêutico digital</span>
+                </div>
+            </div>
+            
+            <div class="flex flex-col items-center md:items-end text-center md:text-right">
+                <span>Desenvolvido por <a href="https://www.instagram.com/gabrielopsicologo" target="_blank" class="font-bold text-yellow-300 hover:underline hover:text-white transition-colors">@gabrielopsicologo</a></span>
+                <span class="text-xs mt-1 bg-white/10 px-3 py-0.5 rounded-full font-medium tracking-wider">CRP 06/215890</span>
+            </div>
+        </div>
+        <div class="mt-6 pt-4 border-t border-white/10 text-center text-[11px] text-gray-400">
+            &copy; 2025 Todos os direitos reservados.
+        </div>
+    </footer>
+
+    <script type="text/javascript">
+        // Dados
+        const IMAGE_URLS = {
+            alex: "https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/Alex.jpg",
+            bia: "https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/bia.jpg",
+            carlos: "https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/carlos.jpg",
+            diana: "https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/diana.jpg",
+            eduardo: "https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/eduardo.jpg",
+            self: "https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/mapa_pessoal.jpg"
+        };
+
+        const CREW_DATA = [
+            {
+                name: "Alex",
+                role: "Exemplo: Ação por Impulso",
+                description: "Alex frequentemente toma decisões de última hora, movido pela crença de que 'precisa agir agora'. Dificuldade em pensar antes de agir.",
+                imageUrl: IMAGE_URLS.alex,
+                colorClass: 'border-red-600 text-red-700', 
+                strengths: ["Muita energia e iniciativa", "Resiliência rápida", "Visão otimista"],
+                improvements: ["Impulsividade", "Reatividade a críticas", "Riscos desnecessários"]
+            },
+            {
+                name: "Bia",
+                role: "Exemplo: Padrões Rígidos",
+                description: "Bia sente que tudo deve ser 'perfeito' e se cobra exaustivamente. Representa o Esquema de Padrões Rígidos e a Cobrança Excessiva.",
+                imageUrl: IMAGE_URLS.bia,
+                colorClass: 'border-green-600 text-green-700', 
+                strengths: ["Extrema dedicação", "Alto senso de responsabilidade", "Força de vontade"],
+                improvements: ["Perfeccionismo paralisante", "Dificuldade em delegar", "Autocrítica severa"]
+            },
+            {
+                name: "Carlos",
+                role: "Exemplo: Medo e Controle",
+                description: "Carlos planeja cada detalhe com medo de falhar ou perder segurança. Simboliza a busca por controle excessivo para evitar ansiedade.",
+                imageUrl: IMAGE_URLS.carlos,
+                colorClass: 'border-orange-500 text-orange-600', 
+                strengths: ["Raciocínio lógico", "Previsão de riscos", "Valorização da segurança"],
+                improvements: ["Desconfiança exagerada", "Dificuldade em relaxar", "Isolamento preventivo"]
+            },
+            {
+                name: "Diana",
+                role: "Exemplo: Subjugação",
+                description: "Diana coloca a necessidade dos outros antes das suas e teme o julgamento. Representa o esquema de Defeito e a tendência à Subjugação.",
+                imageUrl: IMAGE_URLS.diana,
+                colorClass: 'border-purple-800 text-purple-800', 
+                strengths: ["Empatia alta", "Discrição e foco", "Inteligência emocional"],
+                improvements: ["Isolamento social", "Auto-sacrifício", "Dificuldade em dizer 'não'"]
+            },
+            {
+                name: "Eduardo",
+                role: "Exemplo: Arrogância",
+                description: "Acredita que é 'melhor' que os outros e que regras não se aplicam a ele. Baixa empatia e foco no próprio benefício.",
+                imageUrl: IMAGE_URLS.eduardo,
+                colorClass: 'border-gray-700 text-gray-800', 
+                strengths: ["Liderança forte", "Alta autoconfiança", "Capacidade de adaptação"],
+                improvements: ["Comportamento manipulador", "Narcisismo", "Falta de empatia"]
+            },
+            {
+                name: "Seu Mapa Pessoal",
+                role: "Sua Autoavaliação",
+                description: "Reflita sobre si. Quais recursos e desafios desses personagens se parecem mais com você?",
+                imageUrl: IMAGE_URLS.self,
+                colorClass: 'border-blue-500 text-blue-700', 
+                strengths: ["Liste seus 3 maiores recursos..."],
+                improvements: ["Liste seus 3 maiores desafios..."]
+            }
+        ];
+
+        let currentSlide = 0;
+        const container = document.getElementById('card-container');
+
+        function changeSlide(direction) {
+            const nextIndex = currentSlide + direction;
+            if (nextIndex < 0 || nextIndex >= CREW_DATA.length) return;
+
+            // 1. Animação de Saída
+            container.classList.remove('fade-in');
+            container.classList.add('fade-out');
+
+            // 2. Espera a animação acabar para trocar o conteúdo
+            setTimeout(() => {
+                currentSlide = nextIndex;
+                renderContent(currentSlide);
+                
+                // 3. Animação de Entrada
+                container.classList.remove('fade-out');
+                container.classList.add('fade-in');
+            }, 300); // 300ms combina com o CSS transition
+        }
+
+        function renderContent(index) {
+            const data = CREW_DATA[index];
+            const isReflection = index === CREW_DATA.length - 1;
+            const counterElement = document.getElementById('slide-counter');
+            
+            counterElement.textContent = `${index + 1}/${CREW_DATA.length}`;
+
+            // Layout Responsivo: Flex Column no mobile, Flex Row no desktop
+            let htmlContent = `
+                <div class="p-6 md:w-1/3 flex flex-col items-center justify-center bg-gray-50 border-b md:border-b-0 md:border-r border-gray-100 ${isReflection ? 'bg-blue-50' : ''}">
+                    <h3 class="text-xl md:text-2xl font-bold text-gray-800 mb-1 text-center">${isReflection ? 'Você' : data.name}</h3>
+                    <p class="text-xs md:text-sm text-gray-500 mb-4 text-center font-semibold uppercase tracking-wider">${data.role}</p>
+                    
+                    <div class="w-32 h-32 md:w-48 md:h-48 rounded-full border-4 ${data.colorClass.split(' ')[0]} shadow-xl mb-4 overflow-hidden relative group">
+                        <img src="${data.imageUrl}" alt="${data.name}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                    </div>
+                </div>
+
+                <div class="p-6 md:p-8 md:w-2/3 flex flex-col gap-6">
+                    <div>
+                        <h4 class="text-lg font-bold ${data.colorClass.split(' ')[1] || 'text-blue-700'} flex items-center mb-2">
+                            <i data-lucide="book-open-text" class="w-5 h-5 mr-2"></i>
+                            Análise
+                        </h4>
+                        ${isReflection 
+                            ? `<textarea class="w-full p-3 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none resize-none text-sm shadow-inner" rows="3" placeholder="${data.description}"></textarea>`
+                            : `<p class="text-gray-600 leading-relaxed text-sm md:text-base">${data.description}</p>`
+                        }
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="bg-green-50 p-3 rounded-lg border border-green-100">
+                            <h4 class="text-sm font-bold text-green-700 flex items-center mb-2 uppercase">
+                                <i data-lucide="zap" class="w-4 h-4 mr-2"></i> Forças
+                            </h4>
+                            ${isReflection 
+                                ? `<textarea class="w-full p-2 text-sm border border-green-200 rounded focus:border-green-500 outline-none" rows="3" placeholder="Escreva suas forças..."></textarea>`
+                                : `<ul class="list-disc list-inside space-y-1 text-xs md:text-sm text-gray-700">${data.strengths.map(s => `<li>${s}</li>`).join('')}</ul>`
+                            }
+                        </div>
+
+                        <div class="bg-yellow-50 p-3 rounded-lg border border-yellow-100">
+                            <h4 class="text-sm font-bold text-yellow-700 flex items-center mb-2 uppercase">
+                                <i data-lucide="target" class="w-4 h-4 mr-2"></i> Desafios
+                            </h4>
+                            ${isReflection 
+                                ? `<textarea class="w-full p-2 text-sm border border-yellow-200 rounded focus:border-yellow-500 outline-none" rows="3" placeholder="Escreva seus desafios..."></textarea>`
+                                : `<ul class="list-disc list-inside space-y-1 text-xs md:text-sm text-gray-700">${data.improvements.map(i => `<li>${i}</li>`).join('')}</ul>`
+                            }
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            container.innerHTML = htmlContent;
+            
+            // Atualiza estado dos botões
+            document.getElementById('prev-btn').disabled = index === 0;
+            const nextBtn = document.getElementById('next-btn');
+            
+            if (isReflection) {
+                nextBtn.innerHTML = 'Concluir <i data-lucide="check-circle" class="w-5 h-5 ml-2"></i>';
+                nextBtn.classList.remove('bg-blue-700', 'hover:bg-blue-600');
+                nextBtn.classList.add('bg-green-600', 'hover:bg-green-500');
+                nextBtn.onclick = () => alert('Parabéns! Você completou sua análise.');
+            } else {
+                nextBtn.innerHTML = 'Próximo <i data-lucide="arrow-right" class="w-5 h-5 ml-2"></i>';
+                nextBtn.classList.remove('bg-green-600', 'hover:bg-green-500');
+                nextBtn.classList.add('bg-blue-700', 'hover:bg-blue-600');
+                nextBtn.onclick = () => changeSlide(1);
+            }
+
+            lucide.createIcons();
+        }
+
+        // Inicialização
+        window.onload = () => {
+            renderContent(0);
+            // Preload imagens
+            CREW_DATA.forEach(c => (new Image()).src = c.imageUrl);
+        };
+    </script>
+    
+    <script>
+        // Proteções básicas
+        document.addEventListener('contextmenu', event => event.preventDefault());
+        document.onkeydown = function(e) {
+            if (e.keyCode == 123) return false;
+            if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) return false;
+            if (e.ctrlKey && e.key === 'u') return false;
+        };
+    </script>
+</body>
+</html>

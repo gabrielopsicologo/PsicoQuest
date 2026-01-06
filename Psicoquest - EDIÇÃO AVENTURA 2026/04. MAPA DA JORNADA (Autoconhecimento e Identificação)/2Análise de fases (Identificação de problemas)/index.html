@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PsicoQuest Kids | A Jornada</title>
+    
+    <script src="seguranca.js" defer></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #6C5CE7; /* Roxo Game */
+            --secondary: #00CEC9; /* Azul Ciano */
+            --accent: #FAB1A0; /* Pêssego */
+            --warning: #FFEAA7; /* Amarelo */
+            --dark: #2D3436;
+            --light: #DFE6E9;
+            --card-bg: #FFFFFF;
+            --shadow-game: 0 8px 0 rgba(0,0,0,0.15); /* Sombra dura estilo cartoon */
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #74b9ff;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(255,255,255,0.2) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(255,255,255,0.2) 0%, transparent 20%);
+            color: var(--dark);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* --- TELA DE INÍCIO (LOGIN) --- */
+        #start-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--primary);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: top 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+
+        .game-logo {
+            font-family: 'Fredoka One', cursive;
+            font-size: 4rem;
+            text-shadow: 4px 4px 0 #000;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .player-input {
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            border: 4px solid var(--secondary);
+            font-size: 1.2rem;
+            text-align: center;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 800;
+            width: 80%;
+            max-width: 300px;
+            margin-bottom: 1rem;
+        }
+
+        .btn-start {
+            background: var(--warning);
+            color: var(--dark);
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.5rem;
+            padding: 1rem 3rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 6px 0 #fdcb6e;
+            transition: 0.2s;
+        }
+        .btn-start:active { transform: translateY(6px); box-shadow: none; }
+
+        /* --- UI DO JOGO --- */
+        header {
+            height: 80px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 4px solid rgba(0,0,0,0.1);
+            z-index: 10;
+        }
+
+        .player-stats {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .avatar {
+            width: 50px; height: 50px;
+            background: var(--secondary);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; color: white;
+            border: 3px solid white;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.1);
+        }
+
+        .player-info h2 { font-weight: 900; font-size: 1.1rem; }
+        .xp-bar { width: 150px; height: 10px; background: #ddd; border-radius: 10px; overflow: hidden; margin-top: 4px; }
+        .xp-fill { height: 100%; background: #00b894; width: 0%; transition: width 0.5s; }
+
+        /* --- MAPA DE FASES (GRID) --- */
+        main {
+            flex-grow: 1;
+            padding: 2rem;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary) transparent;
+        }
+
+        .level-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .level-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 1.5rem;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 4px solid transparent;
+            box-shadow: var(--shadow-game);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .level-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: var(--secondary);
+        }
+
+        .level-icon {
+            width: 70px; height: 70px;
+            background: #f1f2f6;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2rem; color: var(--primary);
+            margin-bottom: 1rem;
+            transition: 0.3s;
+        }
+
+        .level-card:hover .level-icon { background: var(--warning); color: var(--dark); transform: rotate(15deg); }
+
+        .level-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.2rem;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+
+        .status-badge {
+            font-size: 0.7rem;
+            background: var(--light);
+            padding: 4px 10px;
+            border-radius: 10px;
+            font-weight: 800;
+            color: #b2bec3;
+        }
+        .level-card.done .status-badge { background: #00b894; color: white; }
+        .level-card.done { opacity: 0.7; filter: grayscale(0.5); }
+
+        /* --- MODAL DA MISSÃO --- */
+        .mission-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(45, 52, 54, 0.8);
+            backdrop-filter: blur(5px);
+            display: none; align-items: center; justify-content: center; z-index: 50;
+            padding: 1rem;
+        }
+
+        .mission-content {
+            background: white;
+            width: 100%; max-width: 600px;
+            border-radius: 30px;
+            padding: 2rem;
+            position: relative;
+            box-shadow: 0 15px 0 rgba(0,0,0,0.2);
+            border: 5px solid var(--primary);
+            animation: popIn 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+
+        @keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        .mission-header { display: flex; align-items: center; gap: 15px; margin-bottom: 1.5rem; }
+        .mission-icon { font-size: 2.5rem; color: var(--primary); }
+        .mission-title { font-family: 'Fredoka One'; font-size: 1.5rem; color: var(--primary); }
+
+        .mission-text { font-size: 1.1rem; color: #636e72; margin-bottom: 1.5rem; font-weight: 700; }
+
+        .mission-input {
+            width: 100%;
+            background: #f1f2f6;
+            border: 3px dashed #b2bec3;
+            border-radius: 20px;
+            padding: 1.5rem;
+            font-family: 'Nunito', sans-serif;
+            font-size: 1rem;
+            resize: none;
+            min-height: 120px;
+            margin-bottom: 1.5rem;
+            transition: 0.3s;
+        }
+        .mission-input:focus { background: #fff; border-color: var(--secondary); border-style: solid; }
+
+        .btn-action {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 15px;
+            font-family: 'Fredoka One';
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-save { background: var(--secondary); color: white; box-shadow: 0 6px 0 #00b894; }
+        .btn-save:active { transform: translateY(6px); box-shadow: none; }
+        
+        .close-mission {
+            position: absolute; top: 15px; right: 20px;
+            background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #fab1a0;
+        }
+        .close-mission:hover { color: #e17055; }
+
+        /* Rodapé Gamer */
+        footer {
+            background: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        /* Responsivo */
+        @media(max-width: 600px) {
+            .game-logo { font-size: 2.5rem; }
+            .header-brand h1 { display: none; }
+            .mission-content { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="start-screen">
+        <div class="game-logo">
+            <i class="fa-solid fa-gamepad"></i><br>PsicoQuest
+        </div>
+        <p style="margin-bottom: 1rem; font-size: 1.2rem;">Digite seu nome de Herói:</p>
+        <input type="text" id="playerNameInput" class="player-input" placeholder="Ex: Super Gui">
+        <button class="btn-start" onclick="startGame()">INICIAR AVENTURA</button>
+    </div>
+
+    <header>
+        <div class="header-brand" style="display:flex; align-items:center; gap:10px;">
+            <img src="https://gabrielopsicologo.com/wp-content/uploads/2025/11/Logo_preta.png" alt="Logo" style="height:40px;">
+            <h1 style="font-family:'Fredoka One'; color:var(--primary);">PsicoQuest</h1>
+        </div>
+        
+        <div class="player-stats">
+            <div class="player-info">
+                <h2 id="displayPlayerName">Player</h2>
+                <div class="xp-bar"><div class="xp-fill" id="xpBar"></div></div>
+            </div>
+            <div class="avatar"><i class="fa-solid fa-user-astronaut"></i></div>
+        </div>
+
+        <button onclick="toggleManual()" style="background:none; border:none; font-size:1.5rem; color:var(--primary); cursor:pointer;">
+            <i class="fa-solid fa-scroll"></i>
+        </button>
+    </header>
+
+    <main>
+        <div class="level-grid" id="grid"></div>
+    </main>
+
+    <footer>
+        <div>© 2025 PsicoQuest Kids</div>
+        <a href="https://api.whatsapp.com/message/WV34TWMSKTEEL1?autoload=1&app_absent=0" target="_blank" style="text-decoration:none; color:var(--primary);">
+            <i class="fa-brands fa-whatsapp"></i> Ajuda do Mestre
+        </a>
+    </footer>
+
+    <div class="mission-modal" id="missionModal">
+        <div class="mission-content">
+            <button class="close-mission" onclick="closeMission()"><i class="fa-solid fa-times"></i></button>
+            
+            <div class="mission-header">
+                <div class="mission-icon" id="m-icon"></div>
+                <div>
+                    <span style="text-transform:uppercase; font-size:0.8rem; font-weight:800; color:#b2bec3;">Missão Atual</span>
+                    <h2 class="mission-title" id="m-title">Título</h2>
+                </div>
+            </div>
+
+            <p class="mission-text" id="m-text">Pergunta...</p>
+            
+            <textarea class="mission-input" id="m-input" placeholder="Escreva aqui no seu Diário de Bordo..."></textarea>
+            
+            <button class="btn-action btn-save" onclick="completeMission()">
+                <i class="fa-solid fa-check-circle"></i> COMPLETAR MISSÃO
+            </button>
+        </div>
+    </div>
+
+    <div class="mission-modal" id="manualModal">
+        <div class="mission-content" style="border-color: var(--warning);">
+            <button class="close-mission" onclick="toggleManual()">&times;</button>
+            <h2 class="mission-title" style="color:var(--warning); text-shadow: 1px 1px 0 #000;">Pergaminho do Terapeuta</h2>
+            <p style="margin-top:1rem; line-height:1.5; color:#555;">
+                <strong>Adaptação Lúdica:</strong> As perguntas foram traduzidas para metáforas de jogos/aventura para reduzir a resistência e aumentar o engajamento.
+            </p>
+            <ul style="margin: 1rem 0 1rem 1.5rem; color:#555;">
+                <li><strong>Monstros/Chefões:</strong> Problemas/Ansiedades.</li>
+                <li><strong>Inventário/Mana:</strong> Recursos internos/Energia.</li>
+                <li><strong>Equipe/Guilda:</strong> Família e Amigos.</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Dados Adaptados para Crianças/Adolescentes (Linguagem Gamer)
+        const levels = [
+            { icon: "fa-dragon", title: "O Chefão", q: "Qual é o 'Monstro' (situação ou problema) que mais tem te incomodado ultimamente?" },
+            { icon: "fa-users", title: "A Guilda", q: "Como está sua equipe (família/amigos)? Tem alguém com quem as missões estão difíceis?" },
+            { icon: "fa-heart-pulse", title: "Barra de Vida", q: "Quais emoções fazem sua 'energia' baixar muito rápido (medo, raiva, tristeza)?" },
+            { icon: "fa-gamepad", title: "Bug no Jogo", q: "Tem alguma coisa que você faz (um comportamento) que atrapalha seu jogo e você queria mudar?" },
+            { icon: "fa-shield-halved", title: "Defesa", q: "Quando a fase fica muito difícil (estresse), o que você usa para se defender ou relaxar?" },
+            { icon: "fa-map-location-dot", title: "Mapa Mundi", q: "Olhando para sua vida (escola, casa, diversão), qual área precisa de um 'upgrade' urgente?" },
+            { icon: "fa-cloud-bolt", title: "Tempestade", q: "O que tem deixado você preocupado ou ansioso, como se fosse uma tempestade chegando?" },
+            { icon: "fa-magnifying-glass", title: "Item Oculto", q: "Existe algum segredo ou assunto que você gostaria de investigar melhor hoje?" },
+            { icon: "fa-robot", title: "Bot Chato", q: "Existe uma voz na sua cabeça (pensamento) que fica dizendo que você não consegue? O que ela diz?" },
+            { icon: "fa-puzzle-piece", title: "Puzzle Difícil", q: "Você tem sentido dificuldade para tomar decisões ou resolver problemas sozinho?" },
+            { icon: "fa-star", title: "Super Poder", q: "Em que parte da sua vida você gostaria de se sentir mais forte e confiante?" },
+            { icon: "fa-trophy", title: "O Grande Prêmio", q: "O que é realmente importante para você? Qual é o seu maior sonho para o futuro?" }
+        ];
+
+        let currentLevelIndex = null;
+        let completedCount = 0;
+
+        // Iniciar Jogo
+        function startGame() {
+            const name = document.getElementById('playerNameInput').value || "Herói";
+            document.getElementById('displayPlayerName').innerText = name;
+            document.getElementById('start-screen').style.top = "-100%";
+            renderGrid();
+        }
+
+        // Renderizar Grid
+        function renderGrid() {
+            const grid = document.getElementById('grid');
+            grid.innerHTML = '';
+            
+            levels.forEach((lvl, index) => {
+                const card = document.createElement('div');
+                card.className = `level-card ${lvl.done ? 'done' : ''}`;
+                card.onclick = () => openMission(index);
+                
+                card.innerHTML = `
+                    <div class="level-icon"><i class="fa-solid ${lvl.icon}"></i></div>
+                    <div class="level-title">${lvl.title}</div>
+                    <div class="status-badge">${lvl.done ? 'COMPLETO' : 'DISPONÍVEL'}</div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Abrir Missão
+        function openMission(index) {
+            currentLevelIndex = index;
+            const lvl = levels[index];
+            
+            document.getElementById('m-icon').innerHTML = `<i class="fa-solid ${lvl.icon}"></i>`;
+            document.getElementById('m-title').innerText = lvl.title;
+            document.getElementById('m-text').innerText = lvl.q;
+            document.getElementById('m-input').value = lvl.answer || '';
+            
+            document.getElementById('missionModal').style.display = 'flex';
+        }
+
+        // Fechar Missão
+        function closeMission() {
+            document.getElementById('missionModal').style.display = 'none';
+        }
+
+        // Completar Missão (Salvar)
+        function completeMission() {
+            const val = document.getElementById('m-input').value;
+            if(val.trim() === "") return; // Não salva vazio
+
+            if(!levels[currentLevelIndex].done) {
+                completedCount++;
+                updateXP();
+            }
+
+            levels[currentLevelIndex].answer = val;
+            levels[currentLevelIndex].done = true;
+            
+            closeMission();
+            renderGrid();
+        }
+
+        // Atualizar XP
+        function updateXP() {
+            const percentage = (completedCount / levels.length) * 100;
+            document.getElementById('xpBar').style.width = percentage + "%";
+        }
+
+        function toggleManual() {
+            const m = document.getElementById('manualModal');
+            m.style.display = m.style.display === 'flex' ? 'none' : 'flex';
+        }
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Grande Rota das Emoções</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Inter:wght@400;600;800&family=Rye&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --cor-madeira: #3e2723;
+            --cor-ouro: #c8a464;
+            --cor-texto: #4a2c2a;
+            --safe-top: env(safe-area-inset-top);
+            --safe-bottom: env(safe-area-inset-bottom);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-image: url('https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/Background_OP.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            color: var(--cor-texto);
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            padding-top: max(70px, calc(60px + var(--safe-top)));
+            padding-bottom: 60px; /* Espaço para o rodapé sutil */
+        }
+
+        .font-cinzel { font-family: 'Cinzel', serif; }
+        .font-rye { font-family: 'Rye', serif; }
+
+        @keyframes fade-in-up { 
+            from { opacity: 0; transform: translate3d(0, 20px, 0); } 
+            to { opacity: 1; transform: translate3d(0, 0, 0); } 
+        }
+        @keyframes ship-bob { 
+            0%, 100% { transform: translate3d(-50%, -50%, 0) rotate(0deg); } 
+            50% { transform: translate3d(-50%, -55%, 0) rotate(2deg); } 
+        }
+        @keyframes float-coin { 
+            0% { transform: translate3d(-50%, 0, 0) scale(1); opacity: 1; } 
+            100% { transform: translate3d(-50%, -100px, 0) scale(1.5); opacity: 0; } 
+        }
+
+        .animate-fade-in { animation: fade-in-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        
+        #pirate-ship {
+            position: fixed; z-index: 100; pointer-events: none;
+            transition: left 1.2s cubic-bezier(0.45, 0, 0.55, 1), top 1.2s cubic-bezier(0.45, 0, 0.55, 1);
+            opacity: 0; width: 64px; height: 64px; 
+            transform: translate3d(-50%, -50%, 0);
+            will-change: left, top, opacity;
+        }
+        .ship-visible { opacity: 1 !important; }
+        .ship-icon { width: 100%; height: 100%; color: #8c1c13; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5)); animation: ship-bob 1s infinite ease-in-out; }
+
+        .glass-panel {
+            background: rgba(255, 248, 225, 0.96);
+            border: 4px double var(--cor-madeira);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border-radius: 1rem;
+        }
+
+        .visual-option { background: rgba(255, 255, 255, 0.7); border: 2px solid transparent; transition: all 0.2s; cursor: pointer; }
+        .visual-option:active { transform: scale(0.92); }
+        .visual-option.selected {
+            background: #fff; border-color: #8c1c13; transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(140, 28, 19, 0.2); z-index: 10;
+        }
+
+        .floating-berries {
+            position: fixed; pointer-events: none; color: #ffd700; font-family: 'Rye', serif;
+            font-size: 2.5rem; text-shadow: 2px 2px 0 #3e2723; z-index: 9999;
+            animation: float-coin 1.2s ease-out forwards;
+        }
+
+        /* RODAPÉ SUTIL E FIXO */
+        .static-footer {
+            width: 100%;
+            background: rgba(20, 10, 5, 0.85);
+            backdrop-filter: blur(4px);
+            color: rgba(255, 255, 255, 0.6);
+            text-align: center;
+            padding: 0.5rem;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            z-index: 40;
+            font-size: 0.65rem;
+            border-top: 1px solid rgba(200, 164, 100, 0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="pirate-ship"><i data-lucide="ship" class="ship-icon"></i></div>
+
+    <header class="w-full bg-[#3e2723]/95 backdrop-blur-md text-[#ffecb3] shadow-lg px-4 py-3 flex justify-between items-center fixed top-0 z-30 border-b-2 border-[#c8a464]">
+        <h1 class="text-sm md:text-xl font-black tracking-wider flex items-center gap-2 font-cinzel truncate">
+            <i data-lucide="compass" class="w-5 h-5 md:w-6 md:h-6 text-yellow-500"></i> 
+            <span class="truncate">Grande Rota</span>
+        </h1>
+        
+        <div id="bounty-area" class="flex items-center gap-2 bg-black/40 px-3 py-1.5 rounded-full border border-[#c8a464]/30 cursor-pointer hidden active:bg-black/60 transition" onclick="window.showWantedPoster()">
+            <img src="https://cdn-icons-png.flaticon.com/512/1165/1165623.png" class="w-4 h-4 md:w-5 md:h-5 animate-[spin_4s_linear_infinite]" alt="coin">
+            <span id="bounty-value" class="font-rye text-[#ffd700] text-sm md:text-base leading-none">0</span>
+        </div>
+
+        <div id="auth-info" class="text-[9px] md:text-xs font-bold bg-[#5d4037] px-2 py-1 rounded border border-[#c8a464]/50 text-white truncate max-w-[80px] md:max-w-[150px]"></div>
+    </header>
+
+    <div class="flex-grow w-full max-w-5xl mx-auto flex flex-col justify-center px-4 md:px-6">
+        <main id="content" class="w-full relative flex flex-col justify-center">
+            </main>
+    </div>
+
+    <div id="wantedModal" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm" onclick="this.classList.add('hidden')">
+        <div class="bg-[#f2eecb] p-4 md:p-6 w-full max-w-[280px] md:max-w-md shadow-2xl transform rotate-1 border-4 border-[#5d4037] text-center relative" onclick="event.stopPropagation()">
+            <h2 class="font-rye text-4xl text-[#3e2723] mb-1">WANTED</h2>
+            <div class="w-full aspect-square bg-gray-200 border-4 border-[#3e2723] mb-4 flex items-center justify-center bg-cover bg-center" style="background-image: url('https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/Background_OP.jpg');">
+                <i id="wanted-icon" data-lucide="skull" class="w-1/2 h-1/2 text-[#3e2723]"></i>
+            </div>
+            <h3 id="wanted-name" class="font-rye text-2xl text-[#3e2723] uppercase truncate mb-3">NOME</h3>
+            <div class="border-t-2 border-b-2 border-[#3e2723] py-2 bg-[#e6dfbc]">
+                <span id="wanted-value-display" class="font-rye text-xl text-[#3e2723]">0</span>
+            </div>
+        </div>
+    </div>
+
+    <footer class="static-footer font-cinzel">
+        <p>@gabrielopsicologo | CRP 06/215890 | &copy; 2025</p>
+    </footer>
+
+    <script type="module">
+        const CONTEXT_ICONS = [
+            { id: 'casa', icon: 'home', label: 'Em Casa' },
+            { id: 'escola', icon: 'graduation-cap', label: 'Escola' },
+            { id: 'parque', icon: 'gamepad-2', label: 'Brincando' },
+            { id: 'comida', icon: 'utensils', label: 'Comendo' },
+            { id: 'dormir', icon: 'moon', label: 'À Noite' },
+            { id: 'outro_ctx', icon: 'plus-circle', label: 'Outro' } // ADICIONADO "OUTRO" NO LOCAL
+        ];
+
+        const ACTION_ICONS = [
+            { id: 'falar', icon: 'message-circle', label: 'Conversei' },
+            { id: 'chorar', icon: 'cloud-rain', label: 'Chorei' },
+            { id: 'gritar', icon: 'megaphone', label: 'Gritei' },
+            { id: 'esconder', icon: 'eye-off', label: 'Me Escondi' },
+            { id: 'brincar', icon: 'smile', label: 'Brinquei' },
+            { id: 'outro_act', icon: 'plus-circle', label: 'Outro' } // ADICIONADO "OUTRO" NA AÇÃO
+        ];
+
+        const AVATARS = [
+            { id: 'capitao', icon: 'skull', label: 'Capitão' },
+            { id: 'espadachim', icon: 'sword', label: 'Guerreiro' },
+            { id: 'navegador', icon: 'map', label: 'Navegador' },
+            { id: 'cozinheiro', icon: 'utensils-crossed', label: 'Cozinheiro' },
+            { id: 'medico', icon: 'heart-pulse', label: 'Médico' },
+            { id: 'musico', icon: 'music', label: 'Músico' }
+        ];
+
+        const EMOTIONS = {
+            ALEGRIA: { name: "Alegria", color: "bg-yellow-500", icon: "sun" },
+            TRISTEZA: { name: "Tristeza", color: "bg-blue-600", icon: "cloud-rain" },
+            RAIVA: { name: "Raiva", color: "bg-red-600", icon: "flame" },
+            MEDO: { name: "Medo", color: "bg-purple-700", icon: "ghost" },
+            NOJO: { name: "Nojo", color: "bg-green-600", icon: "skull" },
+            SURPRESA: { name: "Surpresa", color: "bg-cyan-500", icon: "zap" }
+        };
+
+        let currentUser = null;
+        let currentSelection = { emotion: null, intensity: 5, context: null, action: null };
+
+        window.onload = () => {
+            const savedUser = localStorage.getItem('pirate_user_v2');
+            if (savedUser) { currentUser = JSON.parse(savedUser); renderMap(); } 
+            else { renderLogin(); }
+            lucide.createIcons();
+        };
+
+        window.renderLogin = function() {
+            document.getElementById('bounty-area').classList.add('hidden');
+            document.getElementById('auth-info').innerText = "Novo Pirata";
+            const avatarsHtml = AVATARS.map(a => `
+                <div onclick="selectAvatarLogin('${a.id}')" id="av-${a.id}" class="visual-option p-2 rounded-xl flex flex-col items-center justify-center gap-1 aspect-square bg-white/80">
+                    <i data-lucide="${a.icon}" class="w-6 h-6 text-[#3e2723]"></i>
+                    <span class="text-[9px] font-bold uppercase text-center">${a.label}</span>
+                </div>
+            `).join('');
+            document.getElementById('content').innerHTML = `<div class="glass-panel p-6 animate-fade-in max-w-sm mx-auto text-center w-full">
+                <h2 class="text-xl font-black text-[#3e2723] mb-4 font-cinzel">Quem é você?</h2>
+                <input type="text" id="pirateName" placeholder="Seu Nome" class="w-full text-center p-3 text-lg font-bold bg-[#fff8e1] border-2 border-[#c8a464] rounded-xl mb-4 outline-none">
+                <div class="grid grid-cols-3 gap-2 mb-6">${avatarsHtml}</div>
+                <input type="hidden" id="selectedAvatar">
+                <button onclick="createProfile()" class="w-full bg-[#8c1c13] text-[#ffecb3] font-bold py-3 rounded-xl border border-[#ffecb3] uppercase">Zarpar!</button>
+            </div>`;
+            lucide.createIcons();
+        };
+
+        window.selectAvatarLogin = (id) => {
+            document.querySelectorAll('.visual-option').forEach(el => el.classList.remove('selected'));
+            document.getElementById(`av-${id}`).classList.add('selected');
+            document.getElementById('selectedAvatar').value = id;
+        };
+
+        window.createProfile = () => {
+            const name = document.getElementById('pirateName').value.trim();
+            const avatar = document.getElementById('selectedAvatar').value;
+            if(!name || !avatar) return;
+            currentUser = { name, avatar, bounty: 0 };
+            localStorage.setItem('pirate_user_v2', JSON.stringify(currentUser));
+            renderMap();
+        };
+
+        window.renderMap = function() {
+            updateHeader();
+            document.getElementById('content').innerHTML = `<div class="glass-panel p-4 rounded-xl animate-fade-in w-full">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-lg md:text-2xl font-black text-[#3e2723] font-cinzel">Mapa do Tesouro</h2>
+                    <button onclick="logout()" class="text-[9px] text-red-700 font-bold border border-red-200 px-2 py-1 rounded">Sair</button>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                    ${Object.entries(EMOTIONS).map(([k, e]) => `
+                        <button onclick="window.sailTo('${k}', event)" class="island-card ${e.color} h-28 md:h-36 rounded-xl flex flex-col items-center justify-center text-white shadow relative">
+                            <i data-lucide="${e.icon}" class="w-8 h-8 mb-2"></i>
+                            <span class="font-black font-cinzel text-sm">${e.name}</span>
+                        </button>
+                    `).join('')}
+                </div>
+            </div>`;
+            lucide.createIcons();
+        };
+
+        window.sailTo = function(key, event) {
+            const ship = document.getElementById('pirate-ship');
+            const rect = event.currentTarget.getBoundingClientRect();
+            ship.style.left = '50%'; ship.style.top = '100%'; ship.classList.add('ship-visible');
+            requestAnimationFrame(() => {
+                ship.style.left = `${rect.left + rect.width/2}px`; 
+                ship.style.top = `${rect.top + rect.height/2}px`;
+            });
+            setTimeout(() => { ship.classList.remove('ship-visible'); renderActivity(key); }, 1200);
+        };
+
+        window.renderActivity = function(emotionKey) {
+            currentSelection = { emotion: emotionKey, intensity: 5, context: null, action: null };
+            const emotion = EMOTIONS[emotionKey];
+            document.getElementById('content').innerHTML = `<div class="glass-panel p-4 md:p-6 rounded-xl animate-fade-in relative max-w-xl mx-auto w-full">
+                <button onclick="renderMap()" class="absolute top-2 right-2 text-[#5d4037]"><i data-lucide="x" class="w-5 h-5"></i></button>
+                <div class="flex items-center gap-3 mb-4 border-b pb-2">
+                    <div class="p-2 rounded-full ${emotion.color} text-white border-2 border-white"><i data-lucide="${emotion.icon}" class="w-5 h-5"></i></div>
+                    <h2 class="text-lg font-black text-[#3e2723] font-cinzel">${emotion.name}</h2>
+                </div>
+                <div class="mb-4 bg-[#fff8e1] p-3 rounded-lg border border-[#c8a464]">
+                    <label class="text-[10px] font-bold text-[#5d4037] uppercase">Tamanho da Onda</label>
+                    <input type="range" min="1" max="10" value="5" class="w-full accent-[#8c1c13]" oninput="document.getElementById('val-int').innerText = this.value">
+                    <div class="flex justify-between text-[9px] font-bold mt-1 text-[#3e2723]"><span>Pequena</span><span class="text-lg text-[#8c1c13]" id="val-int">5</span><span>Gigante</span></div>
+                </div>
+                <div class="mb-4">
+                    <p class="text-[10px] font-bold text-[#5d4037] uppercase mb-1">Onde aconteceu?</p>
+                    <div class="grid grid-cols-3 md:grid-cols-6 gap-2">${CONTEXT_ICONS.map(c => `<div onclick="selectOption('context', '${c.id}')" id="ctx-${c.id}" class="visual-option p-1.5 rounded-lg flex flex-col items-center justify-center bg-white h-16"><i data-lucide="${c.icon}" class="w-5 h-5 mb-0.5"></i><span class="text-[8px] font-bold uppercase text-center leading-tight">${c.label}</span></div>`).join('')}</div>
+                </div>
+                <div class="mb-6">
+                    <p class="text-[10px] font-bold text-[#5d4037] uppercase mb-1">O que você fez?</p>
+                    <div class="grid grid-cols-3 md:grid-cols-6 gap-2">${ACTION_ICONS.map(a => `<div onclick="selectOption('action', '${a.id}')" id="act-${a.id}" class="visual-option p-1.5 rounded-lg flex flex-col items-center justify-center bg-white h-16"><i data-lucide="${a.icon}" class="w-5 h-5 mb-0.5"></i><span class="text-[8px] font-bold uppercase text-center leading-tight">${a.label}</span></div>`).join('')}</div>
+                </div>
+                <button onclick="finishActivity()" class="w-full bg-green-700 text-white font-bold py-3 rounded-xl uppercase text-xs">Salvar Aventura</button>
+            </div>`;
+            lucide.createIcons();
+        };
+
+        window.selectOption = (type, id) => {
+            currentSelection[type] = id;
+            const prefix = type === 'context' ? 'ctx-' : 'act-';
+            document.querySelectorAll(`[id^="${prefix}"]`).forEach(el => el.classList.remove('selected'));
+            document.getElementById(prefix + id).classList.add('selected');
+        };
+
+        window.finishActivity = () => {
+            if(!currentSelection.context || !currentSelection.action) return;
+            const reward = Math.floor(Math.random() * 50000) + 10000;
+            currentUser.bounty += reward;
+            localStorage.setItem('pirate_user_v2', JSON.stringify(currentUser));
+            const coin = document.createElement('div');
+            coin.className = 'floating-berries';
+            coin.style.left = '50%'; coin.style.top = '50%';
+            coin.innerHTML = `+${reward.toLocaleString('pt-BR')}`;
+            document.body.appendChild(coin);
+            setTimeout(() => { coin.remove(); renderMap(); }, 1200);
+        };
+
+        function updateHeader() {
+            document.getElementById('bounty-area').classList.remove('hidden');
+            document.getElementById('bounty-value').innerText = currentUser.bounty.toLocaleString('pt-BR');
+            document.getElementById('auth-info').innerText = currentUser.name;
+        }
+
+        window.showWantedPoster = function() {
+            const modal = document.getElementById('wantedModal');
+            document.getElementById('wanted-name').innerText = currentUser.name;
+            document.getElementById('wanted-value-display').innerText = currentUser.bounty.toLocaleString('pt-BR');
+            const avatarDef = AVATARS.find(a => a.id === currentUser.avatar) || AVATARS[0];
+            document.getElementById('wanted-icon').setAttribute('data-lucide', avatarDef.icon);
+            lucide.createIcons();
+            modal.classList.remove('hidden');
+        };
+
+        window.logout = () => { if(confirm('Abandonar o navio?')) { localStorage.removeItem('pirate_user_v2'); location.reload(); }};
+    </script>
+</body>
+</html>
