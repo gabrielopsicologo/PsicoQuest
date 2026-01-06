@@ -12,57 +12,62 @@
             --text: #ffffff;
         }
         body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            font-family: 'Segoe UI', sans-serif; 
             background-color: var(--bg); 
             color: var(--text); 
-            margin: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 100vh;
-            padding: 20px;
+            padding: 40px 20px;
+            margin: 0;
         }
-        h1 { margin-top: 40px; color: var(--primary); text-transform: uppercase; letter-spacing: 2px; }
-        .pilar-title { margin-top: 30px; font-size: 1.2rem; color: #aaa; border-bottom: 2px solid var(--primary); padding-bottom: 5px; width: 100%; max-width: 400px; text-align: center; }
-        .menu-container { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 20px; width: 100%; }
+        h1 { color: var(--primary); text-transform: uppercase; margin-bottom: 5px; }
+        .subtitle { color: #888; margin-bottom: 30px; }
+        .pilar-container { width: 100%; max-width: 400px; }
+        .pilar-header { 
+            background: var(--primary); 
+            padding: 10px; 
+            border-radius: 8px 8px 0 0; 
+            font-weight: bold; 
+            text-align: center;
+        }
+        .menu-list { 
+            background: rgba(255,255,255,0.05); 
+            border: 1px solid var(--primary); 
+            border-radius: 0 0 8px 8px; 
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
         .btn { 
             background-color: var(--secondary); 
             color: white; 
             text-decoration: none; 
-            padding: 15px 20px; 
-            border-radius: 12px; 
-            width: 90%; 
-            max-width: 350px; 
-            border: 1px solid rgba(233, 69, 96, 0.3);
-            transition: all 0.3s ease;
+            padding: 12px; 
+            border-radius: 6px; 
+            transition: 0.3s;
             text-align: center;
-            font-weight: bold;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            font-size: 0.9rem;
         }
-        .btn:hover { 
-            background-color: var(--primary); 
-            transform: translateY(-3px); 
-            box-shadow: 0 6px 20px rgba(233, 69, 96, 0.4);
-        }
-        .footer { margin-top: auto; padding: 20px; font-size: 0.8rem; color: #555; }
+        .btn:hover { background-color: var(--primary); transform: translateX(5px); }
     </style>
 </head>
 <body>
 
     <h1>🎮 PSICOQUEST</h1>
-    <p>Selecione sua ferramenta de aventura:</p>
+    <p class="subtitle">Edição Aventura 2026</p>
 
-    <div class="pilar-title">1. CONSULTÓRIO EXPERT</div>
-
-    <div class="menu-container">
-        <a href="aventura/1consultorio/1anamnese/" class="btn">1. Anamnese Interativa</a>
-        <a href="aventura/1consultorio/2linhadavida/" class="btn">2. Linha da Vida</a>
-        <a href="aventura/1consultorio/3prontuario/" class="btn">3. Prontuário de Missão</a>
-        <a href="aventura/1consultorio/4relatoriooc/" class="btn">4. Relatório O.C.</a>
-        <a href="aventura/1consultorio/5rpd/" class="btn">5. Registro R.P.D.</a>
+    <div class="pilar-container">
+        <div class="pilar-header">1. CONSULTÓRIO EXPERT</div>
+        <div class="menu-list">
+            <a href="aventura/1consultorio/1anamnese/" class="btn">1. Anamnese Interativa</a>
+            <a href="aventura/1consultorio/2linhadavida/" class="btn">2. Linha da Vida</a>
+            <a href="aventura/1consultorio/3prontuario/" class="btn">3. Prontuário de Missão</a>
+            <a href="aventura/1consultorio/4relatoriooc/" class="btn">4. Relatório O.C.</a>
+            <a href="aventura/1consultorio/5rpd/" class="btn">5. Registro R.P.D.</a>
+        </div>
     </div>
-
-    <div class="footer">Desenvolvido por Gabriel Psicólogo</div>
 
 </body>
 </html>
