@@ -3,35 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PsicoQuest - Menu de Jogos</title>
+    <title>PsicoQuest - Hub de Aventuras</title>
     <style>
-        body { font-family: sans-serif; background-color: #1a1a2e; color: white; text-align: center; padding: 50px; }
-        h1 { color: #e94560; }
-        .menu-container { display: flex; flex-direction: column; align-items: center; gap: 15px; margin-top: 30px; }
+        :root {
+            --primary: #e94560;
+            --secondary: #0f3460;
+            --bg: #1a1a2e;
+            --text: #ffffff;
+        }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: var(--bg); 
+            color: var(--text); 
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        h1 { margin-top: 40px; color: var(--primary); text-transform: uppercase; letter-spacing: 2px; }
+        .pilar-title { margin-top: 30px; font-size: 1.2rem; color: #aaa; border-bottom: 2px solid var(--primary); padding-bottom: 5px; width: 100%; max-width: 400px; text-align: center; }
+        .menu-container { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 20px; width: 100%; }
         .btn { 
-            background-color: #0f3460; 
+            background-color: var(--secondary); 
             color: white; 
             text-decoration: none; 
-            padding: 15px 25px; 
-            border-radius: 8px; 
-            width: 300px; 
-            border: 2px solid #e94560;
-            transition: 0.3s;
+            padding: 15px 20px; 
+            border-radius: 12px; 
+            width: 90%; 
+            max-width: 350px; 
+            border: 1px solid rgba(233, 69, 96, 0.3);
+            transition: all 0.3s ease;
+            text-align: center;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
-        .btn:hover { background-color: #e94560; transform: scale(1.05); }
+        .btn:hover { 
+            background-color: var(--primary); 
+            transform: translateY(-3px); 
+            box-shadow: 0 6px 20px rgba(233, 69, 96, 0.4);
+        }
+        .footer { margin-top: auto; padding: 20px; font-size: 0.8rem; color: #555; }
     </style>
 </head>
 <body>
 
-    <h1>🎮 PsicoQuest - Edição Aventura</h1>
-    <p>Selecione o módulo que deseja acessar:</p>
+    <h1>🎮 PSICOQUEST</h1>
+    <p>Selecione sua ferramenta de aventura:</p>
+
+    <div class="pilar-title">1. CONSULTÓRIO EXPERT</div>
 
     <div class="menu-container">
-        <a href="01. CONSULTÓRIO EXPERT (Base Técnica e Administrativa)/1Anamnese interativa/" class="btn">
-            01. Anamnese Interativa
-        </a>
+        <a href="aventura/1consultorio/1anamnese/" class="btn">1. Anamnese Interativa</a>
+        <a href="aventura/1consultorio/2linhadavida/" class="btn">2. Linha da Vida</a>
+        <a href="aventura/1consultorio/3prontuario/" class="btn">3. Prontuário de Missão</a>
+        <a href="aventura/1consultorio/4relatoriooc/" class="btn">4. Relatório O.C.</a>
+        <a href="aventura/1consultorio/5rpd/" class="btn">5. Registro R.P.D.</a>
+    </div>
 
-        </div>
+    <div class="footer">Desenvolvido por Gabriel Psicólogo</div>
 
 </body>
 </html>
