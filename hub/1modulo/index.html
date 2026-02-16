@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PsicoQuest - Hub de Ferramentas</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50; /* Azul escuro profissional */
+            --accent-color: #3498db;  /* Azul destaque */
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-color: #333;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        h2 {
+            font-size: 1.1rem;
+            color: #7f8c8d;
+            font-weight: 400;
+            margin-top: 5px;
+        }
+
+        .module-section {
+            margin-bottom: 30px;
+        }
+
+        .module-title {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px 8px 0 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: 1fr; /* Padrão mobile: 1 coluna */
+            gap: 15px;
+            background: white;
+            padding: 20px;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        @media (min-width: 600px) {
+            .tools-grid {
+                grid-template-columns: 1fr 1fr; /* PC: 2 colunas */
+            }
+        }
+
+        .tool-card {
+            display: block;
+            text-decoration: none;
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+            padding: 15px;
+            border-radius: 8px;
+            color: var(--text-color);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+        }
+
+        .tool-card:hover {
+            border-color: var(--accent-color);
+            box-shadow: 0 4px 8px rgba(52, 152, 219, 0.2);
+            transform: translateY(-2px);
+            color: var(--accent-color);
+        }
+
+        .icon {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>PsicoQuest</h1>
+            <h2>Ferramentas Terapêuticas Digitais</h2>
+        </header>
+
+        <div class="module-section">
+            <div class="module-title">Consultório Expert (Base Técnica e Administrativa)</div>
+            <div class="tools-grid">
+                <a href="https://gabrielopsicologo.github.io/PsicoQuest/classica/1consultorio/1anamnese/" class="tool-card" target="_blank">
+                    <span class="icon">📋</span> Anamnese Interativa
+                </a>
+                <a href="https://gabrielopsicologo.github.io/PsicoQuest/classica/1consultorio/2linhadavida/" class="tool-card" target="_blank">
+                    <span class="icon">⏳</span> Linha da Vida
+                </a>
+                <a href="https://gabrielopsicologo.github.io/PsicoQuest/classica/1consultorio/3prontuario/" class="tool-card" target="_blank">
+                    <span class="icon">📂</span> Prontuário Eletrônico
+                </a>
+                <a href="https://gabrielopsicologo.github.io/PsicoQuest/classica/1consultorio/4relatorio/" class="tool-card" target="_blank">
+                    <span class="icon">📝</span> Relatório de Observação
+                </a>
+                <a href="https://gabrielopsicologo.github.io/PsicoQuest/classica/1consultorio/5rpd/" class="tool-card" target="_blank">
+                    <span class="icon">💭</span> RPD — Registro de Pensamentos
+                </a>
+            </div>
+        </div>
+
+        <div class="module-section">
+            <div class="module-title">Maestria Emocional (Ansiedade e Regulação)</div>
+            <div class="tools-grid">
+                <a href="https://gabrielopsicologo.github.io/PsicoQuest/classica/2emocional/1cartoes/" class="tool-card" target="_blank">
+                    <span class="icon">🛡️</span> Cartões de Enfrentamento
+                </a>
+                <a href="https://gabrielopsicologo.github.io/PsicoQuest/classica/2emocional/2menosansiedade/" class="tool-card" target="_blank">
+                    <span class="icon">🌿</span> Estilo de Vida (Menos Ansiedade)
+                </a>
+                <a href="https://gabrielopsicologo.github.io/PsicoQuest/classica/2emocional/3rdflorv1/" class="tool-card" target="_blank">
+                    <span class="icon">🕯️</span> O Poder da Calma (Flor e Vela)
+                </a>
+                <a href="https://gabrielopsicologo.github.io/PsicoQuest/classica/2emocional/5roleta/" class="tool-card" target="_blank">
+                    <span class="icon">🎡</span> Roleta Reflexiva da Ansiedade
+                </a>
+                <a href="https://gabrielopsicologo.github.io/PsicoQuest/classica/2emocional/6relax/" class="tool-card" target="_blank">
+                    <span class="icon">🧘</span> Técnicas de Relaxamento
+                </a>
+                <a href="https://gabrielopsicologo.github.io/PsicoQuest/classica/2emocional/8baralho/" class="tool-card" target="_blank">
+                    <span class="icon">🃏</span> Baralho das Emoções
+                </a>
+            </div>
+        </div>
+
+        <div class="module-section">
+            <div class="module-title">Arquitetura da Identidade (Autoestima e Evolução)</div>
+            <div class="tools-grid">
+                <a href="https://gabrielopsicologo.github.io/PsicoQuest/classica/3identidade/1autoconhecimento/" class="tool-card" target="_blank">
+                    <span class="icon">🔍</span> Baralho de Autoconhecimento
+                </a>
+                <a href="https://gabrielopsicologo.github.io/PsicoQuest/classica/3identidade/2autoestimafem/" class="tool-card" target="_blank">
+                    <span class="icon">👩</span> Jornada da Autoestima Feminina
+                </a>
+                <a href="https://gabrielopsicologo.github.io/PsicoQuest/classica/3identidade/3autoestimam/" class="tool-card" target="_blank">
+                    <span class="icon">👨</span> Jornada da Autoestima Masculina
+                </a>
+                <a href="https://gabrielopsicologo.github.io/PsicoQuest/classica/3identidade/5quemsoueu/" class="tool-card" target="_blank">
+                    <span class="icon">🧠</span> Análise de Crenças (Quem sou eu)
+                </a>
+                <a href="https://gabrielopsicologo.github.io/PsicoQuest/classica/3identidade/4kit/" class="tool-card" target="_blank">
+                    <span class="icon">✨</span> Kit de Bem-estar
+                </a>
+                <a href="https://gabrielopsicologo.github.io/PsicoQuest/classica/4neurodiversidade/1foco/" class="tool-card" target="_blank">
+                    <span class="icon">🎯</span> Estratégias para Foco
+                </a>
+            </div>
+        </div>
+
+        <div class="module-section">
+            <div class="module-title">Protocolos TCC (Cognição e Reestruturação)</div>
+            <div class="tools-grid">
+                <a href="https://gabrielopsicologo.github.io/PsicoQuest/classica/5protocolos/1roda/" class="tool-card" target="_blank">
+                    <span class="icon">🎡</span> Roda da Vida
+                </a>
+                <a href="https://gabrielopsicologo.github.io/PsicoQuest/classica/5protocolos/2torta/" class="tool-card" target="_blank">
+                    <span class="icon">🍰</span> Torta da Responsabilidade
+                </a>
+                <a href="https://gabrielopsicologo.github.io/PsicoQuest/classica/5protocolos/3custob/" class="tool-card" target="_blank">
+                    <span class="icon">⚖️</span> Análise de Custo-Benefício
+                </a>
+                <a href="https://gabrielopsicologo.github.io/PsicoQuest/classica/5protocolos/4descatastrofizacao/" class="tool-card" target="_blank">
+                    <span class="icon">🌤️</span> Descatastrofização
+                </a>
+                <a href="https://gabrielopsicologo.github.io/PsicoQuest/classica/5protocolos/5problemas/" class="tool-card" target="_blank">
+                    <span class="icon">🧩</span> Identificação de Problemas
+                </a>
+                <a href="https://gabrielopsicologo.github.io/PsicoQuest/classica/5protocolos/6evidencias/" class="tool-card" target="_blank">
+                    <span class="icon">🔎</span> Quadro de Evidências
+                </a>
+            </div>
+        </div>
+
+        <footer>
+            &copy; 2026 Gabriel - Psicólogo. Todos os direitos reservados.
+        </footer>
+    </div>
+
+</body>
+</html>

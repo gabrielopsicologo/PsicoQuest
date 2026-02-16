@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PsicoQuest - Edição Aventura</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50; /* Base escura */
+            --adventure-color: #e67e22; /* Laranja RPG/Aventura */
+            --bg-color: #fcf3cf; /* Fundo levemente pergaminho/creme */
+            --card-bg: #ffffff;
+            --text-color: #333;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 25px;
+            background: var(--card-bg);
+            border-radius: 15px;
+            border-bottom: 4px solid var(--adventure-color);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin: 0;
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        h2 {
+            font-size: 1.1rem;
+            color: var(--adventure-color);
+            font-weight: 600;
+            margin-top: 5px;
+        }
+
+        .module-section {
+            margin-bottom: 30px;
+        }
+
+        .module-title {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px 8px 0 0;
+            font-size: 1.1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* Pequeno detalhe visual no título */
+        .module-title::after {
+            content: '⚔️';
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            background: white;
+            padding: 20px;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        @media (min-width: 600px) {
+            .tools-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        .tool-card {
+            display: block;
+            text-decoration: none;
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+            padding: 15px;
+            border-radius: 8px;
+            color: var(--text-color);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tool-card:hover {
+            border-color: var(--adventure-color);
+            box-shadow: 0 4px 8px rgba(230, 126, 34, 0.2);
+            transform: translateY(-2px);
+            color: var(--adventure-color);
+        }
+
+        .tool-card:hover .icon {
+            transform: scale(1.2);
+        }
+
+        .icon {
+            margin-right: 12px;
+            font-size: 1.4rem;
+            transition: transform 0.2s ease;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>PsicoQuest</h1>
+            <h2>Edição Aventura 🛡️</h2>
+        </header>
+
+        <div class="module-section">
+            <div class="module-title">Consultório Expert (Base Técnica)</div>
+            <div class="tools-grid">
+                <a href="https://gabrielopsicologo.github.io/PsicoQuest/classica/1consultorio/1anamnese/" class="tool-card" target="_blank">
+                    <span class="icon">📋</span> Anamnese Interativa
+                </a>
+                <a href="https://gabrielopsicologo.github.io/PsicoQuest/classica/1consultorio/2linhadavida/" class="tool-card" target="_blank">
+                    <span class="icon">⏳</span> Linha da Vida
+                </a>
+                <a href="https://gabrielopsicologo.github.io/PsicoQuest/classica/1consultorio/3prontuario/" class="tool-card" target="_blank">
+                    <span class="icon">📂</span> Prontuário Eletrônico
+                </a>
+                <a href="https://gabrielopsicologo.github.io/PsicoQuest/classica/1consultorio/4relatorio/" class="tool-card" target="_blank">
+                    <span class="icon">📝</span> Relatório de Observação
+                </a>
+                <a href="https://gabrielopsicologo.github.io/PsicoQuest/classica/1consultorio/5rpd/" class="tool-card" target="_blank">
+                    <span class="icon">💭</span> RPD — Registro de Pensamentos
+                </a>
+            </div>
+        </div>
+
+        <div class="module-section">
+            <div class="module-title">Guilda da Calmaria (Ansiedade)</div>
+            <div class="tools-grid">
+                <a href="https://gabrielopsicologo.github.io/PsicoQuest/aventura/2calmaria/1descanso/" class="tool-card" target="_blank">
+                    <span class="icon">⛺</span> Técnicas de Descanso do Herói
+                </a>
+                <a href="https://gabrielopsicologo.github.io/PsicoQuest/aventura/2calmaria/2academia/" class="tool-card" target="_blank">
+                    <span class="icon">⚔️</span> Academia de Heróis (Roleta)
+                </a>
+                <a href="https://gabrielopsicologo.github.io/PsicoQuest/aventura/2calmaria/3baus/" class="tool-card" target="_blank">
+                    <span class="icon">🗝️</span> Baús Mágicos da Ansiedade
+                </a>
+                <a href="https://gabrielopsicologo.github.io/PsicoQuest/aventura/2calmaria/4inventario/" class="tool-card" target="_blank">
+                    <span class="icon">🎒</span> Inventário do Herói
+                </a>
+            </div>
+        </div>
+
+        <div class="module-section">
+            <div class="module-title">Forja do Eu (Autoestima)</div>
+            <div class="tools-grid">
+                <a href="https://gabrielopsicologo.github.io/PsicoQuest/aventura/3eu/1autoestimacasa/" class="tool-card" target="_blank">
+                    <span class="icon">🏰</span> Jornada: Complete as Casas
+                </a>
+                <a href="https://gabrielopsicologo.github.io/PsicoQuest/aventura/3eu/2autoestimarpg/" class="tool-card" target="_blank">
+                    <span class="icon">🎲</span> RPG da Vida Real
+                </a>
+            </div>
+        </div>
+
+        <div class="module-section">
+            <div class="module-title">Mapa da Jornada (Autoconhecimento)</div>
+            <div class="tools-grid">
+                <a href="https://gabrielopsicologo.github.io/PsicoQuest/aventura/4mapa/1faseemoji/" class="tool-card" target="_blank">
+                    <span class="icon">🙂</span> Análise de Fases (Emoji)
+                </a>
+                <a href="https://gabrielopsicologo.github.io/PsicoQuest/aventura/4mapa/2fase/" class="tool-card" target="_blank">
+                    <span class="icon">🗺️</span> Análise de Fases
+                </a>
+                <a href="https://gabrielopsicologo.github.io/PsicoQuest/aventura/4mapa/3heroismente/" class="tool-card" target="_blank">
+                    <span class="icon">🦸</span> Heróis da Mente
+                </a>
+            </div>
+        </div>
+
+        <div class="module-section">
+            <div class="module-title">Árvore de Skills (TDAH e TEA)</div>
+            <div class="tools-grid">
+                <a href="https://gabrielopsicologo.github.io/PsicoQuest/aventura/5arvore/1focoec/" class="tool-card" target="_blank">
+                    <span class="icon">🌳</span> Estratégias para Foco
+                </a>
+            </div>
+        </div>
+
+        <div class="module-section">
+            <div class="module-title" style="background-color: #d35400;">Arco One Piece (Expansão Temática)</div>
+            <div class="tools-grid">
+                <a href="https://gabrielopsicologo.github.io/PsicoQuest/aventura/6op/1baralho/" class="tool-card" target="_blank">
+                    <span class="icon">🏴‍☠️</span> Baralho do Capitão
+                </a>
+                <a href="https://gabrielopsicologo.github.io/PsicoQuest/aventura/6op/2diario/" class="tool-card" target="_blank">
+                    <span class="icon">🧭</span> Diário da Grande Rota
+                </a>
+                <a href="https://gabrielopsicologo.github.io/PsicoQuest/aventura/6op/3granderota/" class="tool-card" target="_blank">
+                    <span class="icon">🌊</span> Grande Rota das Emoções
+                </a>
+                <a href="https://gabrielopsicologo.github.io/PsicoQuest/aventura/6op/4reidospiratas/" class="tool-card" target="_blank">
+                    <span class="icon">👑</span> O Próximo Rei dos Piratas
+                </a>
+                <a href="https://gabrielopsicologo.github.io/PsicoQuest/aventura/6op/5roda/" class="tool-card" target="_blank">
+                    <span class="icon">☸️</span> Roda da Vida
+                </a>
+                <a href="https://gabrielopsicologo.github.io/PsicoQuest/aventura/6op/6rota/" class="tool-card" target="_blank">
+                    <span class="icon">⚓</span> Rota da Calmaria
+                </a>
+                <a href="https://gabrielopsicologo.github.io/PsicoQuest/aventura/6op/7torta/" class="tool-card" target="_blank">
+                    <span class="icon">🍰</span> Torta da Responsabilidade
+                </a>
+            </div>
+        </div>
+
+        <div class="module-section">
+            <div class="module-title">Quartel General (Colorir)</div>
+            <div class="tools-grid">
+                <a href="https://gabrielopsicologo.github.io/PsicoQuest/aventura/7quartel/1canimal/" class="tool-card" target="_blank">
+                    <span class="icon">🐾</span> Mundo Animal
+                </a>
+                <a href="https://gabrielopsicologo.github.io/PsicoQuest/aventura/7quartel/2cgeek/" class="tool-card" target="_blank">
+                    <span class="icon">🎮</span> Espaço Geek
+                </a>
+                <a href="https://gabrielopsicologo.github.io/PsicoQuest/aventura/7quartel/3cfantasia/" class="tool-card" target="_blank">
+                    <span class="icon">🦄</span> Reino da Fantasia
+                </a>
+                <a href="https://gabrielopsicologo.github.io/PsicoQuest/aventura/7quartel/4comida/" class="tool-card" target="_blank">
+                    <span class="icon">🍩</span> Comidinhas Fofas
+                </a>
+            </div>
+        </div>
+
+        <footer>
+            &copy; 2026 Gabriel - Psicólogo. Todos os direitos reservados.
+        </footer>
+    </div>
+
+</body>
+</html>
