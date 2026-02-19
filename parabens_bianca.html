@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>PARABÉNS BIANCA!!! 🏋️‍♀️</title>
+    <style>
+        body {
+            background-color: #ff00ff;
+            background-image: url('https://www.transparenttextures.com/patterns/cubes.png');
+            color: #00ff00;
+            font-family: "Comic Sans MS", cursive;
+            text-align: center;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* NOME GIRANDO - PURO CAOS */
+        .nome-container {
+            padding: 50px;
+        }
+        .girar {
+            display: inline-block;
+            font-size: 120px;
+            font-weight: bold;
+            color: yellow;
+            text-shadow: 8px 8px 0px blue, -5px -5px 0px red;
+            animation: rodar 2s linear infinite;
+        }
+
+        @keyframes rodar {
+            from { transform: rotate(0deg) scale(0.5); }
+            50% { transform: rotate(180deg) scale(1.2); }
+            to { transform: rotate(360deg) scale(0.5); }
+        }
+
+        /* MOLDURAS DOS GATOS */
+        .gato-meme {
+            width: 250px;
+            height: 250px;
+            border: 10px ridge lime;
+            margin: 20px;
+            box-shadow: 10px 10px 0px #000;
+            background-color: white;
+            object-fit: cover;
+            animation: tremer 0.3s infinite;
+        }
+
+        @keyframes tremer {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            50% { transform: translate(-1px, -2px) rotate(-1deg); }
+            100% { transform: translate(1px, 1px) rotate(1deg); }
+        }
+
+        /* FOGOS DE ARTIFÍCIO (CSS) */
+        .fogos {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/2/21/Firework_animated.gif');
+            background-size: contain;
+            opacity: 0.5;
+        }
+
+        .gym-box {
+            background: yellow;
+            color: black;
+            border: 5px dashed red;
+            padding: 20px;
+            display: inline-block;
+            margin: 20px;
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        marquee {
+            font-size: 50px;
+            background: blue;
+            color: white;
+        }
+
+        .btn-creatina {
+            background: linear-gradient(to bottom, #ff0000, #ff00ff);
+            color: white;
+            padding: 30px;
+            font-size: 40px;
+            border: 10px outset yellow;
+            cursor: pointer;
+            animation: pulo 0.5s infinite alternate;
+        }
+
+        @keyframes pulo {
+            from { transform: translateY(0); }
+            to { transform: translateY(-20px); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="fogos"></div>
+
+    <marquee scrollamount="25">🎉 PARABÉNS BIANCA!!! 🏋️‍♀️ FOCO NO TREINO!!! 🐱 MUITOS GATINHOS E MUITO PESO!!! 🎉</marquee>
+
+    <div class="nome-container">
+        <div class="girar">BIANCA</div>
+    </div>
+
+    <div class="gym-box">
+        💪 BORA TREINAR QUE HOJE É DIA DE FESTA! 🎂
+    </div>
+
+    <div style="display: flex; flex-wrap: wrap; justify-content: center;">
+        <img src="https://cataas.com/cat/gif" class="gato-meme">
+        <img src="https://cataas.com/cat?width=250&height=250" class="gato-meme">
+        <img src="https://cataas.com/cat/says/PARABENS?color=yellow&size=40" class="gato-meme">
+        <img src="https://cataas.com/cat/cute" class="gato-meme">
+    </div>
+
+    <br>
+
+    <div class="gym-box" style="background: lime;">
+        🐱 GATINHOS MAROMBAS APROVAM ESSE NIVER 🐱
+    </div>
+
+    <br><br>
+
+    <button class="btn-creatina" onclick="alert('PARABÉNS BIANCA! AGORA VAI LÁ PEGAR SEU PESO!')">
+        CLIQUE AQUI PARA GANHAR UM WHEY
+    </button>
+
+    <br><br>
+
+    <marquee direction="right" scrollamount="15" style="background: red;">
+        🎂 BOLO PROTEICO LIBERADO! 🍰 BOLO PROTEICO LIBERADO! 🎂
+    </marquee>
+
+    <div style="margin-top: 50px;">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/d/d3/Bouncing_ball_anim.gif" width="100">
+        <h2 style="color: white; background: black; display: inline;">TÁ PAGO! ✅</h2>
+    </div>
+
+</body>
+</html>
