@@ -1,0 +1,16 @@
+PsicoQuest V7.2 — Refinamento Final
+
+Base usada:
+- V7.1 Refinamento Funcional, preservando os ajustes de campos personalizados, botões de voltar e correções de interação.
+
+Ajustes aplicados nesta versão:
+- Tamanho na Tela refeito para não depender de objetos ambíguos nem de escala confusa.
+- Tamanho na Tela agora usa pares da mesma figura em dois tamanhos claramente visuais.
+- Adicionado painel de referência com exemplo de Grande na tela e Pequeno na tela.
+- Ajustado CSS responsivo do Tamanho na Tela para celular e desktop.
+- Aplicado acabamento visual de sistema/app: barras superiores mais limpas, botões mais consistentes, foco acessível, cards com acabamento mais moderno e controle de overflow horizontal.
+- Mantido funcionamento local/offline, sem dependências externas.
+- Mantido botão fixo para Central Geral.
+
+Observação:
+- Esta ainda é uma versão de pré-comercialização. Recomenda-se teste manual em Chrome/Edge no PC e Chrome no Android antes de subir para Hotmart/GitHub.

@@ -1,0 +1,11 @@
+PsicoQuest V4 Piloto
+
+Versão: PsicoQuest Completo V4 Piloto
+
+Atualização principal:
+- Integração do novo bloco Apoio Visual — Novas Atividades ao módulo de Crianças/Adolescentes, Completo e Master Interno.
+- O módulo Adultos foi mantido estável, apenas com atualização de versão/entrega.
+- O suporte permanece discreto no topo e a autoria/copyright permanece no rodapé.
+
+Observação de uso:
+- Recursos de PDF/imagem dependem do navegador; em celulares, recomenda-se Chrome/Safari/Edge.

@@ -1,0 +1,76 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Termômetro da Frustração</title><style>
+:root{--bg:#f6f3ea;--ink:#263238;--muted:#667085;--card:#fffaf0;--line:#decda8;--accent:#5f7f64;--accent2:#d08b57;--accent3:#6c63a8;--danger:#b85656;--ok:#2f7d62;--shadow:0 18px 50px rgba(46,37,24,.15);--radius:24px}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);background:radial-gradient(circle at top left,#fff7dd 0,#f6f3ea 34%,#ecf0e9 100%)}
+body{padding:18px}.topbar{display:flex;gap:10px;align-items:center;justify-content:space-between;max-width:1180px;margin:0 auto 14px}.brand{display:flex;gap:10px;align-items:center;font-weight:800;letter-spacing:.02em}.pill{background:rgba(255,255,255,.68);border:1px solid rgba(0,0,0,.08);border-radius:999px;padding:8px 12px;color:#53605a;font-size:13px;text-decoration:none}.wrap{max-width:1180px;margin:0 auto}.hero{background:linear-gradient(135deg,rgba(255,250,240,.95),rgba(239,245,235,.96));border:1px solid rgba(117,98,53,.18);border-radius:32px;padding:26px;box-shadow:var(--shadow);position:relative;overflow:hidden}.hero:after{content:"";position:absolute;right:-80px;top:-80px;width:220px;height:220px;border-radius:50%;background:rgba(208,139,87,.13)}h1{margin:0;font-size:clamp(28px,5vw,52px);line-height:1.02}h2{margin:0 0 12px;font-size:clamp(22px,3vw,34px)}p{line-height:1.55}.lead{color:#52605a;font-size:17px;max-width:760px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:18px}.card{background:rgba(255,255,255,.75);border:1px solid rgba(0,0,0,.08);border-radius:24px;padding:18px;box-shadow:0 10px 30px rgba(0,0,0,.06)}.tool-card{text-decoration:none;color:inherit;display:block;transition:.18s transform,.18s box-shadow}.tool-card:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(0,0,0,.12)}.tag{display:inline-block;background:#eff5ee;color:#48604c;border:1px solid #d4e4d4;border-radius:999px;padding:5px 10px;font-size:12px;font-weight:700;margin:0 6px 8px 0}.stage{background:rgba(255,255,255,.82);border:1px solid rgba(0,0,0,.08);border-radius:32px;box-shadow:var(--shadow);padding:20px;margin-top:16px}.toolbar{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}.btn{border:0;border-radius:16px;background:#2f4f3a;color:#fff;padding:12px 14px;font-weight:800;cursor:pointer;box-shadow:0 8px 18px rgba(47,79,58,.2)}.btn.secondary{background:#fff;color:#34433b;border:1px solid rgba(0,0,0,.12);box-shadow:none}.btn.orange{background:#be7146}.btn.purple{background:#6860a8}.btn.red{background:#a94e4e}.btn:active{transform:scale(.98)}.muted{color:var(--muted);font-size:14px}.columns{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}.dropzone{min-height:150px;border:2px dashed #cab98e;border-radius:22px;padding:12px;background:#fffdf6}.item,.choice,.token{background:#fff;border:1px solid rgba(0,0,0,.10);border-radius:18px;padding:12px 14px;margin:8px 0;box-shadow:0 6px 16px rgba(0,0,0,.06);cursor:pointer}.item[draggable="true"]{cursor:grab}.item.dragging{opacity:.45}.selected{outline:4px solid rgba(208,139,87,.35)}textarea,input,select{width:100%;border:1px solid rgba(0,0,0,.16);border-radius:16px;padding:12px;background:#fff;font:inherit;min-height:48px}textarea{min-height:88px}.footer{text-align:center;color:#68736d;font-size:12px;margin:28px auto 8px}.hidden{display:none!important}.progress{height:12px;border-radius:999px;background:#e9debd;overflow:hidden}.bar{height:100%;width:0;background:linear-gradient(90deg,#5f7f64,#d08b57);transition:width .2s}.big-icon{font-size:40px;line-height:1}.game-panel{background:linear-gradient(180deg,#fffefa,#fff8e9);border:1px solid #e3d2a9;border-radius:28px;padding:18px}.modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:18px;z-index:30}.modalBox{max-width:700px;width:100%;max-height:85vh;overflow:auto;background:#fffaf0;border-radius:28px;padding:22px;border:1px solid #d9c797}.close{float:right}.print-area{background:#fff;border-radius:22px;padding:16px;border:1px solid #e2d7bd}@media print{body{background:#fff;padding:0}.topbar,.toolbar,.footer,.no-print{display:none!important}.stage,.hero,.card,.game-panel{box-shadow:none;border:0;border-radius:0}.wrap{max-width:100%;}.print-area{border:0}}
+</style> <style id="pq-v710-safe-base">
+/* V7.10: patch mínimo, sem sobrescrever identidade visual das ferramentas. */
+html{max-width:100%;overflow-x:hidden;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{max-width:100%;overflow-x:hidden}
+img,svg,canvas,video,iframe{max-width:100%;height:auto}
+textarea,input,select{max-width:100%}
+button,a,.btn,[role="button"]{touch-action:manipulation;-webkit-tap-highlight-color:rgba(37,99,235,.18)}
+.topbar,header,.top{max-width:100%;overflow-x:hidden}
+@media(max-width:680px){ .wrap,.main,.game-main,.topbar-inner,.inner,.top-inner{max-width:100%!important;width:100%!important} .wrap,.main,.game-main{padding-left:12px!important;padding-right:12px!important} .grid,.card-grid,.choice-grid,.visual-grid{max-width:100%} .toolbar,.actions,.tools{max-width:100%;gap:8px!important}
+}
+@media print{.pq-central-back{display:none!important}}
+</style> 
+<style id="pq-mobile-copy-safe">
+html{max-width:100%;overflow-x:hidden;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{max-width:100%;overflow-x:hidden}
+img,svg,canvas,video,iframe{max-width:100%;height:auto}
+button,a,.btn,[role="button"]{touch-action:manipulation;-webkit-tap-highlight-color:rgba(37,99,235,.18)}
+.pq-central-back{position:fixed!important;left:12px!important;right:12px!important;bottom:54px!important;z-index:9999!important;justify-content:center!important;background:#111827!important;color:#fff!important;border-radius:999px!important;padding:12px 14px!important;text-decoration:none!important;font-weight:900!important;box-shadow:0 14px 34px rgba(15,23,42,.24)!important}
+@media(max-width:680px){.wrap,.main,.game-main,.topbar-inner,.inner,.top-inner{max-width:100%!important;width:100%!important}.wrap,.main,.game-main{padding-left:12px!important;padding-right:12px!important}.toolbar,.actions,.tools{gap:8px!important}}
+@media print{.pq-central-back{display:none!important}}
+</style>
+
+</head><body> <div class="topbar no-print"><div class="brand"><span>🧩</span><span>PsicoQuest</span></div><button class="pill" onclick="support()">Suporte</button></div> <main class="wrap"><section class="hero"><h1>Termômetro da Frustração</h1><p class="lead">Ferramenta visual para medir frustração e escolher regulação.</p></section>
+<section class="stage"><div class="toolbar no-print"><button class="btn orange" onclick="novaSituacao()">Nova situação</button><button class="btn secondary" onclick="copyText(resumo())">Copiar resumo</button><button class="btn secondary" onclick="downloadImage('printArea','termometro_frustracao.png')">Imagem</button><button class="btn secondary" onclick="printPage()">PDF/Imprimir</button></div>
+<div id="printArea" class="print-area"><div class="game-panel"><h2>Termômetro da Frustração</h2><p id="situacao" style="font-size:20px"></p><label>Qual o tamanho da frustração?</label><input type="range" min="0" max="10" value="3" id="nivel" oninput="$('nivelOut').innerText=this.value;updateThermo()"><h2 id="nivelOut">3</h2><div style="height:28px;background:#e7e1d1;border-radius:999px;overflow:hidden"><div id="thermo" style="height:100%;width:30%;background:linear-gradient(90deg,#6ca86c,#e4b95b,#c85d5d)"></div></div><h3>Escolha uma ajuda</h3><div id="recursos" class="grid"></div><textarea id="obs" placeholder="O que funcionou? O que a criança precisou?"></textarea></div></div></section>
+</main> <div id="helpModal" class="modal hidden no-print"><div class="modalBox"><button class="btn secondary close" onclick="closeHelp()">Fechar</button><h2>Como usar</h2><div id="helpText"></div></div></div> <footer class="footer">© PsicoQuest · @gabrielopsicologo · Todos os direitos reservados.</footer><script>
+function $(id){return document.getElementById(id)}
+function copyText(txt){ if(navigator.clipboard){navigator.clipboard.writeText(txt).then(()=>alert('Copiado.')).catch(()=>fallbackCopy(txt));}else fallbackCopy(txt)}
+function fallbackCopy(txt){const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();alert('Copiado.');}
+function downloadTxt(name, txt){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt],{type:'text/plain;charset=utf-8'}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+function saveState(key, obj){localStorage.setItem(key, JSON.stringify(obj)); alert('Salvo neste aparelho.');}
+function loadState(key){try{return JSON.parse(localStorage.getItem(key)||'null')}catch(e){return null}}
+function codeFor(obj){return btoa(unescape(encodeURIComponent(JSON.stringify(obj))))}
+function objFromCode(code){return JSON.parse(decodeURIComponent(escape(atob(code.trim()))))}
+function printPage(){window.print()}
+function support(){window.open('https://wa.me/5500000000000?text=Olá! Preciso de suporte com o PsicoQuest.','_blank')}
+function downloadImage(targetId, filename){ const node=$(targetId); const w=node.offsetWidth||900, h=node.offsetHeight||900; const data='<svg xmlns="http://www.w3.org/2000/svg" width="'+w+'" height="'+h+'"><foreignObject width="100%" height="100%"><div xmlns="http://www.w3.org/1999/xhtml" style="font-family:Inter,Arial,sans-serif;background:white;padding:20px;">'+node.innerHTML+'</div></foreignObject></svg>'; const img=new Image(); img.onload=function(){const c=document.createElement('canvas');c.width=w;c.height=h;const ctx=c.getContext('2d');ctx.fillStyle='white';ctx.fillRect(0,0,w,h);ctx.drawImage(img,0,0);const a=document.createElement('a');a.download=filename;a.href=c.toDataURL('image/png');a.click();}; img.onerror=function(){alert('Se a imagem não baixar neste aparelho, use o Chrome/Safari/Edge ou salve em PDF.');}; img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(data);
+}
+function openHelp(text){$('helpText').innerHTML=text;$('helpModal').classList.remove('hidden')}
+function closeHelp(){$('helpModal').classList.add('hidden')}
+function setupDrag(){document.querySelectorAll('[draggable="true"]').forEach(el=>{el.addEventListener('dragstart',()=>el.classList.add('dragging'));el.addEventListener('dragend',()=>el.classList.remove('dragging'));});document.querySelectorAll('.dropzone').forEach(z=>{z.addEventListener('dragover',e=>e.preventDefault());z.addEventListener('drop',e=>{e.preventDefault();const d=document.querySelector('.dragging'); if(d) z.appendChild(d);});});}
+function tapSelectMove(){let selected=null;document.addEventListener('click',e=>{const item=e.target.closest('.item'); const zone=e.target.closest('.dropzone'); if(item && item.dataset.moveable){ if(selected) selected.classList.remove('selected'); selected=item; selected.classList.add('selected'); return;} if(zone && selected){zone.appendChild(selected);selected.classList.remove('selected');selected=null;}})}
+document.addEventListener('DOMContentLoaded',()=>{setupDrag();tapSelectMove();}); const sit=['Perder no jogo','Esperar a vez','Ouvir um não','Errar uma tarefa','Mudar de plano','Dividir um brinquedo'];const rec=['Pausa curta','Respirar junto','Pedir ajuda','Escolher outra opção','Abraço se aceitar','Beber água','Ir para lugar calmo','Contar até 5'];function novaSituacao(){ $('situacao').innerText=sit[Math.floor(Math.random()*sit.length)]; $('recursos').innerHTML=rec.sort(()=>Math.random()-.5).slice(0,4).map(x=>`<button class="choice" onclick="this.classList.toggle('selected')">${x}</button>`).join('');}function updateThermo(){ $('thermo').style.width=($('nivel').value*10)+'%'}function resumo(){return 'Termômetro da Frustração\nSituação: '+$('situacao').innerText+'\nIntensidade: '+$('nivel').value+'\nObservação: '+$('obs').value}document.addEventListener('DOMContentLoaded',()=>{novaSituacao();updateThermo()});
+</script>
+<a class="pq-central-back" href="ABRIR_NO_CELULAR.html">← Central</a> 
+
+<script id="pq-mobile-open-target">
+(function(){
+  const TARGET = "";
+  function safeBack(){
+    document.querySelectorAll('a.pq-central-back').forEach(a=>{a.setAttribute('href','ABRIR_NO_CELULAR.html'); a.textContent='← Central';});
+  }
+  function openTarget(){
+    safeBack();
+    if(!TARGET) return;
+    try{ if(location.hash !== '#'+TARGET && history.replaceState) history.replaceState(null,'','#'+TARGET); }catch(e){}
+    try{ if(typeof window.openTool === 'function'){ window.openTool(TARGET); return; } }catch(e){}
+    try{ if(typeof window.routeTo === 'function'){ window.routeTo(TARGET,true); return; } }catch(e){}
+    try{
+      const el=document.getElementById(TARGET);
+      if(el){
+        document.querySelectorAll('.workspace,.screen,.tool,.section').forEach(x=>{ if(x!==el && x.classList && x.classList.contains('active')) x.classList.remove('active'); });
+        el.classList.remove('hidden'); el.classList.add('active'); el.scrollIntoView({block:'start'});
+      }
+    }catch(e){}
+  }
+  document.addEventListener('DOMContentLoaded',()=>{setTimeout(openTarget,80);setTimeout(openTarget,300);});
+  window.addEventListener('load',()=>{setTimeout(openTarget,160);});
+})();
+</script>
+
+</body></html>

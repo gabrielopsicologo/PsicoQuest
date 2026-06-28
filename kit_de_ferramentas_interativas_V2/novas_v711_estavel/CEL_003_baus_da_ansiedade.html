@@ -1,0 +1,55 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Baús da Ansiedade</title><link rel="stylesheet" href="assets/psicoquest.css"><style>
+body{background:linear-gradient(135deg,#f3f7fb,#fff3df)}.chests{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.chest{border:0;background:linear-gradient(180deg,#8b5a32,#58351f);color:#fff;border-radius:26px;min-height:260px;padding:18px;box-shadow:var(--shadow);cursor:pointer;position:relative;overflow:hidden;text-align:left}.chest:before{content:"";position:absolute;left:0;right:0;top:38%;height:14px;background:#c79b42;box-shadow:0 4px 0 rgba(0,0,0,.12)}.chest:after{content:"";position:absolute;left:50%;top:41%;transform:translate(-50%,-50%);width:42px;height:34px;border-radius:10px;background:#f3c86f;border:4px solid #5a381f}.chest h2{position:relative;margin:0;font-size:1.4rem}.chest p{position:relative;margin-top:130px;opacity:.86}.card-reveal{margin-top:18px;background:#fffdf8;border:1px solid var(--line);border-radius:24px;padding:22px;box-shadow:var(--shadow2)}.card-reveal h2{margin:0 0 8px}.history{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.history span{border-radius:999px;background:#eef6fb;border:1px solid #cfe2ef;padding:8px 10px;font-weight:800}@media(max-width:850px){.chests{grid-template-columns:1fr}.chest{min-height:185px}.chest p{margin-top:80px}}
+</style> <style id="pq-v710-safe-base">
+/* V7.10: patch mínimo, sem sobrescrever identidade visual das ferramentas. */
+html{max-width:100%;overflow-x:hidden;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{max-width:100%;overflow-x:hidden}
+img,svg,canvas,video,iframe{max-width:100%;height:auto}
+textarea,input,select{max-width:100%}
+button,a,.btn,[role="button"]{touch-action:manipulation;-webkit-tap-highlight-color:rgba(37,99,235,.18)}
+.topbar,header,.top{max-width:100%;overflow-x:hidden}
+@media(max-width:680px){ .wrap,.main,.game-main,.topbar-inner,.inner,.top-inner{max-width:100%!important;width:100%!important} .wrap,.main,.game-main{padding-left:12px!important;padding-right:12px!important} .grid,.card-grid,.choice-grid,.visual-grid{max-width:100%} .toolbar,.actions,.tools{max-width:100%;gap:8px!important}
+}
+@media print{.pq-central-back{display:none!important}}
+</style> 
+<style id="pq-mobile-copy-safe">
+html{max-width:100%;overflow-x:hidden;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{max-width:100%;overflow-x:hidden}
+img,svg,canvas,video,iframe{max-width:100%;height:auto}
+button,a,.btn,[role="button"]{touch-action:manipulation;-webkit-tap-highlight-color:rgba(37,99,235,.18)}
+.pq-central-back{position:fixed!important;left:12px!important;right:12px!important;bottom:54px!important;z-index:9999!important;justify-content:center!important;background:#111827!important;color:#fff!important;border-radius:999px!important;padding:12px 14px!important;text-decoration:none!important;font-weight:900!important;box-shadow:0 14px 34px rgba(15,23,42,.24)!important}
+@media(max-width:680px){.wrap,.main,.game-main,.topbar-inner,.inner,.top-inner{max-width:100%!important;width:100%!important}.wrap,.main,.game-main{padding-left:12px!important;padding-right:12px!important}.toolbar,.actions,.tools{gap:8px!important}}
+@media print{.pq-central-back{display:none!important}}
+</style>
+
+</head><body><div class="game-shell"><nav class="topbar"><div class="topbar-inner"><div class="brandmark"><div class="brand-dot">▣</div><span>Baús da Ansiedade</span></div><div class="top-actions"><button class="btn small" data-instructions>Instruções</button><a class="btn small" data-support target="_blank">Suporte</a></div></div></nav><main class="game-main"><section class="game-hero"><div class="game-title"><h1>Baús da Ansiedade</h1><p>Abra baús para explorar o que a ansiedade faz no corpo, nos pensamentos e nas ações possíveis.</p><div class="actions"><button class="btn primary" data-copy-summary>Copiar resumo</button><button class="btn" data-save>Salvar</button><button class="btn" data-clear>Limpar</button></div></div><div class="panel"><div class="section-title">Mecânica</div><p class="muted">Descoberta por baús. Cada clique revela uma carta diferente dentro da categoria.</p></div></section><section class="game-board"><div class="chests"><button class="chest" onclick="openChest('corpo')"><h2>Corpo</h2><p>Sinais físicos e sensações.</p></button><button class="chest" onclick="openChest('mente')"><h2>Mente</h2><p>Pensamentos, previsões e histórias.</p></button><button class="chest" onclick="openChest('acao')"><h2>Ação</h2><p>Enfrentamentos pequenos e possíveis.</p></button></div><div class="card-reveal"><span class="chip" id="kind">Abra um baú</span><h2 id="cardTitle">A carta aparecerá aqui</h2><p id="cardText" class="muted">Clique em um dos baús para sortear uma carta.</p><textarea id="resposta" class="field" placeholder="Resposta, observação ou escolha do paciente..."></textarea><div class="actions" style="margin-top:12px"><button class="btn" data-download-txt>Baixar TXT</button><button class="btn" data-print>PDF/Imprimir</button></div><div class="history" id="history"></div></div></section></main><footer class="footer-copy">© PsicoQuest — @gabrielopsicologo. Todos os direitos reservados.</footer></div><div class="modal" id="modal-instrucoes"><div class="modal-card"><h2>Como usar</h2><p>Use os baús para variar perguntas sem transformar a sessão em interrogatório. A pessoa pode escolher um baú ou o terapeuta pode sortear.</p><button class="btn primary" data-close-modal>Entendi</button></div></div><script src="assets/psicoquest.js"></script><script>
+const deck={corpo:[['Onde aparece?','Em que parte do corpo a ansiedade aparece primeiro?'],['Alarme falso','Que sensação parece perigosa, mas talvez seja só alarme?'],['Intensidade','De 0 a 10, quanto está agora?']],mente:[['História da mente','Qual história sua mente conta quando a ansiedade sobe?'],['Previsão','O que você acha que pode acontecer?'],['Evidência','O que mostra que talvez isso não seja 100% certo?']],acao:[['Passo pequeno','Qual ação segura pode ser feita hoje?'],['Pausa','O que ajuda a esperar a onda passar?'],['Pedido de ajuda','Quem ou o que pode apoiar agora?']]};const hist=[];function openChest(k){const arr=deck[k];const c=arr[Math.floor(Math.random()*arr.length)];document.getElementById('kind').textContent=k==='corpo'?'Corpo':k==='mente'?'Mente':'Ação';document.getElementById('cardTitle').textContent=c[0];document.getElementById('cardText').textContent=c[1];hist.push(`${document.getElementById('kind').textContent}: ${c[0]}`);document.getElementById('history').innerHTML=hist.slice(-8).map(x=>`<span>${x}</span>`).join('');}function resumo(){return `Baús da Ansiedade\nCarta atual: ${document.getElementById('kind').textContent} - ${document.getElementById('cardTitle').textContent}\nPergunta: ${document.getElementById('cardText').textContent}\nResposta: ${document.getElementById('resposta').value||'-'}\nHistórico: ${hist.join(' | ')||'-'}`;}PQ.setupCommon('pq_baus_ansiedade_v1',resumo);
+</script>
+<a class="pq-central-back" href="ABRIR_NO_CELULAR.html">← Central</a> 
+
+<script id="pq-mobile-open-target">
+(function(){
+  const TARGET = "";
+  function safeBack(){
+    document.querySelectorAll('a.pq-central-back').forEach(a=>{a.setAttribute('href','ABRIR_NO_CELULAR.html'); a.textContent='← Central';});
+  }
+  function openTarget(){
+    safeBack();
+    if(!TARGET) return;
+    try{ if(location.hash !== '#'+TARGET && history.replaceState) history.replaceState(null,'','#'+TARGET); }catch(e){}
+    try{ if(typeof window.openTool === 'function'){ window.openTool(TARGET); return; } }catch(e){}
+    try{ if(typeof window.routeTo === 'function'){ window.routeTo(TARGET,true); return; } }catch(e){}
+    try{
+      const el=document.getElementById(TARGET);
+      if(el){
+        document.querySelectorAll('.workspace,.screen,.tool,.section').forEach(x=>{ if(x!==el && x.classList && x.classList.contains('active')) x.classList.remove('active'); });
+        el.classList.remove('hidden'); el.classList.add('active'); el.scrollIntoView({block:'start'});
+      }
+    }catch(e){}
+  }
+  document.addEventListener('DOMContentLoaded',()=>{setTimeout(openTarget,80);setTimeout(openTarget,300);});
+  window.addEventListener('load',()=>{setTimeout(openTarget,160);});
+})();
+</script>
+
+</body></html>

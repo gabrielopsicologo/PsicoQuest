@@ -1,0 +1,138 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Combinados da Rotina</title><style>
+:root{--bg:#f6f3ea;--ink:#263238;--muted:#667085;--card:#fffaf0;--line:#decda8;--accent:#5f7f64;--accent2:#d08b57;--accent3:#6c63a8;--danger:#b85656;--ok:#2f7d62;--shadow:0 18px 50px rgba(46,37,24,.15);--radius:24px}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);background:radial-gradient(circle at top left,#fff7dd 0,#f6f3ea 34%,#ecf0e9 100%)}
+body{padding:18px}.topbar{display:flex;gap:10px;align-items:center;justify-content:space-between;max-width:1180px;margin:0 auto 14px}.brand{display:flex;gap:10px;align-items:center;font-weight:800;letter-spacing:.02em}.pill{background:rgba(255,255,255,.68);border:1px solid rgba(0,0,0,.08);border-radius:999px;padding:8px 12px;color:#53605a;font-size:13px;text-decoration:none}.wrap{max-width:1180px;margin:0 auto}.hero{background:linear-gradient(135deg,rgba(255,250,240,.95),rgba(239,245,235,.96));border:1px solid rgba(117,98,53,.18);border-radius:32px;padding:26px;box-shadow:var(--shadow);position:relative;overflow:hidden}.hero:after{content:"";position:absolute;right:-80px;top:-80px;width:220px;height:220px;border-radius:50%;background:rgba(208,139,87,.13)}h1{margin:0;font-size:clamp(28px,5vw,52px);line-height:1.02}h2{margin:0 0 12px;font-size:clamp(22px,3vw,34px)}p{line-height:1.55}.lead{color:#52605a;font-size:17px;max-width:760px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:18px}.card{background:rgba(255,255,255,.75);border:1px solid rgba(0,0,0,.08);border-radius:24px;padding:18px;box-shadow:0 10px 30px rgba(0,0,0,.06)}.tool-card{text-decoration:none;color:inherit;display:block;transition:.18s transform,.18s box-shadow}.tool-card:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(0,0,0,.12)}.tag{display:inline-block;background:#eff5ee;color:#48604c;border:1px solid #d4e4d4;border-radius:999px;padding:5px 10px;font-size:12px;font-weight:700;margin:0 6px 8px 0}.stage{background:rgba(255,255,255,.82);border:1px solid rgba(0,0,0,.08);border-radius:32px;box-shadow:var(--shadow);padding:20px;margin-top:16px}.toolbar{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}.btn{border:0;border-radius:16px;background:#2f4f3a;color:#fff;padding:12px 14px;font-weight:800;cursor:pointer;box-shadow:0 8px 18px rgba(47,79,58,.2)}.btn.secondary{background:#fff;color:#34433b;border:1px solid rgba(0,0,0,.12);box-shadow:none}.btn.orange{background:#be7146}.btn.purple{background:#6860a8}.btn.red{background:#a94e4e}.btn:active{transform:scale(.98)}.muted{color:var(--muted);font-size:14px}.columns{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}.dropzone{min-height:150px;border:2px dashed #cab98e;border-radius:22px;padding:12px;background:#fffdf6}.item,.choice,.token{background:#fff;border:1px solid rgba(0,0,0,.10);border-radius:18px;padding:12px 14px;margin:8px 0;box-shadow:0 6px 16px rgba(0,0,0,.06);cursor:pointer}.item[draggable="true"]{cursor:grab}.item.dragging{opacity:.45}.selected{outline:4px solid rgba(208,139,87,.35)}textarea,input,select{width:100%;border:1px solid rgba(0,0,0,.16);border-radius:16px;padding:12px;background:#fff;font:inherit;min-height:48px}textarea{min-height:88px}.footer{text-align:center;color:#68736d;font-size:12px;margin:28px auto 8px}.hidden{display:none!important}.progress{height:12px;border-radius:999px;background:#e9debd;overflow:hidden}.bar{height:100%;width:0;background:linear-gradient(90deg,#5f7f64,#d08b57);transition:width .2s}.big-icon{font-size:40px;line-height:1}.game-panel{background:linear-gradient(180deg,#fffefa,#fff8e9);border:1px solid #e3d2a9;border-radius:28px;padding:18px}.modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:18px;z-index:30}.modalBox{max-width:700px;width:100%;max-height:85vh;overflow:auto;background:#fffaf0;border-radius:28px;padding:22px;border:1px solid #d9c797}.close{float:right}.print-area{background:#fff;border-radius:22px;padding:16px;border:1px solid #e2d7bd}@media print{body{background:#fff;padding:0}.topbar,.toolbar,.footer,.no-print{display:none!important}.stage,.hero,.card,.game-panel{box-shadow:none;border:0;border-radius:0}.wrap{max-width:100%;}.print-area{border:0}}
+</style> <style id="pq-v710-safe-base">
+/* V7.10: patch mínimo, sem sobrescrever identidade visual das ferramentas. */
+html{max-width:100%;overflow-x:hidden;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{max-width:100%;overflow-x:hidden}
+img,svg,canvas,video,iframe{max-width:100%;height:auto}
+textarea,input,select{max-width:100%}
+button,a,.btn,[role="button"]{touch-action:manipulation;-webkit-tap-highlight-color:rgba(37,99,235,.18)}
+.topbar,header,.top{max-width:100%;overflow-x:hidden}
+@media(max-width:680px){ .wrap,.main,.game-main,.topbar-inner,.inner,.top-inner{max-width:100%!important;width:100%!important} .wrap,.main,.game-main{padding-left:12px!important;padding-right:12px!important} .grid,.card-grid,.choice-grid,.visual-grid{max-width:100%} .toolbar,.actions,.tools{max-width:100%;gap:8px!important}
+}
+@media print{.pq-central-back{display:none!important}}
+</style> 
+<style id="pq-mobile-copy-safe">
+html{max-width:100%;overflow-x:hidden;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{max-width:100%;overflow-x:hidden}
+img,svg,canvas,video,iframe{max-width:100%;height:auto}
+button,a,.btn,[role="button"]{touch-action:manipulation;-webkit-tap-highlight-color:rgba(37,99,235,.18)}
+.pq-central-back{position:fixed!important;left:12px!important;right:12px!important;bottom:54px!important;z-index:9999!important;justify-content:center!important;background:#111827!important;color:#fff!important;border-radius:999px!important;padding:12px 14px!important;text-decoration:none!important;font-weight:900!important;box-shadow:0 14px 34px rgba(15,23,42,.24)!important}
+@media(max-width:680px){.wrap,.main,.game-main,.topbar-inner,.inner,.top-inner{max-width:100%!important;width:100%!important}.wrap,.main,.game-main{padding-left:12px!important;padding-right:12px!important}.toolbar,.actions,.tools{gap:8px!important}}
+@media print{.pq-central-back{display:none!important}}
+</style>
+
+</head><body> <div class="topbar no-print"><div class="brand"><span>🧩</span><span>PsicoQuest</span></div><button class="pill" onclick="support()">Suporte</button></div> <main class="wrap"><section class="hero"><h1>Combinados da Rotina</h1><p class="lead">Organização visual de tarefas com categorias e combinados.</p></section>
+<section class="stage"><div class="toolbar no-print"><button class="btn" onclick="novaLista()">Sugestões</button><button class="btn secondary" onclick="mostrarMais()">Mostrar mais itens</button><button class="btn secondary" onclick="limparQuadro()">Limpar quadro</button><button class="btn secondary" onclick="copyText(resumo())">Copiar combinado</button><button class="btn secondary" onclick="printPage()">PDF/Imprimir</button></div>
+<div id="printArea" class="print-area"><div class="game-panel"><h2>Combinados da Rotina</h2><p class="muted">Monte poucos combinados claros. Arraste para: fazer sozinho, com ajuda ou depois. No celular, toque em um item e depois toque na categoria.</p><div class="card no-print"><label><strong>Combinado personalizado</strong></label><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><input id="customTask" placeholder="Ex.: separar roupa antes do banho" style="flex:1;min-width:220px"><button class="btn orange" onclick="addCustom()">Adicionar</button></div><p class="muted">Use para criar combinados reais da rotina da criança/adolescente.</p></div><h3>Banco de combinados</h3><div id="tokens"></div><div class="columns"><div class="dropzone"><h3>Faço sozinho</h3></div><div class="dropzone"><h3>Faço com ajuda</h3></div><div class="dropzone"><h3>Fica para depois</h3></div></div><textarea id="premio" placeholder="Depois que cumprir, qual reforço/pausa/atividade pode acontecer?"></textarea></div></div></section>
+</main> <div id="helpModal" class="modal hidden no-print"><div class="modalBox"><button class="btn secondary close" onclick="closeHelp()">Fechar</button><h2>Como usar</h2><div id="helpText"></div></div></div> <footer class="footer">© PsicoQuest · @gabrielopsicologo · Todos os direitos reservados.</footer><script>
+function $(id){return document.getElementById(id)}
+function copyText(txt){ if(navigator.clipboard){navigator.clipboard.writeText(txt).then(()=>alert('Copiado.')).catch(()=>fallbackCopy(txt));}else fallbackCopy(txt)}
+function fallbackCopy(txt){const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();alert('Copiado.');}
+function downloadTxt(name, txt){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt],{type:'text/plain;charset=utf-8'}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+function saveState(key, obj){localStorage.setItem(key, JSON.stringify(obj)); alert('Salvo neste aparelho.');}
+function loadState(key){try{return JSON.parse(localStorage.getItem(key)||'null')}catch(e){return null}}
+function codeFor(obj){return btoa(unescape(encodeURIComponent(JSON.stringify(obj))))}
+function objFromCode(code){return JSON.parse(decodeURIComponent(escape(atob(code.trim()))))}
+function printPage(){window.print()}
+function support(){window.open('https://wa.me/5500000000000?text=Olá! Preciso de suporte com o PsicoQuest.','_blank')}
+function downloadImage(targetId, filename){ const node=$(targetId); const w=node.offsetWidth||900, h=node.offsetHeight||900; const data='<svg xmlns="http://www.w3.org/2000/svg" width="'+w+'" height="'+h+'"><foreignObject width="100%" height="100%"><div xmlns="http://www.w3.org/1999/xhtml" style="font-family:Inter,Arial,sans-serif;background:white;padding:20px;">'+node.innerHTML+'</div></foreignObject></svg>'; const img=new Image(); img.onload=function(){const c=document.createElement('canvas');c.width=w;c.height=h;const ctx=c.getContext('2d');ctx.fillStyle='white';ctx.fillRect(0,0,w,h);ctx.drawImage(img,0,0);const a=document.createElement('a');a.download=filename;a.href=c.toDataURL('image/png');a.click();}; img.onerror=function(){alert('Se a imagem não baixar neste aparelho, use o Chrome/Safari/Edge ou salve em PDF.');}; img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(data);
+}
+function openHelp(text){$('helpText').innerHTML=text;$('helpModal').classList.remove('hidden')}
+function closeHelp(){$('helpModal').classList.add('hidden')}
+function setupDrag(){document.querySelectorAll('[draggable="true"]').forEach(el=>{el.addEventListener('dragstart',()=>el.classList.add('dragging'));el.addEventListener('dragend',()=>el.classList.remove('dragging'));});document.querySelectorAll('.dropzone').forEach(z=>{z.addEventListener('dragover',e=>e.preventDefault());z.addEventListener('drop',e=>{e.preventDefault();const d=document.querySelector('.dragging'); if(d) z.appendChild(d);});});}
+function tapSelectMove(){let selected=null;document.addEventListener('click',e=>{const item=e.target.closest('.item'); const zone=e.target.closest('.dropzone'); if(item && item.dataset.moveable){ if(selected) selected.classList.remove('selected'); selected=item; selected.classList.add('selected'); return;} if(zone && selected){zone.appendChild(selected);selected.classList.remove('selected');selected=null;}})}
+document.addEventListener('DOMContentLoaded',()=>{setupDrag();tapSelectMove();}); const opts=[
+"Guardar material",
+"Tomar banho",
+"Vestir roupa",
+"Escovar dentes",
+"Arrumar mochila",
+"Fazer tarefa pequena",
+"Separar uniforme",
+"Desligar tela",
+"Comer lanche",
+"Dormir no horário",
+"Lavar as mãos",
+"Ir ao banheiro antes de sair",
+"Separar garrafa de água",
+"Colocar roupa suja no cesto",
+"Guardar brinquedos",
+"Organizar a mesa",
+"Preparar o lanche",
+"Conferir agenda",
+"Pegar o casaco",
+"Colocar sapato",
+"Juntar material da escola",
+"Ler um bilhete com ajuda",
+"Fazer pausa combinada",
+"Guardar celular/tablet",
+"Diminuir volume da tela",
+"Escolher roupa com duas opções",
+"Tomar remédio com responsável",
+"Pentear cabelo",
+"Passar protetor solar",
+"Separar pijama",
+"Colocar prato na pia",
+"Ajudar a colocar a mesa",
+"Guardar um objeto por vez",
+"Escolher atividade de pausa",
+"Fazer respiração curta",
+"Esperar 5 minutos",
+"Pedir ajuda com uma frase",
+"Avisar quando terminar",
+"Marcar tarefa feita",
+"Separar tarefa difícil em partes",
+"Preparar mochila da terapia",
+"Escolher brinquedo para levar",
+"Guardar jogo depois de usar",
+"Combinar tempo de tela",
+"Tomar água",
+"Fazer alongamento curto",
+"Organizar cama",
+"Separar livro/caderno",
+"Deixar uniforme pronto",
+"Apagar luz no horário"
+];
+let bancoAtual=[];
+function h(txt){return String(txt).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function makeItem(x){return `<div class="item" draggable="true" data-moveable="1">${h(x)}</div>`}
+function resetZones(){document.querySelectorAll('.dropzone').forEach(z=>{const h3=z.querySelector('h3')?.innerText||'Categoria';z.innerHTML='<h3>'+h(h3)+'</h3>'})}
+function renderBanco(lista){$('tokens').innerHTML=lista.map(makeItem).join('');setupDrag()}
+function novaLista(){resetZones();bancoAtual=[...opts].sort(()=>Math.random()-.5).slice(0,10);renderBanco(bancoAtual)}
+function mostrarMais(){const usados=new Set(bancoAtual);const extras=opts.filter(x=>!usados.has(x)).sort(()=>Math.random()-.5).slice(0,8);bancoAtual=bancoAtual.concat(extras);renderBanco(bancoAtual)}
+function addCustom(){const input=$('customTask');const val=(input.value||'').trim();if(!val){alert('Escreva um combinado personalizado.');return}const el=document.createElement('div');el.className='item';el.draggable=true;el.dataset.moveable='1';el.innerText=val;$('tokens').prepend(el);input.value='';setupDrag()}
+function limparQuadro(){resetZones();renderBanco(bancoAtual.length?bancoAtual:[...opts].sort(()=>Math.random()-.5).slice(0,10))}
+function resumo(){let txt='Combinados da Rotina\n';document.querySelectorAll('.dropzone').forEach(z=>{txt+='\n'+z.querySelector('h3').innerText+': '+[...z.querySelectorAll('.item')].map(i=>i.innerText).join(', ')});txt+='\nReforço/pausa: '+$('premio').value;return txt}
+document.addEventListener('DOMContentLoaded',novaLista);
+</script>
+<a class="pq-central-back" href="ABRIR_NO_CELULAR.html">← Central</a> 
+
+<script id="pq-mobile-open-target">
+(function(){
+  const TARGET = "";
+  function safeBack(){
+    document.querySelectorAll('a.pq-central-back').forEach(a=>{a.setAttribute('href','ABRIR_NO_CELULAR.html'); a.textContent='← Central';});
+  }
+  function openTarget(){
+    safeBack();
+    if(!TARGET) return;
+    try{ if(location.hash !== '#'+TARGET && history.replaceState) history.replaceState(null,'','#'+TARGET); }catch(e){}
+    try{ if(typeof window.openTool === 'function'){ window.openTool(TARGET); return; } }catch(e){}
+    try{ if(typeof window.routeTo === 'function'){ window.routeTo(TARGET,true); return; } }catch(e){}
+    try{
+      const el=document.getElementById(TARGET);
+      if(el){
+        document.querySelectorAll('.workspace,.screen,.tool,.section').forEach(x=>{ if(x!==el && x.classList && x.classList.contains('active')) x.classList.remove('active'); });
+        el.classList.remove('hidden'); el.classList.add('active'); el.scrollIntoView({block:'start'});
+      }
+    }catch(e){}
+  }
+  document.addEventListener('DOMContentLoaded',()=>{setTimeout(openTarget,80);setTimeout(openTarget,300);});
+  window.addEventListener('load',()=>{setTimeout(openTarget,160);});
+})();
+</script>
+
+</body></html>

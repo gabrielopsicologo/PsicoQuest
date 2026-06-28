@@ -1,0 +1,11 @@
+PsicoQuest V7.2 — Refinamento final
+
+Ajustes aplicados:
+- Roda de Responsabilidades: campo para situação personalizada.
+- Escudo contra Bullying: campos personalizados para tipo da situação e adulto seguro.
+- Missão Pedir Ajuda: campos personalizados para situação, pessoa de apoio e frase de pedido.
+- Caixa da Raiva: intensidade agora atualiza visualmente ao mexer na escala.
+- Baixa Demanda 3: Grande e Pequeno virou Tamanho na Tela, com figuras neutras para reduzir confusão.
+- Botão fixo de voltar à Central Geral adicionado às ferramentas.
+- Documento sobre jogos temáticos de One Piece incluído.
+- Plano de refinamento visual final incluído.

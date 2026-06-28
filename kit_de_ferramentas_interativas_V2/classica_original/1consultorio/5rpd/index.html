@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>RPD — Registro de Pensamentos</title>
+  <style>
+    :root{--bg:#f7f9fc;--card:#ffffff;--muted:#6b7280;--accent:#0f1724}
+    *{box-sizing:border-box;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial}
+    body{margin:0;background:var(--bg);color:var(--accent);padding:28px}
+    .wrap{max-width:760px;margin:0 auto}
+    header{margin-bottom:18px}
+    h1{font-size:20px;margin:0}
+    p.lead{margin:6px 0 0;color:var(--muted);font-size:13px}
+    .card{background:var(--card);padding:18px;border-radius:10px;box-shadow:0 6px 18px rgba(15,23,36,0.06);border:1px solid rgba(15,23,36,0.04)}
+    label{display:block;font-size:13px;margin-bottom:6px}
+    input,textarea,select{width:100%;padding:10px;border-radius:8px;border:1px solid #e6eef8;background:transparent;font-size:14px;color:var(--accent)}
+    textarea{min-height:72px;resize:vertical}
+    .row{display:flex;gap:12px}
+    .row > div{flex:1}
+    .actions{display:flex;gap:8px;margin-top:12px}
+    .btn{padding:9px 12px;border-radius:8px;border:0;background:var(--accent);color:white;cursor:pointer}
+    .btn.ghost{background:transparent;border:1px solid #e6eef8;color:var(--accent)}
+    .list{margin-top:14px;display:grid;gap:8px}
+    .item{padding:10px;border-radius:8px;border:1px solid #eef3fb;background:#fbfdff;display:flex;justify-content:space-between;align-items:center}
+    .meta{font-size:12px;color:var(--muted)}
+    .small{font-size:12px;color:var(--muted)}
+    .ethic{font-size:12px;color:var(--muted);margin-top:8px}
+    @media(max-width:640px){.row{flex-direction:column}}
+
+    /* Footer minimalista */
+    .site-footer{
+      margin-top:20px;
+      padding:8px 4px;
+      text-align:center;
+      opacity:0.55;
+      font-size:0.72rem;
+      line-height:1.2;
+      color:var(--muted);
+    }
+    .site-footer a{color:var(--muted);text-decoration:none;font-weight:500}
+    .site-footer a:hover{text-decoration:underline}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>RPD — Registro de Pensamentos</h1>
+      <p class="lead">Registre situação, pensamento, emoção, distorções, evidências e reformulação.</p>
+    </header>
+
+    <main class="card" aria-labelledby="form-title">
+      <h2 id="form-title" style="font-size:15px;margin:0 0 12px">Novo registro</h2>
+
+      <form id="rpd" onsubmit="return false">
+        <div class="row">
+          <div>
+            <label for="date">Data</label>
+            <input id="date" type="date" required />
+          </div>
+          <div>
+            <label for="time">Hora</label>
+            <input id="time" type="time" />
+          </div>
+        </div>
+
+        <label for="situation">Situação (breve)</label>
+        <input id="situation" type="text" placeholder="Onde/Quem/O que aconteceu" required />
+
+        <label for="thought">Pensamento automático</label>
+        <input id="thought" type="text" placeholder="Frase curta: ex. 'Ninguém me ouve'" required />
+
+        <div class="row" style="margin-top:8px">
+          <div>
+            <label for="emotion">Emoção</label>
+            <input id="emotion" type="text" placeholder="Ansiedade, tristeza..." />
+          </div>
+          <div>
+            <label for="intensity">Intensidade (0–10)</label>
+            <input id="intensity" type="number" min="0" max="10" value="5" />
+          </div>
+        </div>
+
+        <label for="distortions" style="margin-top:8px">Distorções (separadas por vírgula)</label>
+        <input id="distortions" type="text" placeholder="Ex.: Catastrofização, Leitura da mente" />
+
+        <label for="evidenceFor" style="margin-top:8px">Evidências que sustentam</label>
+        <textarea id="evidenceFor" placeholder="Fatos observáveis (curto)"></textarea>
+
+        <label for="evidenceAgainst" style="margin-top:8px">Evidências que contradizem</label>
+        <textarea id="evidenceAgainst" placeholder="Fatos que enfraquecem o pensamento"></textarea>
+
+        <label for="alternative" style="margin-top:8px">Pensamento alternativo</label>
+        <input id="alternative" type="text" placeholder="Frase equilibrada e específica" />
+
+        <div class="actions">
+          <button id="save" class="btn">Salvar</button>
+          <button id="clear" class="btn ghost" type="button">Limpar</button>
+          <button id="exportPDF" class="btn ghost" type="button">Exportar PDF</button>
+          <button id="deleteAll" class="btn ghost" type="button">Apagar todos</button>
+        </div>
+
+        <p class="ethic">Nota: registro pessoal. Use com supervisão profissional; os dados ficam apenas no seu dispositivo</p>
+      </form>
+
+      <section style="margin-top:14px">
+        <h3 style="margin:0 0 8px;font-size:14px">Registros</h3>
+        <div id="list" class="list">
+          <div class="small">Nenhum registro ainda.</div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Rodapé minimalista -->
+    <div class="site-footer" role="contentinfo">
+      Gabriel Vinícius – Psicólogo • CRP 06/215890 • PsicoQuest •
+      <a href="https://gabrielopsicologo.com/psicoquest" target="_blank" rel="noopener noreferrer">gabrielopsicologo.com/psicoquest</a>
+      • © 2025
+    </div>
+
+  </div>
+
+  <script>
+    const KEY = 'rpd__v1';
+    const qs = s => document.querySelector(s);
+    const qsa = s => Array.from(document.querySelectorAll(s));
+
+    function nowDate(){ return new Date().toISOString().slice(0,10); }
+    function load(){ try{ return JSON.parse(localStorage.getItem(KEY)||'[]') }catch(e){return[]} }
+    function save(list){ localStorage.setItem(KEY,JSON.stringify(list)); render(); }
+
+    function getForm(){
+      return {
+        id: Date.now(),
+        date: qs('#date').value || nowDate(),
+        time: qs('#time').value || '',
+        situation: qs('#situation').value.trim(),
+        thought: qs('#thought').value.trim(),
+        emotion: qs('#emotion').value.trim(),
+        intensity: qs('#intensity').value,
+        distortions: qs('#distortions').value.split(',').map(s=>s.trim()).filter(Boolean),
+        evidenceFor: qs('#evidenceFor').value.trim(),
+        evidenceAgainst: qs('#evidenceAgainst').value.trim(),
+        alternative: qs('#alternative').value.trim()
+      };
+    }
+
+    function render(){
+      const container = qs('#list'); container.innerHTML='';
+      const list = load().sort((a,b)=>b.id-a.id);
+      if(!list.length){ container.innerHTML='<div class="small">Nenhum registro ainda.</div>'; return }
+      list.forEach(item=>{
+        const div = document.createElement('div'); div.className='item';
+        div.innerHTML = `<div>
+          <div style="font-weight:600">${escape(item.situation)}</div>

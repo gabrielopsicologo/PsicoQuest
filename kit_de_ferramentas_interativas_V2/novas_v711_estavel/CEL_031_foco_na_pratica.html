@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><title>Foco na Prática • PsicoQuest</title>
+<meta name="author" content="Gabriel Vinícius - @gabrielopsicologo"><meta name="copyright" content="© 2026 Gabriel Vinícius • PsicoQuest • Todos os direitos reservados.">
+<style>
+:root{--ink:#152033;--muted:#667085;--line:rgba(15,23,42,.14);--card:#fff;--soft:#f8fafc;--brand:#2b6cb0;--radius:24px;--shadow:0 18px 50px rgba(15,23,42,.14)}
+*{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;min-height:100vh;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);background:#f6f7fb}.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px;background:rgba(255,255,255,.76);backdrop-filter:blur(16px);border-bottom:1px solid rgba(15,23,42,.08)}.topbar a,.topbar button{font:700 12px/1 Inter,sans-serif;border:1px solid rgba(15,23,42,.12);background:#fff;color:#24324a;text-decoration:none;border-radius:999px;padding:9px 12px;cursor:pointer}.topbar .ghost{background:transparent}.brandmini{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#475467}.wrap{width:min(1140px,94vw);margin:0 auto}.hero{padding:44px 0 22px}.eyebrow{display:inline-flex;gap:8px;align-items:center;padding:7px 12px;border:1px solid rgba(15,23,42,.12);border-radius:999px;background:rgba(255,255,255,.72);color:#475467;font-weight:800;font-size:12px;letter-spacing:.06em;text-transform:uppercase}.hero h1{font-size:clamp(32px,7vw,72px);line-height:.92;margin:16px 0 14px;letter-spacing:-.06em}.hero p{max-width:760px;color:#475467;font-size:clamp(16px,2.8vw,20px);line-height:1.55;margin:0}.panel{background:rgba(255,255,255,.82);border:1px solid rgba(15,23,42,.1);border-radius:var(--radius);box-shadow:var(--shadow)}.actions{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0}.btn{appearance:none;border:0;border-radius:16px;background:#152033;color:#fff;padding:12px 15px;font-weight:850;cursor:pointer;box-shadow:0 10px 20px rgba(15,23,42,.12)}.btn.alt{background:#fff;color:#152033;border:1px solid rgba(15,23,42,.14);box-shadow:none}.btn.good{background:#167a53}.btn.warn{background:#b45309}.btn.small{font-size:12px;padding:9px 11px;border-radius:12px}.field{display:grid;gap:7px;margin:12px 0}.field label{font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.06em;color:#667085}.field textarea,.field input,.field select{width:100%;border:1px solid rgba(15,23,42,.16);border-radius:16px;background:#fff;padding:13px 14px;font:500 15px/1.4 Inter,sans-serif;color:#152033;outline:none}.field textarea{min-height:92px;resize:vertical}.field textarea:focus,.field input:focus{box-shadow:0 0 0 4px rgba(43,108,176,.12);border-color:rgba(43,108,176,.55)}.footer{margin:46px 0 18px;text-align:center;color:#667085;font-size:12px}.support{display:flex;gap:8px;align-items:center}.help-panel{display:none;position:fixed;right:16px;top:58px;z-index:40;width:min(420px,calc(100vw - 32px));background:#fff;border:1px solid rgba(15,23,42,.13);border-radius:20px;box-shadow:0 25px 70px rgba(15,23,42,.2);padding:18px}.help-panel.open{display:block}.help-panel h3{margin:0 0 8px}.help-panel p,.help-panel li{color:#475467;line-height:1.45;font-size:14px}.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;z-index:99;background:#101828;color:white;padding:12px 16px;border-radius:999px;font-weight:800;font-size:13px;box-shadow:0 18px 50px rgba(0,0,0,.25);transition:.25s}.toast.show{opacity:1;transform:translate(-50%,0)}.summary{padding:18px;border-radius:22px;background:#fff;border:1px solid rgba(15,23,42,.12);white-space:pre-wrap;color:#24324a;line-height:1.45}.choice-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}.choice{border:1px solid rgba(15,23,42,.12);background:#fff;border-radius:20px;padding:16px;cursor:pointer;transition:.18s;min-height:92px;display:flex;flex-direction:column;justify-content:center;gap:8px}.choice:hover{transform:translateY(-2px);box-shadow:0 12px 24px rgba(15,23,42,.1)}.choice.selected{outline:4px solid rgba(43,108,176,.16);border-color:#2b6cb0;background:#eff6ff}.choice .ico{font-size:32px}.choice strong{font-size:16px}.choice span{color:#667085;font-size:13px;line-height:1.25}.range-wrap{display:grid;gap:8px}.range-wrap input{width:100%}.pill{display:inline-flex;align-items:center;gap:7px;border-radius:999px;background:#fff;border:1px solid rgba(15,23,42,.12);padding:8px 11px;color:#475467;font-weight:800;font-size:12px}.hidden-print-note{font-size:12px;color:#667085}@media(max-width:720px){.topbar{align-items:flex-start}.support{flex-wrap:wrap;justify-content:flex-end}.hero{padding-top:28px}.actions .btn{flex:1 1 150px}.panel{border-radius:20px}.choice-grid{grid-template-columns:1fr 1fr}.hero h1{letter-spacing:-.045em}}@media print{.topbar,.actions,.help-panel{display:none!important}body{background:#fff}.panel{box-shadow:none}.footer{color:#222}} body.foco{background:radial-gradient(circle at 25% 15%,#dbeafe 0,#f8fafc 40%,#fefce8 100%)}.mission{display:grid;grid-template-columns:.75fr 1.25fr;gap:18px}.quest-card{padding:26px;border-radius:34px;background:linear-gradient(145deg,#0f172a,#1e3a8a);color:#fff;box-shadow:0 25px 60px rgba(30,58,138,.22)}.quest-card h2{font-size:38px;line-height:.95;margin:8px 0}.steps{display:grid;gap:14px}.step{padding:18px;border-radius:26px;background:#fff;border:1px solid rgba(15,23,42,.1)}.step h3{margin:0 0 8px}.timerbig{font-size:54px;font-weight:950;letter-spacing:-.05em;margin:12px 0}@media(max-width:850px){.mission{grid-template-columns:1fr}.quest-card h2{font-size:32px}}
+</style> <style id="pq-v710-safe-base">
+/* V7.10: patch mínimo, sem sobrescrever identidade visual das ferramentas. */
+html{max-width:100%;overflow-x:hidden;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{max-width:100%;overflow-x:hidden}
+img,svg,canvas,video,iframe{max-width:100%;height:auto}
+textarea,input,select{max-width:100%}
+button,a,.btn,[role="button"]{touch-action:manipulation;-webkit-tap-highlight-color:rgba(37,99,235,.18)}
+.topbar,header,.top{max-width:100%;overflow-x:hidden}
+@media(max-width:680px){ .wrap,.main,.game-main,.topbar-inner,.inner,.top-inner{max-width:100%!important;width:100%!important} .wrap,.main,.game-main{padding-left:12px!important;padding-right:12px!important} .grid,.card-grid,.choice-grid,.visual-grid{max-width:100%} .toolbar,.actions,.tools{max-width:100%;gap:8px!important}
+}
+@media print{.pq-central-back{display:none!important}}
+</style> 
+<style id="pq-mobile-copy-safe">
+html{max-width:100%;overflow-x:hidden;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{max-width:100%;overflow-x:hidden}
+img,svg,canvas,video,iframe{max-width:100%;height:auto}
+button,a,.btn,[role="button"]{touch-action:manipulation;-webkit-tap-highlight-color:rgba(37,99,235,.18)}
+.pq-central-back{position:fixed!important;left:12px!important;right:12px!important;bottom:54px!important;z-index:9999!important;justify-content:center!important;background:#111827!important;color:#fff!important;border-radius:999px!important;padding:12px 14px!important;text-decoration:none!important;font-weight:900!important;box-shadow:0 14px 34px rgba(15,23,42,.24)!important}
+@media(max-width:680px){.wrap,.main,.game-main,.topbar-inner,.inner,.top-inner{max-width:100%!important;width:100%!important}.wrap,.main,.game-main{padding-left:12px!important;padding-right:12px!important}.toolbar,.actions,.tools{gap:8px!important}}
+@media print{.pq-central-back{display:none!important}}
+</style>
+
+</head><body>
+<nav class="topbar"><div class="brandmini">PsicoQuest</div><div class="support"><button class="ghost" id="helpBtn">Instruções</button><a href="https://wa.link/ydbdpl" target="_blank" rel="noopener">Suporte</a></div></nav>
+<div id="helpPanel" class="help-panel"><h3>Como usar</h3><p>Use em sessão ou como atividade entre atendimentos. O progresso pode ser salvo neste aparelho ou por código de continuação.</p><ul><li><b>Copiar:</b> forma mais simples para WhatsApp/e-mail.</li><li><b>PDF:</b> use imprimir/salvar PDF pelo navegador.</li><li><b>Imagem:</b> pode falhar em alguns leitores de HTML; prefira Chrome, Safari ou Edge.</li></ul><p>Recurso de apoio profissional. Não substitui avaliação clínica, supervisão ou tomada de decisão profissional.</p></div>
+<main class="wrap"><section class="hero"><span class="eyebrow">Ferramenta interativa</span><h1>Foco na Prática</h1><p>Missão de foco com tarefa pequena, obstáculo, primeiro passo, retomada e timer simples.</p></section>
+<section class="mission"><div class="quest-card"><span class="eyebrow" style="background:rgba(255,255,255,.12);color:#dbeafe;border-color:rgba(255,255,255,.18)">Missão de foco</span><h2>Um passo por vez.</h2><p>Escolha uma tarefa pequena, identifique o obstáculo e defina a primeira ação possível.</p><div class="timerbig" id="timerOut">05:00</div><div class="actions"><button class="btn alt" onclick="startTimer(300)">5 min</button><button class="btn alt" onclick="startTimer(600)">10 min</button><button class="btn alt" onclick="pauseTimer()">Pausar</button></div></div><div class="steps"><div class="step"><h3>1. Missão</h3><div class="field"><label>Qual tarefa pequena?</label><textarea data-save="missao" placeholder="Ex.: abrir o documento e escrever 3 linhas"></textarea></div></div><div class="step"><h3>2. Obstáculo</h3><div class="field"><label>O que costuma atrapalhar?</label><textarea data-save="obstaculo" placeholder="Ex.: medo de errar, celular, não saber por onde começar"></textarea></div></div><div class="step"><h3>3. Primeiro passo</h3><div class="field"><label>Qual ação de 2 minutos?</label><textarea data-save="passo" placeholder="Ex.: separar material, abrir arquivo, escrever título"></textarea></div></div><div class="step"><h3>4. Retomada</h3><div class="field"><label>Se eu travar, vou...</label><textarea data-save="retomada" placeholder="Ex.: respirar, voltar ao primeiro passo, pedir ajuda"></textarea></div><div class="summary" id="summaryBox"></div></div></div></section><div class="actions"><button class="btn" onclick="safeCopy(makeSummary())">Copiar plano</button><button class="btn alt" onclick="safeCopy(makeTask())">Copiar tarefa</button><button class="btn alt" onclick="saveLocal()">Salvar</button><button class="btn alt" onclick="loadLocal()">Retomar</button><button class="btn alt" onclick="continuationCode()">Código</button><button class="btn alt" onclick="restoreCode()">Colar código</button><button class="btn alt" onclick="downloadTxt('foco_na_pratica.txt', makeSummary())">Baixar TXT</button><button class="btn alt" onclick="window.print()">Salvar PDF</button><button class="btn alt" onclick="downloadSummaryImage('Foco na Prática', makeSummary(), 'foco_na_pratica.png')">Imagem</button><button class="btn alt" onclick="clearLocal()">Limpar</button></div>
+</main>
+<footer class="footer"><b>@gabrielopsicologo</b> • © 2026 Gabriel Vinícius • PsicoQuest • Todos os direitos reservados.</footer>
+<script>
+const APP_KEY = 'psicoquest_foco_pratica';
+const $ = (s,root=document)=>root.querySelector(s);
+const $$ = (s,root=document)=>Array.from(root.querySelectorAll(s));
+function toast(msg){ const el = document.createElement('div'); el.className = 'toast'; el.textContent = msg; document.body.appendChild(el); setTimeout(()=>el.classList.add('show'), 20); setTimeout(()=>{el.classList.remove('show'); setTimeout(()=>el.remove(),250)}, 2400);
+}
+function safeCopy(text){ if(!text || !text.trim()){ toast('Ainda não há conteúdo para copiar.'); return; } if(navigator.clipboard && window.isSecureContext){ navigator.clipboard.writeText(text).then(()=>toast('Copiado.')).catch(()=>fallbackCopy(text)); } else fallbackCopy(text);
+}
+function fallbackCopy(text){ const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.left='-9999px'; document.body.appendChild(ta); ta.focus(); ta.select(); try{ document.execCommand('copy'); toast('Copiado.'); } catch(e){ toast('Não foi possível copiar automaticamente.'); } ta.remove();
+}
+function getState(){ const data={}; $$('[data-save]').forEach(el=>{ const k=el.getAttribute('data-save'); if(el.type==='checkbox') data[k]=el.checked; else data[k]=el.value; }); $$('[data-choice].selected').forEach(el=>{ const group=el.getAttribute('data-choice-group'); if(group) data[group]=el.getAttribute('data-choice'); }); return data;
+}
+function applyState(data){ if(!data) return; $$('[data-save]').forEach(el=>{ const k=el.getAttribute('data-save'); if(data[k]!==undefined){ if(el.type==='checkbox') el.checked=!!data[k]; else el.value=data[k]; } }); $$('[data-choice-group]').forEach(el=>{ const group=el.getAttribute('data-choice-group'); if(data[group]!==undefined){ el.classList.toggle('selected', el.getAttribute('data-choice')===data[group]); } }); if(typeof afterLoad === 'function') afterLoad();
+}
+function saveLocal(){ localStorage.setItem(APP_KEY, JSON.stringify(getState())); toast('Progresso salvo neste aparelho.'); }
+function loadLocal(){ const raw=localStorage.getItem(APP_KEY); if(raw){ try{ applyState(JSON.parse(raw)); toast('Progresso retomado.'); }catch(e){toast('Não foi possível retomar.');} } else toast('Nenhum progresso salvo neste aparelho.'); }
+function clearLocal(){ if(confirm('Limpar respostas desta ferramenta?')){ localStorage.removeItem(APP_KEY); $$('input, textarea').forEach(el=>{ if(el.type==='checkbox') el.checked=false; else if(el.type!=='range') el.value=''; }); $$('input[type="range"]').forEach(el=>{ el.value=el.getAttribute('value')||'5'; el.dispatchEvent(new Event('input')); }); $$('[data-choice]').forEach(el=>el.classList.remove('selected')); if(typeof afterLoad==='function') afterLoad(); toast('Respostas limpas.'); }}
+function continuationCode(){ const code=btoa(unescape(encodeURIComponent(JSON.stringify(getState())))); safeCopy(code); }
+function restoreCode(){ const code=prompt('Cole aqui o código de continuação:'); if(!code) return; try{ applyState(JSON.parse(decodeURIComponent(escape(atob(code.trim()))))); toast('Código carregado.'); }catch(e){ toast('Código inválido.'); } }
+function downloadTxt(filename, text){ const blob = new Blob([text], {type:'text/plain;charset=utf-8'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=filename; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href); a.remove();}, 400);
+}
+function downloadSummaryImage(title, text, filename){ const lines = wrapText(`${title}\n\n${text || 'Sem respostas preenchidas.'}`, 52); const w=1080, lineH=34, pad=64, h=Math.max(900, pad*2 + lines.length*lineH + 120); const c=document.createElement('canvas'); c.width=w; c.height=h; const ctx=c.getContext('2d'); const grad=ctx.createLinearGradient(0,0,w,h); grad.addColorStop(0,'#f8fafc'); grad.addColorStop(1,'#eef2ff'); ctx.fillStyle=grad; ctx.fillRect(0,0,w,h); ctx.fillStyle='#0f172a'; ctx.font='700 42px Arial, sans-serif'; ctx.fillText(title, pad, pad+20); ctx.fillStyle='#334155'; ctx.font='28px Arial, sans-serif'; let y=pad+90; lines.slice(2).forEach(line=>{ ctx.fillText(line, pad, y); y+=lineH; }); ctx.fillStyle='#64748b'; ctx.font='22px Arial, sans-serif'; ctx.fillText('PsicoQuest • @gabrielopsicologo', pad, h-pad); const a=document.createElement('a'); a.href=c.toDataURL('image/png'); a.download=filename; document.body.appendChild(a); a.click(); a.remove();
+}
+function wrapText(text, max){ const out=[]; String(text).split('\n').forEach(p=>{ let line=''; p.split(/\s+/).forEach(w=>{ if((line+' '+w).trim().length>max){ out.push(line.trim()); line=w; } else line=(line+' '+w).trim(); }); out.push(line); }); return out; }
+function initChoices(){ $$('[data-choice]').forEach(el=>el.addEventListener('click',()=>{ const g=el.getAttribute('data-choice-group'); if(g){ $$(`[data-choice-group="${g}"]`).forEach(x=>x.classList.remove('selected')); } el.classList.toggle('selected'); if(typeof afterLoad==='function') afterLoad(); }));
+}
+function initMenu(){ const b=$('#helpBtn'), p=$('#helpPanel'); if(b&&p) b.addEventListener('click',()=>p.classList.toggle('open')); }
+window.addEventListener('DOMContentLoaded',()=>{initChoices(); initMenu(); if(typeof afterLoad==='function') afterLoad();}); document.body.classList.add('foco');let timer=null,remaining=300;
+function fmt(s){return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
+function startTimer(sec){remaining=sec; $('#timerOut').textContent=fmt(remaining); clearInterval(timer); timer=setInterval(()=>{remaining--; $('#timerOut').textContent=fmt(Math.max(remaining,0)); if(remaining<=0){clearInterval(timer); toast('Tempo finalizado.');}},1000)}
+function pauseTimer(){clearInterval(timer); toast('Pausado.');}
+$$('[data-save]').forEach(el=>el.addEventListener('input',()=>{$('#summaryBox').textContent=makeSummary();}));
+function val(k){return ($(`[data-save="${k}"]`)||{}).value||'-'}
+function makeSummary(){return `FOCO NA PRÁTICA\n\nMissão: ${val('missao')}\nObstáculo: ${val('obstaculo')}\nPrimeiro passo: ${val('passo')}\nSe travar, vou: ${val('retomada')}`;}
+function makeTask(){return `Atividade: Foco na Prática\n\nEscolha uma tarefa pequena. Responda: qual é a missão, o obstáculo, o primeiro passo de 2 minutos e o que fará se travar.`;}
+function afterLoad(){ $('#summaryBox').textContent=makeSummary(); }
+</script>
+<a class="pq-central-back" href="ABRIR_NO_CELULAR.html">← Central</a> 
+
+<script id="pq-mobile-open-target">
+(function(){
+  const TARGET = "";
+  function safeBack(){
+    document.querySelectorAll('a.pq-central-back').forEach(a=>{a.setAttribute('href','ABRIR_NO_CELULAR.html'); a.textContent='← Central';});
+  }
+  function openTarget(){
+    safeBack();
+    if(!TARGET) return;
+    try{ if(location.hash !== '#'+TARGET && history.replaceState) history.replaceState(null,'','#'+TARGET); }catch(e){}
+    try{ if(typeof window.openTool === 'function'){ window.openTool(TARGET); return; } }catch(e){}
+    try{ if(typeof window.routeTo === 'function'){ window.routeTo(TARGET,true); return; } }catch(e){}
+    try{
+      const el=document.getElementById(TARGET);
+      if(el){
+        document.querySelectorAll('.workspace,.screen,.tool,.section').forEach(x=>{ if(x!==el && x.classList && x.classList.contains('active')) x.classList.remove('active'); });
+        el.classList.remove('hidden'); el.classList.add('active'); el.scrollIntoView({block:'start'});
+      }
+    }catch(e){}
+  }
+  document.addEventListener('DOMContentLoaded',()=>{setTimeout(openTarget,80);setTimeout(openTarget,300);});
+  window.addEventListener('load',()=>{setTimeout(openTarget,160);});
+})();
+</script>
+
+</body></html>

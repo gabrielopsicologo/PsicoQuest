@@ -1,0 +1,7 @@
+PsicoQuest V3.2 - Correção de UX
+
+- Roda de Responsabilidades redesenhada para evitar sobreposição/bug visual ao passar o mouse.
+- Banco de situações separado da área de categorias.
+- Arraste mantido, com fallback por toque/clique.
+- Itens agora não ficam sobre a roda ilustrativa.
+- Salvamento local específico da atividade preservando categorias.

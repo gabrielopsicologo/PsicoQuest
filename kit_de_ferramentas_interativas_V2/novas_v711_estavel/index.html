@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><title>PsicoQuest Completo</title><style>
+:root{ --page:#f4f6fb; --side:#111827; --side2:#0b1220; --ink:#111827; --muted:#5b6678; --line:#d9e0ea; --card:#ffffff; --blue:#2563eb; --blue2:#1d4ed8; --focus:#38bdf8; --radius:18px; --shadow:0 14px 36px rgba(15,23,42,.10); --font:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;min-height:100vh;background:var(--page);color:var(--ink);font-family:var(--font);overflow-x:hidden;-webkit-font-smoothing:antialiased} a{text-decoration:none;color:inherit}
+.shell{display:grid;grid-template-columns:260px minmax(0,1fr);min-height:100vh}.sidebar{position:sticky;top:0;height:100vh;background:linear-gradient(180deg,var(--side),var(--side2));color:#fff;border-right:1px solid rgba(255,255,255,.08);padding:16px 12px;display:flex;flex-direction:column;min-height:0}.brand{display:flex;align-items:center;gap:10px;padding:8px 8px 14px}.logo{width:38px;height:38px;border-radius:13px;background:#fff;color:#111827;display:grid;place-items:center;font-weight:900}.brand h1{font-size:1rem;line-height:1.1;margin:0}.brand p{display:none}.nav-label{font-size:.76rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#9ca3af;margin:8px 10px 8px}.nav-list{display:flex;flex-direction:column;gap:5px;overflow-y:auto;overflow-x:hidden;max-height:calc(100vh - 170px);padding-right:4px}.nav-list::-webkit-scrollbar{width:8px}.nav-list::-webkit-scrollbar-thumb{background:rgba(255,255,255,.28);border-radius:999px}.nav-btn{display:flex;align-items:center;gap:10px;min-height:42px;width:100%;padding:10px 11px;border-radius:13px;border:1px solid transparent;background:transparent;color:#f9fafb;text-align:left;cursor:pointer;font-weight:750}.nav-btn:hover,.nav-btn.active{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.12)}.nav-btn .count{margin-left:auto;font-size:.72rem;color:#111827;background:#fff;padding:3px 7px;border-radius:999px}.support{margin-top:auto;display:flex;justify-content:center;align-items:center;min-height:42px;border-radius:13px;background:#ffffff;color:#111827;font-weight:850}.main{min-width:0;padding:18px 22px 44px}.topbar{display:flex;align-items:center;gap:12px;margin:0 0 14px}.searchwrap{flex:1;display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:12px 16px;box-shadow:0 6px 18px rgba(15,23,42,.04)}.searchwrap input{border:0;outline:0;background:transparent;font:inherit;color:var(--ink);width:100%}.searchwrap input::placeholder{color:#7a8596}.total-pill{white-space:nowrap;background:#111827;color:#fff;border-radius:999px;padding:11px 14px;font-weight:850}.hero{background:#ffffff;border:1px solid var(--line);border-radius:24px;padding:22px;box-shadow:var(--shadow);margin-bottom:12px}.eyebrow{display:none}.hero h2{font-size:clamp(1.8rem,3vw,2.7rem);letter-spacing:-.03em;line-height:1.05;margin:0 0 8px}.hero p{margin:0;color:#334155;font-size:1rem;line-height:1.45}.stats{display:none}.quick{display:flex;gap:8px;overflow-x:auto;padding:8px 0 12px;margin-bottom:4px}.quick::-webkit-scrollbar{height:6px}.quick::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:999px}.chip{white-space:nowrap;border:1px solid var(--line);background:#fff;color:#1f2937;border-radius:999px;padding:9px 12px;cursor:pointer;font-weight:750}.chip.active{background:#111827;color:#fff;border-color:#111827}.help{display:none}.sections{display:grid;gap:20px}.section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin:4px 2px 10px}.section-head h3{font-size:1.35rem;letter-spacing:-.02em;margin:0}.section-head p{margin:4px 0 0;color:var(--muted);font-size:.94rem;line-height:1.35}.count-pill{white-space:nowrap;font-size:.82rem;color:#475569;background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 10px}.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(238px,1fr));gap:14px}.tool-card{background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:0 10px 28px rgba(15,23,42,.07);padding:16px;min-height:206px;display:flex;flex-direction:column;gap:10px;overflow:hidden}.tool-card:before{display:none}.card-meta{display:flex;justify-content:space-between;gap:8px;font-size:.72rem;letter-spacing:.04em;text-transform:uppercase;color:#64748b;font-weight:850}.tool-card h4{font-size:1.1rem;line-height:1.18;margin:0;color:#0f172a}.tool-card p{font-size:.92rem;line-height:1.38;margin:0;color:#475569;flex:1}.badges{display:none}.open-btn{display:flex;align-items:center;justify-content:center;background:var(--blue);color:#fff;border-radius:13px;padding:11px 12px;font-weight:850;margin-top:auto}.open-btn:hover{background:var(--blue2)}button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid rgba(56,189,248,.55);outline-offset:3px}.hidden{display:none!important}footer{margin-top:24px;border-top:1px solid var(--line);padding-top:16px;color:#64748b;font-size:.85rem}
+@media(max-width:980px){.shell{grid-template-columns:1fr}.sidebar{position:relative;height:auto;max-height:none}.nav-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));max-height:240px}.main{padding:14px 14px 36px}.support{margin-top:10px}.hero{padding:18px}.card-grid{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}}
+@media(max-width:640px){.topbar{flex-direction:column;align-items:stretch}.total-pill{text-align:center}.nav-list{grid-template-columns:1fr;max-height:260px}.hero h2{font-size:1.8rem}.section-head{align-items:flex-start;flex-direction:column}.card-grid{grid-template-columns:1fr}.tool-card{min-height:0}.main{padding-left:12px;padding-right:12px}.sidebar{padding-left:10px;padding-right:10px}}
+</style>
+<style id="pq-v710-safe-base">
+/* V7.10: patch mínimo, sem sobrescrever identidade visual das ferramentas. */
+html{max-width:100%;overflow-x:hidden;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{max-width:100%;overflow-x:hidden}
+img,svg,canvas,video,iframe{max-width:100%;height:auto}
+textarea,input,select{max-width:100%}
+button,a,.btn,[role="button"]{touch-action:manipulation;-webkit-tap-highlight-color:rgba(37,99,235,.18)}
+.topbar,header,.top{max-width:100%;overflow-x:hidden}
+@media(max-width:680px){
+  .wrap,.main,.game-main,.topbar-inner,.inner,.top-inner{max-width:100%!important;width:100%!important}
+  .wrap,.main,.game-main{padding-left:12px!important;padding-right:12px!important}
+  .grid,.card-grid,.choice-grid,.visual-grid{max-width:100%}
+  .toolbar,.actions,.tools{max-width:100%;gap:8px!important}
+}
+@media print{.pq-central-back{display:none!important}}
+</style>
+</head><body>
+<div class="shell"><aside class="sidebar"><div class="brand"><div class="logo">PQ</div><div><h1>PsicoQuest Completo</h1><p></p></div></div><div class="nav-label">Categorias</div><div class="nav-list"><button class="nav-btn active" data-filter="todos"><span>⌂</span><span>Início</span><span class="count">74</span></button><button class="nav-btn" data-filter="Abertura de sessão"><span>•</span><span>Abertura de sessão</span><span class="count">1</span></button><button class="nav-btn" data-filter="Ansiedade"><span>◍</span><span>Ansiedade</span><span class="count">3</span></button><button class="nav-btn" data-filter="Apoio visual"><span>▣</span><span>Apoio visual</span><span class="count">1</span></button><button class="nav-btn" data-filter="Autoestima"><span>✦</span><span>Autoestima</span><span class="count">1</span></button><button class="nav-btn" data-filter="Baixa demanda"><span>•</span><span>Baixa demanda</span><span class="count">20</span></button><button class="nav-btn" data-filter="Cartas e emoções"><span>•</span><span>Cartas e emoções</span><span class="count">1</span></button><button class="nav-btn" data-filter="Emoções"><span>●</span><span>Emoções</span><span class="count">2</span></button><button class="nav-btn" data-filter="Emoções e intensidade"><span>•</span><span>Emoções e intensidade</span><span class="count">1</span></button><button class="nav-btn" data-filter="Foco e tarefas"><span>•</span><span>Foco e tarefas</span><span class="count">1</span></button><button class="nav-btn" data-filter="Limites e responsabilidade"><span>•</span><span>Limites e responsabilidade</span><span class="count">1</span></button><button class="nav-btn" data-filter="Rastreios adultos"><span>•</span><span>Rastreios adultos</span><span class="count">1</span></button><button class="nav-btn" data-filter="Recursos pessoais"><span>•</span><span>Recursos pessoais</span><span class="count">1</span></button><button class="nav-btn" data-filter="Regulação emocional"><span>•</span><span>Regulação emocional</span><span class="count">2</span></button><button class="nav-btn" data-filter="Rotina e funcionamento"><span>•</span><span>Rotina e funcionamento</span><span class="count">1</span></button><button class="nav-btn" data-filter="Rotina e previsibilidade"><span>•</span><span>Rotina e previsibilidade</span><span class="count">1</span></button><button class="nav-btn" data-filter="Valores e direção"><span>•</span><span>Valores e direção</span><span class="count">1</span></button><button class="nav-btn" data-filter="Humor e semana"><span>•</span><span>Humor e semana</span><span class="count">1</span></button><button class="nav-btn" data-filter="Pensamentos"><span>•</span><span>Pensamentos</span><span class="count">1</span></button><button class="nav-btn" data-filter="Limites e relações"><span>•</span><span>Limites e relações</span><span class="count">1</span></button><button class="nav-btn" data-filter="Autocuidado"><span>•</span><span>Autocuidado</span><span class="count">1</span></button><button class="nav-btn" data-filter="Fechamento e ação"><span>•</span><span>Fechamento e ação</span><span class="count">1</span></button><button class="nav-btn" data-filter="Habilidades sociais"><span>•</span><span>Habilidades sociais</span><span class="count">1</span></button><button class="nav-btn" data-filter="Flexibilidade"><span>↻</span><span>Flexibilidade</span><span class="count">1</span></button><button class="nav-btn" data-filter="Frustração"><span>▴</span><span>Frustração</span><span class="count">1</span></button><button class="nav-btn" data-filter="Situações e pensamento"><span>•</span><span>Situações e pensamento</span><span class="count">1</span></button><button class="nav-btn" data-filter="Rotina e autonomia"><span>•</span><span>Rotina e autonomia</span><span class="count">1</span></button><button class="nav-btn" data-filter="Autoestima e qualidades"><span>•</span><span>Autoestima e qualidades</span><span class="count">1</span></button><button class="nav-btn" data-filter="Autocobrança"><span>•</span><span>Autocobrança</span><span class="count">1</span></button><button class="nav-btn" data-filter="Procrastinação"><span>•</span><span>Procrastinação</span><span class="count">1</span></button><button class="nav-btn" data-filter="Gatilhos"><span>•</span><span>Gatilhos</span><span class="count">1</span></button><button class="nav-btn" data-filter="Comunicação"><span>•</span><span>Comunicação</span><span class="count">1</span></button><button class="nav-btn" data-filter="Rede de apoio"><span>•</span><span>Rede de apoio</span><span class="count">1</span></button><button class="nav-btn" data-filter="Crise emocional"><span>•</span><span>Crise emocional</span><span class="count">1</span></button><button class="nav-btn" data-filter="Decisão"><span>•</span><span>Decisão</span><span class="count">1</span></button><button class="nav-btn" data-filter="Prevenção"><span>•</span><span>Prevenção</span><span class="count">1</span></button><button class="nav-btn" data-filter="Bullying"><span>•</span><span>Bullying</span><span class="count">1</span></button><button class="nav-btn" data-filter="Pedir ajuda"><span>•</span><span>Pedir ajuda</span><span class="count">1</span></button><button class="nav-btn" data-filter="Amizade"><span>•</span><span>Amizade</span><span class="count">1</span></button><button class="nav-btn" data-filter="Raiva"><span>•</span><span>Raiva</span><span class="count">1</span></button><button class="nav-btn" data-filter="Medo"><span>•</span><span>Medo</span><span class="count">1</span></button><button class="nav-btn" data-filter="Escola"><span>•</span><span>Escola</span><span class="count">1</span></button><button class="nav-btn" data-filter="Conversa"><span>•</span><span>Conversa</span><span class="count">1</span></button><button class="nav-btn" data-filter="Espera"><span>•</span><span>Espera</span><span class="count">1</span></button><button class="nav-btn" data-filter="Profissional"><span>☑</span><span>Profissional</span><span class="count">8</span></button></div><a class="support" href="https://wa.link/ydbdpl" rel="noopener" target="_blank">Suporte</a></aside>
+<main class="main"><div class="topbar"><div class="searchwrap"><span>🔎</span><input id="search" placeholder="Pesquisar ferramenta" type="search"/></div><div class="total-pill">74 ferramentas</div></div><section class="hero"><h2>PsicoQuest Completo</h2><p>Todas as ferramentas em um só lugar.</p></section><div class="quick"><button class="chip active" data-filter="todos">Tudo</button><button class="chip" data-filter="Abertura de sessão">Abertura de sessão</button><button class="chip" data-filter="Ansiedade">Ansiedade</button><button class="chip" data-filter="Apoio visual">Apoio visual</button><button class="chip" data-filter="Autoestima">Autoestima</button><button class="chip" data-filter="Baixa demanda">Baixa demanda</button><button class="chip" data-filter="Cartas e emoções">Cartas e emoções</button><button class="chip" data-filter="Emoções">Emoções</button><button class="chip" data-filter="Emoções e intensidade">Emoções e intensidade</button><button class="chip" data-filter="Foco e tarefas">Foco e tarefas</button><button class="chip" data-filter="Limites e responsabilidade">Limites e responsabilidade</button><button class="chip" data-filter="Rastreios adultos">Rastreios adultos</button><button class="chip" data-filter="Recursos pessoais">Recursos pessoais</button><button class="chip" data-filter="Regulação emocional">Regulação emocional</button><button class="chip" data-filter="Rotina e funcionamento">Rotina e funcionamento</button><button class="chip" data-filter="Rotina e previsibilidade">Rotina e previsibilidade</button><button class="chip" data-filter="Valores e direção">Valores e direção</button><button class="chip" data-filter="Humor e semana">Humor e semana</button><button class="chip" data-filter="Pensamentos">Pensamentos</button><button class="chip" data-filter="Limites e relações">Limites e relações</button><button class="chip" data-filter="Autocuidado">Autocuidado</button><button class="chip" data-filter="Fechamento e ação">Fechamento e ação</button><button class="chip" data-filter="Habilidades sociais">Habilidades sociais</button><button class="chip" data-filter="Flexibilidade">Flexibilidade</button><button class="chip" data-filter="Frustração">Frustração</button><button class="chip" data-filter="Situações e pensamento">Situações e pensamento</button><button class="chip" data-filter="Rotina e autonomia">Rotina e autonomia</button><button class="chip" data-filter="Autoestima e qualidades">Autoestima e qualidades</button><button class="chip" data-filter="Autocobrança">Autocobrança</button><button class="chip" data-filter="Procrastinação">Procrastinação</button><button class="chip" data-filter="Gatilhos">Gatilhos</button><button class="chip" data-filter="Comunicação">Comunicação</button><button class="chip" data-filter="Rede de apoio">Rede de apoio</button><button class="chip" data-filter="Crise emocional">Crise emocional</button><button class="chip" data-filter="Decisão">Decisão</button><button class="chip" data-filter="Prevenção">Prevenção</button><button class="chip" data-filter="Bullying">Bullying</button><button class="chip" data-filter="Pedir ajuda">Pedir ajuda</button><button class="chip" data-filter="Amizade">Amizade</button><button class="chip" data-filter="Raiva">Raiva</button><button class="chip" data-filter="Medo">Medo</button><button class="chip" data-filter="Escola">Escola</button><button class="chip" data-filter="Conversa">Conversa</button><button class="chip" data-filter="Espera">Espera</button><button class="chip" data-filter="Profissional">Profissional</button></div><div class="sections"><section class="section" data-filter="Abertura de sessão">
+<div class="section-head"><div><h3>Abertura de sessão</h3><p>Ferramentas organizadas por objetivo de uso.</p></div><div class="count-pill">1</div></div>
+<div class="card-grid"><article class="tool-card" data-group="Abertura de sessão" data-tags="abertura de sessão painel adulto adultos check-in emocional">
+<div class="card-meta"><span>Abertura de sessão</span><span>Painel</span></div>
+<h4>Check-in Emocional</h4>
+<p>Painel rápido para organizar estado emocional antes ou durante a sessão.</p>
+<a class="open-btn" href="ferramentas/checkin-emocional/index.html">Abrir</a>
+</article></div>
+</section><section class="section" data-filter="Ansiedade">
+<div class="section-head"><div><h3>Ansiedade</h3><p>Gatilhos, enfrentamento e recursos de calma.</p></div><div class="count-pill">3</div></div>
+<div class="card-grid"><article class="tool-card" data-group="Ansiedade" data-tags="ansiedade mapa/ciclo adulto adultos mapa da ansiedade">
+<div class="card-meta"><span>Ansiedade</span><span>Mapa/ciclo</span></div>
+<h4>Mapa da Ansiedade</h4>
+<p>Mapeia gatilho, corpo, pensamento, evitação e enfrentamento possível.</p>
+<a class="open-btn" href="ferramentas/mapa-ansiedade/index.html">Abrir</a>
+</article><article class="tool-card" data-group="Ansiedade" data-tags="ansiedade baús/descoberta médio ambos baús da ansiedade">
+<div class="card-meta"><span>Ansiedade</span><span>Baús/descoberta</span></div>
+<h4>Baús da Ansiedade</h4>
+<p>Atividade de descoberta por baús: corpo, mente e ação diante da ansiedade.</p>
+<a class="open-btn" href="ferramentas/baus-ansiedade/index.html">Abrir</a>
+</article><article class="tool-card" data-group="Ansiedade" data-tags="escada de exposição gradual ansiedade exposição medo enfrentamento adultos clínico">
+<div class="card-meta"><span>Ansiedade</span><span>Escada</span></div>
+<h4>Escada de Exposição Gradual</h4>
+<p>Construa pequenos degraus para enfrentar situações com mais segurança.</p>
+<a class="open-btn" href="ferramentas/lote5-adultos-clinico/index.html#tool-expo">Abrir</a>
+</article></div>
+</section><section class="section" data-filter="Apoio visual">
+<div class="section-head"><div><h3>Apoio visual</h3><p>Ferramentas organizadas por objetivo de uso.</p></div><div class="count-pill">1</div></div>
+<div class="card-grid"><article class="tool-card" data-group="Apoio visual" data-tags="apoio visual prancha baixa/média criancas escolha e conte">
+<div class="card-meta"><span>Apoio visual</span><span>Prancha</span></div>
+<h4>Escolha e Conte</h4>
+<p>Atividade de escolha simples para comunicação mediada e baixa exigência verbal.</p>
+<a class="open-btn" href="ferramentas/escolha-conte/index.html">Abrir</a>
+</article></div>
+</section><section class="section" data-filter="Autoestima">
+<div class="section-head"><div><h3>Autoestima</h3><p>Qualidades, recursos e identidade.</p></div><div class="count-pill">1</div></div>
+<div class="card-grid"><article class="tool-card" data-group="Autoestima" data-tags="autoestima oficina adulto adultos autoestima na prática">
+<div class="card-meta"><span>Autoestima</span><span>Oficina</span></div>
+<h4>Autoestima na Prática</h4>
+<p>Ferramenta para autocrítica, comparação, cuidado possível e frase mais justa.</p>
+<a class="open-btn" href="ferramentas/autoestima-pratica/index.html">Abrir</a>
+</article></div>
+</section><section class="section" data-filter="Baixa demanda">
+<div class="section-head"><div><h3>Baixa demanda</h3><p>Ferramentas organizadas por objetivo de uso.</p></div><div class="count-pill">20</div></div>
+<div class="card-grid"><article class="tool-card" data-group="Baixa demanda" data-tags="baixa demanda coleção visual baixa demanda criancas apoio visual e baixa demanda">
+<div class="card-meta"><span>Baixa demanda</span><span>Coleção visual</span></div>
+<h4>Apoio Visual e Baixa Demanda</h4>
+<p>10 atividades concretas: ligar, circular, contar, seguir caminho, rotina e pareamento.</p>
+<a class="open-btn" href="ferramentas/apoio-visual-baixa-demanda/index.html">Abrir</a>
+</article><article class="tool-card" data-group="Baixa demanda" data-tags="baixa demanda apoio visual atividades concretas pareamento varredura pintar sequência ajuda criancas apoio visual e baixa demanda 2">
+<div class="card-meta"><span>Baixa demanda</span><span>Atividades visuais</span></div>
+<h4>Apoio Visual — Novas Atividades</h4>
+<p>5 atividades concretas: igual/diferente, procure e encontre, pinte por código, primeiro/depois e escolha o que ajuda.</p>
+<a class="open-btn" href="ferramentas/apoio-visual-baixa-demanda-2/index.html">Abrir</a>
+</article><article class="tool-card" data-group="Baixa demanda" data-tags="baixa demanda busca visual baixa demanda onde está? baixa demanda visual encontre igual alvo">
+<div class="card-meta"><span>Baixa demanda</span><span>Busca visual</span></div>
+<h4>Onde Está?</h4>
+<p>Varredura visual simples para encontrar todos os itens iguais ao alvo.</p>
+<a class="open-btn" href="ferramentas/apoio-visual-baixa-demanda-3/index.html#onde">Abrir</a>
+</article><article class="tool-card" data-group="Baixa demanda" data-tags="baixa demanda pareamento baixa demanda o que combina? baixa demanda pareamento combina objeto função">
+<div class="card-meta"><span>Baixa demanda</span><span>Pareamento</span></div>
+<h4>O Que Combina?</h4>
+<p>Pareamento simples entre objeto e função com escolha por toque.</p>
+<a class="open-btn" href="ferramentas/apoio-visual-baixa-demanda-3/index.html#combina">Abrir</a>
+</article><article class="tool-card" data-group="Baixa demanda" data-tags="baixa demanda sequência baixa demanda sequência de 3 figuras baixa demanda sequência rotina começo meio fim">
+<div class="card-meta"><span>Baixa demanda</span><span>Sequência</span></div>
+<h4>Sequência de 3 Figuras</h4>
+<p>Organização de começo, meio e fim com três passos concretos.</p>
+<a class="open-btn" href="ferramentas/apoio-visual-baixa-demanda-3/index.html#sequencia">Abrir</a>
+</article><article class="tool-card" data-group="Baixa demanda" data-tags="baixa demanda escolha baixa demanda escolha simples baixa demanda escolha simples ajuda situação">
+<div class="card-meta"><span>Baixa demanda</span><span>Escolha</span></div>
+<h4>Escolha Simples</h4>
+<p>Escolha entre duas opções em situações concretas do dia a dia.</p>
+<a class="open-btn" href="ferramentas/apoio-visual-baixa-demanda-3/index.html#escolha">Abrir</a>
+</article><article class="tool-card" data-group="Baixa demanda" data-tags="baixa demanda rotina visual baixa demanda monte a rotina baixa demanda rotina ordem visual">
+<div class="card-meta"><span>Baixa demanda</span><span>Rotina visual</span></div>
+<h4>Monte a Rotina</h4>
+<p>Ordena ações simples em uma rotina visual.</p>
+<a class="open-btn" href="ferramentas/apoio-visual-baixa-demanda-3/index.html#rotina">Abrir</a>
+</article><article class="tool-card" data-group="Baixa demanda" data-tags="baixa demanda classificação baixa demanda leve ao lugar baixa demanda lugar cozinha banheiro quarto escola">
+<div class="card-meta"><span>Baixa demanda</span><span>Classificação</span></div>
+<h4>Leve ao Lugar</h4>
+<p>Leva cada item para o lugar certo por toque ou arraste.</p>
+<a class="open-btn" href="ferramentas/apoio-visual-baixa-demanda-3/index.html#lugar">Abrir</a>
+</article><article class="tool-card" data-group="Baixa demanda" data-tags="baixa demanda cor baixa demanda igual por cor baixa demanda cor igual pareamento">
+<div class="card-meta"><span>Baixa demanda</span><span>Cor</span></div>
+<h4>Igual por Cor</h4>
+<p>Encontra figuras com a mesma cor do alvo.</p>
+<a class="open-btn" href="ferramentas/apoio-visual-baixa-demanda-3/index.html#cor">Abrir</a>
+</article><article class="tool-card" data-group="Baixa demanda" data-tags="baixa demanda tamanho baixa demanda grande e pequeno baixa demanda tamanho grande pequeno">
+<div class="card-meta"><span>Baixa demanda</span><span>Tamanho</span></div>
+<h4>Tamanho na Tela</h4>
+<p>Separa a mesma figura pelo tamanho visual na tela: grande ou pequena.</p>
+<a class="open-btn" href="ferramentas/apoio-visual-baixa-demanda-3/index.html#tamanho">Abrir</a>
+</article><article class="tool-card" data-group="Baixa demanda" data-tags="baixa demanda coleção visual baixa demanda criancas apoio visual e baixa demanda">
+<div class="card-meta"><span>Baixa demanda</span><span>Coleção visual</span></div>
+<h4>Apoio Visual e Baixa Demanda</h4>
+<p>10 atividades concretas: ligar, circular, contar, seguir caminho, rotina e pareamento.</p>
+<a class="open-btn" href="ferramentas/apoio-visual-baixa-demanda/index.html">Abrir</a>
+</article><article class="tool-card" data-group="Baixa demanda" data-tags="baixa demanda apoio visual atividades concretas pareamento varredura pintar sequência ajuda criancas apoio visual e baixa demanda 2">
+<div class="card-meta"><span>Baixa demanda</span><span>Atividades visuais</span></div>
+<h4>Apoio Visual — Novas Atividades</h4>
+<p>5 atividades concretas: igual/diferente, procure e encontre, pinte por código, primeiro/depois e escolha o que ajuda.</p>
+<a class="open-btn" href="ferramentas/apoio-visual-baixa-demanda-2/index.html">Abrir</a>
+</article><article class="tool-card" data-group="Baixa demanda" data-tags="baixa demanda busca visual baixa demanda onde está? baixa demanda visual encontre igual alvo">
+<div class="card-meta"><span>Baixa demanda</span><span>Busca visual</span></div>
+<h4>Onde Está?</h4>
+<p>Varredura visual simples para encontrar todos os itens iguais ao alvo.</p>
+<a class="open-btn" href="ferramentas/apoio-visual-baixa-demanda-3/index.html#onde">Abrir</a>
+</article><article class="tool-card" data-group="Baixa demanda" data-tags="baixa demanda pareamento baixa demanda o que combina? baixa demanda pareamento combina objeto função">
+<div class="card-meta"><span>Baixa demanda</span><span>Pareamento</span></div>
+<h4>O Que Combina?</h4>
+<p>Pareamento simples entre objeto e função com escolha por toque.</p>
+<a class="open-btn" href="ferramentas/apoio-visual-baixa-demanda-3/index.html#combina">Abrir</a>
+</article><article class="tool-card" data-group="Baixa demanda" data-tags="baixa demanda sequência baixa demanda sequência de 3 figuras baixa demanda sequência rotina começo meio fim">
+<div class="card-meta"><span>Baixa demanda</span><span>Sequência</span></div>
+<h4>Sequência de 3 Figuras</h4>
+<p>Organização de começo, meio e fim com três passos concretos.</p>
+<a class="open-btn" href="ferramentas/apoio-visual-baixa-demanda-3/index.html#sequencia">Abrir</a>
+</article><article class="tool-card" data-group="Baixa demanda" data-tags="baixa demanda escolha baixa demanda escolha simples baixa demanda escolha simples ajuda situação">
+<div class="card-meta"><span>Baixa demanda</span><span>Escolha</span></div>
+<h4>Escolha Simples</h4>
+<p>Escolha entre duas opções em situações concretas do dia a dia.</p>
+<a class="open-btn" href="ferramentas/apoio-visual-baixa-demanda-3/index.html#escolha">Abrir</a>
+</article><article class="tool-card" data-group="Baixa demanda" data-tags="baixa demanda rotina visual baixa demanda monte a rotina baixa demanda rotina ordem visual">
+<div class="card-meta"><span>Baixa demanda</span><span>Rotina visual</span></div>
+<h4>Monte a Rotina</h4>
+<p>Ordena ações simples em uma rotina visual.</p>
+<a class="open-btn" href="ferramentas/apoio-visual-baixa-demanda-3/index.html#rotina">Abrir</a>
+</article><article class="tool-card" data-group="Baixa demanda" data-tags="baixa demanda classificação baixa demanda leve ao lugar baixa demanda lugar cozinha banheiro quarto escola">
+<div class="card-meta"><span>Baixa demanda</span><span>Classificação</span></div>
+<h4>Leve ao Lugar</h4>
+<p>Leva cada item para o lugar certo por toque ou arraste.</p>
+<a class="open-btn" href="ferramentas/apoio-visual-baixa-demanda-3/index.html#lugar">Abrir</a>
+</article><article class="tool-card" data-group="Baixa demanda" data-tags="baixa demanda cor baixa demanda igual por cor baixa demanda cor igual pareamento">
+<div class="card-meta"><span>Baixa demanda</span><span>Cor</span></div>
+<h4>Igual por Cor</h4>
+<p>Encontra figuras com a mesma cor do alvo.</p>
+<a class="open-btn" href="ferramentas/apoio-visual-baixa-demanda-3/index.html#cor">Abrir</a>
+</article><article class="tool-card" data-group="Baixa demanda" data-tags="baixa demanda tamanho baixa demanda grande e pequeno baixa demanda tamanho grande pequeno">
+<div class="card-meta"><span>Baixa demanda</span><span>Tamanho</span></div>
+<h4>Tamanho na Tela</h4>
+<p>Separa a mesma figura pelo tamanho visual na tela: grande ou pequena.</p>
+<a class="open-btn" href="ferramentas/apoio-visual-baixa-demanda-3/index.html#tamanho">Abrir</a>
+</article></div>
+</section><section class="section" data-filter="Cartas e emoções">
+<div class="section-head"><div><h3>Cartas e emoções</h3><p>Ferramentas organizadas por objetivo de uso.</p></div><div class="count-pill">1</div></div>
+<div class="card-grid"><article class="tool-card" data-group="Cartas e emoções" data-tags="cartas e emoções baralho médio criancas baralho das emoções">
+<div class="card-meta"><span>Cartas e emoções</span><span>Baralho</span></div>
+<h4>Baralho das Emoções</h4>
+<p>Deck visual para abrir conversas sobre emoções, escolhas e reflexão.</p>
+<a class="open-btn" href="ferramentas/baralho-das-emocoes/index.html">Abrir</a>
+</article></div>
+</section><section class="section" data-filter="Emoções">
+<div class="section-head"><div><h3>Emoções</h3><p>Nomear, reconhecer e regular emoções.</p></div><div class="count-pill">2</div></div>
+<div class="card-grid"><article class="tool-card" data-group="Emoções" data-tags="emoções escolhas guiadas médio criancas jogo das emoções">
+<div class="card-meta"><span>Emoções</span><span>Escolhas guiadas</span></div>
+<h4>Jogo das Emoções</h4>
+<p>Atividade visual para nomear emoção, corpo, intensidade e recurso de cuidado.</p>
+<a class="open-btn" href="ferramentas/jogo-das-emocoes/index.html">Abrir</a>
+</article><article class="tool-card" data-group="Emoções" data-tags="emoções cartões médio criancas cartões de sentimentos">
+<div class="card-meta"><span>Emoções</span><span>Cartões</span></div>
+<h4>Cartões de Sentimentos</h4>
+<p>Prancha/cartões de sentimentos para reconhecimento e conversa mediada.</p>
+<a class="open-btn" href="ferramentas/cartoes-sentimentos/index.html">Abrir</a>
+</article></div>
+</section><section class="section" data-filter="Emoções e intensidade">
+<div class="section-head"><div><h3>Emoções e intensidade</h3><p>Ferramentas organizadas por objetivo de uso.</p></div><div class="count-pill">1</div></div>
+<div class="card-grid"><article class="tool-card" data-group="Emoções e intensidade" data-tags="emoções e intensidade semáforo baixa/média criancas semáforo das emoções">
+<div class="card-meta"><span>Emoções e intensidade</span><span>Semáforo</span></div>
+<h4>Semáforo das Emoções</h4>
+<p>Organiza intensidade emocional por cores e escolhe ação proporcional.</p>
+<a class="open-btn" href="ferramentas/semaforo-emocoes/index.html">Abrir</a>
+</article></div>
+</section><section class="section" data-filter="Foco e tarefas">
+<div class="section-head"><div><h3>Foco e tarefas</h3><p>Ferramentas organizadas por objetivo de uso.</p></div><div class="count-pill">1</div></div>
+<div class="card-grid"><article class="tool-card" data-group="Foco e tarefas" data-tags="foco e tarefas missão médio/adulto ambos foco na prática">
+<div class="card-meta"><span>Foco e tarefas</span><span>Missão</span></div>
+<h4>Foco na Prática</h4>
+<p>Missão de foco para iniciar, pausar e retomar tarefas pequenas.</p>
+<a class="open-btn" href="ferramentas/foco-pratica/index.html">Abrir</a>
+</article></div>
+</section><section class="section" data-filter="Limites e responsabilidade">
+<div class="section-head"><div><h3>Limites e responsabilidade</h3><p>Ferramentas organizadas por objetivo de uso.</p></div><div class="count-pill">1</div></div>
+<div class="card-grid"><article class="tool-card" data-group="Limites e responsabilidade" data-tags="limites e responsabilidade roda médio/adulto ambos roda de responsabilidades">
+<div class="card-meta"><span>Limites e responsabilidade</span><span>Roda</span></div>
+<h4>Roda de Responsabilidades</h4>
+<p>Separa visualmente o que é meu, do outro e fora do meu controle.</p>
+<a class="open-btn" href="ferramentas/roda-responsabilidades/index.html">Abrir</a>
+</article></div>
+</section><section class="section" data-filter="Rastreios adultos">
+<div class="section-head"><div><h3>Rastreios adultos</h3><p>Ferramentas organizadas por objetivo de uso.</p></div><div class="count-pill">1</div></div>
+<div class="card-grid"><article class="tool-card" data-group="Rastreios adultos" data-tags="rastreios adultos rastreio adulto adultos rastreio de funcionamento e atenção">
+<div class="card-meta"><span>Rastreios adultos</span><span>Rastreio</span></div>
+<h4>Rastreio de Funcionamento e Atenção</h4>
+<p>Triagem reflexiva sobre atenção, organização, rotina e impacto funcional.</p>
+<a class="open-btn" href="ferramentas/rastreio-funcionamento-atencao/index.html">Abrir</a>
+</article></div>
+</section><section class="section" data-filter="Recursos pessoais">
+<div class="section-head"><div><h3>Recursos pessoais</h3><p>Ferramentas organizadas por objetivo de uso.</p></div><div class="count-pill">1</div></div>
+<div class="card-grid"><article class="tool-card" data-group="Recursos pessoais" data-tags="recursos pessoais inventário/mochila médio/adulto ambos inventário de recursos pessoais">
+<div class="card-meta"><span>Recursos pessoais</span><span>Inventário/mochila</span></div>
+<h4>Inventário de Recursos Pessoais</h4>
+<p>Atividade para montar uma mochila de recursos, apoios e estratégias pessoais.</p>
+<a class="open-btn" href="ferramentas/inventario-recursos-pessoais/index.html">Abrir</a>
+</article></div>
+</section><section class="section" data-filter="Regulação emocional">
+<div class="section-head"><div><h3>Regulação emocional</h3><p>Ferramentas organizadas por objetivo de uso.</p></div><div class="count-pill">2</div></div>
+<div class="card-grid"><article class="tool-card" data-group="Regulação emocional" data-tags="regulação emocional jornada médio ambos rota da calmaria">
+<div class="card-meta"><span>Regulação emocional</span><span>Jornada</span></div>
+<h4>Rota da Calmaria</h4>
+<p>Jornada guiada para perceber, nomear e regular emoções com calma.</p>
+<a class="open-btn" href="ferramentas/rota-da-calmaria/index.html">Abrir</a>
+</article><article class="tool-card" data-group="Regulação emocional" data-tags="regulação emocional roleta médio ambos roleta de enfrentamento">
+<div class="card-meta"><span>Regulação emocional</span><span>Roleta</span></div>
+<h4>Roleta de Enfrentamento</h4>
+<p>Roleta de estratégias rápidas para lidar com emoção, tensão e sobrecarga.</p>
+<a class="open-btn" href="ferramentas/roleta-enfrentamento/index.html">Abrir</a>
+</article></div>
+</section><section class="section" data-filter="Rotina e funcionamento">
+<div class="section-head"><div><h3>Rotina e funcionamento</h3><p>Ferramentas organizadas por objetivo de uso.</p></div><div class="count-pill">1</div></div>
+<div class="card-grid"><article class="tool-card" data-group="Rotina e funcionamento" data-tags="rotina e funcionamento matriz adulto adultos mapa da rotina">
+<div class="card-meta"><span>Rotina e funcionamento</span><span>Matriz</span></div>
+<h4>Mapa da Rotina</h4>
+<p>Painel de energia, demandas, hábitos e plano mínimo possível.</p>
+<a class="open-btn" href="ferramentas/mapa-rotina/index.html">Abrir</a>
+</article></div>
+</section><section class="section" data-filter="Rotina e previsibilidade">
+<div class="section-head"><div><h3>Rotina e previsibilidade</h3><p>Ferramentas organizadas por objetivo de uso.</p></div><div class="count-pill">1</div></div>
+<div class="card-grid"><article class="tool-card" data-group="Rotina e previsibilidade" data-tags="rotina e previsibilidade quadro visual baixa/média criancas rotina visual">
+<div class="card-meta"><span>Rotina e previsibilidade</span><span>Quadro visual</span></div>
+<h4>Rotina Visual</h4>
+<p>Quadro para organizar sequência, previsibilidade e rotina com apoio visual.</p>
+<a class="open-btn" href="ferramentas/rotina-visual/index.html">Abrir</a>
+</article></div>
+</section><section class="section" data-filter="Valores e direção">
+<div class="section-head"><div><h3>Valores e direção</h3><p>Ferramentas organizadas por objetivo de uso.</p></div><div class="count-pill">1</div></div>
+<div class="card-grid"><article class="tool-card" data-group="Valores e direção" data-tags="valores e direção bússola adulto/adolescente adultos mapa de valores">
+<div class="card-meta"><span>Valores e direção</span><span>Bússola</span></div>
+<h4>Mapa de Valores</h4>
+<p>Bússola para escolher valores e transformar em ação pequena possível.</p>
+<a class="open-btn" href="ferramentas/mapa-valores/index.html">Abrir</a>
+</article></div>
+</section><section class="section" data-filter="Humor e semana">
+<div class="section-head"><div><h3>Humor e semana</h3><p>Ferramentas organizadas por objetivo de uso.</p></div><div class="count-pill">1</div></div>
+<div class="card-grid"><article class="tool-card" data-group="Humor e semana" data-tags="mapa do humor da semana humor energia eventos semana adultos clínico">
+<div class="card-meta"><span>Humor e semana</span><span>Grade semanal</span></div>
+<h4>Mapa do Humor da Semana</h4>
+<p>Grade semanal visual para humor, energia e eventos relevantes.</p>
+<a class="open-btn" href="ferramentas/lote5-adultos-clinico/index.html#tool-humor">Abrir</a>
+</article></div>
+</section><section class="section" data-filter="Pensamentos">
+<div class="section-head"><div><h3>Pensamentos</h3><p>Ferramentas organizadas por objetivo de uso.</p></div><div class="count-pill">1</div></div>
+<div class="card-grid"><article class="tool-card" data-group="Pensamentos" data-tags="caixa de pensamentos pensamento emoção evidências resposta justa tcc adultos clínico">
+<div class="card-meta"><span>Pensamentos</span><span>Oficina</span></div>
+<h4>Caixa de Pensamentos</h4>
+<p>Separe pensamento, emoção, evidências e resposta mais justa.</p>
+<a class="open-btn" href="ferramentas/lote5-adultos-clinico/index.html#tool-thought">Abrir</a>
+</article></div>
+</section><section class="section" data-filter="Limites e relações">
+<div class="section-head"><div><h3>Limites e relações</h3><p>Ferramentas organizadas por objetivo de uso.</p></div><div class="count-pill">1</div></div>
+<div class="card-grid"><article class="tool-card" data-group="Limites e relações" data-tags="radar de limites família trabalho amizades relação tempo corpo adultos clínico">
+<div class="card-meta"><span>Limites e relações</span><span>Radar</span></div>
+<h4>Radar de Limites</h4>
+<p>Mapeie limites em família, trabalho, amizades, relação, tempo e corpo.</p>
+<a class="open-btn" href="ferramentas/lote5-adultos-clinico/index.html#tool-limits">Abrir</a>
+</article></div>
+</section><section class="section" data-filter="Autocuidado">
+<div class="section-head"><div><h3>Autocuidado</h3><p>Ferramentas organizadas por objetivo de uso.</p></div><div class="count-pill">1</div></div>
+<div class="card-grid"><article class="tool-card" data-group="Autocuidado" data-tags="roda de autocuidado realista sono alimentação movimento vínculo ambiente prazer adultos clínico">
+<div class="card-meta"><span>Autocuidado</span><span>Roda</span></div>
+<h4>Roda de Autocuidado Realista</h4>
+<p>Transforme autocuidado em ações pequenas e possíveis.</p>
+<a class="open-btn" href="ferramentas/lote5-adultos-clinico/index.html#tool-care">Abrir</a>
+</article></div>
+</section><section class="section" data-filter="Fechamento e ação">
+<div class="section-head"><div><h3>Fechamento e ação</h3><p>Ferramentas organizadas por objetivo de uso.</p></div><div class="count-pill">1</div></div>
+<div class="card-grid"><article class="tool-card" data-group="Fechamento e ação" data-tags="contrato de próximo passo ação mínima fechamento sessão timer adultos clínico">
+<div class="card-meta"><span>Fechamento e ação</span><span>Missão</span></div>
+<h4>Contrato de Próximo Passo</h4>
+<p>Fechamento de sessão com uma ação mínima, concreta e revisável.</p>
+<a class="open-btn" href="ferramentas/lote5-adultos-clinico/index.html#tool-next">Abrir</a>
+</article></div>
+</section><section class="section" data-filter="Habilidades sociais">
+<div class="section-head"><div><h3>Habilidades sociais</h3><p>Ferramentas organizadas por objetivo de uso.</p></div><div class="count-pill">1</div></div>
+<div class="card-grid"><article class="tool-card" data-group="Habilidades sociais" data-tags="habilidades sociais trilha situações sociais escolhas consequências amizade empatia limite espera pedido de ajuda crianças adolescentes trilha das habilidades sociais">
+<div class="card-meta"><span>Habilidades sociais</span><span>Trilha</span></div>
+<h4>Trilha das Habilidades Sociais</h4>
+<p>Jogo de situações sociais com escolhas, consequências e mediação.</p>
+<a class="open-btn" href="ferramentas/lote6-criancas-adolescentes/ferramentas/trilha_habilidades_sociais.html">Abrir</a>
+</article></div>
+</section><section class="section" data-filter="Flexibilidade">
+<div class="section-head"><div><h3>Flexibilidade</h3><p>Mudança de planos, plano B e alternativas.</p></div><div class="count-pill">1</div></div>
+<div class="card-grid"><article class="tool-card" data-group="Flexibilidade" data-tags="flexibilidade mudança de planos plano b pedido de ajuda rotina previsibilidade crianças adolescentes neurodivergência missão da flexibilidade">
+<div class="card-meta"><span>Flexibilidade</span><span>Missão</span></div>
+<h4>Missão da Flexibilidade</h4>
+<p>Atividade para trabalhar mudança de planos, plano B e pedido de ajuda.</p>
+<a class="open-btn" href="ferramentas/lote6-criancas-adolescentes/ferramentas/missao_flexibilidade.html">Abrir</a>
+</article></div>
+</section><section class="section" data-filter="Frustração">
+<div class="section-head"><div><h3>Frustração</h3><p>Intensidade, recurso e resposta proporcional.</p></div><div class="count-pill">1</div></div>
+<div class="card-grid"><article class="tool-card" data-group="Frustração" data-tags="frustração termômetro intensidade raiva regulação recursos emoção crianças adolescentes termômetro da frustração">
+<div class="card-meta"><span>Frustração</span><span>Termômetro</span></div>
+<h4>Termômetro da Frustração</h4>
+<p>Escala visual para reconhecer intensidade e escolher recursos proporcionais.</p>
+<a class="open-btn" href="ferramentas/lote6-criancas-adolescentes/ferramentas/termometro_frustracao.html">Abrir</a>
+</article></div>
+</section><section class="section" data-filter="Situações e pensamento">
+<div class="section-head"><div><h3>Situações e pensamento</h3><p>Ferramentas organizadas por objetivo de uso.</p></div><div class="count-pill">1</div></div>
+<div class="card-grid"><article class="tool-card" data-group="Situações e pensamento" data-tags="detetive situações fato pensamento emoção ação tcc adolescente crianças detetive das situações">
+<div class="card-meta"><span>Situações e pensamento</span><span>Detetive</span></div>
+<h4>Detetive das Situações</h4>
+<p>Investigação simples para separar fato, pensamento, emoção e ação.</p>
+<a class="open-btn" href="ferramentas/lote6-criancas-adolescentes/ferramentas/detetive_situacoes.html">Abrir</a>
+</article></div>
+</section><section class="section" data-filter="Rotina e autonomia">
+<div class="section-head"><div><h3>Rotina e autonomia</h3><p>Ferramentas organizadas por objetivo de uso.</p></div><div class="count-pill">1</div></div>
+<div class="card-grid"><article class="tool-card" data-group="Rotina e autonomia" data-tags="combinados rotina autonomia arraste personalizado tarefas faço sozinho faço com ajuda crianças adolescentes neurodivergência combinados da rotina">
+<div class="card-meta"><span>Rotina e autonomia</span><span>Arraste</span></div>
+<h4>Combinados da Rotina</h4>
+<p>Organização visual com itens arrastáveis e combinados personalizados.</p>
+<a class="open-btn" href="ferramentas/lote6-criancas-adolescentes/ferramentas/combinados_rotina.html">Abrir</a>
+</article></div>
+</section><section class="section" data-filter="Autoestima e qualidades">
+<div class="section-head"><div><h3>Autoestima e qualidades</h3><p>Ferramentas organizadas por objetivo de uso.</p></div><div class="count-pill">1</div></div>
+<div class="card-grid"><article class="tool-card" data-group="Autoestima e qualidades" data-tags="jardim qualidades autoestima apoios ações pequenas crianças adolescentes jardim das qualidades">
+<div class="card-meta"><span>Autoestima e qualidades</span><span>Construção</span></div>
+<h4>Jardim das Qualidades</h4>
+<p>Construção visual de qualidades, apoios e ações pequenas.</p>
+<a class="open-btn" href="ferramentas/lote6-criancas-adolescentes/ferramentas/jardim_qualidades.html">Abrir</a>
+</article></div>
+</section><section class="section" data-filter="Autocobrança">
+<div class="section-head"><div><h3>Autocobrança</h3><p>Ferramentas organizadas por objetivo de uso.</p></div><div class="count-pill">1</div></div>
+<div class="card-grid"><article class="tool-card" data-group="Autocobrança" data-tags="autocobrança mapa adultos mapa da autocobrança autocobrança autocrítica rigidez culpa exigência adulto">
+<div class="card-meta"><span>Autocobrança</span><span>Mapa</span></div>
+<h4>Mapa da Autocobrança</h4>
+<p>Mapa de cobranças internas, resposta mais justa e ação mínima possível.</p>
+<a class="open-btn" href="ferramentas/lote7-adultos-clinico2/index.html#autocobranca">Abrir</a>
+</article></div>
+</section><section class="section" data-filter="Procrastinação">
+<div class="section-head"><div><h3>Procrastinação</h3><p>Ferramentas organizadas por objetivo de uso.</p></div><div class="count-pill">1</div></div>
+<div class="card-grid"><article class="tool-card" data-group="Procrastinação" data-tags="procrastinação kanban adultos plano antiprocrastinação procrastinação tarefas hábitos primeiro passo adulto">
+<div class="card-meta"><span>Procrastinação</span><span>Kanban</span></div>
+<h4>Plano Antiprocrastinação</h4>
+<p>Quebra tarefas travadas em primeiro passo, barreira e andamento.</p>
+<a class="open-btn" href="ferramentas/lote7-adultos-clinico2/index.html#procrastinacao">Abrir</a>
+</article></div>
+</section><section class="section" data-filter="Gatilhos">
+<div class="section-head"><div><h3>Gatilhos</h3><p>Ferramentas organizadas por objetivo de uso.</p></div><div class="count-pill">1</div></div>
+<div class="card-grid"><article class="tool-card" data-group="Gatilhos" data-tags="gatilhos linha do tempo adultos diário de gatilhos gatilhos padrões emoção corpo intensidade adulto">
+<div class="card-meta"><span>Gatilhos</span><span>Linha do tempo</span></div>
+<h4>Diário de Gatilhos</h4>
+<p>Linha do tempo para mapear situação, corpo, intensidade e resposta possível.</p>
+<a class="open-btn" href="ferramentas/lote7-adultos-clinico2/index.html#gatilhos">Abrir</a>
+</article></div>
+</section><section class="section" data-filter="Comunicação">
+<div class="section-head"><div><h3>Comunicação</h3><p>Ferramentas organizadas por objetivo de uso.</p></div><div class="count-pill">1</div></div>
+<div class="card-grid"><article class="tool-card" data-group="Comunicação" data-tags="comunicação construtor adultos comunicação assertiva comunicação assertiva limites relacionamento conversa adulto">
+<div class="card-meta"><span>Comunicação</span><span>Construtor</span></div>
+<h4>Comunicação Assertiva</h4>
+<p>Construtor de fala para conversas difíceis, limites e pedidos concretos.</p>
+<a class="open-btn" href="ferramentas/lote7-adultos-clinico2/index.html#assertiva">Abrir</a>
+</article></div>
+</section><section class="section" data-filter="Rede de apoio">
+<div class="section-head"><div><h3>Rede de apoio</h3><p>Ferramentas organizadas por objetivo de uso.</p></div><div class="count-pill">1</div></div>
+<div class="card-grid"><article class="tool-card" data-group="Rede de apoio" data-tags="rede de apoio círculos adultos círculo de apoio rede de apoio recursos proteção adulto">
+<div class="card-meta"><span>Rede de apoio</span><span>Círculos</span></div>
+<h4>Círculo de Apoio</h4>
+<p>Mapa visual de pessoas, serviços e recursos para momentos difíceis.</p>
+<a class="open-btn" href="ferramentas/lote7-adultos-clinico2/index.html#apoio">Abrir</a>
+</article></div>
+</section><section class="section" data-filter="Crise emocional">
+<div class="section-head"><div><h3>Crise emocional</h3><p>Ferramentas organizadas por objetivo de uso.</p></div><div class="count-pill">1</div></div>
+<div class="card-grid"><article class="tool-card" data-group="Crise emocional" data-tags="crise emocional semáforo adultos plano de crise emocional crise emocional sinais ações segurança adulto">
+<div class="card-meta"><span>Crise emocional</span><span>Semáforo</span></div>
+<h4>Plano de Crise Emocional</h4>
+<p>Semáforo de sinais, ações e pessoas/serviços para acionar.</p>
+<a class="open-btn" href="ferramentas/lote7-adultos-clinico2/index.html#crise">Abrir</a>
+</article></div>
+</section><section class="section" data-filter="Decisão">
+<div class="section-head"><div><h3>Decisão</h3><p>Ferramentas organizadas por objetivo de uso.</p></div><div class="count-pill">1</div></div>
+<div class="card-grid"><article class="tool-card" data-group="Decisão" data-tags="decisão balança adultos balança de decisão decisão escolhas custos ganhos pesos adulto">
+<div class="card-meta"><span>Decisão</span><span>Balança</span></div>
+<h4>Balança de Decisão</h4>
+<p>Compara opções, ganhos, custos e pesos para escolhas difíceis.</p>
+<a class="open-btn" href="ferramentas/lote7-adultos-clinico2/index.html#decisao">Abrir</a>
+</article></div>
+</section><section class="section" data-filter="Prevenção">
+<div class="section-head"><div><h3>Prevenção</h3><p>Ferramentas organizadas por objetivo de uso.</p></div><div class="count-pill">1</div></div>
+<div class="card-grid"><article class="tool-card" data-group="Prevenção" data-tags="prevenção painel adultos prevenção de recaída prevenção recaída manutenção sinais gatilhos adulto">
+<div class="card-meta"><span>Prevenção</span><span>Painel</span></div>
+<h4>Prevenção de Recaída</h4>
+<p>Painel de sinais precoces, gatilhos, recursos e plano de manutenção.</p>
+<a class="open-btn" href="ferramentas/lote7-adultos-clinico2/index.html#recaida">Abrir</a>
+</article></div>
+</section><section class="section" data-filter="Bullying">
+<div class="section-head"><div><h3>Bullying</h3><p>Ferramentas organizadas por objetivo de uso.</p></div><div class="count-pill">1</div></div>
+<div class="card-grid"><article class="tool-card" data-group="Bullying" data-tags="bullying escudo crianças/adolescentes escudo contra bullying bullying escola segurança proteção adulto seguro">
+<div class="card-meta"><span>Bullying</span><span>Escudo</span></div>
+<h4>Escudo contra Bullying</h4>
+<p>Situações de bullying, adulto seguro, frase curta e ação de proteção.</p>
+<a class="open-btn" href="ferramentas/lote8-criancas-adolescentes2/index.html#escudo-bullying">Abrir</a>
+</article></div>
+</section><section class="section" data-filter="Pedir ajuda">
+<div class="section-head"><div><h3>Pedir ajuda</h3><p>Ferramentas organizadas por objetivo de uso.</p></div><div class="count-pill">1</div></div>
+<div class="card-grid"><article class="tool-card" data-group="Pedir ajuda" data-tags="pedir ajuda missão crianças/adolescentes missão pedir ajuda pedir ajuda autonomia comunicação criança adolescente">
+<div class="card-meta"><span>Pedir ajuda</span><span>Missão</span></div>
+<h4>Missão Pedir Ajuda</h4>
+<p>Treino de pedido de ajuda com frases prontas e apoio personalizado.</p>
+<a class="open-btn" href="ferramentas/lote8-criancas-adolescentes2/index.html#missao-ajuda">Abrir</a>
+</article></div>
+</section><section class="section" data-filter="Amizade">
+<div class="section-head"><div><h3>Amizade</h3><p>Ferramentas organizadas por objetivo de uso.</p></div><div class="count-pill">1</div></div>
+<div class="card-grid"><article class="tool-card" data-group="Amizade" data-tags="amizade mapa crianças/adolescentes mapa da amizade amizade limites alerta vínculo criança adolescente">
+<div class="card-meta"><span>Amizade</span><span>Mapa</span></div>
+<h4>Mapa da Amizade</h4>
+<p>Classifica atitudes em vínculo seguro, precisa conversar e sinal de alerta.</p>
+<a class="open-btn" href="ferramentas/lote8-criancas-adolescentes2/index.html#mapa-amizade">Abrir</a>
+</article></div>
+</section><section class="section" data-filter="Raiva">
+<div class="section-head"><div><h3>Raiva</h3><p>Ferramentas organizadas por objetivo de uso.</p></div><div class="count-pill">1</div></div>
+<div class="card-grid"><article class="tool-card" data-group="Raiva" data-tags="raiva caixa crianças/adolescentes caixa da raiva raiva regulação corpo intensidade criança adolescente">
+<div class="card-meta"><span>Raiva</span><span>Caixa</span></div>
+<h4>Caixa da Raiva</h4>
+<p>Organiza gatilho, sinais no corpo, intensidade e estratégias de regulação.</p>
+<a class="open-btn" href="ferramentas/lote8-criancas-adolescentes2/index.html#caixa-raiva">Abrir</a>
+</article></div>
+</section><section class="section" data-filter="Medo">
+<div class="section-head"><div><h3>Medo</h3><p>Ferramentas organizadas por objetivo de uso.</p></div><div class="count-pill">1</div></div>
+<div class="card-grid"><article class="tool-card" data-group="Medo" data-tags="medo cartas crianças/adolescentes cartões do medo medo enfrentamento coragem criança adolescente">
+<div class="card-meta"><span>Medo</span><span>Cartas</span></div>
+<h4>Cartões do Medo</h4>
+<p>Cartas de medo com escolha de passo pequeno de coragem.</p>
+<a class="open-btn" href="ferramentas/lote8-criancas-adolescentes2/index.html#cartoes-medo">Abrir</a>
+</article></div>
+</section><section class="section" data-filter="Escola">
+<div class="section-head"><div><h3>Escola</h3><p>Ferramentas organizadas por objetivo de uso.</p></div><div class="count-pill">1</div></div>
+<div class="card-grid"><article class="tool-card" data-group="Escola" data-tags="escola quadro crianças/adolescentes escola em partes escola rotina organização criança adolescente">
+<div class="card-meta"><span>Escola</span><span>Quadro</span></div>
+<h4>Escola em Partes</h4>
+<p>Divide a rotina escolar em antes, durante, intervalo e depois/casa.</p>
+<a class="open-btn" href="ferramentas/lote8-criancas-adolescentes2/index.html#escola-partes">Abrir</a>
+</article></div>
+</section><section class="section" data-filter="Conversa">
+<div class="section-head"><div><h3>Conversa</h3><p>Ferramentas organizadas por objetivo de uso.</p></div><div class="count-pill">1</div></div>
+<div class="card-grid"><article class="tool-card" data-group="Conversa" data-tags="conversa ponte crianças/adolescentes ponte da conversa conversa assertividade pedido combinado adolescente">
+<div class="card-meta"><span>Conversa</span><span>Ponte</span></div>
+<h4>Ponte da Conversa</h4>
+<p>Monta conversa com começo, sentimento, pedido e combinado.</p>
+<a class="open-btn" href="ferramentas/lote8-criancas-adolescentes2/index.html#ponte-conversa">Abrir</a>
+</article></div>
+</section><section class="section" data-filter="Espera">
+<div class="section-head"><div><h3>Espera</h3><p>Ferramentas organizadas por objetivo de uso.</p></div><div class="count-pill">1</div></div>
+<div class="card-grid"><article class="tool-card" data-group="Espera" data-tags="espera timer crianças/adolescentes plano da espera espera tolerância estratégia timer criança">
+<div class="card-meta"><span>Espera</span><span>Timer</span></div>
+<h4>Plano da Espera</h4>
+<p>Plano visual para esperar com estratégia, apoio e timer simples.</p>
+<a class="open-btn" href="ferramentas/lote8-criancas-adolescentes2/index.html#plano-espera">Abrir</a>
+</article></div>
+</section><section class="section" data-filter="Profissional">
+<div class="section-head"><div><h3>Profissional</h3><p>Planejamento, registro, devolutiva e objetivos.</p></div><div class="count-pill">8</div></div>
+<div class="card-grid"><article class="tool-card" data-group="Profissional" data-tags="profissional planejamento profissional planejador de sessão profissional sessão objetivo foco atendimento terapeuta">
+<div class="card-meta"><span>Profissional</span><span>Planejamento</span></div>
+<h4>Planejador de Sessão</h4>
+<p>Organiza objetivo, foco, recurso e fechamento antes do atendimento.</p>
+<a class="open-btn" href="ferramentas/extras-profissionais/index.html#planejador_sessao">Abrir</a>
+</article><article class="tool-card" data-group="Profissional" data-tags="profissional registro profissional registro de evolução profissional evolução registro sessão conduta">
+<div class="card-meta"><span>Profissional</span><span>Registro</span></div>
+<h4>Registro de Evolução</h4>
+<p>Registra demanda, intervenção, resposta observada e próximos passos.</p>
+<a class="open-btn" href="ferramentas/extras-profissionais/index.html#registro_evolucao">Abrir</a>
+</article><article class="tool-card" data-group="Profissional" data-tags="profissional devolutiva profissional devolutiva simples profissional devolutiva paciente responsáveis escola">
+<div class="card-meta"><span>Profissional</span><span>Devolutiva</span></div>
+<h4>Devolutiva Simples</h4>
+<p>Monta devolutiva clara para paciente, responsáveis, escola/equipe ou profissional.</p>
+<a class="open-btn" href="ferramentas/extras-profissionais/index.html#devolutiva_simples">Abrir</a>
+</article><article class="tool-card" data-group="Profissional" data-tags="profissional plano visual profissional plano terapêutico visual profissional plano terapêutico objetivos indicadores">
+<div class="card-meta"><span>Profissional</span><span>Plano visual</span></div>
+<h4>Plano Terapêutico Visual</h4>
+<p>Organiza objetivos, indicadores, ações e critérios de revisão.</p>
+<a class="open-btn" href="ferramentas/extras-profissionais/index.html#plano_visual">Abrir</a>
+</article><article class="tool-card" data-group="Profissional" data-tags="profissional guia profissional guia de encaminhamento profissional encaminhamento sinais serviço continuidade">
+<div class="card-meta"><span>Profissional</span><span>Guia</span></div>
+<h4>Guia de Encaminhamento</h4>
+<p>Estrutura sinais, justificativa, serviço indicado e continuidade.</p>
+<a class="open-btn" href="ferramentas/extras-profissionais/index.html#guia_encaminhamento">Abrir</a>
+</article><article class="tool-card" data-group="Profissional" data-tags="profissional checklist profissional checklist de objetivos profissional objetivos checklist clareza viabilidade">
+<div class="card-meta"><span>Profissional</span><span>Checklist</span></div>
+<h4>Checklist de Objetivos</h4>
+<p>Verifica se objetivos estão claros, observáveis, realistas e revisáveis.</p>
+<a class="open-btn" href="ferramentas/extras-profissionais/index.html#checklist_objetivos">Abrir</a>
+</article><article class="tool-card" data-group="Profissional" data-tags="profissional registro profissional registro de tarefa terapêutica profissional tarefa terapêutica instrução barreira plano b">
+<div class="card-meta"><span>Profissional</span><span>Registro</span></div>
+<h4>Registro de Tarefa Terapêutica</h4>
+<p>Cria tarefa entre sessões com instrução, frequência, barreira e plano B.</p>
+<a class="open-btn" href="ferramentas/extras-profissionais/index.html#registro_tarefa">Abrir</a>
+</article><article class="tool-card" data-group="Profissional" data-tags="profissional banco profissional banco de perguntas clínicas profissional perguntas clínicas abertura emoções valores fechamento">
+<div class="card-meta"><span>Profissional</span><span>Banco</span></div>
+<h4>Banco de Perguntas Clínicas</h4>
+<p>Banco de perguntas por tema para condução e fechamento de sessão.</p>
+<a class="open-btn" href="ferramentas/extras-profissionais/index.html#banco_perguntas">Abrir</a>
+</article></div>
+</section></div><footer>© 2026 PsicoQuest — @gabrielopsicologo</footer></main></div><script>
+const search = document.getElementById('search');
+const navButtons = [...document.querySelectorAll('.nav-btn')];
+const chips = [...document.querySelectorAll('.chip')];
+const sections = [...document.querySelectorAll('.section')];
+let activeFilter = 'todos';
+function normalize(v){return (v||'').toLowerCase().trim();}
+function setFilter(filter){activeFilter=filter;[...navButtons,...chips].forEach(el=>el.classList.toggle('active',el.dataset.filter===filter));apply();}
+function apply(){const q=normalize(search.value);sections.forEach(section=>{const sf=section.dataset.filter;let visible=0;section.querySelectorAll('.tool-card').forEach(card=>{const title=normalize(card.querySelector('h4')?.textContent);const tags=normalize(card.dataset.tags);const okFilter=activeFilter==='todos'||sf===activeFilter;const okSearch=!q||title.includes(q)||tags.includes(q);const show=okFilter&&okSearch;card.classList.toggle('hidden',!show);if(show)visible++;});section.classList.toggle('hidden',visible===0);const pill=section.querySelector('.count-pill');if(pill)pill.textContent=`${visible}`;});}
+search?.addEventListener('input',apply);[...navButtons,...chips].forEach(btn=>btn.addEventListener('click',()=>setFilter(btn.dataset.filter)));setFilter('todos');
+</script>
+<style id="pq-central-style">
+.pq-central-back{position:fixed;right:16px;bottom:58px;z-index:9999;display:inline-flex;align-items:center;gap:8px;padding:11px 14px;border-radius:999px;background:#111827;color:#fff!important;text-decoration:none;font-weight:900;border:1px solid rgba(255,255,255,.22);box-shadow:0 14px 34px rgba(15,23,42,.24);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;font-size:14px;line-height:1}
+.pq-central-back:hover{background:#0f172a}
+@media(max-width:640px){.pq-central-back{left:12px;right:12px;bottom:54px;justify-content:center}}
+@media print{.pq-central-back{display:none!important}}
+</style>
+</body></html>

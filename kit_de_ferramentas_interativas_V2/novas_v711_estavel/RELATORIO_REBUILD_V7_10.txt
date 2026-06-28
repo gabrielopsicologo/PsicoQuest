@@ -1,0 +1,12 @@
+V7.11 QA Comercial
+
+Base: V7.4 Premium, que preservava o menu aprovado.
+Ações:
+- removidos patches agressivos de V7.2/V7.4 que sobrescreviam botões e cores internas;
+- mantidas ferramentas originais sempre que possível;
+- criado ABRIR_NO_CELULAR.html com links simples;
+- criadas cópias móveis diretas para cada ferramenta listada;
+- para ferramentas com hash, a página móvel chama a ferramenta alvo diretamente;
+- evitado CSS global que força todos os botões para uma cor.
+
+Limitação conhecida: o Android/Chrome com content:// depende do app que extrai/abre o ZIP. Esta versão reduz essa dependência colocando as páginas móveis no mesmo nível do lançador.

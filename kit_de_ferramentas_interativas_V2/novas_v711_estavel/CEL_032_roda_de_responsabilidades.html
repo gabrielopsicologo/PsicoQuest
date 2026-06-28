@@ -1,0 +1,94 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Roda de Responsabilidades</title><link rel="stylesheet" href="assets/psicoquest.css"><style>
+body{background:linear-gradient(135deg,#edf4f8,#fff8e7)}
+.resp-layout{display:grid;grid-template-columns:1.05fr .95fr;gap:22px;align-items:start}
+.resp-card{background:rgba(255,255,255,.92);border:1px solid var(--line);border-radius:26px;padding:18px;box-shadow:var(--shadow2)}
+.mini-wheel{width:148px;height:148px;border-radius:50%;margin:0 auto 10px;background:conic-gradient(#cfe8ff 0 120deg,#ffe8b3 120deg 240deg,#eadfff 240deg 360deg);border:10px solid #fff;box-shadow:0 12px 28px rgba(36,49,61,.12);position:relative;display:grid;place-items:center;flex:0 0 auto}
+.mini-wheel:after{content:"separar";width:72px;height:72px;border-radius:999px;background:white;display:grid;place-items:center;text-align:center;font-weight:1000;color:#25405f;box-shadow:0 8px 20px rgba(36,49,61,.10);font-size:.9rem;text-transform:uppercase;letter-spacing:.02em}
+.source-head{display:flex;gap:14px;align-items:center;margin-bottom:12px}
+.source-head-text h2{margin:0;font-size:1.15rem}.source-head-text p{margin:4px 0 0;color:#64748b;font-weight:650;line-height:1.35}
+.cards{display:flex;flex-wrap:wrap;gap:10px;min-height:126px;padding:12px;border:1px solid #ece3d4;background:#fffaf2;border-radius:22px}
+.situation{background:white;border:2px solid #e6dac7;border-radius:999px;padding:11px 14px;font-weight:900;color:#24313d;cursor:pointer;user-select:none;touch-action:none;box-shadow:0 8px 16px rgba(15,23,42,.06);transition:border-color .15s,background .15s,color .15s,box-shadow .15s;position:relative;z-index:1}
+.situation:hover{border-color:#b9cce0;background:#f7fbff;box-shadow:0 10px 18px rgba(15,23,42,.08)}
+.situation.selected{background:linear-gradient(135deg,var(--brand),#3a658b);color:white;border-color:transparent;box-shadow:0 12px 28px rgba(37,64,95,.18)}
+.situation.drag-source{opacity:.25}.drag-clone{position:fixed;z-index:9999;pointer-events:none;opacity:.96;transform:translate(-50%,-50%) scale(1.02);box-shadow:0 18px 40px rgba(15,23,42,.25)!important;background:white!important;color:#24313d!important}
+.bucket-grid{display:grid;grid-template-columns:1fr;gap:12px}.bucket{border:2px dashed #d8cdb8;border-radius:24px;padding:14px;background:rgba(255,255,255,.92);min-height:168px;transition:border-color .14s,background .14s,transform .14s;cursor:pointer}.bucket.drop-hover{border-color:var(--brand);background:#eef6ff;transform:translateY(-1px)}
+.bucket-title{display:flex;align-items:center;gap:10px;margin-bottom:5px;font-weight:1000;color:#24313d}.dot{width:16px;height:16px;border-radius:50%;display:inline-block;box-shadow:inset 0 -2px 4px rgba(0,0,0,.18)}.dot.blue{background:#4f86d8}.dot.gold{background:#d8a927}.dot.purple{background:#8b65cf}
+.bucket p{margin:0 0 10px;color:#64748b;font-size:.88rem;font-weight:700}.drop{min-height:88px}.empty-hint{font-size:.88rem;color:#8a94a3;font-weight:800;padding:12px 10px;border-radius:16px;background:#f8fafc;text-align:center;border:1px dashed #e5e7eb}.pill{display:flex;justify-content:space-between;align-items:center;gap:8px;background:#f3f7fb;border:1px solid #e4ecf3;border-radius:16px;padding:10px 11px;margin:8px 0;font-weight:900;line-height:1.25}.remove-pill{border:0;background:#e2e8f0;border-radius:999px;width:26px;height:26px;cursor:pointer;font-weight:1000;color:#334155;flex:0 0 auto}.remove-pill:hover{background:#dbe3ee}
+.selection-bar{margin-top:12px;padding:10px 12px;border-radius:18px;background:#eef6fb;border:1px solid #d8e8f4;color:#25405f;font-weight:850}.selection-bar strong{font-weight:1000}.board-note{margin-top:12px;color:#667085;font-size:.9rem;font-weight:700;line-height:1.4}.tools-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.custom-situation{margin-top:12px;border:1px solid #e7edf3;background:#f8fbff;border-radius:18px;padding:12px}.custom-situation label{display:block;font-size:.9rem;color:#475569;font-weight:900;margin-bottom:8px}.custom-situation .custom-line{display:grid;grid-template-columns:1fr auto;gap:8px}.custom-situation input{width:100%;border:1px solid #dbe6ef;border-radius:14px;padding:11px 12px;font-weight:800;color:#24313d;background:white}@media(max-width:640px){.custom-situation .custom-line{grid-template-columns:1fr}.custom-situation .btn{width:100%}}
+@media(min-width:920px){.bucket-grid{grid-template-columns:repeat(3,1fr)}.bucket{min-height:260px}.drop{min-height:168px}.resp-layout{grid-template-columns:.92fr 1.08fr}.source-card{position:sticky;top:78px}}
+@media(max-width:720px){.resp-layout{grid-template-columns:1fr}.source-head{align-items:flex-start}.mini-wheel{width:112px;height:112px;border-width:8px}.mini-wheel:after{width:56px;height:56px;font-size:.72rem}.cards{min-height:100px}.situation{padding:10px 12px}.bucket{min-height:150px}.game-title p{font-size:.98rem}}
+@media print{.topbar,.actions,.tools-row,.source-card .btn,.modal{display:none!important}.game-board,.resp-card,.bucket{box-shadow:none}.resp-layout{grid-template-columns:1fr}.source-card{position:static}.cards{border:1px solid #222}.bucket{border:1px solid #222;break-inside:avoid}}
+</style> <style id="pq-v710-safe-base">
+/* V7.10: patch mínimo, sem sobrescrever identidade visual das ferramentas. */
+html{max-width:100%;overflow-x:hidden;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{max-width:100%;overflow-x:hidden}
+img,svg,canvas,video,iframe{max-width:100%;height:auto}
+textarea,input,select{max-width:100%}
+button,a,.btn,[role="button"]{touch-action:manipulation;-webkit-tap-highlight-color:rgba(37,99,235,.18)}
+.topbar,header,.top{max-width:100%;overflow-x:hidden}
+@media(max-width:680px){ .wrap,.main,.game-main,.topbar-inner,.inner,.top-inner{max-width:100%!important;width:100%!important} .wrap,.main,.game-main{padding-left:12px!important;padding-right:12px!important} .grid,.card-grid,.choice-grid,.visual-grid{max-width:100%} .toolbar,.actions,.tools{max-width:100%;gap:8px!important}
+}
+@media print{.pq-central-back{display:none!important}}
+</style> 
+<style id="pq-mobile-copy-safe">
+html{max-width:100%;overflow-x:hidden;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{max-width:100%;overflow-x:hidden}
+img,svg,canvas,video,iframe{max-width:100%;height:auto}
+button,a,.btn,[role="button"]{touch-action:manipulation;-webkit-tap-highlight-color:rgba(37,99,235,.18)}
+.pq-central-back{position:fixed!important;left:12px!important;right:12px!important;bottom:54px!important;z-index:9999!important;justify-content:center!important;background:#111827!important;color:#fff!important;border-radius:999px!important;padding:12px 14px!important;text-decoration:none!important;font-weight:900!important;box-shadow:0 14px 34px rgba(15,23,42,.24)!important}
+@media(max-width:680px){.wrap,.main,.game-main,.topbar-inner,.inner,.top-inner{max-width:100%!important;width:100%!important}.wrap,.main,.game-main{padding-left:12px!important;padding-right:12px!important}.toolbar,.actions,.tools{gap:8px!important}}
+@media print{.pq-central-back{display:none!important}}
+</style>
+
+</head><body><div class="game-shell"><nav class="topbar"><div class="topbar-inner"><div class="brandmark"><div class="brand-dot">◎</div><span>Roda de Responsabilidades</span></div><div class="top-actions"><button class="btn small" data-instructions>Instruções</button><a class="btn small" data-support target="_blank">Suporte</a></div></div></nav><main class="game-main"><section class="game-hero"><div class="game-title"><h1>Roda de Responsabilidades</h1><p>Organize as situações em três áreas: o que posso cuidar, o que pertence ao outro e o que não controlo agora.</p><div class="actions"><button class="btn primary" data-copy-summary>Copiar resumo</button><button class="btn" id="saveBtn">Salvar</button><button class="btn" id="clearBtn">Limpar</button></div></div><div class="panel"><div class="section-title">Mecânica</div><p class="muted">Clique em uma situação e depois clique na categoria. No computador, também é possível arrastar.</p></div></section><section class="game-board"><div class="resp-layout"><aside class="resp-card source-card"><div class="source-head"><div class="mini-wheel" aria-hidden="true"></div><div class="source-head-text"><h2>Situações</h2><p>Escolha uma situação por vez e coloque na categoria mais adequada.</p></div></div><div class="cards" id="cards"></div><div class="custom-situation"><label for="customSit">Escrever situação personalizada</label><div class="custom-line"><input id="customSit" type="text" placeholder="Ex: Preciso responder uma mensagem difícil"><button class="btn" id="addCustomSit" type="button">Adicionar</button></div></div><div class="selection-bar" id="selectionBar">Nenhuma situação selecionada.</div><div class="tools-row"><button class="btn" id="newSet">Novo conjunto</button><button class="btn" id="returnAll">Voltar itens</button></div><div class="board-note">A ideia não é “acertar”, mas separar responsabilidades para reduzir culpa excessiva e encontrar uma ação possível.</div></aside><div><div class="bucket-grid"><div class="bucket" data-bucket="Eu posso cuidar"><div class="bucket-title"><span class="dot blue"></span>Eu posso cuidar</div><p>Minhas ações, limites, comunicação e escolhas.</p><div class="drop"></div></div><div class="bucket" data-bucket="É do outro"><div class="bucket-title"><span class="dot gold"></span>É do outro</div><p>Reações, decisões e responsabilidades da outra pessoa.</p><div class="drop"></div></div><div class="bucket" data-bucket="Não controlo agora"><div class="bucket-title"><span class="dot purple"></span>Não controlo agora</div><p>Passado, tempo, imprevistos, contexto ou resultado final.</p><div class="drop"></div></div></div><label class="section-title" style="display:block;margin-top:18px">Próximo passo possível</label><textarea id="passo" class="field" placeholder="Depois de separar, qual ação pequena faz sentido?"></textarea><div class="actions" style="margin-top:12px"><button class="btn" data-download-txt>Baixar TXT</button><button class="btn" data-print>PDF/Imprimir</button></div></div></div></section></main><footer class="footer-copy">© PsicoQuest — @gabrielopsicologo. Todos os direitos reservados.</footer></div><div class="modal" id="modal-instrucoes"><div class="modal-card"><h2>Como usar</h2><p>Escolha uma situação e coloque em uma das três categorias. No celular, toque na situação e depois na categoria. No computador, também pode arrastar.</p><p>Use a atividade para trabalhar limites, culpa, responsabilização excessiva e ações possíveis.</p><button class="btn primary" data-close-modal>Entendi</button></div></div><script src="assets/psicoquest.js"></script><script>
+const sets=[['Minha fala','Reação do outro','O passado','Meu limite','A opinião alheia','Minha rotina','O clima da casa','Minha escolha','O tempo','Minha tentativa'],['Meu pedido','O humor do outro','Uma crítica recebida','Minha pausa','A resposta da escola','Meu descanso','Uma decisão antiga','Minha comunicação','O trânsito','Minha organização'],['Meu esforço','Expectativa da família','Meu sim e meu não','O que já aconteceu','Meu planejamento','A vontade do outro','Minha atitude hoje','O resultado final','Minha presença','O julgamento alheio'],['Minha respiração','A pressa do outro','O barulho do lugar','Minha resposta','A mensagem recebida','Minha preparação','O passado da família','Meu horário de dormir','A escolha do colega','Minha forma de pedir ajuda']];
+let selected=null;let bank=[];const buckets={'Eu posso cuidar':[],'É do outro':[],'Não controlo agora':[]};const STORAGE='pq_roda_responsabilidades_v3_2';
+function shuffle(a){return [...a].sort(()=>Math.random()-.5)}
+function escapeAttr(s){return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function newSet(){bank=shuffle(sets[Math.floor(Math.random()*sets.length)]); selected=null; Object.keys(buckets).forEach(k=>buckets[k]=[]); render();}
+function render(){renderCards();renderBuckets();updateSelection();}
+function renderCards(){const el=document.getElementById('cards');el.innerHTML=bank.length?bank.map((s,i)=>`<button class="situation${selected===s?' selected':''}" type="button" data-name="${escapeAttr(s)}">${escapeAttr(s)}</button>`).join(''):'<div class="empty-hint">Todos os itens foram organizados.</div>'; setupItems();}
+function updateSelection(){document.getElementById('selectionBar').innerHTML=selected?`Selecionado: <strong>${escapeAttr(selected)}</strong>. Agora toque em uma categoria.`:'Nenhuma situação selecionada.'}
+function selectSit(s){selected=(selected===s?null:s); renderCards();updateSelection();}
+function moveToBucket(name,bucket){if(!name)return;Object.values(buckets).forEach(arr=>{const i=arr.indexOf(name); if(i>=0)arr.splice(i,1)});if(!buckets[bucket].includes(name))buckets[bucket].push(name);bank=bank.filter(x=>x!==name);selected=null;render();PQ.toast('Organizado.');}
+function renderBuckets(){document.querySelectorAll('.bucket').forEach(b=>{const name=b.dataset.bucket; const arr=buckets[name]||[];b.querySelector('.drop').innerHTML=arr.length?arr.map(x=>`<div class="pill"><span>${escapeAttr(x)}</span><button class="remove-pill" type="button" data-remove="${escapeAttr(x)}" data-from="${escapeAttr(name)}">×</button></div>`).join(''):'<div class="empty-hint">Coloque aqui</div>';});document.querySelectorAll('.remove-pill').forEach(btn=>btn.addEventListener('click',e=>{e.stopPropagation();removeItem(btn.dataset.remove,btn.dataset.from)}));}
+function removeItem(x,bucket){const arr=buckets[bucket];const i=arr.indexOf(x);if(i>=0)arr.splice(i,1);if(!bank.includes(x))bank.push(x);render();}
+function returnAll(){Object.keys(buckets).forEach(k=>{buckets[k].forEach(x=>{if(!bank.includes(x))bank.push(x)});buckets[k]=[]});selected=null;render();}
+function addCustomSituation(){const input=document.getElementById('customSit');const value=(input?.value||'').trim();if(!value){PQ.toast('Escreva uma situação.');return;} if(!bank.includes(value)&&!Object.values(buckets).some(arr=>arr.includes(value))) bank.unshift(value); selected=value; if(input)input.value=''; render(); PQ.toast('Situação personalizada criada.');}
+function setupItems(){document.querySelectorAll('.situation').forEach(el=>{let clone=null,startX=0,startY=0,dragging=false,pointerId=null;el.addEventListener('click',e=>{if(dragging)return;selectSit(el.dataset.name)});el.addEventListener('pointerdown',e=>{pointerId=e.pointerId;startX=e.clientX;startY=e.clientY;dragging=false;el.setPointerCapture?.(pointerId)});el.addEventListener('pointermove',e=>{if(pointerId!==e.pointerId)return;const dist=Math.hypot(e.clientX-startX,e.clientY-startY);if(!dragging&&dist>12){dragging=true;clone=el.cloneNode(true);clone.classList.add('drag-clone');document.body.appendChild(clone);el.classList.add('drag-source')}if(dragging&&clone){clone.style.left=e.clientX+'px';clone.style.top=e.clientY+'px';document.querySelectorAll('.bucket').forEach(x=>x.classList.remove('drop-hover'));const t=document.elementFromPoint(e.clientX,e.clientY)?.closest?.('.bucket');if(t)t.classList.add('drop-hover')}});el.addEventListener('pointerup',e=>{if(pointerId!==e.pointerId)return;const wasDragging=dragging;if(wasDragging){const t=document.elementFromPoint(e.clientX,e.clientY)?.closest?.('.bucket');document.querySelectorAll('.bucket').forEach(x=>x.classList.remove('drop-hover'));if(t)moveToBucket(el.dataset.name,t.dataset.bucket)}clone?.remove();el.classList.remove('drag-source');dragging=false;pointerId=null;if(wasDragging){e.preventDefault();e.stopPropagation();}});el.addEventListener('pointercancel',()=>{clone?.remove();el.classList.remove('drag-source');dragging=false;pointerId=null;document.querySelectorAll('.bucket').forEach(x=>x.classList.remove('drop-hover'))});});}
+document.querySelectorAll('.bucket').forEach(b=>{b.addEventListener('click',e=>{if(e.target.closest('.remove-pill'))return;if(selected)moveToBucket(selected,b.dataset.bucket);});});
+document.getElementById('newSet').onclick=newSet;document.getElementById('returnAll').onclick=returnAll;document.getElementById('addCustomSit').onclick=addCustomSituation;document.getElementById('customSit').addEventListener('keydown',e=>{if(e.key==='Enter')addCustomSituation();});
+function snapshot(){return {bank,selected,buckets,passo:document.getElementById('passo').value}}
+function restore(data){if(!data)return;bank=Array.isArray(data.bank)?data.bank:bank;selected=data.selected||null;Object.keys(buckets).forEach(k=>{buckets[k]=Array.isArray(data.buckets?.[k])?data.buckets[k]:[]});document.getElementById('passo').value=data.passo||'';render();}
+document.getElementById('saveBtn').onclick=()=>{localStorage.setItem(STORAGE,JSON.stringify(snapshot()));PQ.toast('Salvo neste aparelho.')};document.getElementById('clearBtn').onclick=()=>{if(confirm('Limpar esta atividade?')){localStorage.removeItem(STORAGE);newSet();document.getElementById('passo').value='';}};
+function resumo(){return `Roda de Responsabilidades\nEu posso cuidar: ${(buckets['Eu posso cuidar']||[]).join(', ')||'-'}\nÉ do outro: ${(buckets['É do outro']||[]).join(', ')||'-'}\nNão controlo agora: ${(buckets['Não controlo agora']||[]).join(', ')||'-'}\nPróximo passo: ${document.getElementById('passo').value||'-'}`;}
+newSet();try{const saved=JSON.parse(localStorage.getItem(STORAGE)||'null'); if(saved)restore(saved)}catch(e){}PQ.setupCommon(STORAGE,resumo);
+</script>
+<a class="pq-central-back" href="ABRIR_NO_CELULAR.html">← Central</a> 
+
+<script id="pq-mobile-open-target">
+(function(){
+  const TARGET = "";
+  function safeBack(){
+    document.querySelectorAll('a.pq-central-back').forEach(a=>{a.setAttribute('href','ABRIR_NO_CELULAR.html'); a.textContent='← Central';});
+  }
+  function openTarget(){
+    safeBack();
+    if(!TARGET) return;
+    try{ if(location.hash !== '#'+TARGET && history.replaceState) history.replaceState(null,'','#'+TARGET); }catch(e){}
+    try{ if(typeof window.openTool === 'function'){ window.openTool(TARGET); return; } }catch(e){}
+    try{ if(typeof window.routeTo === 'function'){ window.routeTo(TARGET,true); return; } }catch(e){}
+    try{
+      const el=document.getElementById(TARGET);
+      if(el){
+        document.querySelectorAll('.workspace,.screen,.tool,.section').forEach(x=>{ if(x!==el && x.classList && x.classList.contains('active')) x.classList.remove('active'); });
+        el.classList.remove('hidden'); el.classList.add('active'); el.scrollIntoView({block:'start'});
+      }
+    }catch(e){}
+  }
+  document.addEventListener('DOMContentLoaded',()=>{setTimeout(openTarget,80);setTimeout(openTarget,300);});
+  window.addEventListener('load',()=>{setTimeout(openTarget,160);});
+})();
+</script>
+
+</body></html>

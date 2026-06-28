@@ -1,0 +1,18 @@
+RELATÓRIO DE MONTAGEM — V7 PILOTO
+
+Módulo: PsicoQuest Completo V7 Piloto
+Data técnica: 2026-06-26
+
+Resumo da etapa:
+- Versão V7 criada a partir da V5 piloto.
+- Integração do Lote 6 Crianças e Adolescentes V1.1 nos módulos Crianças/Adolescentes, Completo e Master Interno.
+- Adultos mantido estável em relação à V5, apenas com identificação V7 e contagem revisada.
+- Contagem atual de cards na central: 32.
+
+Ajustes específicos do Lote 6 V1.1:
+- Trilha das Habilidades Sociais com estoque ampliado de situações.
+- Combinados da Rotina com banco ampliado e combinados personalizados.
+- Ferramentas adicionadas com mecânicas variadas: trilha, missão, termômetro, detetive, arraste e construção visual.
+
+Observação:
+Esta é uma versão piloto para teste em navegador real no PC e celular antes de uso comercial definitivo.

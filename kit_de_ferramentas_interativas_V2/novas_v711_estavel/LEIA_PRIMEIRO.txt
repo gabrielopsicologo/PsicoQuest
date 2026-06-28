@@ -1,0 +1,12 @@
+PsicoQuest Completo
+V7.11 QA Comercial
+
+Como abrir no computador:
+- Use index.html.
+
+Como abrir no celular Android/Chrome:
+- Use ABRIR_NO_CELULAR.html.
+
+Observação:
+Esta versão mantém a base funcional estável da V7.10 e adiciona organização comercial/documental.
+Não abra diretamente de dentro do ZIP; primeiro extraia a pasta.

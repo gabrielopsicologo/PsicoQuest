@@ -1,0 +1,11 @@
+PsicoQuest completo V5 Piloto
+
+Integração realizada nesta etapa:
+- Adultos clínico Lote 5 integrado aos módulos Adultos, Completo e Master Interno.
+- Crianças/Adolescentes mantido estável em relação à V4.
+- Suporte discreto no topo e @gabrielopsicologo no rodapé.
+- Ferramentas do Lote 5 abrem em tela própria dentro de uma coleção clínica.
+
+Cartões na central: 26
+
+Observação: as 6 ferramentas adultas do Lote 5 ficam dentro de ferramentas/lote5-adultos-clinico/ e também são acessadas por links diretos com âncora.

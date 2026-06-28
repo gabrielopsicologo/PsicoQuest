@@ -1,0 +1,941 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hub completo | Kit de Ferramentas Interativas</title>
+<style>
+:root {
+  --bg:#f6f1e7; --paper:#fffaf1; --ink:#24312f; --muted:#6d7773; --line:rgba(36,49,47,.12);
+  --accent:#245d52; --accent2:#d28d35; --card:#ffffff; --shadow:0 18px 45px rgba(31,41,39,.10);
+}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at top left,#fff7e5 0,#f6f1e7 45%,#efe7d8 100%);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);line-height:1.45}
+a{color:inherit;text-decoration:none}
+.shell{width:min(1180px,calc(100% - 36px));margin:0 auto}
+.hero{padding:38px 0 24px;border-bottom:1px solid var(--line)}
+.brand{display:inline-flex;align-items:center;gap:10px;padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.65);border:1px solid var(--line);font-size:.82rem;color:var(--muted);font-weight:600}
+.logo{width:26px;height:26px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;color:white;font-weight:800;letter-spacing:-.04em}
+h1{font-family:Georgia,'Times New Roman',serif;font-size:clamp(2.1rem,4vw,4.2rem);line-height:1.02;margin:18px 0 12px;letter-spacing:-.04em}
+.subtitle{max-width:770px;font-size:1.06rem;color:#4c5b57;margin:0 0 22px}
+.hub-nav{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 0}
+.hub-nav a,.pill{border:1px solid var(--line);background:rgba(255,255,255,.72);padding:10px 14px;border-radius:999px;font-size:.88rem;font-weight:700;color:#33413e}
+.hub-nav a.active,.pill.active{background:var(--accent);color:white;border-color:var(--accent)}
+.stats{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}
+.stat{background:rgba(255,255,255,.7);border:1px solid var(--line);border-radius:16px;padding:12px 14px;min-width:135px}
+.stat strong{font-size:1.4rem;display:block}
+.stat span{font-size:.78rem;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+.controls{position:sticky;top:0;z-index:10;background:rgba(246,241,231,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:12px 0}
+.control-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.search{flex:1;min-width:260px;border:1px solid var(--line);border-radius:14px;background:#fff;padding:13px 14px;font-size:.96rem;outline:none}
+.pills{display:flex;gap:8px;flex-wrap:wrap}
+.pill{cursor:pointer}
+main{padding:26px 0 48px}
+.module-section{margin:0 0 24px}
+.module-title{display:flex;align-items:center;gap:10px;background:linear-gradient(135deg,var(--accent),#304b47);color:white;padding:15px 18px;border-radius:18px 18px 0 0;font-weight:800;letter-spacing:-.015em;box-shadow:var(--shadow)}
+.module-title span{font-size:1.25rem}
+.module-title small{margin-left:auto;font-size:.78rem;opacity:.78;font-weight:700}
+.tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;background:rgba(255,255,255,.55);border:1px solid var(--line);border-top:0;border-radius:0 0 18px 18px;padding:16px}
+.tool-card{display:flex;flex-direction:column;min-height:176px;background:var(--card);border:1px solid rgba(36,49,47,.10);border-radius:18px;padding:16px;box-shadow:0 10px 24px rgba(31,41,39,.06);transition:.18s ease;position:relative;overflow:hidden}
+.tool-card:hover{transform:translateY(-3px);box-shadow:0 18px 38px rgba(31,41,39,.12);border-color:rgba(36,93,82,.28)}
+.card-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+.tool-icon{width:34px;height:34px;border-radius:12px;background:#f4ead9;display:grid;place-items:center;font-size:1.05rem}
+.tag{font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;font-weight:800;color:var(--accent);background:#edf4f1;padding:5px 7px;border-radius:999px;text-align:right}
+h3{font-size:1rem;margin:2px 0 8px;letter-spacing:-.02em}
+p{font-size:.86rem;color:#65716d;margin:0 0 14px}
+.open-label{margin-top:auto;font-size:.82rem;font-weight:800;color:var(--accent)}
+.empty{display:none;text-align:center;padding:40px 18px;color:var(--muted)}
+footer{text-align:center;color:#7a837f;font-size:.8rem;border-top:1px solid var(--line);padding:22px 0 36px}
+@media(max-width:700px){.shell{width:min(100% - 24px,1180px)}.hero{padding-top:26px}.tools-grid{grid-template-columns:1fr;padding:12px}.module-title{align-items:flex-start;flex-wrap:wrap}.module-title small{width:100%;margin-left:0}}
+@media print{.controls,.hub-nav,.stats,.brand{display:none!important}body{background:#fff}.tool-card{break-inside:avoid}}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="shell">
+    <div class="brand"><span class="logo">KI</span><span>Kit de Ferramentas Interativas</span></div>
+    <h1>Hub completo</h1>
+    <p class="subtitle">Todos os recursos do kit em uma central única, com busca, categorias e acesso direto às ferramentas.</p>
+    <nav class="hub-nav">
+      <a href="HUB_COMPLETO.html" class="active">Hub completo</a>
+      <a href="HUB_CRIANCAS_ADOLESCENTES.html" class="">Crianças e adolescentes</a>
+      <a href="HUB_ADULTOS.html" class="">Adultos</a>
+      <a href="LEIA_PRIMEIRO.html">Como usar</a>
+    </nav>
+    <div class="stats"><div class="stat"><strong>133</strong><span>ferramentas</span></div><div class="stat"><strong>9</strong><span>categorias</span></div><div class="stat"><strong>HTML</strong><span>acesso local</span></div></div>
+  </div>
+</header>
+<div class="controls"><div class="shell control-row">
+  <input class="search" id="search" placeholder="Buscar por nome, tema ou público..." autocomplete="off">
+  <div class="pills" id="pills"><button class="pill active" data-filter="todos">Todos</button><button class="pill" data-filter="ansiedade">Ansiedade</button><button class="pill" data-filter="emoções">Emoções</button><button class="pill" data-filter="apoio visual">Apoio visual</button><button class="pill" data-filter="documentos">Documentos</button><button class="pill" data-filter="tcc">TCC</button></div>
+</div></div>
+<main class="shell" id="main">
+
+        <section class="module-section" data-section="documentos e condução clínica">
+            <div class="module-title"><span>📋</span>Documentos e condução clínica <small>14 ferramentas</small></div>
+            <div class="tools-grid">
+            <a class="tool-card" href="aprovadas/anamnese-interativa/index.html" target="_blank" data-title="anamnese interativa" data-search="anamnese interativa roteiro interativo para organizar informações iniciais do atendimento. documentos e condução clínica adultos" data-target="Adultos">
+                <div class="card-top"><span class="tool-icon">📋</span><span class="tag">Adultos</span></div>
+                <h3>Anamnese Interativa</h3>
+                <p>Roteiro interativo para organizar informações iniciais do atendimento.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="classica_original/1consultorio/1anamnese/index.html" target="_blank" data-title="anamnese interativa" data-search="anamnese interativa roteiro interativo para organizar informações iniciais do atendimento. documentos e condução clínica adultos" data-target="Adultos">
+                <div class="card-top"><span class="tool-icon">📋</span><span class="tag">Adultos</span></div>
+                <h3>Anamnese Interativa</h3>
+                <p>Roteiro interativo para organizar informações iniciais do atendimento.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="aventura_original/1consultorio/1anamnese/index.html" target="_blank" data-title="anamnese profissional" data-search="anamnese profissional roteiro interativo para organizar informações iniciais do atendimento. documentos e condução clínica adultos" data-target="Adultos">
+                <div class="card-top"><span class="tool-icon">📋</span><span class="tag">Adultos</span></div>
+                <h3>Anamnese Profissional</h3>
+                <p>Roteiro interativo para organizar informações iniciais do atendimento.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_074_banco_de_perguntas_clinicas.html" target="_blank" data-title="banco de perguntas clínicas" data-search="banco de perguntas clínicas ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. documentos e condução clínica adultos" data-target="Adultos">
+                <div class="card-top"><span class="tool-icon">📋</span><span class="tag">Adultos</span></div>
+                <h3>Banco de Perguntas Clínicas</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_072_checklist_de_objetivos.html" target="_blank" data-title="checklist de objetivos" data-search="checklist de objetivos ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. documentos e condução clínica adultos" data-target="Adultos">
+                <div class="card-top"><span class="tool-icon">📋</span><span class="tag">Adultos</span></div>
+                <h3>Checklist de Objetivos</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_069_devolutiva_simples.html" target="_blank" data-title="devolutiva simples" data-search="devolutiva simples ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. documentos e condução clínica adultos" data-target="Adultos">
+                <div class="card-top"><span class="tool-icon">📋</span><span class="tag">Adultos</span></div>
+                <h3>Devolutiva Simples</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_071_guia_de_encaminhamento.html" target="_blank" data-title="guia de encaminhamento" data-search="guia de encaminhamento ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. documentos e condução clínica adultos" data-target="Adultos">
+                <div class="card-top"><span class="tool-icon">📋</span><span class="tag">Adultos</span></div>
+                <h3>Guia de Encaminhamento</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_067_planejador_de_sessao.html" target="_blank" data-title="planejador de sessão" data-search="planejador de sessão ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. documentos e condução clínica adultos" data-target="Adultos">
+                <div class="card-top"><span class="tool-icon">📋</span><span class="tag">Adultos</span></div>
+                <h3>Planejador de Sessão</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_070_plano_terapeutico_visual.html" target="_blank" data-title="plano terapêutico visual" data-search="plano terapêutico visual ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. documentos e condução clínica adultos" data-target="Adultos">
+                <div class="card-top"><span class="tool-icon">📋</span><span class="tag">Adultos</span></div>
+                <h3>Plano Terapêutico Visual</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="classica_original/1consultorio/3prontuario/index.html" target="_blank" data-title="prontuário eletrônico" data-search="prontuário eletrônico modelo digital para registro e organização clínica. documentos e condução clínica adultos" data-target="Adultos">
+                <div class="card-top"><span class="tool-icon">📋</span><span class="tag">Adultos</span></div>
+                <h3>Prontuário Eletrônico</h3>
+                <p>Modelo digital para registro e organização clínica.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="aventura_original/1consultorio/3prontuario/index.html" target="_blank" data-title="prontuário eletrônico" data-search="prontuário eletrônico modelo digital para registro e organização clínica. documentos e condução clínica adultos" data-target="Adultos">
+                <div class="card-top"><span class="tool-icon">📋</span><span class="tag">Adultos</span></div>
+                <h3>Prontuário Eletrônico</h3>
+                <p>Modelo digital para registro e organização clínica.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_068_registro_de_evolucao.html" target="_blank" data-title="registro de evolução" data-search="registro de evolução ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. documentos e condução clínica adultos" data-target="Adultos">
+                <div class="card-top"><span class="tool-icon">📋</span><span class="tag">Adultos</span></div>
+                <h3>Registro de Evolução</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="classica_original/1consultorio/4relatorio/index.html" target="_blank" data-title="relatório de observação" data-search="relatório de observação apoio para estruturar observações e registros profissionais. documentos e condução clínica adultos" data-target="Adultos">
+                <div class="card-top"><span class="tool-icon">📋</span><span class="tag">Adultos</span></div>
+                <h3>Relatório de Observação</h3>
+                <p>Apoio para estruturar observações e registros profissionais.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="aventura_original/1consultorio/4relatoriooc/index.html" target="_blank" data-title="relatório de observação comportamental" data-search="relatório de observação comportamental apoio para estruturar observações e registros profissionais. documentos e condução clínica adultos" data-target="Adultos">
+                <div class="card-top"><span class="tool-icon">📋</span><span class="tag">Adultos</span></div>
+                <h3>Relatório de Observação Comportamental</h3>
+                <p>Apoio para estruturar observações e registros profissionais.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a></div>
+        </section>
+        <section class="module-section" data-section="ansiedade, regulação e crise">
+            <div class="module-title"><span>🌿</span>Ansiedade, regulação e crise <small>21 ferramentas</small></div>
+            <div class="tools-grid">
+            <a class="tool-card" href="aventura_original/2calmaria/2academia/index.html" target="_blank" data-title="academia de heróis" data-search="academia de heróis ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. ansiedade, regulação e crise crianças e adolescentes" data-target="Crianças e adolescentes">
+                <div class="card-top"><span class="tool-icon">🌿</span><span class="tag">Crianças e adolescentes</span></div>
+                <h3>Academia de Heróis</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_003_baus_da_ansiedade.html" target="_blank" data-title="baús da ansiedade" data-search="baús da ansiedade atividade para mapear sinais, gatilhos e estratégias de enfrentamento. ansiedade, regulação e crise crianças, adolescentes e adultos" data-target="Crianças, adolescentes e adultos">
+                <div class="card-top"><span class="tool-icon">🌿</span><span class="tag">Crianças, adolescentes e adultos</span></div>
+                <h3>Baús da Ansiedade</h3>
+                <p>Atividade para mapear sinais, gatilhos e estratégias de enfrentamento.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="aventura_original/2calmaria/3baus/index.html" target="_blank" data-title="baús da ansiedade" data-search="baús da ansiedade atividade para mapear sinais, gatilhos e estratégias de enfrentamento. ansiedade, regulação e crise crianças, adolescentes e adultos" data-target="Crianças, adolescentes e adultos">
+                <div class="card-top"><span class="tool-icon">🌿</span><span class="tag">Crianças, adolescentes e adultos</span></div>
+                <h3>Baús da Ansiedade</h3>
+                <p>Atividade para mapear sinais, gatilhos e estratégias de enfrentamento.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_062_caixa_da_raiva.html" target="_blank" data-title="caixa da raiva" data-search="caixa da raiva ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. ansiedade, regulação e crise crianças e adolescentes" data-target="Crianças e adolescentes">
+                <div class="card-top"><span class="tool-icon">🌿</span><span class="tag">Crianças e adolescentes</span></div>
+                <h3>Caixa da Raiva</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_063_cartoes_do_medo.html" target="_blank" data-title="cartões do medo" data-search="cartões do medo ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. ansiedade, regulação e crise crianças e adolescentes" data-target="Crianças e adolescentes">
+                <div class="card-top"><span class="tool-icon">🌿</span><span class="tag">Crianças e adolescentes</span></div>
+                <h3>Cartões do Medo</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="classica_original/2emocional/1cartoes/index.html" target="_blank" data-title="enfrentamento da ansiedade" data-search="enfrentamento da ansiedade atividade para mapear sinais, gatilhos e estratégias de enfrentamento. ansiedade, regulação e crise crianças, adolescentes e adultos" data-target="Crianças, adolescentes e adultos">
+                <div class="card-top"><span class="tool-icon">🌿</span><span class="tag">Crianças, adolescentes e adultos</span></div>
+                <h3>Enfrentamento da Ansiedade</h3>
+                <p>Atividade para mapear sinais, gatilhos e estratégias de enfrentamento.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="classica_original/2emocional/2menosansiedade/index.html" target="_blank" data-title="estilo de vida" data-search="estilo de vida ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. ansiedade, regulação e crise crianças, adolescentes e adultos" data-target="Crianças, adolescentes e adultos">
+                <div class="card-top"><span class="tool-icon">🌿</span><span class="tag">Crianças, adolescentes e adultos</span></div>
+                <h3>Estilo de Vida</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="aprovadas/flor-e-vela/index.html" target="_blank" data-title="flor e vela" data-search="flor e vela ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. ansiedade, regulação e crise crianças, adolescentes e adultos" data-target="Crianças, adolescentes e adultos">
+                <div class="card-top"><span class="tool-icon">🌿</span><span class="tag">Crianças, adolescentes e adultos</span></div>
+                <h3>Flor e Vela</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="aventura_original/2calmaria/4inventario/index.html" target="_blank" data-title="inventário do herói" data-search="inventário do herói ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. ansiedade, regulação e crise crianças e adolescentes" data-target="Crianças e adolescentes">
+                <div class="card-top"><span class="tool-icon">🌿</span><span class="tag">Crianças e adolescentes</span></div>
+                <h3>Inventário do Herói</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="aprovadas/mapa-da-ansiedade/index.html" target="_blank" data-title="mapa da ansiedade" data-search="mapa da ansiedade atividade para mapear sinais, gatilhos e estratégias de enfrentamento. ansiedade, regulação e crise crianças, adolescentes e adultos" data-target="Crianças, adolescentes e adultos">
+                <div class="card-top"><span class="tool-icon">🌿</span><span class="tag">Crianças, adolescentes e adultos</span></div>
+                <h3>Mapa da Ansiedade</h3>
+                <p>Atividade para mapear sinais, gatilhos e estratégias de enfrentamento.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_056_plano_de_crise_emocional.html" target="_blank" data-title="plano de crise emocional" data-search="plano de crise emocional plano visual para reconhecer sinais e escolher recursos de segurança. ansiedade, regulação e crise crianças, adolescentes e adultos" data-target="Crianças, adolescentes e adultos">
+                <div class="card-top"><span class="tool-icon">🌿</span><span class="tag">Crianças, adolescentes e adultos</span></div>
+                <h3>Plano de Crise Emocional</h3>
+                <p>Plano visual para reconhecer sinais e escolher recursos de segurança.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_058_prevencao_de_recaida.html" target="_blank" data-title="prevenção de recaída" data-search="prevenção de recaída ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. ansiedade, regulação e crise adultos" data-target="Adultos">
+                <div class="card-top"><span class="tool-icon">🌿</span><span class="tag">Adultos</span></div>
+                <h3>Prevenção de Recaída</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="classica_original/2emocional/4rdflorv2/index.html" target="_blank" data-title="respira &amp; reseta: flor e vela interativo" data-search="respira &amp; reseta: flor e vela interativo ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. ansiedade, regulação e crise crianças, adolescentes e adultos" data-target="Crianças, adolescentes e adultos">
+                <div class="card-top"><span class="tool-icon">🌿</span><span class="tag">Crianças, adolescentes e adultos</span></div>
+                <h3>Respira &amp; Reseta: Flor e Vela Interativo</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="classica_original/2emocional/3rdflorv1/index.html" target="_blank" data-title="respira &amp; reseta: flor e vela visual" data-search="respira &amp; reseta: flor e vela visual ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. ansiedade, regulação e crise crianças, adolescentes e adultos" data-target="Crianças, adolescentes e adultos">
+                <div class="card-top"><span class="tool-icon">🌿</span><span class="tag">Crianças, adolescentes e adultos</span></div>
+                <h3>Respira &amp; Reseta: Flor e Vela Visual</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="classica_original/2emocional/5roleta/index.html" target="_blank" data-title="roleta reflexiva da ansiedade" data-search="roleta reflexiva da ansiedade atividade para mapear sinais, gatilhos e estratégias de enfrentamento. ansiedade, regulação e crise crianças, adolescentes e adultos" data-target="Crianças, adolescentes e adultos">
+                <div class="card-top"><span class="tool-icon">🌿</span><span class="tag">Crianças, adolescentes e adultos</span></div>
+                <h3>Roleta Reflexiva da Ansiedade</h3>
+                <p>Atividade para mapear sinais, gatilhos e estratégias de enfrentamento.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_036_roleta_de_enfrentamento.html" target="_blank" data-title="roleta de enfrentamento" data-search="roleta de enfrentamento ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. ansiedade, regulação e crise crianças, adolescentes e adultos" data-target="Crianças, adolescentes e adultos">
+                <div class="card-top"><span class="tool-icon">🌿</span><span class="tag">Crianças, adolescentes e adultos</span></div>
+                <h3>Roleta de Enfrentamento</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_035_rota_da_calmaria.html" target="_blank" data-title="rota da calmaria" data-search="rota da calmaria ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. ansiedade, regulação e crise crianças, adolescentes e adultos" data-target="Crianças, adolescentes e adultos">
+                <div class="card-top"><span class="tool-icon">🌿</span><span class="tag">Crianças, adolescentes e adultos</span></div>
+                <h3>Rota da Calmaria</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="aventura_original/6op/6rota/index.html" target="_blank" data-title="rota da calmaria" data-search="rota da calmaria ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. ansiedade, regulação e crise crianças, adolescentes e adultos" data-target="Crianças, adolescentes e adultos">
+                <div class="card-top"><span class="tool-icon">🌿</span><span class="tag">Crianças, adolescentes e adultos</span></div>
+                <h3>Rota da Calmaria</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="aventura_original/2calmaria/1descanso/index.html" target="_blank" data-title="técnicas de descanso do herói" data-search="técnicas de descanso do herói ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. ansiedade, regulação e crise crianças e adolescentes" data-target="Crianças e adolescentes">
+                <div class="card-top"><span class="tool-icon">🌿</span><span class="tag">Crianças e adolescentes</span></div>
+                <h3>Técnicas de Descanso do Herói</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="aprovadas/tecnicas-de-relaxamento/index.html" target="_blank" data-title="técnicas de relaxamento" data-search="técnicas de relaxamento ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. ansiedade, regulação e crise crianças, adolescentes e adultos" data-target="Crianças, adolescentes e adultos">
+                <div class="card-top"><span class="tool-icon">🌿</span><span class="tag">Crianças, adolescentes e adultos</span></div>
+                <h3>Técnicas de Relaxamento</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="classica_original/2emocional/6relax/index.html" target="_blank" data-title="técnicas de relaxamento" data-search="técnicas de relaxamento ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. ansiedade, regulação e crise crianças, adolescentes e adultos" data-target="Crianças, adolescentes e adultos">
+                <div class="card-top"><span class="tool-icon">🌿</span><span class="tag">Crianças, adolescentes e adultos</span></div>
+                <h3>Técnicas de Relaxamento</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a></div>
+        </section>
+        <section class="module-section" data-section="emoções e comunicação emocional">
+            <div class="module-title"><span>💛</span>Emoções e comunicação emocional <small>11 ferramentas</small></div>
+            <div class="tools-grid">
+            <a class="tool-card" href="aprovadas/baralho-das-emocoes/index.html" target="_blank" data-title="baralho das emoções" data-search="baralho das emoções recurso visual para nomear, diferenciar e comunicar emoções. emoções e comunicação emocional crianças, adolescentes e adultos" data-target="Crianças, adolescentes e adultos">
+                <div class="card-top"><span class="tool-icon">💛</span><span class="tag">Crianças, adolescentes e adultos</span></div>
+                <h3>Baralho das Emoções</h3>
+                <p>Recurso visual para nomear, diferenciar e comunicar emoções.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_027_baralho_das_emocoes.html" target="_blank" data-title="baralho das emoções" data-search="baralho das emoções recurso visual para nomear, diferenciar e comunicar emoções. emoções e comunicação emocional crianças, adolescentes e adultos" data-target="Crianças, adolescentes e adultos">
+                <div class="card-top"><span class="tool-icon">💛</span><span class="tag">Crianças, adolescentes e adultos</span></div>
+                <h3>Baralho das Emoções</h3>
+                <p>Recurso visual para nomear, diferenciar e comunicar emoções.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="classica_original/2emocional/8baralho/index.html" target="_blank" data-title="baralho das emoções" data-search="baralho das emoções recurso visual para nomear, diferenciar e comunicar emoções. emoções e comunicação emocional crianças, adolescentes e adultos" data-target="Crianças, adolescentes e adultos">
+                <div class="card-top"><span class="tool-icon">💛</span><span class="tag">Crianças, adolescentes e adultos</span></div>
+                <h3>Baralho das Emoções</h3>
+                <p>Recurso visual para nomear, diferenciar e comunicar emoções.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="aventura_original/6op/1baralho/index.html" target="_blank" data-title="baralho do capitão" data-search="baralho do capitão ferramenta lúdica para conduzir conversa terapêutica de forma mais engajadora. emoções e comunicação emocional crianças e adolescentes" data-target="Crianças e adolescentes">
+                <div class="card-top"><span class="tool-icon">💛</span><span class="tag">Crianças e adolescentes</span></div>
+                <h3>Baralho do Capitão</h3>
+                <p>Ferramenta lúdica para conduzir conversa terapêutica de forma mais engajadora.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="aprovadas/cartoes-de-sentimentos/index.html" target="_blank" data-title="cartões de sentimentos" data-search="cartões de sentimentos recurso visual para nomear, diferenciar e comunicar emoções. emoções e comunicação emocional crianças, adolescentes e adultos" data-target="Crianças, adolescentes e adultos">
+                <div class="card-top"><span class="tool-icon">💛</span><span class="tag">Crianças, adolescentes e adultos</span></div>
+                <h3>Cartões de Sentimentos</h3>
+                <p>Recurso visual para nomear, diferenciar e comunicar emoções.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_029_cartoes_de_sentimentos.html" target="_blank" data-title="cartões de sentimentos" data-search="cartões de sentimentos recurso visual para nomear, diferenciar e comunicar emoções. emoções e comunicação emocional crianças, adolescentes e adultos" data-target="Crianças, adolescentes e adultos">
+                <div class="card-top"><span class="tool-icon">💛</span><span class="tag">Crianças, adolescentes e adultos</span></div>
+                <h3>Cartões de Sentimentos</h3>
+                <p>Recurso visual para nomear, diferenciar e comunicar emoções.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="aventura_original/6op/3granderota/index.html" target="_blank" data-title="grande rota das emoções" data-search="grande rota das emoções recurso visual para nomear, diferenciar e comunicar emoções. emoções e comunicação emocional crianças, adolescentes e adultos" data-target="Crianças, adolescentes e adultos">
+                <div class="card-top"><span class="tool-icon">💛</span><span class="tag">Crianças, adolescentes e adultos</span></div>
+                <h3>Grande Rota das Emoções</h3>
+                <p>Recurso visual para nomear, diferenciar e comunicar emoções.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="classica_original/2emocional/7ilha/index.html" target="_blank" data-title="ilha das emoções: jornada terapêutica" data-search="ilha das emoções: jornada terapêutica recurso visual para nomear, diferenciar e comunicar emoções. emoções e comunicação emocional crianças, adolescentes e adultos" data-target="Crianças, adolescentes e adultos">
+                <div class="card-top"><span class="tool-icon">💛</span><span class="tag">Crianças, adolescentes e adultos</span></div>
+                <h3>Ilha das Emoções: Jornada Terapêutica</h3>
+                <p>Recurso visual para nomear, diferenciar e comunicar emoções.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_028_jogo_das_emocoes.html" target="_blank" data-title="jogo das emoções" data-search="jogo das emoções recurso visual para nomear, diferenciar e comunicar emoções. emoções e comunicação emocional crianças, adolescentes e adultos" data-target="Crianças, adolescentes e adultos">
+                <div class="card-top"><span class="tool-icon">💛</span><span class="tag">Crianças, adolescentes e adultos</span></div>
+                <h3>Jogo das Emoções</h3>
+                <p>Recurso visual para nomear, diferenciar e comunicar emoções.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_040_mapa_do_humor_da_semana.html" target="_blank" data-title="mapa do humor da semana" data-search="mapa do humor da semana recurso visual para nomear, diferenciar e comunicar emoções. emoções e comunicação emocional crianças, adolescentes e adultos" data-target="Crianças, adolescentes e adultos">
+                <div class="card-top"><span class="tool-icon">💛</span><span class="tag">Crianças, adolescentes e adultos</span></div>
+                <h3>Mapa do Humor da Semana</h3>
+                <p>Recurso visual para nomear, diferenciar e comunicar emoções.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_030_semaforo_das_emocoes.html" target="_blank" data-title="semáforo das emoções" data-search="semáforo das emoções recurso visual para nomear, diferenciar e comunicar emoções. emoções e comunicação emocional crianças, adolescentes e adultos" data-target="Crianças, adolescentes e adultos">
+                <div class="card-top"><span class="tool-icon">💛</span><span class="tag">Crianças, adolescentes e adultos</span></div>
+                <h3>Semáforo das Emoções</h3>
+                <p>Recurso visual para nomear, diferenciar e comunicar emoções.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a></div>
+        </section>
+        <section class="module-section" data-section="crianças, adolescentes e apoio visual">
+            <div class="module-title"><span>🧩</span>Crianças, adolescentes e apoio visual <small>33 ferramentas</small></div>
+            <div class="tools-grid">
+            <a class="tool-card" href="novas_v711_estavel/CEL_007_apoio_visual_e_baixa_demanda.html" target="_blank" data-title="apoio visual e baixa demanda i" data-search="apoio visual e baixa demanda i atividades simples e visuais para baixa exigência verbal e cognitiva. crianças, adolescentes e apoio visual crianças e adolescentes" data-target="Crianças e adolescentes">
+                <div class="card-top"><span class="tool-icon">🧩</span><span class="tag">Crianças e adolescentes</span></div>
+                <h3>Apoio Visual e Baixa Demanda I</h3>
+                <p>Atividades simples e visuais para baixa exigência verbal e cognitiva.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_017_apoio_visual_e_baixa_demanda.html" target="_blank" data-title="apoio visual e baixa demanda ii" data-search="apoio visual e baixa demanda ii atividades simples e visuais para baixa exigência verbal e cognitiva. crianças, adolescentes e apoio visual crianças e adolescentes" data-target="Crianças e adolescentes">
+                <div class="card-top"><span class="tool-icon">🧩</span><span class="tag">Crianças e adolescentes</span></div>
+                <h3>Apoio Visual e Baixa Demanda II</h3>
+                <p>Atividades simples e visuais para baixa exigência verbal e cognitiva.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_008_apoio_visual_novas_atividades.html" target="_blank" data-title="apoio visual — novas atividades i" data-search="apoio visual — novas atividades i atividades simples e visuais para baixa exigência verbal e cognitiva. crianças, adolescentes e apoio visual crianças e adolescentes" data-target="Crianças e adolescentes">
+                <div class="card-top"><span class="tool-icon">🧩</span><span class="tag">Crianças e adolescentes</span></div>
+                <h3>Apoio Visual — Novas Atividades I</h3>
+                <p>Atividades simples e visuais para baixa exigência verbal e cognitiva.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_018_apoio_visual_novas_atividades.html" target="_blank" data-title="apoio visual — novas atividades ii" data-search="apoio visual — novas atividades ii atividades simples e visuais para baixa exigência verbal e cognitiva. crianças, adolescentes e apoio visual crianças e adolescentes" data-target="Crianças e adolescentes">
+                <div class="card-top"><span class="tool-icon">🧩</span><span class="tag">Crianças e adolescentes</span></div>
+                <h3>Apoio Visual — Novas Atividades II</h3>
+                <p>Atividades simples e visuais para baixa exigência verbal e cognitiva.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="aventura_original/7quartel/4comida/index.html" target="_blank" data-title="colorir: comidinhas fofas" data-search="colorir: comidinhas fofas recurso visual leve para acolhimento, vínculo e expressão. crianças, adolescentes e apoio visual crianças e adolescentes" data-target="Crianças e adolescentes">
+                <div class="card-top"><span class="tool-icon">🧩</span><span class="tag">Crianças e adolescentes</span></div>
+                <h3>Colorir: Comidinhas Fofas</h3>
+                <p>Recurso visual leve para acolhimento, vínculo e expressão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="aventura_original/7quartel/2cgeek/index.html" target="_blank" data-title="colorir: espaço geek" data-search="colorir: espaço geek recurso visual leve para acolhimento, vínculo e expressão. crianças, adolescentes e apoio visual crianças e adolescentes" data-target="Crianças e adolescentes">
+                <div class="card-top"><span class="tool-icon">🧩</span><span class="tag">Crianças e adolescentes</span></div>
+                <h3>Colorir: Espaço Geek</h3>
+                <p>Recurso visual leve para acolhimento, vínculo e expressão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="aventura_original/7quartel/1canimal/index.html" target="_blank" data-title="colorir: mundo animal" data-search="colorir: mundo animal recurso visual leve para acolhimento, vínculo e expressão. crianças, adolescentes e apoio visual crianças e adolescentes" data-target="Crianças e adolescentes">
+                <div class="card-top"><span class="tool-icon">🧩</span><span class="tag">Crianças e adolescentes</span></div>
+                <h3>Colorir: Mundo Animal</h3>
+                <p>Recurso visual leve para acolhimento, vínculo e expressão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="aventura_original/7quartel/3cfantasia/index.html" target="_blank" data-title="colorir: reino da fantasia" data-search="colorir: reino da fantasia recurso visual leve para acolhimento, vínculo e expressão. crianças, adolescentes e apoio visual crianças e adolescentes" data-target="Crianças e adolescentes">
+                <div class="card-top"><span class="tool-icon">🧩</span><span class="tag">Crianças e adolescentes</span></div>
+                <h3>Colorir: Reino da Fantasia</h3>
+                <p>Recurso visual leve para acolhimento, vínculo e expressão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_049_combinados_da_rotina.html" target="_blank" data-title="combinados da rotina" data-search="combinados da rotina organização visual de rotina, previsibilidade e próximos passos. crianças, adolescentes e apoio visual crianças e adolescentes" data-target="Crianças e adolescentes">
+                <div class="card-top"><span class="tool-icon">🧩</span><span class="tag">Crianças e adolescentes</span></div>
+                <h3>Combinados da Rotina</h3>
+                <p>Organização visual de rotina, previsibilidade e próximos passos.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_064_escola_em_partes.html" target="_blank" data-title="escola em partes" data-search="escola em partes ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. crianças, adolescentes e apoio visual crianças e adolescentes" data-target="Crianças e adolescentes">
+                <div class="card-top"><span class="tool-icon">🧩</span><span class="tag">Crianças e adolescentes</span></div>
+                <h3>Escola em Partes</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_012_escolha_simples.html" target="_blank" data-title="escolha simples i" data-search="escolha simples i ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. crianças, adolescentes e apoio visual crianças e adolescentes" data-target="Crianças e adolescentes">
+                <div class="card-top"><span class="tool-icon">🧩</span><span class="tag">Crianças e adolescentes</span></div>
+                <h3>Escolha Simples I</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_022_escolha_simples.html" target="_blank" data-title="escolha simples ii" data-search="escolha simples ii ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. crianças, adolescentes e apoio visual crianças e adolescentes" data-target="Crianças e adolescentes">
+                <div class="card-top"><span class="tool-icon">🧩</span><span class="tag">Crianças e adolescentes</span></div>
+                <h3>Escolha Simples II</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_059_escudo_contra_bullying.html" target="_blank" data-title="escudo contra bullying" data-search="escudo contra bullying recurso para habilidades sociais, pedido de ajuda e relações. crianças, adolescentes e apoio visual crianças e adolescentes" data-target="Crianças e adolescentes">
+                <div class="card-top"><span class="tool-icon">🧩</span><span class="tag">Crianças e adolescentes</span></div>
+                <h3>Escudo Contra Bullying</h3>
+                <p>Recurso para habilidades sociais, pedido de ajuda e relações.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_015_igual_por_cor.html" target="_blank" data-title="igual por cor i" data-search="igual por cor i ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. crianças, adolescentes e apoio visual crianças e adolescentes" data-target="Crianças e adolescentes">
+                <div class="card-top"><span class="tool-icon">🧩</span><span class="tag">Crianças e adolescentes</span></div>
+                <h3>Igual por Cor I</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_025_igual_por_cor.html" target="_blank" data-title="igual por cor ii" data-search="igual por cor ii ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. crianças, adolescentes e apoio visual crianças e adolescentes" data-target="Crianças e adolescentes">
+                <div class="card-top"><span class="tool-icon">🧩</span><span class="tag">Crianças e adolescentes</span></div>
+                <h3>Igual por Cor II</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="aventura_original/4mapa/1faseemoji/index.html" target="_blank" data-title="jornada por emojis" data-search="jornada por emojis ferramenta lúdica para conduzir conversa terapêutica de forma mais engajadora. crianças, adolescentes e apoio visual crianças e adolescentes" data-target="Crianças e adolescentes">
+                <div class="card-top"><span class="tool-icon">🧩</span><span class="tag">Crianças e adolescentes</span></div>
+                <h3>Jornada por Emojis</h3>
+                <p>Ferramenta lúdica para conduzir conversa terapêutica de forma mais engajadora.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_014_leve_ao_lugar.html" target="_blank" data-title="leve ao lugar i" data-search="leve ao lugar i ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. crianças, adolescentes e apoio visual crianças e adolescentes" data-target="Crianças e adolescentes">
+                <div class="card-top"><span class="tool-icon">🧩</span><span class="tag">Crianças e adolescentes</span></div>
+                <h3>Leve ao Lugar I</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_024_leve_ao_lugar.html" target="_blank" data-title="leve ao lugar ii" data-search="leve ao lugar ii ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. crianças, adolescentes e apoio visual crianças e adolescentes" data-target="Crianças e adolescentes">
+                <div class="card-top"><span class="tool-icon">🧩</span><span class="tag">Crianças e adolescentes</span></div>
+                <h3>Leve ao Lugar II</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_061_mapa_da_amizade.html" target="_blank" data-title="mapa da amizade" data-search="mapa da amizade recurso para habilidades sociais, pedido de ajuda e relações. crianças, adolescentes e apoio visual crianças e adolescentes" data-target="Crianças e adolescentes">
+                <div class="card-top"><span class="tool-icon">🧩</span><span class="tag">Crianças e adolescentes</span></div>
+                <h3>Mapa da Amizade</h3>
+                <p>Recurso para habilidades sociais, pedido de ajuda e relações.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="aventura_original/4mapa/3heroismente/index.html" target="_blank" data-title="missão detetive" data-search="missão detetive ferramenta lúdica para conduzir conversa terapêutica de forma mais engajadora. crianças, adolescentes e apoio visual crianças e adolescentes" data-target="Crianças e adolescentes">
+                <div class="card-top"><span class="tool-icon">🧩</span><span class="tag">Crianças e adolescentes</span></div>
+                <h3>Missão Detetive</h3>
+                <p>Ferramenta lúdica para conduzir conversa terapêutica de forma mais engajadora.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_060_missao_pedir_ajuda.html" target="_blank" data-title="missão pedir ajuda" data-search="missão pedir ajuda ferramenta lúdica para conduzir conversa terapêutica de forma mais engajadora. crianças, adolescentes e apoio visual crianças e adolescentes" data-target="Crianças e adolescentes">
+                <div class="card-top"><span class="tool-icon">🧩</span><span class="tag">Crianças e adolescentes</span></div>
+                <h3>Missão Pedir Ajuda</h3>
+                <p>Ferramenta lúdica para conduzir conversa terapêutica de forma mais engajadora.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_013_monte_a_rotina.html" target="_blank" data-title="monte a rotina i" data-search="monte a rotina i organização visual de rotina, previsibilidade e próximos passos. crianças, adolescentes e apoio visual crianças e adolescentes" data-target="Crianças e adolescentes">
+                <div class="card-top"><span class="tool-icon">🧩</span><span class="tag">Crianças e adolescentes</span></div>
+                <h3>Monte a Rotina I</h3>
+                <p>Organização visual de rotina, previsibilidade e próximos passos.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_023_monte_a_rotina.html" target="_blank" data-title="monte a rotina ii" data-search="monte a rotina ii organização visual de rotina, previsibilidade e próximos passos. crianças, adolescentes e apoio visual crianças e adolescentes" data-target="Crianças e adolescentes">
+                <div class="card-top"><span class="tool-icon">🧩</span><span class="tag">Crianças e adolescentes</span></div>
+                <h3>Monte a Rotina II</h3>
+                <p>Organização visual de rotina, previsibilidade e próximos passos.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_010_o_que_combina.html" target="_blank" data-title="o que combina? i" data-search="o que combina? i ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. crianças, adolescentes e apoio visual crianças e adolescentes" data-target="Crianças e adolescentes">
+                <div class="card-top"><span class="tool-icon">🧩</span><span class="tag">Crianças e adolescentes</span></div>
+                <h3>O Que Combina? I</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_020_o_que_combina.html" target="_blank" data-title="o que combina? ii" data-search="o que combina? ii ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. crianças, adolescentes e apoio visual crianças e adolescentes" data-target="Crianças e adolescentes">
+                <div class="card-top"><span class="tool-icon">🧩</span><span class="tag">Crianças e adolescentes</span></div>
+                <h3>O Que Combina? II</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_009_onde_esta.html" target="_blank" data-title="onde está? i" data-search="onde está? i ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. crianças, adolescentes e apoio visual crianças e adolescentes" data-target="Crianças e adolescentes">
+                <div class="card-top"><span class="tool-icon">🧩</span><span class="tag">Crianças e adolescentes</span></div>
+                <h3>Onde Está? I</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_019_onde_esta.html" target="_blank" data-title="onde está? ii" data-search="onde está? ii ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. crianças, adolescentes e apoio visual crianças e adolescentes" data-target="Crianças e adolescentes">
+                <div class="card-top"><span class="tool-icon">🧩</span><span class="tag">Crianças e adolescentes</span></div>
+                <h3>Onde Está? II</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_066_plano_da_espera.html" target="_blank" data-title="plano da espera" data-search="plano da espera ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. crianças, adolescentes e apoio visual crianças e adolescentes" data-target="Crianças e adolescentes">
+                <div class="card-top"><span class="tool-icon">🧩</span><span class="tag">Crianças e adolescentes</span></div>
+                <h3>Plano da Espera</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_038_rotina_visual.html" target="_blank" data-title="rotina visual" data-search="rotina visual organização visual de rotina, previsibilidade e próximos passos. crianças, adolescentes e apoio visual crianças e adolescentes" data-target="Crianças e adolescentes">
+                <div class="card-top"><span class="tool-icon">🧩</span><span class="tag">Crianças e adolescentes</span></div>
+                <h3>Rotina Visual</h3>
+                <p>Organização visual de rotina, previsibilidade e próximos passos.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_011_sequencia_de_3_figuras.html" target="_blank" data-title="sequência de 3 figuras i" data-search="sequência de 3 figuras i ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. crianças, adolescentes e apoio visual crianças e adolescentes" data-target="Crianças e adolescentes">
+                <div class="card-top"><span class="tool-icon">🧩</span><span class="tag">Crianças e adolescentes</span></div>
+                <h3>Sequência de 3 Figuras I</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_021_sequencia_de_3_figuras.html" target="_blank" data-title="sequência de 3 figuras ii" data-search="sequência de 3 figuras ii ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. crianças, adolescentes e apoio visual crianças e adolescentes" data-target="Crianças e adolescentes">
+                <div class="card-top"><span class="tool-icon">🧩</span><span class="tag">Crianças e adolescentes</span></div>
+                <h3>Sequência de 3 Figuras II</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_016_tamanho_na_tela.html" target="_blank" data-title="tamanho na tela i" data-search="tamanho na tela i ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. crianças, adolescentes e apoio visual crianças e adolescentes" data-target="Crianças e adolescentes">
+                <div class="card-top"><span class="tool-icon">🧩</span><span class="tag">Crianças e adolescentes</span></div>
+                <h3>Tamanho na Tela I</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_026_tamanho_na_tela.html" target="_blank" data-title="tamanho na tela ii" data-search="tamanho na tela ii ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. crianças, adolescentes e apoio visual crianças e adolescentes" data-target="Crianças e adolescentes">
+                <div class="card-top"><span class="tool-icon">🧩</span><span class="tag">Crianças e adolescentes</span></div>
+                <h3>Tamanho na Tela II</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a></div>
+        </section>
+        <section class="module-section" data-section="neurodivergência, foco e habilidades">
+            <div class="module-title"><span>🎯</span>Neurodivergência, foco e habilidades <small>9 ferramentas</small></div>
+            <div class="tools-grid">
+            <a class="tool-card" href="classica_original/4neurodiversidade/2tdah/index.html" target="_blank" data-title="desafio cognitivo para tdah adulto" data-search="desafio cognitivo para tdah adulto ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. neurodivergência, foco e habilidades adultos" data-target="Adultos">
+                <div class="card-top"><span class="tool-icon">🎯</span><span class="tag">Adultos</span></div>
+                <h3>Desafio Cognitivo para TDAH Adulto</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="classica_original/4neurodiversidade/1foco/index.html" target="_blank" data-title="foco e concentração" data-search="foco e concentração apoio para foco, funcionamento e organização de tarefas. neurodivergência, foco e habilidades crianças, adolescentes e adultos" data-target="Crianças, adolescentes e adultos">
+                <div class="card-top"><span class="tool-icon">🎯</span><span class="tag">Crianças, adolescentes e adultos</span></div>
+                <h3>Foco e Concentração</h3>
+                <p>Apoio para foco, funcionamento e organização de tarefas.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_031_foco_na_pratica.html" target="_blank" data-title="foco na prática" data-search="foco na prática apoio para foco, funcionamento e organização de tarefas. neurodivergência, foco e habilidades crianças, adolescentes e adultos" data-target="Crianças, adolescentes e adultos">
+                <div class="card-top"><span class="tool-icon">🎯</span><span class="tag">Crianças, adolescentes e adultos</span></div>
+                <h3>Foco na Prática</h3>
+                <p>Apoio para foco, funcionamento e organização de tarefas.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="classica_original/4neurodiversidade/4teaadulto/index.html" target="_blank" data-title="investigação autismo adulto" data-search="investigação autismo adulto ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. neurodivergência, foco e habilidades adultos" data-target="Adultos">
+                <div class="card-top"><span class="tool-icon">🎯</span><span class="tag">Adultos</span></div>
+                <h3>Investigação Autismo Adulto</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="classica_original/4neurodiversidade/3tdahimpacto/index.html" target="_blank" data-title="investigação tdah adulto" data-search="investigação tdah adulto ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. neurodivergência, foco e habilidades adultos" data-target="Adultos">
+                <div class="card-top"><span class="tool-icon">🎯</span><span class="tag">Adultos</span></div>
+                <h3>Investigação TDAH Adulto</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="aventura_original/5arvore/1focoec/index.html" target="_blank" data-title="missão foco" data-search="missão foco apoio para foco, funcionamento e organização de tarefas. neurodivergência, foco e habilidades crianças e adolescentes" data-target="Crianças e adolescentes">
+                <div class="card-top"><span class="tool-icon">🎯</span><span class="tag">Crianças e adolescentes</span></div>
+                <h3>Missão Foco</h3>
+                <p>Apoio para foco, funcionamento e organização de tarefas.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_046_missao_da_flexibilidade.html" target="_blank" data-title="missão da flexibilidade" data-search="missão da flexibilidade ferramenta lúdica para conduzir conversa terapêutica de forma mais engajadora. neurodivergência, foco e habilidades crianças e adolescentes" data-target="Crianças e adolescentes">
+                <div class="card-top"><span class="tool-icon">🎯</span><span class="tag">Crianças e adolescentes</span></div>
+                <h3>Missão da Flexibilidade</h3>
+                <p>Ferramenta lúdica para conduzir conversa terapêutica de forma mais engajadora.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_033_rastreio_de_funcionamento_e_atencao.html" target="_blank" data-title="rastreio de funcionamento e atenção" data-search="rastreio de funcionamento e atenção apoio para foco, funcionamento e organização de tarefas. neurodivergência, foco e habilidades crianças, adolescentes e adultos" data-target="Crianças, adolescentes e adultos">
+                <div class="card-top"><span class="tool-icon">🎯</span><span class="tag">Crianças, adolescentes e adultos</span></div>
+                <h3>Rastreio de Funcionamento e Atenção</h3>
+                <p>Apoio para foco, funcionamento e organização de tarefas.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_047_termometro_da_frustracao.html" target="_blank" data-title="termômetro da frustração" data-search="termômetro da frustração ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. neurodivergência, foco e habilidades crianças e adolescentes" data-target="Crianças e adolescentes">
+                <div class="card-top"><span class="tool-icon">🎯</span><span class="tag">Crianças e adolescentes</span></div>
+                <h3>Termômetro da Frustração</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a></div>
+        </section>
+        <section class="module-section" data-section="tcc, pensamentos e tomada de decisão">
+            <div class="module-title"><span>🧠</span>TCC, pensamentos e tomada de decisão <small>14 ferramentas</small></div>
+            <div class="tools-grid">
+            <a class="tool-card" href="classica_original/5protocolos/3custob/index.html" target="_blank" data-title="análise de custo-benefício" data-search="análise de custo-benefício ferramenta de apoio para reestruturação cognitiva e tomada de perspectiva. tcc, pensamentos e tomada de decisão adultos" data-target="Adultos">
+                <div class="card-top"><span class="tool-icon">🧠</span><span class="tag">Adultos</span></div>
+                <h3>Análise de Custo-Benefício</h3>
+                <p>Ferramenta de apoio para reestruturação cognitiva e tomada de perspectiva.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_057_balanca_de_decisao.html" target="_blank" data-title="balança de decisão" data-search="balança de decisão ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. tcc, pensamentos e tomada de decisão adultos" data-target="Adultos">
+                <div class="card-top"><span class="tool-icon">🧠</span><span class="tag">Adultos</span></div>
+                <h3>Balança de Decisão</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="aventura_original/6op/7torta/index.html" target="_blank" data-title="bússola da responsabilidade" data-search="bússola da responsabilidade ferramenta de apoio para reestruturação cognitiva e tomada de perspectiva. tcc, pensamentos e tomada de decisão adultos" data-target="Adultos">
+                <div class="card-top"><span class="tool-icon">🧠</span><span class="tag">Adultos</span></div>
+                <h3>Bússola da Responsabilidade</h3>
+                <p>Ferramenta de apoio para reestruturação cognitiva e tomada de perspectiva.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_041_caixa_de_pensamentos.html" target="_blank" data-title="caixa de pensamentos" data-search="caixa de pensamentos ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. tcc, pensamentos e tomada de decisão adultos" data-target="Adultos">
+                <div class="card-top"><span class="tool-icon">🧠</span><span class="tag">Adultos</span></div>
+                <h3>Caixa de Pensamentos</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="classica_original/5protocolos/4descatastrofizacao/index.html" target="_blank" data-title="descatastrofização" data-search="descatastrofização ferramenta de apoio para reestruturação cognitiva e tomada de perspectiva. tcc, pensamentos e tomada de decisão adultos" data-target="Adultos">
+                <div class="card-top"><span class="tool-icon">🧠</span><span class="tag">Adultos</span></div>
+                <h3>Descatastrofização</h3>
+                <p>Ferramenta de apoio para reestruturação cognitiva e tomada de perspectiva.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_053_diario_de_gatilhos.html" target="_blank" data-title="diário de gatilhos" data-search="diário de gatilhos ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. tcc, pensamentos e tomada de decisão adultos" data-target="Adultos">
+                <div class="card-top"><span class="tool-icon">🧠</span><span class="tag">Adultos</span></div>
+                <h3>Diário de Gatilhos</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="classica_original/5protocolos/5problemas/index.html" target="_blank" data-title="identificação de problemas" data-search="identificação de problemas ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. tcc, pensamentos e tomada de decisão adultos" data-target="Adultos">
+                <div class="card-top"><span class="tool-icon">🧠</span><span class="tag">Adultos</span></div>
+                <h3>Identificação de Problemas</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_051_mapa_da_autocobranca.html" target="_blank" data-title="mapa da autocobrança" data-search="mapa da autocobrança ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. tcc, pensamentos e tomada de decisão adultos" data-target="Adultos">
+                <div class="card-top"><span class="tool-icon">🧠</span><span class="tag">Adultos</span></div>
+                <h3>Mapa da Autocobrança</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_052_plano_antiprocrastinacao.html" target="_blank" data-title="plano antiprocrastinação" data-search="plano antiprocrastinação ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. tcc, pensamentos e tomada de decisão adultos" data-target="Adultos">
+                <div class="card-top"><span class="tool-icon">🧠</span><span class="tag">Adultos</span></div>
+                <h3>Plano Antiprocrastinação</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="classica_original/5protocolos/6evidencias/index.html" target="_blank" data-title="quadro de evidências" data-search="quadro de evidências ferramenta de apoio para reestruturação cognitiva e tomada de perspectiva. tcc, pensamentos e tomada de decisão adultos" data-target="Adultos">
+                <div class="card-top"><span class="tool-icon">🧠</span><span class="tag">Adultos</span></div>
+                <h3>Quadro de Evidências</h3>
+                <p>Ferramenta de apoio para reestruturação cognitiva e tomada de perspectiva.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="classica_original/1consultorio/5rpd/index.html" target="_blank" data-title="registro de pensamentos" data-search="registro de pensamentos ferramenta para identificar situação, pensamento, emoção e resposta alternativa. tcc, pensamentos e tomada de decisão adultos" data-target="Adultos">
+                <div class="card-top"><span class="tool-icon">🧠</span><span class="tag">Adultos</span></div>
+                <h3>Registro de Pensamentos</h3>
+                <p>Ferramenta para identificar situação, pensamento, emoção e resposta alternativa.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="aventura_original/1consultorio/5rpd/index.html" target="_blank" data-title="registro de pensamentos" data-search="registro de pensamentos ferramenta para identificar situação, pensamento, emoção e resposta alternativa. tcc, pensamentos e tomada de decisão adultos" data-target="Adultos">
+                <div class="card-top"><span class="tool-icon">🧠</span><span class="tag">Adultos</span></div>
+                <h3>Registro de Pensamentos</h3>
+                <p>Ferramenta para identificar situação, pensamento, emoção e resposta alternativa.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_032_roda_de_responsabilidades.html" target="_blank" data-title="roda de responsabilidades" data-search="roda de responsabilidades ferramenta de apoio para reestruturação cognitiva e tomada de perspectiva. tcc, pensamentos e tomada de decisão adultos" data-target="Adultos">
+                <div class="card-top"><span class="tool-icon">🧠</span><span class="tag">Adultos</span></div>
+                <h3>Roda de Responsabilidades</h3>
+                <p>Ferramenta de apoio para reestruturação cognitiva e tomada de perspectiva.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="classica_original/5protocolos/2torta/index.html" target="_blank" data-title="torta da responsabilidade" data-search="torta da responsabilidade ferramenta de apoio para reestruturação cognitiva e tomada de perspectiva. tcc, pensamentos e tomada de decisão adultos" data-target="Adultos">
+                <div class="card-top"><span class="tool-icon">🧠</span><span class="tag">Adultos</span></div>
+                <h3>Torta da Responsabilidade</h3>
+                <p>Ferramenta de apoio para reestruturação cognitiva e tomada de perspectiva.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a></div>
+        </section>
+        <section class="module-section" data-section="autoconhecimento, autoestima e relações">
+            <div class="module-title"><span>✨</span>Autoconhecimento, autoestima e relações <small>18 ferramentas</small></div>
+            <div class="tools-grid">
+            <a class="tool-card" href="classica_original/3identidade/1autoconhecimento/index.html" target="_blank" data-title="autoconhecimento e equilíbrio" data-search="autoconhecimento e equilíbrio ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. autoconhecimento, autoestima e relações crianças, adolescentes e adultos" data-target="Crianças, adolescentes e adultos">
+                <div class="card-top"><span class="tool-icon">✨</span><span class="tag">Crianças, adolescentes e adultos</span></div>
+                <h3>Autoconhecimento e Equilíbrio</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_006_autoestima_na_pratica.html" target="_blank" data-title="autoestima na prática" data-search="autoestima na prática atividade para trabalhar autopercepção, qualidades e autocuidado. autoconhecimento, autoestima e relações crianças, adolescentes e adultos" data-target="Crianças, adolescentes e adultos">
+                <div class="card-top"><span class="tool-icon">✨</span><span class="tag">Crianças, adolescentes e adultos</span></div>
+                <h3>Autoestima na Prática</h3>
+                <p>Atividade para trabalhar autopercepção, qualidades e autocuidado.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_054_comunicacao_assertiva.html" target="_blank" data-title="comunicação assertiva" data-search="comunicação assertiva ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. autoconhecimento, autoestima e relações adultos" data-target="Adultos">
+                <div class="card-top"><span class="tool-icon">✨</span><span class="tag">Adultos</span></div>
+                <h3>Comunicação Assertiva</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_055_circulo_de_apoio.html" target="_blank" data-title="círculo de apoio" data-search="círculo de apoio ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. autoconhecimento, autoestima e relações crianças, adolescentes e adultos" data-target="Crianças, adolescentes e adultos">
+                <div class="card-top"><span class="tool-icon">✨</span><span class="tag">Crianças, adolescentes e adultos</span></div>
+                <h3>Círculo de Apoio</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_034_inventario_de_recursos_pessoais.html" target="_blank" data-title="inventário de recursos pessoais" data-search="inventário de recursos pessoais ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. autoconhecimento, autoestima e relações crianças, adolescentes e adultos" data-target="Crianças, adolescentes e adultos">
+                <div class="card-top"><span class="tool-icon">✨</span><span class="tag">Crianças, adolescentes e adultos</span></div>
+                <h3>Inventário de Recursos Pessoais</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_050_jardim_das_qualidades.html" target="_blank" data-title="jardim das qualidades" data-search="jardim das qualidades atividade para trabalhar autopercepção, qualidades e autocuidado. autoconhecimento, autoestima e relações crianças e adolescentes" data-target="Crianças e adolescentes">
+                <div class="card-top"><span class="tool-icon">✨</span><span class="tag">Crianças e adolescentes</span></div>
+                <h3>Jardim das Qualidades</h3>
+                <p>Atividade para trabalhar autopercepção, qualidades e autocuidado.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="aventura_original/3eu/1autoestimacasa/index.html" target="_blank" data-title="jornada da autoestima" data-search="jornada da autoestima atividade para trabalhar autopercepção, qualidades e autocuidado. autoconhecimento, autoestima e relações crianças, adolescentes e adultos" data-target="Crianças, adolescentes e adultos">
+                <div class="card-top"><span class="tool-icon">✨</span><span class="tag">Crianças, adolescentes e adultos</span></div>
+                <h3>Jornada da Autoestima</h3>
+                <p>Atividade para trabalhar autopercepção, qualidades e autocuidado.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="classica_original/3identidade/2autoestimafem/index.html" target="_blank" data-title="jornada da autoestima feminina" data-search="jornada da autoestima feminina atividade para trabalhar autopercepção, qualidades e autocuidado. autoconhecimento, autoestima e relações crianças, adolescentes e adultos" data-target="Crianças, adolescentes e adultos">
+                <div class="card-top"><span class="tool-icon">✨</span><span class="tag">Crianças, adolescentes e adultos</span></div>
+                <h3>Jornada da Autoestima Feminina</h3>
+                <p>Atividade para trabalhar autopercepção, qualidades e autocuidado.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="classica_original/3identidade/3autoestimam/index.html" target="_blank" data-title="jornada da masculinidade" data-search="jornada da masculinidade ferramenta lúdica para conduzir conversa terapêutica de forma mais engajadora. autoconhecimento, autoestima e relações crianças, adolescentes e adultos" data-target="Crianças, adolescentes e adultos">
+                <div class="card-top"><span class="tool-icon">✨</span><span class="tag">Crianças, adolescentes e adultos</span></div>
+                <h3>Jornada da Masculinidade</h3>
+                <p>Ferramenta lúdica para conduzir conversa terapêutica de forma mais engajadora.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="classica_original/3identidade/4kit/index.html" target="_blank" data-title="kit de bem-estar e alegria — interativo" data-search="kit de bem-estar e alegria — interativo ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. autoconhecimento, autoestima e relações crianças, adolescentes e adultos" data-target="Crianças, adolescentes e adultos">
+                <div class="card-top"><span class="tool-icon">✨</span><span class="tag">Crianças, adolescentes e adultos</span></div>
+                <h3>Kit de Bem-Estar e Alegria — Interativo</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="classica_original/1consultorio/2linha/index.html" target="_blank" data-title="linha da vida" data-search="linha da vida ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. autoconhecimento, autoestima e relações crianças, adolescentes e adultos" data-target="Crianças, adolescentes e adultos">
+                <div class="card-top"><span class="tool-icon">✨</span><span class="tag">Crianças, adolescentes e adultos</span></div>
+                <h3>Linha da Vida</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="aventura_original/1consultorio/2linha/index.html" target="_blank" data-title="linha da vida" data-search="linha da vida ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. autoconhecimento, autoestima e relações crianças, adolescentes e adultos" data-target="Crianças, adolescentes e adultos">
+                <div class="card-top"><span class="tool-icon">✨</span><span class="tag">Crianças, adolescentes e adultos</span></div>
+                <h3>Linha da Vida</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_039_mapa_de_valores.html" target="_blank" data-title="mapa de valores" data-search="mapa de valores ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. autoconhecimento, autoestima e relações crianças, adolescentes e adultos" data-target="Crianças, adolescentes e adultos">
+                <div class="card-top"><span class="tool-icon">✨</span><span class="tag">Crianças, adolescentes e adultos</span></div>
+                <h3>Mapa de Valores</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="classica_original/3identidade/5quemsoueu/index.html" target="_blank" data-title="quem sou eu" data-search="quem sou eu ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. autoconhecimento, autoestima e relações crianças, adolescentes e adultos" data-target="Crianças, adolescentes e adultos">
+                <div class="card-top"><span class="tool-icon">✨</span><span class="tag">Crianças, adolescentes e adultos</span></div>
+                <h3>Quem Sou Eu</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="aventura_original/3eu/2autoestimarpg/index.html" target="_blank" data-title="rpg da vida real" data-search="rpg da vida real ferramenta lúdica para conduzir conversa terapêutica de forma mais engajadora. autoconhecimento, autoestima e relações crianças e adolescentes" data-target="Crianças e adolescentes">
+                <div class="card-top"><span class="tool-icon">✨</span><span class="tag">Crianças e adolescentes</span></div>
+                <h3>RPG da Vida Real</h3>
+                <p>Ferramenta lúdica para conduzir conversa terapêutica de forma mais engajadora.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_042_radar_de_limites.html" target="_blank" data-title="radar de limites" data-search="radar de limites ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. autoconhecimento, autoestima e relações crianças, adolescentes e adultos" data-target="Crianças, adolescentes e adultos">
+                <div class="card-top"><span class="tool-icon">✨</span><span class="tag">Crianças, adolescentes e adultos</span></div>
+                <h3>Radar de Limites</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="classica_original/5protocolos/1roda/index.html" target="_blank" data-title="roda da vida interativa" data-search="roda da vida interativa ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. autoconhecimento, autoestima e relações adultos" data-target="Adultos">
+                <div class="card-top"><span class="tool-icon">✨</span><span class="tag">Adultos</span></div>
+                <h3>Roda da Vida Interativa</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_043_roda_de_autocuidado_realista.html" target="_blank" data-title="roda de autocuidado realista" data-search="roda de autocuidado realista ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. autoconhecimento, autoestima e relações crianças, adolescentes e adultos" data-target="Crianças, adolescentes e adultos">
+                <div class="card-top"><span class="tool-icon">✨</span><span class="tag">Crianças, adolescentes e adultos</span></div>
+                <h3>Roda de Autocuidado Realista</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a></div>
+        </section>
+        <section class="module-section" data-section="recursos lúdicos e temáticos">
+            <div class="module-title"><span>🎲</span>Recursos lúdicos e temáticos <small>4 ferramentas</small></div>
+            <div class="tools-grid">
+            <a class="tool-card" href="aventura_original/6op/5roda/index.html" target="_blank" data-title="bússola da jornada" data-search="bússola da jornada ferramenta lúdica para conduzir conversa terapêutica de forma mais engajadora. recursos lúdicos e temáticos adultos" data-target="Adultos">
+                <div class="card-top"><span class="tool-icon">🎲</span><span class="tag">Adultos</span></div>
+                <h3>Bússola da Jornada</h3>
+                <p>Ferramenta lúdica para conduzir conversa terapêutica de forma mais engajadora.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="aventura_original/6op/2diario/index.html" target="_blank" data-title="diário da grande rota" data-search="diário da grande rota ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. recursos lúdicos e temáticos adultos" data-target="Adultos">
+                <div class="card-top"><span class="tool-icon">🎲</span><span class="tag">Adultos</span></div>
+                <h3>Diário da Grande Rota</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="aventura_original/4mapa/2fase/index.html" target="_blank" data-title="mapa da jornada" data-search="mapa da jornada ferramenta lúdica para conduzir conversa terapêutica de forma mais engajadora. recursos lúdicos e temáticos adultos" data-target="Adultos">
+                <div class="card-top"><span class="tool-icon">🎲</span><span class="tag">Adultos</span></div>
+                <h3>Mapa da Jornada</h3>
+                <p>Ferramenta lúdica para conduzir conversa terapêutica de forma mais engajadora.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="aventura_original/6op/4reidospiratas/index.html" target="_blank" data-title="o próximo rei dos piratas" data-search="o próximo rei dos piratas ferramenta lúdica para conduzir conversa terapêutica de forma mais engajadora. recursos lúdicos e temáticos adultos" data-target="Adultos">
+                <div class="card-top"><span class="tool-icon">🎲</span><span class="tag">Adultos</span></div>
+                <h3>O Próximo Rei dos Piratas</h3>
+                <p>Ferramenta lúdica para conduzir conversa terapêutica de forma mais engajadora.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a></div>
+        </section>
+        <section class="module-section" data-section="ferramentas terapêuticas gerais">
+            <div class="module-title"><span>🛠️</span>Ferramentas terapêuticas gerais <small>9 ferramentas</small></div>
+            <div class="tools-grid">
+            <a class="tool-card" href="novas_v711_estavel/CEL_001_check_in_emocional.html" target="_blank" data-title="check-in emocional" data-search="check-in emocional ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. ferramentas terapêuticas gerais adultos" data-target="Adultos">
+                <div class="card-top"><span class="tool-icon">🛠️</span><span class="tag">Adultos</span></div>
+                <h3>Check-in Emocional</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_044_contrato_de_proximo_passo.html" target="_blank" data-title="contrato de próximo passo" data-search="contrato de próximo passo ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. ferramentas terapêuticas gerais adultos" data-target="Adultos">
+                <div class="card-top"><span class="tool-icon">🛠️</span><span class="tag">Adultos</span></div>
+                <h3>Contrato de Próximo Passo</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_048_detetive_das_situacoes.html" target="_blank" data-title="detetive das situações" data-search="detetive das situações ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. ferramentas terapêuticas gerais adultos" data-target="Adultos">
+                <div class="card-top"><span class="tool-icon">🛠️</span><span class="tag">Adultos</span></div>
+                <h3>Detetive das Situações</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_004_escada_de_exposicao_gradual.html" target="_blank" data-title="escada de exposição gradual" data-search="escada de exposição gradual ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. ferramentas terapêuticas gerais adultos" data-target="Adultos">
+                <div class="card-top"><span class="tool-icon">🛠️</span><span class="tag">Adultos</span></div>
+                <h3>Escada de Exposição Gradual</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_005_escolha_e_conte.html" target="_blank" data-title="escolha e conte" data-search="escolha e conte ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. ferramentas terapêuticas gerais adultos" data-target="Adultos">
+                <div class="card-top"><span class="tool-icon">🛠️</span><span class="tag">Adultos</span></div>
+                <h3>Escolha e Conte</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_037_mapa_da_rotina.html" target="_blank" data-title="mapa da rotina" data-search="mapa da rotina organização visual de rotina, previsibilidade e próximos passos. ferramentas terapêuticas gerais crianças, adolescentes e adultos" data-target="Crianças, adolescentes e adultos">
+                <div class="card-top"><span class="tool-icon">🛠️</span><span class="tag">Crianças, adolescentes e adultos</span></div>
+                <h3>Mapa da Rotina</h3>
+                <p>Organização visual de rotina, previsibilidade e próximos passos.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_065_ponte_da_conversa.html" target="_blank" data-title="ponte da conversa" data-search="ponte da conversa recurso para habilidades sociais, pedido de ajuda e relações. ferramentas terapêuticas gerais adultos" data-target="Adultos">
+                <div class="card-top"><span class="tool-icon">🛠️</span><span class="tag">Adultos</span></div>
+                <h3>Ponte da Conversa</h3>
+                <p>Recurso para habilidades sociais, pedido de ajuda e relações.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_073_registro_de_tarefa_terapeutica.html" target="_blank" data-title="registro de tarefa terapêutica" data-search="registro de tarefa terapêutica ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. ferramentas terapêuticas gerais adultos" data-target="Adultos">
+                <div class="card-top"><span class="tool-icon">🛠️</span><span class="tag">Adultos</span></div>
+                <h3>Registro de Tarefa Terapêutica</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a>
+            <a class="tool-card" href="novas_v711_estavel/CEL_045_trilha_das_habilidades_sociais.html" target="_blank" data-title="trilha das habilidades sociais" data-search="trilha das habilidades sociais ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão. ferramentas terapêuticas gerais crianças e adolescentes" data-target="Crianças e adolescentes">
+                <div class="card-top"><span class="tool-icon">🛠️</span><span class="tag">Crianças e adolescentes</span></div>
+                <h3>Trilha das Habilidades Sociais</h3>
+                <p>Ferramenta interativa para apoiar psicoeducação, conversa e registro em sessão.</p>
+                <span class="open-label">Abrir ferramenta →</span>
+            </a></div>
+        </section>
+<div class="empty" id="empty">Nenhuma ferramenta encontrada para essa busca.</div>
+</main>
+<footer>Gabriel Vinícius – Psicólogo • CRP 06/215890 • PsicoQuest • @gabrielopsicologo • Todos os direitos reservados • © 2026</footer>
+<script>
+const cards=[...document.querySelectorAll('.tool-card')];
+const sections=[...document.querySelectorAll('.module-section')];
+const search=document.getElementById('search');
+const empty=document.getElementById('empty');
+let active='todos';
+function applyFilter(){
+  const q=(search.value||'').toLowerCase().trim();
+  let shown=0;
+  cards.forEach(card=>{
+    const data=(card.dataset.search||'');
+    const passQ=!q || data.includes(q);
+    const passF=active==='todos' || data.includes(active);
+    const ok=passQ && passF;
+    card.style.display=ok?'flex':'none';
+    if(ok) shown++;
+  });
+  sections.forEach(sec=>{
+    const visible=[...sec.querySelectorAll('.tool-card')].some(c=>c.style.display!=='none');
+    sec.style.display=visible?'block':'none';
+  });
+  empty.style.display=shown?'none':'block';
+}
+search.addEventListener('input',applyFilter);
+document.querySelectorAll('.pill').forEach(btn=>btn.addEventListener('click',()=>{
+  document.querySelectorAll('.pill').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active'); active=btn.dataset.filter; applyFilter();
+}));
+</script>
+</body>
+</html>

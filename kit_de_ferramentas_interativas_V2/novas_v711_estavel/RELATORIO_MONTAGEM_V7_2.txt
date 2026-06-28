@@ -1,0 +1,20 @@
+PsicoQuest V7.2 — Refinamento Final
+
+Base herdada da montagem V7, com refinamento funcional V7.1 e ajuste final V7.2.
+
+PsicoQuest — Relatório de Montagem V7 Piloto
+
+Módulo: PsicoQuest Completo V7 Piloto
+Quantidade estimada de recursos: 64
+Novos blocos integrados: Lote 7 — Adultos Clínico 2, Lote 8 — Crianças e Adolescentes 2, Lote 9 — Baixa Demanda 3, Lote 10 — Extras Profissionais
+
+Resumo técnico:
+- Base usada: V6 Piloto.
+- Versão atualizada: V7 Piloto.
+- Links internos checados automaticamente: 87.
+- Links internos quebrados encontrados: 0.
+- @gabrielopsicologo mantido no rodapé quando já existente.
+- Ferramentas novas foram adicionadas como blocos HTML independentes dentro de /ferramentas/.
+
+Observação:
+Esta ainda é uma versão piloto. O ideal é testar em Chrome no PC e no Android antes de publicar na Hotmart.

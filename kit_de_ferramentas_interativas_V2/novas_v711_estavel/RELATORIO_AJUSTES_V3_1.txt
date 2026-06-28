@@ -1,0 +1,10 @@
+PsicoQuest V3.1 — Ajustes de UX e Mecânica
+
+Correções realizadas a partir do teste:
+- Separe por Categoria: agora permite arrastar itens para as categorias, com fallback por toque.
+- Como Estou Agora: agora mostra uma grade fixa com mais emoções, sem depender de sorteio aleatório.
+- Roleta de Enfrentamento: roleta redesenhada; os rótulos giram junto com a roda e o resultado fica mais visual.
+- Roda de Responsabilidades: agora permite arrastar situações para as categorias, com fallback por toque no celular.
+
+Observação:
+- Recursos de PDF/imagem continuam dependentes do navegador. Para melhor resultado, usar Chrome, Edge ou Safari.

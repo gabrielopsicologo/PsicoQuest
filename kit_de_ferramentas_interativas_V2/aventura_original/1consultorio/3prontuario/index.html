@@ -1,0 +1,1001 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Prontuário Eletrônico - Psicologia</title>
+  <style>
+    :root{--bg:#f7f7fb;--card:#ffffff;--muted:#6b7280;--accent:#6b46c1;--accent-hover:#553c9a;--danger:#e53e3e;--border:#e6e9ee}
+    body{font-family:Inter, ui-sans-serif, system-ui, -apple-system, sans-serif; background:var(--bg); color:#111; margin:0; padding:20px; overflow-x:hidden; padding-bottom: 60px;}
+    .container{max-width:900px;margin:0 auto}
+    
+    /* Header e Nav */
+    .top-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+    .nav-tabs{display:flex;gap:10px;border-bottom:2px solid #e6e9ee;padding-bottom:2px; width: 100%}
+    .tab-btn{background:none;border:none;padding:10px 20px;font-size:15px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;transition:0.3s}
+    .tab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
+    .tab-btn:hover{color:#333}
+
+    /* Páginas */
+    .page-content{display:none;animation:fadeIn 0.4s ease}
+    .page-content.active{display:block}
+    @keyframes fadeIn{from{opacity:0;transform:translateX(10px)} to{opacity:1;transform:translateX(0)}}
+
+    /* Estilos Gerais */
+    .card{background:var(--card);border-radius:12px;padding:24px;box-shadow:0 4px 12px rgba(0,0,0,0.05);margin-bottom:16px;border:1px solid var(--border); position: relative;}
+    h1, h2{margin-top:0;color:#111}
+    h1{font-size:22px;margin-bottom:5px}
+    h2{font-size:18px;margin-bottom:15px;border-bottom:1px solid #eee;padding-bottom:8px}
+    
+    .header-flex{display:flex; justify-content:space-between; align-items: flex-start;}
+
+    label{display:block;font-weight:600;font-size:13px;margin-bottom:6px;color:#374151;margin-top:12px}
+    label:first-child{margin-top:0}
+    input, textarea, select{width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);font-size:14px;box-sizing:border-box;font-family:inherit;transition:0.2s}
+    input:focus, textarea:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 3px rgba(107,70,193,0.1)}
+    textarea{resize:vertical;min-height:100px}
+    
+    .row{display:flex;gap:16px}
+    .col{flex:1}
+    .col-small{flex:0 0 140px}
+    .muted{color:var(--muted);font-size:13px}
+
+    /* Botões */
+    .actions{display:flex;gap:10px;justify-content:flex-end;margin-top:20px; flex-wrap: wrap;}
+    .btn{background:var(--accent);color:#fff;padding:12px 18px;border-radius:8px;border:none;cursor:pointer;font-weight:600;font-size:14px;transition:0.2s}
+    .btn:hover{background:var(--accent-hover)}
+    .btn.secondary{background:#e6e7ee;color:#333}
+    .btn.secondary:hover{background:#d1d5db}
+    .btn.danger{background:#fee2e2; color:#c53030; border:1px solid #fecaca; padding: 8px 12px; font-size:13px;}
+    .btn.danger:hover{background:#fecaca}
+
+    /* Área de Campos Personalizados */
+    .custom-creator{background:#f0fdf4; border:1px dashed #86efac; padding:15px; border-radius:8px; margin-top:20px; display:flex; gap:10px; align-items:center}
+    .custom-creator input{margin:0}
+    .btn-add{background:#22c55e;color:#fff;border:none;border-radius:6px;padding:10px;cursor:pointer;font-weight:bold}
+    .btn-remove{position:absolute; top:15px; right:15px; background:none; border:none; color:#e53e3e; cursor:pointer; font-size:18px; font-weight:bold}
+
+    footer{text-align:center; margin-top:40px; color:#9ca3af; font-size:12px; border-top:1px solid #e6e9ee; padding-top:20px}
+
+    @media (max-width:640px){.row{flex-direction:column}.col-small{flex:auto}.top-bar{flex-direction:column; gap:10px; align-items:flex-start}}
+  </style>
+</head>
+
+<body>
+<div class="container">
+
+  <div class="top-bar">
+    <nav class="nav-tabs">
+      <button class="tab-btn active" onclick="switchTab('session')">📝 Registro de Sessão</button>
+      <button class="tab-btn" onclick="switchTab('cover')">📂 Capa do Prontuário</button>
+    </nav>
+  </div>
+
+  <div id="tab-session" class="page-content active">
+    <div class="header-flex">
+      <header style="margin-bottom:20px">
+        <h1>Registro de Sessão</h1>
+        <div class="muted">Anotações e evolução diária</div>
+      </header>
+      <button onclick="clearTab('session')" class="btn danger">🗑️ Limpar Sessão</button>
+    </div>
+
+    <div class="card">
+      <div class="row">
+        <div class="col">
+          <label>Nome do Paciente</label>
+          <input type="text" id="sess_patientName">
+        </div>
+        <div class="col">
+          <label>Local da Sessão</label>
+          <input type="text" id="sess_location">
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <label>Rascunho (Anotações Livres)</label>
+      <textarea id="sess_draft"></textarea>
+    </div>
+
+    <div class="card">
+      <h2>Evolução Formal</h2>
+
+      <div class="row">
+        <div class="col-small">
+          <label>Data</label>
+          <input type="date" id="sess_date">
+        </div>
+        <div class="col-small">
+          <label>Horário</label>
+          <input type="time" id="sess_time">
+        </div>
+        <div class="col-small">
+          <label>Sessão Nº</label>
+          <input type="text" id="sess_number">
+        </div>
+      </div>
+
+      <label>Descrição da Evolução</label>
+      <textarea id="sess_evolution" style="min-height:120px"></textarea>
+
+      <label>Intervenções / Técnicas</label>
+      <textarea id="sess_intervention" style="min-height:80px"></textarea>
+
+      <label>Formulação / Hipótese</label>
+      <textarea id="sess_formulation" style="min-height:60px"></textarea>
+    </div>
+
+    <div id="dynamic-area-session"></div>
+
+    <div class="custom-creator">
+      <input type="text" id="new-field-session" placeholder="Nome do novo campo">
+      <button class="btn-add" onclick="addCustomField('session')">Adicionar +</button>
+    </div>
+
+    <div class="actions">
+      <button onclick="saveSession('draft')" class="btn secondary">Salvar Rascunho (PDF)</button>
+      <button onclick="saveSession('evolution')" class="btn">Salvar Evolução (PDF)</button>
+    </div>
+  </div>
+  <!-- PARTE 2/2 - continuação -->
+
+  <div id="tab-cover" class="page-content">
+    <div class="header-flex">
+      <header style="margin-bottom:20px">
+        <h1>Capa de Prontuário</h1>
+        <div class="muted">Dados cadastrais e queixa inicial</div>
+      </header>
+      <button onclick="clearTab('cover')" class="btn danger">🗑️ Limpar Capa</button>
+    </div>
+
+    <div class="card">
+      <h2>Identificação Profissional</h2>
+      <div class="row">
+        <div class="col">
+          <label>Psicólogo(a)</label>
+          <input type="text" id="capa_psi" placeholder="Seu nome completo">
+        </div>
+        <div class="col-small">
+          <label>Prontuário Nº</label>
+          <input type="number" id="capa_num" placeholder="01">
+        </div>
+        <div class="col-small">
+          <label>Sala</label>
+          <input type="text" id="capa_sala" placeholder="Ex: 01">
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Identificação do Paciente</h2>
+      <label>Nome Completo</label>
+      <input type="text" id="capa_nome">
+
+      <div class="row">
+        <div class="col">
+          <label>Data de Nascimento</label>
+          <input type="date" id="capa_nasc">
+        </div>
+        <div class="col-small">
+          <label>Idade</label>
+          <input type="text" id="capa_idade">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <label>CPF</label>
+          <input type="text" id="capa_cpf" placeholder="000.000.000-00">
+        </div>
+        <div class="col">
+          <label>Contato (Tel/Email)</label>
+          <input type="text" id="capa_contato">
+        </div>
+      </div>
+
+      <label>Nome Responsável e Parentesco (se menor)</label>
+      <input type="text" id="capa_resp" placeholder="Ex: Maria (Mãe)">
+
+      <div class="row">
+        <div class="col">
+          <label>Data da Primeira Sessão</label>
+          <input type="date" id="capa_data_inicio">
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Demanda Inicial</h2>
+      <label>Motivo do Atendimento - Queixa / Demanda</label>
+      <textarea id="capa_queixa" style="min-height:150px" placeholder="Relatório sintético da demanda inicial..."></textarea>
+    </div>
+
+    <div id="dynamic-area-cover"></div>
+
+    <div class="custom-creator">
+      <input type="text" id="new-field-cover" placeholder="Nome do novo campo (ex: Medicações)">
+      <button class="btn-add" onclick="addCustomField('cover')">Adicionar +</button>
+    </div>
+
+    <div class="actions">
+      <button onclick="generateCoverPDF()" class="btn">📄 Gerar Capa do Prontuário (PDF)</button>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2025 Gabriel Vinícius. Todos os direitos reservados.
+  </footer>
+
+  <div id="pdf-container" style="display:none">
+    <div id="pdf-content" style="padding:30px; font-family: 'Times New Roman', serif; color:#000; line-height:1.5;"></div>
+  </div>
+
+</div> <!-- fim container -->
+
+<script>
+  // --- ABAS ---
+  function switchTab(tabName){
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
+
+    const btnIndex = tabName === 'session' ? 0 : 1;
+    document.querySelectorAll('.tab-btn')[btnIndex].classList.add('active');
+    document.getElementById(`tab-${tabName}`).classList.add('active');
+  }
+
+  // --- UTILITÁRIOS ---
+  const getVal = (id) => { const el = document.getElementById(id); return (el && el.value) ? el.value : ''; };
+  const getDisplayVal = (id) => { const val = getVal(id); return val === '' ? '-' : val; };
+  const setVal = (id, val) => { if(document.getElementById(id)) document.getElementById(id).value = val || ''; };
+  const escapeHtml = (text) => { if(!text) return ''; return String(text).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>'); }
+  const formatDate = (isoDate) => { if(!isoDate) return '-'; return isoDate.split('-').reverse().join('/'); }
+
+  // --- CAMPOS PERSONALIZADOS ---
+  function addCustomField(context, labelText = null, savedValue = ''){
+    const inputId = `new-field-${context}`;
+    const label = labelText || document.getElementById(inputId).value;
+
+    if(!label) return alert('Digite um nome para o campo!');
+    if(!labelText) document.getElementById(inputId).value = ''; // limpa input se for novo
+
+    const fieldId = `custom_${context}_${Date.now()}_${Math.random().toString(36).substr(2,9)}`;
+
+    const div = document.createElement('div');
+    div.className = 'card';
+    div.dataset.id = fieldId;
+    div.dataset.label = label;
+    div.dataset.context = context;
+    div.innerHTML = `
+      <button class="btn-remove" onclick="removeCustomField(this)" title="Remover campo">&times;</button>
+      <label>${label}</label>
+      <textarea id="${fieldId}" placeholder="Digite aqui...">${savedValue}</textarea>
+    `;
+
+    document.getElementById(`dynamic-area-${context}`).appendChild(div);
+    if(!labelText) saveData();
+  }
+
+  function removeCustomField(btn){
+    if(confirm('Tem certeza que deseja remover este campo?')){
+      btn.parentElement.remove();
+      saveData();
+    }
+  }
+
+  function getCustomFieldsHTML(context){
+    const container = document.getElementById(`dynamic-area-${context}`);
+    const cards = container.querySelectorAll('.card');
+    let html = '';
+    cards.forEach(card => {
+      const label = card.dataset.label;
+      const val = card.querySelector('textarea').value;
+      if(val.trim() !== ''){
+        html += `<h3 style="margin-top:18px;margin-bottom:6px">${label}</h3><div style="text-align:justify">${escapeHtml(val)}</div>`;
+      }
+    });
+    return html;
+  }
+
+  // --- LIMPEZA INDIVIDUAL ---
+  function clearTab(context){
+    const msg = context === 'session' ? 'SESSÃO' : 'CAPA DE PRONTUÁRIO';
+    if(!confirm(`ATENÇÃO: Deseja limpar apenas os dados da ${msg}?\nIsso não afeta a outra aba.`)) return;
+
+    // 1. Limpar inputs específicos
+    const container = document.getElementById(`tab-${context}`);
+    container.querySelectorAll('input, textarea').forEach(el => {
+      // Ignora o campo de "novo campo personalizado"
+      if(!el.id.startsWith('new-field')) el.value = '';
+    });
+
+    // 2. Limpar campos personalizados DOM dessa aba
+    document.getElementById(`dynamic-area-${context}`).innerHTML = '';
+
+    // 3. Atualizar localStorage especificamente
+    if(context === 'session'){
+       localStorage.removeItem('psi_session_data');
+    } else {
+      localStorage.removeItem('psi_cover_data');
+    }
+
+    // 4. Filtrar campos personalizados no storage (manter os da outra aba)
+    let customs = JSON.parse(localStorage.getItem('psi_custom_fields') || '[]');
+    // Mantém apenas os que NÃO são deste contexto
+    customs = customs.filter(c => c.context !== context);
+    localStorage.setItem('psi_custom_fields', JSON.stringify(customs));
+
+    alert(`Dados da ${msg} limpos com sucesso!`);
+  }
+
+  // --- PERSISTÊNCIA ---
+  function loadData(){
+    try {
+      // Sessão
+      const sessData = JSON.parse(localStorage.getItem('psi_session_data') || '{}');
+      setVal('sess_patientName', sessData.name);
+      setVal('sess_location', sessData.loc);
+      setVal('sess_draft', sessData.draft);
+      setVal('sess_evolution', sessData.evo);
+      setVal('sess_intervention', sessData.inter);
+      setVal('sess_formulation', sessData.form);
+      setVal('sess_date', sessData.date);
+      setVal('sess_time', sessData.time);
+      setVal('sess_number', sessData.number);
+
+      // Capa
+      const coverData = JSON.parse(localStorage.getItem('psi_cover_data') || '{}');
+      setVal('capa_psi', coverData.psi);
+      setVal('capa_num', coverData.num);
+      setVal('capa_sala', coverData.sala);
+      setVal('capa_nome', coverData.nome);
+      setVal('capa_nasc', coverData.nasc);
+      setVal('capa_idade', coverData.idade);
+      setVal('capa_cpf', coverData.cpf);
+      setVal('capa_contato', coverData.contato);
+      setVal('capa_resp', coverData.resp);
+      setVal('capa_data_inicio', coverData.dataIni);
+      setVal('capa_queixa', coverData.queixa);
+
+      // Campos Customizados
+      const customs = JSON.parse(localStorage.getItem('psi_custom_fields') || '[]');
+      document.getElementById('dynamic-area-session').innerHTML = '';
+      document.getElementById('dynamic-area-cover').innerHTML = '';
+      
+      customs.forEach(field => {
+        addCustomField(field.context, field.label, field.value);
+      });
+
+    } catch(e){ console.log('Erro ao carregar dados', e); }
+  }
+
+  function saveData(){
+    // Sessão
+    const sessPayload = {
+      name: getVal('sess_patientName'),
+      loc: getVal('sess_location'),
+      draft: getVal('sess_draft'),
+      evo: getVal('sess_evolution'),
+      inter: getVal('sess_intervention'),
+      form: getVal('sess_formulation'),
+      date: getVal('sess_date'),
+      time: getVal('sess_time'),
+      number: getVal('sess_number')
+    };
+    localStorage.setItem('psi_session_data', JSON.stringify(sessPayload));
+
+    // Capa
+    const coverPayload = {
+      psi: getVal('capa_psi'),
+      num: getVal('capa_num'),
+      sala: getVal('capa_sala'),
+      nome: getVal('capa_nome'),
+      nasc: getVal('capa_nasc'),
+      idade: getVal('capa_idade'),
+      cpf: getVal('capa_cpf'),
+      contato: getVal('capa_contato'),
+      resp: getVal('capa_resp'),
+      dataIni: getVal('capa_data_inicio'),
+      queixa: getVal('capa_queixa')
+    };
+    localStorage.setItem('psi_cover_data', JSON.stringify(coverPayload));
+
+    // Customizados
+    let customs = [];
+    document.querySelectorAll('[data-context]').forEach(el => {
+      customs.push({
+        context: el.dataset.context,
+        label: el.dataset.label,
+        value: el.querySelector('textarea').value
+      });
+    });
+    localStorage.setItem('psi_custom_fields', JSON.stringify(customs));
+  }
+
+  setInterval(saveData, 3000);
+  document.addEventListener('input', (e) => {
+    if(e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') saveData();
+  });
+
+  // --- // --- GERADOR DE PDF ---
+  async function makePdf(filename, htmlContent){
+    const docHtml = `
+      <!doctype html>
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <title>${filename}</title>
+          <meta name="viewport" content="width=device-width,initial-scale=1">
+          <style>
+            body { font-family: 'Times New Roman', serif; color: #000; margin: 20mm; line-height: 1.5; -webkit-print-color-adjust: exact; }
+            h1,h2,h3,h4{ margin:0 0 8px 0; }
+            table{ width:100%; border-collapse:collapse; }
+            td{ vertical-align:top; padding:6px 0; }
+            .monitor-table td { border: 1px solid #999; padding: 5px 8px; vertical-align: middle; }
+            .monitor-table { margin-bottom: 15px; margin-top: 5px; }
+          </style>
+        </head>
+        <body>
+          ${htmlContent}
+        </body>
+      </html>
+    `;
+
+    return new Promise((resolve, reject) => {
+      try {
+        const iframe = document.createElement('iframe');
+        iframe.style.position = 'fixed'; iframe.style.right = '0'; iframe.style.bottom = '0'; iframe.style.width = '0'; iframe.style.height = '0'; iframe.style.border = '0'; iframe.style.visibility = 'hidden';
+        document.body.appendChild(iframe);
+        const idoc = iframe.contentWindow.document;
+        idoc.open(); idoc.write(docHtml); idoc.close();
+        const win = iframe.contentWindow;
+        setTimeout(() => { 
+            win.focus(); 
+            win.print(); 
+            setTimeout(() => { document.body.removeChild(iframe); resolve(); }, 1000); 
+        }, 500);
+      } catch (err) { console.error(err); reject(err); }
+    });
+  }
+
+  // PDF SESSÃO
+  async function saveSession(type){
+    saveData();
+    const name = getVal('sess_patientName') || 'Paciente';
+    const date = formatDate(getVal('sess_date'));
+    const title = type === 'draft' ? 'RASCUNHO E MONITORAMENTO' : 'EVOLUÇÃO DE SESSÃO';
+
+    let body = `
+      <div style="border-bottom:2px solid #333; padding-bottom:10px; margin-bottom:20px;">
+        <h2 style="margin:0; text-transform:uppercase;">${title}</h2>
+        <p style="margin:5px 0 0 0;">Paciente: <b>${name}</b> | Data: ${date}</p>
+      </div>
+    `;
+
+    if(type === 'draft'){
+      body += `
+        <h3 style="margin-top:10px">Anotações / Rascunho</h3>
+        <div style="margin-bottom:20px; text-align:justify">${escapeHtml(getVal('sess_draft'))}</div>
+        <hr style="margin: 20px 0;">
+        <h3>📊 Painel de Monitoramento</h3>
+        <table class="monitor-table">
+            <tr>
+                <td width="33%"><b>📉 Humor:</b><br>${getDisplayVal('sess_mood')}</td>
+                <td width="33%"><b>🔋 Energia:</b><br>${getDisplayVal('sess_energy')}</td>
+                <td width="33%"><b>⚠️ Risco:</b><br>${getDisplayVal('sess_risk')}</td>
+            </tr>
+        </table>
+        <div style="margin-bottom: 20px; background: #f4f4f4; padding: 12px; border-radius: 4px; border:1px solid #ddd;">
+            <b style="display:block; margin-bottom:5px">🗣️ Relatos e Assuntos Centrais:</b>
+            <div style="white-space: pre-line;">${escapeHtml(getVal('sess_topics'))}</div>
+        </div>
+      `;
+    } else {
+      body += `
+        <p><b>Horário:</b> ${getDisplayVal('sess_time')} | <b>Sessão Nº:</b> ${getDisplayVal('sess_number')}</p>
+        <p><b>Local:</b> ${getDisplayVal('sess_location')}</p>
+        <hr style="margin: 15px 0;">
+        <h3>Descrição da Evolução</h3>
+        <div style="text-align:justify; margin-bottom:15px">${escapeHtml(getVal('sess_evolution'))}</div>
+        <h3>Intervenções</h3>
+        <div style="text-align:justify">${escapeHtml(getVal('sess_intervention'))}</div>
+      `;
+    }
+    body += getCustomFieldsHTML('session');
+    await makePdf(`Sessao_${name}_${type}.pdf`, body);
+  }
+
+  // PDF CAPA
+  async function generateCoverPDF(){
+    saveData();
+    const nome = getVal('capa_nome') || 'Paciente';
+    const html = `
+      <div style="text-align:center; border-bottom:2px solid #000; padding-bottom:10px; margin-bottom:25px">
+        <h1 style="font-size:16pt; margin:0">PRONTUÁRIO – RELATÓRIO DE EVOLUÇÃO</h1>
+      </div>
+      <table style="width:100%; border-collapse:collapse; margin-bottom:20px; font-size:12pt">
+        <tr><td style="padding:6px 0; font-weight:bold; width:130px">PSICÓLOGO:</td><td style="padding:6px 0; border-bottom:1px solid #999">${getDisplayVal('capa_psi')}</td></tr>
+        <tr><td style="padding:6px 0; font-weight:bold;">PRONTUÁRIO:</td><td style="padding:6px 0; border-bottom:1px solid #999">${getDisplayVal('capa_num')}</td></tr>
+        <tr><td style="padding:6px 0; font-weight:bold;">NOME:</td><td style="padding:6px 0; border-bottom:1px solid #999">${getDisplayVal('capa_nome')}</td></tr>
+        <tr><td style="padding:6px 0; font-weight:bold;">DATA NASC.:</td><td style="padding:6px 0; border-bottom:1px solid #999">${formatDate(getVal('capa_nasc'))}</td></tr>
+        <tr><td style="padding:6px 0; font-weight:bold;">IDADE:</td><td style="padding:6px 0; border-bottom:1px solid #999">${getDisplayVal('capa_idade')}</td></tr>
+        <tr><td style="padding:6px 0; font-weight:bold;">RESPONSÁVEL:</td><td style="padding:6px 0; border-bottom:1px solid #999">${getDisplayVal('capa_resp')}</td></tr>
+        <tr><td style="padding:6px 0; font-weight:bold;">CPF:</td><td style="padding:6px 0; border-bottom:1px solid #999">${getDisplayVal('capa_cpf')}</td></tr>
+        <tr><td style="padding:6px 0; font-weight:bold;">CONTATO:</td><td style="padding:6px 0; border-bottom:1px solid #999">${getDisplayVal('capa_contato')}</td></tr>
+        <tr><td style="padding:6px 0; font-weight:bold;">DATA 1ª SESSÃO:</td><td style="padding:6px 0; border-bottom:1px solid #999">${formatDate(getVal('capa_data_inicio'))}</td></tr>
+        <tr><td style="padding:6px 0; font-weight:bold;">SALA:</td><td style="padding:6px 0; border-bottom:1px solid #999">${getDisplayVal('capa_sala')}</td></tr>
+      </table>
+      <div style="background:#eee; padding:8px; font-weight:bold; border:1px solid #000; margin-top:30px; text-align:center; font-size:11pt">MOTIVO DO ATENDIMENTO</div>
+      <div style="border:1px solid #000; border-top:none; padding:15px; min-height:200px; text-align:justify">${escapeHtml(getVal('capa_queixa'))}</div>
+      ${getCustomFieldsHTML('cover')}
+      <div style="margin-top:60px; text-align:center"><div style="border-top:1px solid #000; width:60%; margin:0 auto; padding-top:5px">Assinatura / Carimbo</div></div>
+    `;
+    await makePdf(`Capa_Prontuario_${nome}.pdf`, html);
+  }
+
+  // Inicializa
+  window.addEventListener('DOMContentLoaded', loadData);
+</script>
+
+<script>
+(function(){
+    /* 1. VARIÁVEIS SEGURAS */
+    const VARS = ['answers', 'gridData', 'characters', 'backlogItems', 'customValues', 'notes', 'score', 'savedData'];
+    const FUNCS = ['renderStep', 'renderGrid', 'renderBacklog', 'renderStage', 'renderFooter', 'renderValuesGrid', 'init', 'updateView', 'carregarDados', 'loadData'];
+
+    /* 2. VISUAL */
+    const css = document.createElement('style');
+    css.textContent = `
+        #pq-bar { position: fixed; top: 0; left: 0; width: 100%; height: 50px; background: #f0f9ff; border-bottom: 1px solid #bae6fd; z-index: 2147483647; display: flex; align-items: center; justify-content: space-between; padding: 0 15px; box-sizing: border-box; font-family: sans-serif; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .pq-g { display: flex; gap: 8px; align-items: center; }
+        .pq-b { background: white; border: 1px solid #7dd3fc; color: #0284c7; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; }
+        .pq-b:hover { background: #0284c7; color: white; }
+        .pq-b.red { color: #dc2626; border-color: #fca5a5; }
+        .pq-b.red:hover { background: #dc2626; color: white; }
+        .pq-i { padding: 4px; border: 1px solid #bae6fd; border-radius: 4px; font-size: 12px; width: 140px; }
+        #pq-modal-bg { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2147483648; justify-content: center; align-items: center; }
+        .pq-modal { background: white; padding: 20px; border-radius: 8px; width: 300px; max-height: 80vh; overflow-y: auto; font-family: sans-serif; }
+        .pq-row { padding: 8px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; cursor: pointer; }
+        .pq-row:hover { background: #f0f9ff; }
+        @media print { #pq-bar { display: none !important; } body { margin-top: 0 !important; } }
+    `;
+    document.head.appendChild(css);
+
+    /* 3. HTML */
+    const bar = document.createElement('div');
+    bar.id = 'pq-bar';
+    bar.innerHTML = `
+        <div class="pq-g"><strong>🔒 Profissional</strong></div>
+        <div class="pq-g">
+            <input id="pq-name" class="pq-i" placeholder="Paciente...">
+            <button class="pq-b" onclick="PQ.save()">💾</button>
+            <button class="pq-b" onclick="PQ.list()">📂</button>
+            <button class="pq-b" onclick="PQ.down()">⬇️</button>
+            <label class="pq-b" title="Upload">⬆️ <input type="file" onchange="PQ.up(this)" style="display:none"></label>
+            <button class="pq-b red" onclick="PQ.reset()">✖</button>
+        </div>
+    `;
+    document.body.insertBefore(bar, document.body.firstChild);
+    if(window.innerWidth > 600) document.body.style.marginTop = "50px";
+
+    const modal = document.createElement('div');
+    modal.id = 'pq-modal-bg';
+    modal.innerHTML = `<div class="pq-modal"><h3>Salvos</h3><div id="pq-list"></div><button class="pq-b" style="width:100%; margin-top:10px" onclick="document.getElementById('pq-modal-bg').style.display='none'">Fechar</button></div>`;
+    document.body.appendChild(modal);
+
+    /* 4. LÓGICA */
+    window.PQ = {
+        get: () => {
+            const s = {};
+            VARS.forEach(v => { if(typeof window[v]!=='undefined' && !(window[v] instanceof HTMLElement)) s[v]=window[v]; });
+            const inp = {};
+            document.querySelectorAll('input:not(#pq-name):not([type="file"]), textarea, select').forEach(e => { if(e.id) inp[e.id] = (e.type==='checkbox'||e.type==='radio')?e.checked:e.value; });
+            s['html'] = inp;
+            return s;
+        },
+        set: (s) => {
+            try {
+                Object.keys(s).forEach(k => { if(k!=='html') window[k]=s[k]; });
+                if(s.html) Object.keys(s.html).forEach(id => { const e=document.getElementById(id); if(e) (e.type==='checkbox'||e.type==='radio')?e.checked=s.html[id]:e.value=s.html[id]; });
+                const idx = window.currentIndex || 0;
+                FUNCS.forEach(f => { if(typeof window[f]==='function') try{window[f](idx)}catch(e){} });
+            } catch(e) { console.error(e); alert('Erro ao carregar dados.'); }
+        },
+        save: () => {
+            const n = document.getElementById('pq-name').value.trim();
+            if(!n) return alert('Nome obrigatório');
+            try {
+                localStorage.setItem('pq_'+n, JSON.stringify({d: new Date().toLocaleDateString(), data: PQ.get()}));
+                alert('Salvo!');
+            } catch(e) { alert('Erro ao salvar.'); }
+        },
+        list: () => {
+            const l = document.getElementById('pq-list'); l.innerHTML = '';
+            Object.keys(localStorage).forEach(k => {
+                if(k.startsWith('pq_')) {
+                    const d = JSON.parse(localStorage.getItem(k));
+                    const i = document.createElement('div'); i.className = 'pq-row';
+                    i.innerHTML = `<span>${k.substring(3)} <small>(${d.d})</small></span> <span>🗑️</span>`;
+                    i.onclick = (e) => {
+                        if(e.target.innerText==='🗑️') { localStorage.removeItem(k); PQ.list(); }
+                        else { PQ.set(d.data); document.getElementById('pq-name').value = k.substring(3); document.getElementById('pq-modal-bg').style.display = 'none'; }
+                    };
+                    l.appendChild(i);
+                }
+            });
+            document.getElementById('pq-modal-bg').style.display = 'flex';
+        },
+        down: () => {
+            const n = document.getElementById('pq-name').value.trim() || 'paciente';
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(new Blob([JSON.stringify({name:n, data:PQ.get()})], {type:'application/json'}));
+            a.download = 'PsicoQuest_'+n+'.json'; document.body.appendChild(a); a.click();
+        },
+        up: (el) => {
+            const r = new FileReader();
+            r.onload = (e) => {
+                try { const d = JSON.parse(e.target.result); if(confirm('Carregar '+d.name+'?')){ PQ.set(d.data); document.getElementById('pq-name').value=d.name; } } catch(e){ alert('Erro'); }
+            };
+            r.readAsText(el.files[0]); el.value='';
+        },
+        reset: () => { if(confirm('Limpar?')) location.reload(); }
+    };
+})();
+</script>
+</body>
+</html> (robusto: abre janela ou usa iframe como fallback; mantém texto copiável) ---
+  async function makePdf(filename, htmlContent){
+    const docHtml = `
+      <!doctype html>
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <title>${filename}</title>
+          <meta name="viewport" content="width=device-width,initial-scale=1">
+          <style>
+            body {
+              font-family: 'Times New Roman', serif;
+              color: #000;
+              margin: 20mm;
+              line-height: 1.5;
+              -webkit-print-color-adjust: exact;
+            }
+            h1,h2,h3,h4{ margin:0 0 8px 0; }
+            table{ width:100%; border-collapse:collapse; }
+            td{ vertical-align:top; padding:6px 0; }
+            /* pequenas instruções visíveis ao usuário */
+            .print-instructions { font-size:11px; color:#333; margin-bottom:12px; }
+          </style>
+        </head>
+        <body>
+      
+          ${htmlContent}
+        <script>
+(function(){
+    /* 1. VARIÁVEIS PARA DETECTAR O JOGO */
+    const KNOWN_VARS = ['answers', 'gridData', 'characters', 'backlogItems', 'customValues', 'notes', 'score', 'history', 'savedData'];
+    const RENDER_FUNCS = ['renderStep', 'renderGrid', 'renderBacklog', 'renderStage', 'renderFooter', 'renderValuesGrid', 'init', 'updateView', 'carregarDados'];
+
+    /* 2. INJEÇÃO VISUAL (CSS CORRIGIDO PARA NÃO QUEBRAR LAYOUT) */
+    const style = document.createElement('style');
+    style.innerHTML = `
+        /* A barra agora é 'fixed' para flutuar sobre o site sem empurrar o layout */
+        #pq-bar { 
+            background: #f0f9ff; border-bottom: 1px solid #bae6fd; padding: 8px 15px; 
+            display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; 
+            font-family: sans-serif; font-size: 14px; color: #0369a1; 
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 2147483647; 
+            box-shadow: 0 4px 10px -2px rgba(0,0,0,0.1); box-sizing: border-box; height: 60px;
+        }
+        .pq-col { display: flex; gap: 8px; align-items: center; }
+        .pq-btn { background: white; border: 1px solid #7dd3fc; color: #0284c7; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 12px; transition: 0.2s; display:flex; align-items:center; gap:5px; white-space: nowrap; }
+        .pq-btn:hover { background: #0284c7; color: white; border-color: #0284c7; }
+        .pq-btn.danger { color: #dc2626; border-color: #fca5a5; }
+        .pq-btn.danger:hover { background: #dc2626; border-color: #dc2626; color: white; }
+        .pq-inp { padding: 6px; border: 1px solid #bae6fd; border-radius: 6px; font-size: 13px; width: 160px; outline:none; }
+        
+        /* Modal Style */
+        #pq-modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2147483648; justify-content: center; align-items: center; backdrop-filter: blur(3px); }
+        .pq-modal { background: white; padding: 25px; border-radius: 12px; width: 90%; max-width: 400px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); font-family: sans-serif; position: relative; }
+        .pq-list { max-height: 300px; overflow-y: auto; margin: 15px 0; border: 1px solid #e2e8f0; border-radius: 6px; }
+        .pq-item { padding: 10px; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; cursor: pointer; color: #334155; }
+        .pq-item:hover { background: #f8fafc; color: #0f172a; }
+        @media print { #pq-bar { display: none !important; } body { margin-top: 0 !important; } }
+        @media (max-width: 650px) { #pq-bar { height: auto; position: relative; } body { margin-top: 0 !important; } .pq-col { width: 100%; justify-content: center; flex-wrap: wrap; margin-bottom: 5px; } .pq-inp { width: 100%; } }
+    `;
+    document.head.appendChild(style);
+
+    /* 3. HTML DA BARRA */
+    const bar = document.createElement('div');
+    bar.id = 'pq-bar';
+    bar.innerHTML = `
+        <div class="pq-col"><strong>🔒 Profissional</strong></div>
+        <div class="pq-col">
+            <input id="pq-name" class="pq-inp" placeholder="Nome do Paciente...">
+            <button class="pq-btn" onclick="PQ_System.save()">💾 Salvar</button>
+            <button class="pq-btn" onclick="PQ_System.list()">📂 Abrir</button>
+            <button class="pq-btn" onclick="PQ_System.download()">⬇️ Baixar</button>
+            <label class="pq-btn" style="cursor:pointer" title="Carregar arquivo do PC">⬆️ <input type="file" onchange="PQ_System.upload(this)" style="display:none"></label>
+            <button class="pq-btn danger" onclick="PQ_System.reset()">🧹 Novo</button>
+        </div>
+    `;
+    
+    // Insere a barra no topo
+    document.body.insertBefore(bar, document.body.firstChild);
+    
+    // AJUSTE DE LAYOUT: Empurra o corpo do site para baixo para a barra não tampar nada
+    // Apenas se não for mobile (onde ela não é fixa)
+    if(window.innerWidth > 650) {
+        document.body.style.marginTop = "60px";
+        document.body.style.height = "calc(100vh - 60px)"; // Ajusta altura para evitar scroll duplo
+    }
+
+    /* 4. MODAL */
+    const modal = document.createElement('div');
+    modal.id = 'pq-modal-overlay';
+    modal.innerHTML = `
+        <div class="pq-modal">
+            <h3 style="margin:0 0 10px 0; color:#0f172a;">Pacientes Salvos</h3>
+            <div id="pq-file-list" class="pq-list"></div>
+            <button class="pq-btn" style="width:100%; justify-content:center; background:#f1f5f9; color:#475569; border:none;" onclick="document.getElementById('pq-modal-overlay').style.display='none'">Fechar</button>
+        </div>
+    `;
+    document.body.appendChild(modal);
+
+    /* 5. LÓGICA DO SISTEMA */
+    window.PQ_System = {
+        getState: function() {
+            const state = {};
+            // Procura variaveis globais
+            VARS_TO_SAVE.forEach(v => { if (typeof window[v] !== 'undefined') state[v] = window[v]; });
+            // Procura inputs
+            const inputs = {};
+            document.querySelectorAll('input:not(#pq-name):not([type="file"]), textarea, select').forEach(el => {
+                if(el.id) inputs[el.id] = (el.type === 'checkbox' || el.type === 'radio') ? el.checked : el.value;
+            });
+            state['__html_inputs'] = inputs;
+            return state;
+        },
+        restoreState: function(state) {
+            Object.keys(state).forEach(k => { if(k !== '__html_inputs') window[k] = state[k]; });
+            if(state['__html_inputs']) {
+                Object.keys(state['__html_inputs']).forEach(id => {
+                    const el = document.getElementById(id);
+                    if(el) (el.type === 'checkbox' || el.type === 'radio') ? el.checked = state['__html_inputs'][id] : el.value = state['__html_inputs'][id];
+                });
+            }
+            const idx = (typeof window.currentIndex !== 'undefined') ? window.currentIndex : 0;
+            FUNCS_TO_RENDER.forEach(f => { if(typeof window[f] === 'function') { try{ window[f](idx); }catch(e){} } });
+        },
+        save: function() {
+            const name = document.getElementById('pq-name').value.trim();
+            if(!name) return alert('Por favor, digite o nome do paciente.');
+            const data = this.getState();
+            localStorage.setItem('pq_' + name, JSON.stringify({ date: new Date().toLocaleString(), data: data }));
+            alert('Salvo no navegador!');
+        },
+        list: function() {
+            const listEl = document.getElementById('pq-file-list');
+            listEl.innerHTML = '';
+            let count = 0;
+            Object.keys(localStorage).forEach(k => {
+                if(k.startsWith('pq_')) {
+                    count++;
+                    const item = JSON.parse(localStorage.getItem(k));
+                    const row = document.createElement('div'); row.className = 'pq-item';
+                    row.innerHTML = `<span><strong>${k.substring(3)}</strong> <small style="color:#94a3b8; font-size:11px;">(${item.date})</small></span> <span>🗑️</span>`;
+                    row.onclick = (e) => {
+                        if(e.target.innerText === '🗑️') { if(confirm('Excluir?')) { localStorage.removeItem(k); PQ_System.list(); } }
+                        else { PQ_System.restoreState(item.data); document.getElementById('pq-name').value = k.substring(3); document.getElementById('pq-modal-overlay').style.display = 'none'; }
+                    };
+                    listEl.appendChild(row);
+                }
+            });
+            if(count === 0) listEl.innerHTML = '<div style="padding:20px; text-align:center; color:#94a3b8;">Nenhum paciente salvo.</div>';
+            document.getElementById('pq-modal-overlay').style.display = 'flex';
+        },
+        download: function() {
+            const name = document.getElementById('pq-name').value.trim() || 'paciente';
+            const blob = new Blob([JSON.stringify({ name: name, data: this.getState() }, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'PsicoQuest_' + name + '.json';
+            document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        },
+        upload: function(input) {
+            if(!input.files[0]) return;
+            const r = new FileReader();
+            r.onload = (e) => {
+                try {
+                    const d = JSON.parse(e.target.result);
+                    if(confirm('Carregar dados de "'+d.name+'"?')) { this.restoreState(d.data); document.getElementById('pq-name').value = d.name; }
+                } catch(err) { alert('Arquivo inválido.'); }
+            };
+            r.readAsText(input.files[0]); input.value = '';
+        },
+        reset: function() { if(confirm('Limpar tela para novo atendimento?')) location.reload(); }
+    };
+})();
+</script>
+      </html>
+    `;
+
+    return new Promise((resolve, reject) => {
+      try {
+        // Tenta abrir nova janela (click direto do usuário normalmente autoriza)
+        const printWindow = window.open('', '_blank');
+
+        if (printWindow) {
+          printWindow.document.open();
+          printWindow.document.write(docHtml);
+          printWindow.document.close();
+
+          const cleanup = () => {
+            try { /* opcional: printWindow.close(); */ } catch(e){}
+            resolve();
+          };
+
+          if ('onafterprint' in printWindow) {
+            printWindow.onafterprint = () => { cleanup(); };
+            setTimeout(() => {
+              printWindow.focus();
+              printWindow.print();
+            }, 300);
+          } else {
+            setTimeout(() => {
+              printWindow.focus();
+              printWindow.print();
+              setTimeout(cleanup, 700);
+            }, 350);
+          }
+
+        } else {
+          // Popup bloqueado -> fallback por iframe
+          const iframe = document.createElement('iframe');
+          iframe.style.position = 'fixed';
+          iframe.style.right = '0';
+          iframe.style.bottom = '0';
+          iframe.style.width = '0';
+          iframe.style.height = '0';
+          iframe.style.border = '0';
+          iframe.style.visibility = 'hidden';
+          document.body.appendChild(iframe);
+
+          const idoc = iframe.contentWindow.document;
+          idoc.open();
+          idoc.write(docHtml);
+          idoc.close();
+
+          const win = iframe.contentWindow;
+
+          const cleanupIframe = () => {
+            try { document.body.removeChild(iframe); } catch(e){}
+            resolve();
+          };
+
+          if ('onafterprint' in win) {
+            win.onafterprint = cleanupIframe;
+            setTimeout(() => { win.focus(); win.print(); }, 300);
+          } else {
+            setTimeout(() => {
+              try { win.focus(); win.print(); } catch(e){}
+              setTimeout(cleanupIframe, 700);
+            }, 350);
+          }
+        }
+      } catch (err) {
+        console.error('Erro ao gerar PDF via impressão:', err);
+        reject(err);
+      }
+    });
+  }
+
+  // PDF SESSÃO
+  async function saveSession(type){
+    saveData();
+    const name = getVal('sess_patientName') || 'Paciente';
+    const date = formatDate(getVal('sess_date'));
+    const title = type === 'draft' ? 'RASCUNHO DE SESSÃO' : 'EVOLUÇÃO DE SESSÃO';
+
+    let body = `
+      <div style="border-bottom:2px solid #333; padding-bottom:10px; margin-bottom:20px;">
+        <h2 style="margin:0; text-transform:uppercase;">${title}</h2>
+        <p style="margin:5px 0 0 0;">Paciente: <b>${name}</b> | Data: ${date}</p>
+      </div>
+    `;
+
+    if(type === 'draft'){
+      body += `<h3 style="margin-top:10px">Anotações / Rascunho</h3><div>${escapeHtml(getVal('sess_draft'))}</div>`;
+    } else {
+      body += `
+        <p><b>Horário:</b> ${getDisplayVal('sess_time')} | <b>Sessão Nº:</b> ${getDisplayVal('sess_number')}</p>
+        <p><b>Local:</b> ${getDisplayVal('sess_location')}</p>
+        <hr>
+        <h3>Evolução</h3>
+        <div style="text-align:justify">${escapeHtml(getVal('sess_evolution'))}</div>
+        <h3>Intervenções</h3>
+        <div>${escapeHtml(getVal('sess_intervention'))}</div>
+        <h3>Formulação</h3>
+        <div>${escapeHtml(getVal('sess_formulation'))}</div>
+      `;
+    }
+
+    body += getCustomFieldsHTML('session');
+    await makePdf(`Sessao_${name}_${getVal('sess_date')||'data'}.pdf`, body);
+  }
+
+  // PDF CAPA
+  async function generateCoverPDF(){
+    saveData();
+    const nome = getVal('capa_nome') || 'Paciente';
+
+    const html = `
+      <div style="text-align:center; border-bottom:2px solid #000; padding-bottom:10px; margin-bottom:25px">
+        <h1 style="font-size:16pt; margin:0">PRONTUÁRIO – RELATÓRIO DE EVOLUÇÃO</h1>
+      </div>
+
+      <table style="width:100%; border-collapse:collapse; margin-bottom:20px; font-size:12pt">
+        <tr>
+          <td style="padding:6px 0; font-weight:bold; width:130px">PSICÓLOGO:</td>
+          <td style="padding:6px 0; border-bottom:1px solid #999">${getDisplayVal('capa_psi')}</td>
+        </tr>
+         <tr>
+          <td style="padding:6px 0; font-weight:bold;">PRONTUÁRIO:</td>
+          <td style="padding:6px 0; border-bottom:1px solid #999">${getDisplayVal('capa_num')}</td>
+        </tr>
+        <tr>
+          <td style="padding:6px 0; font-weight:bold;">NOME:</td>
+          <td style="padding:6px 0; border-bottom:1px solid #999">${getDisplayVal('capa_nome')}</td>
+        </tr>
+        <tr>
+          <td style="padding:6px 0; font-weight:bold;">DATA NASC.:</td>
+          <td style="padding:6px 0; border-bottom:1px solid #999">${formatDate(getVal('capa_nasc'))}</td>
+        </tr>
+        <tr>
+          <td style="padding:6px 0; font-weight:bold;">IDADE:</td>
+          <td style="padding:6px 0; border-bottom:1px solid #999">${getDisplayVal('capa_idade')}</td>
+        </tr>
+        <tr>
+          <td style="padding:6px 0; font-weight:bold;">RESPONSÁVEL:</td>
+          <td style="padding:6px 0; border-bottom:1px solid #999">${getDisplayVal('capa_resp')}</td>
+        </tr>
+        <tr>
+          <td style="padding:6px 0; font-weight:bold;">CPF:</td>
+          <td style="padding:6px 0; border-bottom:1px solid #999">${getDisplayVal('capa_cpf')}</td>
+        </tr>
+        <tr>
+          <td style="padding:6px 0; font-weight:bold;">CONTATO:</td>
+          <td style="padding:6px 0; border-bottom:1px solid #999">${getDisplayVal('capa_contato')}</td>
+        </tr>
+        <tr>
+          <td style="padding:6px 0; font-weight:bold;">DATA 1ª SESSÃO:</td>
+          <td style="padding:6px 0; border-bottom:1px solid #999">${formatDate(getVal('capa_data_inicio'))}</td>
+        </tr>
+         <tr>
+          <td style="padding:6px 0; font-weight:bold;">SALA:</td>
+          <td style="padding:6px 0; border-bottom:1px solid #999">${getDisplayVal('capa_sala')}</td>
+        </tr>
+      </table>
+
+      <div style="background:#eee; padding:8px; font-weight:bold; border:1px solid #000; margin-top:30px; text-align:center; font-size:11pt">
+        MOTIVO DO ATENDIMENTO - QUEIXA / DEMANDA - RELATÓRIO SINTÉTICO DE PRONTUÁRIO
+      </div>
+      <div style="border:1px solid #000; border-top:none; padding:15px; min-height:200px; text-align:justify">
+        ${escapeHtml(getVal('capa_queixa'))}
+      </div>
+
+      ${getCustomFieldsHTML('cover')}
+      
+      <div style="margin-top:60px; text-align:center">
+        <div style="border-top:1px solid #000; width:60%; margin:0 auto; padding-top:5px">
+          Assinatura / Carimbo
+        </div>
+      </div>
+    `;
+
+    await makePdf(`Capa_Prontuario_${nome}.pdf`, html);
+  }
+
+  // carregamento inicial
+  loadData();
+
+</script>
+</body>

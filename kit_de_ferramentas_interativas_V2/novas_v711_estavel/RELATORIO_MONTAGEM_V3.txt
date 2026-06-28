@@ -1,0 +1,26 @@
+PsicoQuest Completo V3 Piloto
+
+Versão modular V3 piloto.
+Total de recursos: 19
+Inclui modelos-base, lote criativo, apoio visual/baixa demanda e lote 3 de mecânicas diversificadas conforme o módulo comercial.
+
+Ferramentas:
+- Baralho das Emoções (Baralho)
+- Rota da Calmaria (Jornada)
+- Rastreio de Funcionamento e Atenção (Rastreio)
+- Jogo das Emoções (Escolhas guiadas)
+- Check-in Emocional (Painel)
+- Mapa da Ansiedade (Mapa/ciclo)
+- Rotina Visual (Quadro visual)
+- Cartões de Sentimentos (Cartões)
+- Autoestima na Prática (Oficina)
+- Mapa da Rotina (Matriz)
+- Foco na Prática (Missão)
+- Escolha e Conte (Prancha)
+- Apoio Visual e Baixa Demanda (Coleção visual)
+- Roleta de Enfrentamento (Roleta)
+- Inventário de Recursos Pessoais (Inventário/mochila)
+- Roda de Responsabilidades (Roda)
+- Mapa de Valores (Bússola)
+- Baús da Ansiedade (Baús/descoberta)
+- Semáforo das Emoções (Semáforo)
