@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"><title>Mapa da Ansiedade • PsicoQuest</title>
+<meta name="author" content="Gabriel Vinícius - @gabrielopsicologo"><meta name="copyright" content="© 2026 Gabriel Vinícius • PsicoQuest • Todos os direitos reservados.">
+<style>
+:root{--ink:#152033;--muted:#667085;--line:rgba(15,23,42,.14);--card:#fff;--soft:#f8fafc;--brand:#2b6cb0;--radius:24px;--shadow:0 18px 50px rgba(15,23,42,.14)}
+*{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;min-height:100vh;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);background:#f6f7fb}.topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px;background:rgba(255,255,255,.76);backdrop-filter:blur(16px);border-bottom:1px solid rgba(15,23,42,.08)}.topbar a,.topbar button{font:700 12px/1 Inter,sans-serif;border:1px solid rgba(15,23,42,.12);background:#fff;color:#24324a;text-decoration:none;border-radius:999px;padding:9px 12px;cursor:pointer}.topbar .ghost{background:transparent}.brandmini{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#475467}.wrap{width:min(1140px,94vw);margin:0 auto}.hero{padding:44px 0 22px}.eyebrow{display:inline-flex;gap:8px;align-items:center;padding:7px 12px;border:1px solid rgba(15,23,42,.12);border-radius:999px;background:rgba(255,255,255,.72);color:#475467;font-weight:800;font-size:12px;letter-spacing:.06em;text-transform:uppercase}.hero h1{font-size:clamp(32px,7vw,72px);line-height:.92;margin:16px 0 14px;letter-spacing:-.06em}.hero p{max-width:760px;color:#475467;font-size:clamp(16px,2.8vw,20px);line-height:1.55;margin:0}.panel{background:rgba(255,255,255,.82);border:1px solid rgba(15,23,42,.1);border-radius:var(--radius);box-shadow:var(--shadow)}.actions{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0}.btn{appearance:none;border:0;border-radius:16px;background:#152033;color:#fff;padding:12px 15px;font-weight:850;cursor:pointer;box-shadow:0 10px 20px rgba(15,23,42,.12)}.btn.alt{background:#fff;color:#152033;border:1px solid rgba(15,23,42,.14);box-shadow:none}.btn.good{background:#167a53}.btn.warn{background:#b45309}.btn.small{font-size:12px;padding:9px 11px;border-radius:12px}.field{display:grid;gap:7px;margin:12px 0}.field label{font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.06em;color:#667085}.field textarea,.field input,.field select{width:100%;border:1px solid rgba(15,23,42,.16);border-radius:16px;background:#fff;padding:13px 14px;font:500 15px/1.4 Inter,sans-serif;color:#152033;outline:none}.field textarea{min-height:92px;resize:vertical}.field textarea:focus,.field input:focus{box-shadow:0 0 0 4px rgba(43,108,176,.12);border-color:rgba(43,108,176,.55)}.footer{margin:46px 0 18px;text-align:center;color:#667085;font-size:12px}.support{display:flex;gap:8px;align-items:center}.help-panel{display:none;position:fixed;right:16px;top:58px;z-index:40;width:min(420px,calc(100vw - 32px));background:#fff;border:1px solid rgba(15,23,42,.13);border-radius:20px;box-shadow:0 25px 70px rgba(15,23,42,.2);padding:18px}.help-panel.open{display:block}.help-panel h3{margin:0 0 8px}.help-panel p,.help-panel li{color:#475467;line-height:1.45;font-size:14px}.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;z-index:99;background:#101828;color:white;padding:12px 16px;border-radius:999px;font-weight:800;font-size:13px;box-shadow:0 18px 50px rgba(0,0,0,.25);transition:.25s}.toast.show{opacity:1;transform:translate(-50%,0)}.summary{padding:18px;border-radius:22px;background:#fff;border:1px solid rgba(15,23,42,.12);white-space:pre-wrap;color:#24324a;line-height:1.45}.choice-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}.choice{border:1px solid rgba(15,23,42,.12);background:#fff;border-radius:20px;padding:16px;cursor:pointer;transition:.18s;min-height:92px;display:flex;flex-direction:column;justify-content:center;gap:8px}.choice:hover{transform:translateY(-2px);box-shadow:0 12px 24px rgba(15,23,42,.1)}.choice.selected{outline:4px solid rgba(43,108,176,.16);border-color:#2b6cb0;background:#eff6ff}.choice .ico{font-size:32px}.choice strong{font-size:16px}.choice span{color:#667085;font-size:13px;line-height:1.25}.range-wrap{display:grid;gap:8px}.range-wrap input{width:100%}.pill{display:inline-flex;align-items:center;gap:7px;border-radius:999px;background:#fff;border:1px solid rgba(15,23,42,.12);padding:8px 11px;color:#475467;font-weight:800;font-size:12px}.hidden-print-note{font-size:12px;color:#667085}@media(max-width:720px){.topbar{align-items:flex-start}.support{flex-wrap:wrap;justify-content:flex-end}.hero{padding-top:28px}.actions .btn{flex:1 1 150px}.panel{border-radius:20px}.choice-grid{grid-template-columns:1fr 1fr}.hero h1{letter-spacing:-.045em}}@media print{.topbar,.actions,.help-panel{display:none!important}body{background:#fff}.panel{box-shadow:none}.footer{color:#222}} body.ansiedade{background:linear-gradient(135deg,#e0f2fe 0,#f8fafc 42%,#fff7ed 100%)}.cycle{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:20px}.node{min-height:168px;border-radius:30px;padding:18px;background:#fff;border:1px solid rgba(15,23,42,.1);box-shadow:0 12px 28px rgba(15,23,42,.08);position:relative}.node:before{content:attr(data-step);position:absolute;top:14px;right:16px;background:#0f172a;color:#fff;border-radius:999px;padding:6px 10px;font-weight:900;font-size:12px}.node h3{margin:0 0 12px}.node textarea{min-height:82px}.cycle-line{height:8px;background:linear-gradient(90deg,#38bdf8,#f59e0b);border-radius:999px;margin:12px 32px}.result-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}.result-grid .panel{padding:18px}@media(max-width:850px){.cycle{grid-template-columns:1fr}.result-grid{grid-template-columns:1fr}}
+</style> <style id="pq-v710-safe-base">
+/* V7.10: patch mínimo, sem sobrescrever identidade visual das ferramentas. */
+html{max-width:100%;overflow-x:hidden;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{max-width:100%;overflow-x:hidden}
+img,svg,canvas,video,iframe{max-width:100%;height:auto}
+textarea,input,select{max-width:100%}
+button,a,.btn,[role="button"]{touch-action:manipulation;-webkit-tap-highlight-color:rgba(37,99,235,.18)}
+.topbar,header,.top{max-width:100%;overflow-x:hidden}
+@media(max-width:680px){ .wrap,.main,.game-main,.topbar-inner,.inner,.top-inner{max-width:100%!important;width:100%!important} .wrap,.main,.game-main{padding-left:12px!important;padding-right:12px!important} .grid,.card-grid,.choice-grid,.visual-grid{max-width:100%} .toolbar,.actions,.tools{max-width:100%;gap:8px!important}
+}
+@media print{.pq-central-back{display:none!important}}
+</style> 
+<style id="pq-mobile-copy-safe">
+html{max-width:100%;overflow-x:hidden;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{max-width:100%;overflow-x:hidden}
+img,svg,canvas,video,iframe{max-width:100%;height:auto}
+button,a,.btn,[role="button"]{touch-action:manipulation;-webkit-tap-highlight-color:rgba(37,99,235,.18)}
+.pq-central-back{position:fixed!important;left:12px!important;right:12px!important;bottom:54px!important;z-index:9999!important;justify-content:center!important;background:#111827!important;color:#fff!important;border-radius:999px!important;padding:12px 14px!important;text-decoration:none!important;font-weight:900!important;box-shadow:0 14px 34px rgba(15,23,42,.24)!important}
+@media(max-width:680px){.wrap,.main,.game-main,.topbar-inner,.inner,.top-inner{max-width:100%!important;width:100%!important}.wrap,.main,.game-main{padding-left:12px!important;padding-right:12px!important}.toolbar,.actions,.tools{gap:8px!important}}
+@media print{.pq-central-back{display:none!important}}
+</style>
+
+
+<style id="kt-standard-style">
+:root{--kt-navy:#071a37;--kt-navy2:#0b254f;--kt-gold:#e8c867;--kt-green:#16a34a;--kt-line:rgba(255,255,255,.16);--kt-ink:#111827;}
+html{scroll-behavior:smooth;}
+body{overflow-x:hidden!important;}
+.kt-topbar{position:static!important;top:auto!important;z-index:1000;background:linear-gradient(90deg,var(--kt-navy),var(--kt-navy2));color:#fff;border-bottom:1px solid rgba(255,255,255,.12);font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;box-shadow:0 10px 28px rgba(7,26,55,.14);}
+.kt-topbar *{box-sizing:border-box;}
+.ktbar-inner{min-height:58px;display:flex;align-items:center;gap:12px;padding:9px 14px;}
+.kt-back{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:38px;padding:8px 13px;border-radius:999px;border:1px solid var(--kt-line);background:rgba(255,255,255,.08);color:#fff;text-decoration:none;font-weight:760;font-size:14px;white-space:nowrap;}
+.kt-logo{width:36px;height:36px;border-radius:13px;background:linear-gradient(135deg,#f4d675,#e0bd52);color:#071a37;display:grid;place-items:center;font-weight:900;font-size:14px;flex:0 0 auto;}
+.kt-brand{min-width:170px;max-width:260px;line-height:1.08;}
+.kt-brand strong{display:block;font-size:14px;letter-spacing:.08em;text-transform:uppercase;font-weight:820;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.kt-brand span{display:block;font-size:11px;color:#c8d3e4;font-weight:620;margin-top:3px;}
+.kt-title{min-width:0;flex:1;line-height:1.1;}
+.kt-title strong{display:block;font-size:17px;font-weight:760;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.kt-title span{display:block;font-size:12px;color:#c8d3e4;font-weight:560;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.kt-controls{display:flex;align-items:center;gap:8px;flex:0 0 auto;}
+.kt-btn,.kt-actions summary{appearance:none;border:1px solid var(--kt-line);background:rgba(255,255,255,.09);color:#fff;border-radius:999px;min-height:38px;padding:8px 13px;font:760 13px/1 Inter,system-ui,sans-serif;text-decoration:none;cursor:pointer;white-space:nowrap;list-style:none;}
+.kt-support{background:#10943f!important;border-color:#10943f!important;}
+.kt-actions{position:relative;}
+.kt-actions summary::-webkit-details-marker{display:none;}
+.kt-menu{position:absolute;right:0;top:calc(100% + 8px);width:230px;background:#fff;color:#111827;border:1px solid rgba(15,23,42,.12);border-radius:16px;box-shadow:0 24px 70px rgba(7,26,55,.24);padding:8px;display:grid;gap:4px;z-index:9999;}
+.kt-menu button{width:100%;text-align:left;border:0;background:transparent;color:#111827;border-radius:10px;padding:10px 11px;font:720 13px/1.15 Inter,system-ui,sans-serif;cursor:pointer;}
+.kt-menu button:hover{background:#f1f5f9;}
+.kt-modal{position:fixed;inset:0;background:rgba(2,6,23,.62);z-index:99999;display:none;align-items:center;justify-content:center;padding:20px;font-family:Inter,system-ui,sans-serif;}
+.kt-modal.open{display:flex;}
+.kt-modal-card{width:min(620px,94vw);background:#fff;border-radius:22px;box-shadow:0 28px 90px rgba(0,0,0,.28);padding:24px;color:#111827;}
+.kt-modal-card h2{margin:0 0 10px;font-size:24px;letter-spacing:-.03em;color:#071a37;}
+.kt-modal-card p{color:#475569;line-height:1.62;margin:0 0 16px;font-size:15px;}
+.kt-modal-card button{border:0;background:#071a37;color:#fff;border-radius:999px;padding:11px 16px;font-weight:800;cursor:pointer;}
+.kt-footer{display:block!important;position:static!important;left:auto!important;right:auto!important;bottom:auto!important;top:auto!important;width:100%!important;height:auto!important;max-width:100%!important;margin:40px auto 0!important;padding:18px 18px!important;text-align:center!important;color:#8792a3!important;background:transparent!important;border:0!important;box-shadow:none!important;font:600 12px/1.5 Inter,system-ui,Arial,sans-serif!important;letter-spacing:.01em!important;transform:none!important;writing-mode:horizontal-tb!important;z-index:1!important;}
+.kt-toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#111827;color:#fff;border-radius:999px;padding:11px 15px;font:760 13px/1 Inter,system-ui,sans-serif;z-index:999999;box-shadow:0 18px 50px rgba(0,0,0,.24);}
+.pq-central-back,.floating-central,.central-float,[class*="central"][style*="fixed"]{display:none!important;}
+.whatsapp-float,.whatsapp-button,.support-btn[class*="float"],a[href*="wa.link"].fixed,a[href*="wa.me"].fixed,#vertical-credits,#crp-vertical,.logo-psicologo{display:none!important;}
+@media(max-width:850px){.ktbar-inner{align-items:flex-start;flex-wrap:wrap}.kt-title{order:3;flex-basis:100%}.kt-brand{max-width:calc(100vw - 210px)}.kt-controls{margin-left:auto}.kt-btn,.kt-actions summary{font-size:12px;padding:8px 10px}.kt-menu{right:0}.kt-back{font-size:13px}}
+@media print{.kt-topbar,.kt-footer,.kt-modal,.kt-toast,.pq-central-back,.whatsapp-float,.whatsapp-button,.support-btn,.logo-psicologo,#vertical-credits,#crp-vertical,.no-print{display:none!important} body{background:#fff!important;overflow:visible!important} *{box-shadow:none!important} @page{margin:12mm}}
+</style>
+
+<style id="kt-specific-style">
+body > nav.topbar, body > .help-panel, body > footer.footer, .pq-central-back{display:none!important;}
+body > .actions, .wrap > .actions{display:none!important;}
+body{padding-bottom:0!important;}
+</style>
+
+<style id="kt-proto-v2-fixes">
+/* V2: correções locais do protótipo de 6 ferramentas — sem iframe e sem patch global agressivo. */
+html,body{max-width:100%!important;overflow-x:hidden!important;}
+.kt-topbar{display:block!important;visibility:visible!important;opacity:1!important;position:static!important;transform:none!important;width:100%!important;max-width:100%!important;min-height:auto!important;}
+.ktbar-inner{display:flex!important;align-items:center!important;gap:10px!important;flex-wrap:wrap!important;min-height:52px!important;padding:8px 12px!important;overflow:visible!important;}
+.kt-back{min-height:34px!important;padding:7px 11px!important;font-size:13px!important;}
+.kt-logo{width:32px!important;height:32px!important;border-radius:11px!important;font-size:13px!important;}
+.kt-brand{min-width:145px!important;max-width:230px!important;}
+.kt-brand strong{font-size:13px!important;letter-spacing:.055em!important;font-weight:760!important;}
+.kt-brand span{font-size:10.5px!important;}
+.kt-title strong{font-size:15px!important;font-weight:740!important;}
+.kt-title span{font-size:11.5px!important;}
+.kt-controls{margin-left:auto!important;display:flex!important;align-items:center!important;gap:7px!important;flex-wrap:wrap!important;}
+.kt-btn,.kt-actions summary{min-height:34px!important;padding:7px 11px!important;font-size:12.5px!important;font-weight:740!important;}
+.kt-actions{position:relative!important;overflow:visible!important;}
+.kt-actions[open]{flex:1 0 100%!important;order:20!important;display:block!important;margin-top:4px!important;}
+.kt-actions[open] summary{display:inline-flex!important;margin-bottom:8px!important;background:rgba(255,255,255,.14)!important;}
+.kt-menu{position:static!important;inset:auto!important;right:auto!important;top:auto!important;width:100%!important;max-width:100%!important;display:grid!important;grid-template-columns:repeat(auto-fit,minmax(135px,1fr))!important;gap:6px!important;margin:0!important;background:#fff!important;color:#111827!important;border:1px solid rgba(15,23,42,.12)!important;border-radius:14px!important;box-shadow:0 12px 30px rgba(7,26,55,.16)!important;padding:8px!important;z-index:10!important;}
+.kt-menu button{text-align:center!important;padding:9px 10px!important;border-radius:10px!important;font-size:12.5px!important;}
+.kt-footer{display:block!important;visibility:visible!important;position:static!important;clear:both!important;width:100%!important;margin:42px auto 0!important;padding:18px 14px!important;text-align:center!important;color:#8792a3!important;background:transparent!important;border:0!important;box-shadow:none!important;font:600 12px/1.55 Inter,system-ui,Arial,sans-serif!important;transform:none!important;writing-mode:horizontal-tb!important;}
+.pq-central-back,.floating-central,.central-float,.whatsapp-float,.whatsapp-button,.support-btn[class*="float"],#vertical-credits,#crp-vertical,.logo-psicologo{display:none!important;}
+@media(max-width:800px){.kt-title{flex-basis:100%!important;order:10!important}.kt-controls{margin-left:0!important;width:100%!important}.kt-btn,.kt-actions summary{flex:0 0 auto}.kt-actions[open]{width:100%!important}.kt-menu{grid-template-columns:1fr 1fr!important}.kt-brand{max-width:calc(100vw - 190px)!important;}}
+@media print{.kt-topbar,.kt-footer,.kt-modal,.kt-toast,.pq-central-back,.whatsapp-float,.whatsapp-button,.support-btn,.logo-psicologo,#vertical-credits,#crp-vertical,.no-print,.kt-actions{display:none!important} body{background:#fff!important;overflow:visible!important;max-width:none!important} *{box-shadow:none!important} @page{margin:12mm}}
+</style>
+
+<style id="kt-page-fix-mapa">
+body > nav.topbar, body > .help-panel, body > footer.footer, .pq-central-back{display:none!important;}
+body > .actions, .wrap > .actions{display:none!important;}
+body{padding-bottom:0!important;min-height:100vh!important;}
+.wrap{overflow:visible!important;}
+main,.wrap,.cycle,.panel{max-height:none!important;}
+</style>
+
+</head><body>
+
+<header class="kt-topbar no-print">
+  <div class="ktbar-inner">
+    <a class="kt-back" href="../../HUB_COMPLETO/index.html">← Central</a>
+    <div class="kt-logo">KT</div>
+    <div class="kt-brand"><strong>Kit Essencial do Terapeuta</strong><span>Central Digital</span></div>
+    <div class="kt-title"><strong>Mapa da Ansiedade</strong><span>Ferramenta clínica • Novo</span></div>
+    <div class="kt-controls">
+      <button class="kt-btn" type="button" onclick="ktOpenManual()">Instruções</button>
+      <a class="kt-btn kt-support" href="https://wa.link/ydbdpl" target="_blank" rel="noopener">Suporte</a>
+      <details class="kt-actions"><summary>Ações ▾</summary><div class="kt-menu">
+        <button type="button" onclick="ktAction('copySummary','Mapa da Ansiedade')">Copiar resumo</button>
+        <button type="button" onclick="ktAction('copyTask','Mapa da Ansiedade')">Copiar tarefa</button>
+        <button type="button" onclick="ktAction('save','Mapa da Ansiedade')">Salvar</button>
+        <button type="button" onclick="ktAction('load','Mapa da Ansiedade')">Retomar</button>
+        <button type="button" onclick="ktAction('code','Mapa da Ansiedade')">Código</button>
+        <button type="button" onclick="ktAction('paste','Mapa da Ansiedade')">Colar código</button>
+        <button type="button" onclick="ktAction('txt','Mapa da Ansiedade')">Baixar TXT</button>
+        <button type="button" onclick="ktAction('print','Mapa da Ansiedade')">Salvar PDF</button>
+        <button type="button" onclick="ktAction('image','Mapa da Ansiedade')">Imagem</button>
+        <button type="button" onclick="ktAction('clear','Mapa da Ansiedade')">Limpar tudo</button>
+      </div></details>
+    </div>
+  </div>
+</header>
+<div class="kt-modal" id="ktManual" onclick="if(event.target===this) ktCloseManual()">
+  <div class="kt-modal-card"><h2>Como usar</h2><p>Use para mapear o ciclo ansioso: gatilho, pensamento, corpo, ação automática, alívio curto e custo. O objetivo é ajudar paciente e terapeuta a visualizar o padrão e construir uma resposta alternativa possível.</p><p>Use como material de apoio profissional, educativo e mediado. Ajuste a condução conforme avaliação clínica, contexto e necessidade do paciente.</p><button type="button" onclick="ktCloseManual()">Entendi</button></div>
+</div>
+
+<nav class="topbar"><div class="brandmini">PsicoQuest</div><div class="support"><button class="ghost" id="helpBtn">Instruções</button><a href="https://wa.link/ydbdpl" target="_blank" rel="noopener">Suporte</a></div></nav>
+<div id="helpPanel" class="help-panel"><h3>Como usar</h3><p>Use em sessão ou como atividade entre atendimentos. O progresso pode ser salvo neste aparelho ou por código de continuação.</p><ul><li><b>Copiar:</b> forma mais simples para WhatsApp/e-mail.</li><li><b>PDF:</b> use imprimir/salvar PDF pelo navegador.</li><li><b>Imagem:</b> pode falhar em alguns leitores de HTML; prefira Chrome, Safari ou Edge.</li></ul><p>Recurso de apoio profissional. Não substitui avaliação clínica, supervisão ou tomada de decisão profissional.</p></div>
+<main class="wrap"><section class="hero"><span class="eyebrow">Ferramenta interativa</span><h1>Mapa da Ansiedade</h1><p>Mapa visual do ciclo ansioso: gatilho, pensamento, corpo, ação automática, alívio curto e custo.</p></section>
+<section class="panel cycle"> <div class="node" data-step="1"><h3>Gatilho</h3><div class="field"><label>O que disparou?</label><textarea data-save="gatilho" placeholder="Situação, lugar, conversa, memória..."></textarea></div></div> <div class="node" data-step="2"><h3>Pensamento</h3><div class="field"><label>O que a mente contou?</label><textarea data-save="pensamento" placeholder="Ex.: vai dar errado, não vou conseguir..."></textarea></div></div> <div class="node" data-step="3"><h3>Corpo</h3><div class="field"><label>Onde apareceu no corpo?</label><textarea data-save="corpo" placeholder="Peito, respiração, estômago, tensão..."></textarea></div></div> <div class="node" data-step="4"><h3>Ação automática</h3><div class="field"><label>O que você fez ou evitou?</label><textarea data-save="acao" placeholder="Fugi, adiei, pedi confirmação, controlei..."></textarea></div></div> <div class="node" data-step="5"><h3>Alívio curto</h3><div class="field"><label>O que aliviou na hora?</label><textarea data-save="alivio" placeholder="Evitar, checar, dormir, cancelar..."></textarea></div></div> <div class="node" data-step="6"><h3>Custo</h3><div class="field"><label>Qual foi o custo depois?</label><textarea data-save="custo" placeholder="Mais medo, culpa, atraso, isolamento..."></textarea></div></div>
+</section>
+<div class="cycle-line"></div>
+<section class="result-grid"><div class="panel"><div class="field"><label>Resposta alternativa possível</label><textarea data-save="alternativa" placeholder="Qual ação pequena seria possível sem esperar a ansiedade sumir?"></textarea></div></div><div class="panel"><h3>Resumo do ciclo</h3><div class="summary" id="summaryBox">Preencha o mapa.</div></div></section>
+<div class="actions"><button class="btn" onclick="safeCopy(makeSummary())">Copiar resumo</button><button class="btn alt" onclick="safeCopy(makeTask())">Copiar tarefa</button><button class="btn alt" onclick="saveLocal()">Salvar</button><button class="btn alt" onclick="loadLocal()">Retomar</button><button class="btn alt" onclick="continuationCode()">Código</button><button class="btn alt" onclick="restoreCode()">Colar código</button><button class="btn alt" onclick="downloadTxt('mapa_da_ansiedade.txt', makeSummary())">Baixar TXT</button><button class="btn alt" onclick="window.print()">Salvar PDF</button><button class="btn alt" onclick="downloadSummaryImage('Mapa da Ansiedade', makeSummary(), 'mapa_da_ansiedade.png')">Imagem</button><button class="btn alt" onclick="clearLocal()">Limpar</button></div>
+</main>
+<footer class="footer"><b>@gabrielopsicologo</b> • © 2026 Gabriel Vinícius • PsicoQuest • Todos os direitos reservados.</footer>
+<script>
+const APP_KEY = 'psicoquest_mapa_ansiedade';
+const $ = (s,root=document)=>root.querySelector(s);
+const $$ = (s,root=document)=>Array.from(root.querySelectorAll(s));
+function toast(msg){ const el = document.createElement('div'); el.className = 'toast'; el.textContent = msg; document.body.appendChild(el); setTimeout(()=>el.classList.add('show'), 20); setTimeout(()=>{el.classList.remove('show'); setTimeout(()=>el.remove(),250)}, 2400);
+}
+function safeCopy(text){ if(!text || !text.trim()){ toast('Ainda não há conteúdo para copiar.'); return; } if(navigator.clipboard && window.isSecureContext){ navigator.clipboard.writeText(text).then(()=>toast('Copiado.')).catch(()=>fallbackCopy(text)); } else fallbackCopy(text);
+}
+function fallbackCopy(text){ const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.left='-9999px'; document.body.appendChild(ta); ta.focus(); ta.select(); try{ document.execCommand('copy'); toast('Copiado.'); } catch(e){ toast('Não foi possível copiar automaticamente.'); } ta.remove();
+}
+function getState(){ const data={}; $$('[data-save]').forEach(el=>{ const k=el.getAttribute('data-save'); if(el.type==='checkbox') data[k]=el.checked; else data[k]=el.value; }); $$('[data-choice].selected').forEach(el=>{ const group=el.getAttribute('data-choice-group'); if(group) data[group]=el.getAttribute('data-choice'); }); return data;
+}
+function applyState(data){ if(!data) return; $$('[data-save]').forEach(el=>{ const k=el.getAttribute('data-save'); if(data[k]!==undefined){ if(el.type==='checkbox') el.checked=!!data[k]; else el.value=data[k]; } }); $$('[data-choice-group]').forEach(el=>{ const group=el.getAttribute('data-choice-group'); if(data[group]!==undefined){ el.classList.toggle('selected', el.getAttribute('data-choice')===data[group]); } }); if(typeof afterLoad === 'function') afterLoad();
+}
+function saveLocal(){ localStorage.setItem(APP_KEY, JSON.stringify(getState())); toast('Progresso salvo neste aparelho.'); }
+function loadLocal(){ const raw=localStorage.getItem(APP_KEY); if(raw){ try{ applyState(JSON.parse(raw)); toast('Progresso retomado.'); }catch(e){toast('Não foi possível retomar.');} } else toast('Nenhum progresso salvo neste aparelho.'); }
+function clearLocal(){ if(confirm('Limpar respostas desta ferramenta?')){ localStorage.removeItem(APP_KEY); $$('input, textarea').forEach(el=>{ if(el.type==='checkbox') el.checked=false; else if(el.type!=='range') el.value=''; }); $$('input[type="range"]').forEach(el=>{ el.value=el.getAttribute('value')||'5'; el.dispatchEvent(new Event('input')); }); $$('[data-choice]').forEach(el=>el.classList.remove('selected')); if(typeof afterLoad==='function') afterLoad(); toast('Respostas limpas.'); }}
+function continuationCode(){ const code=btoa(unescape(encodeURIComponent(JSON.stringify(getState())))); safeCopy(code); }
+function restoreCode(){ const code=prompt('Cole aqui o código de continuação:'); if(!code) return; try{ applyState(JSON.parse(decodeURIComponent(escape(atob(code.trim()))))); toast('Código carregado.'); }catch(e){ toast('Código inválido.'); } }
+function downloadTxt(filename, text){ const blob = new Blob([text], {type:'text/plain;charset=utf-8'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=filename; document.body.appendChild(a); a.click(); setTimeout(()=>{URL.revokeObjectURL(a.href); a.remove();}, 400);
+}
+function downloadSummaryImage(title, text, filename){ const lines = wrapText(`${title}\n\n${text || 'Sem respostas preenchidas.'}`, 52); const w=1080, lineH=34, pad=64, h=Math.max(900, pad*2 + lines.length*lineH + 120); const c=document.createElement('canvas'); c.width=w; c.height=h; const ctx=c.getContext('2d'); const grad=ctx.createLinearGradient(0,0,w,h); grad.addColorStop(0,'#f8fafc'); grad.addColorStop(1,'#eef2ff'); ctx.fillStyle=grad; ctx.fillRect(0,0,w,h); ctx.fillStyle='#0f172a'; ctx.font='700 42px Arial, sans-serif'; ctx.fillText(title, pad, pad+20); ctx.fillStyle='#334155'; ctx.font='28px Arial, sans-serif'; let y=pad+90; lines.slice(2).forEach(line=>{ ctx.fillText(line, pad, y); y+=lineH; }); ctx.fillStyle='#64748b'; ctx.font='22px Arial, sans-serif'; ctx.fillText('PsicoQuest • @gabrielopsicologo', pad, h-pad); const a=document.createElement('a'); a.href=c.toDataURL('image/png'); a.download=filename; document.body.appendChild(a); a.click(); a.remove();
+}
+function wrapText(text, max){ const out=[]; String(text).split('\n').forEach(p=>{ let line=''; p.split(/\s+/).forEach(w=>{ if((line+' '+w).trim().length>max){ out.push(line.trim()); line=w; } else line=(line+' '+w).trim(); }); out.push(line); }); return out; }
+function initChoices(){ $$('[data-choice]').forEach(el=>el.addEventListener('click',()=>{ const g=el.getAttribute('data-choice-group'); if(g){ $$(`[data-choice-group="${g}"]`).forEach(x=>x.classList.remove('selected')); } el.classList.toggle('selected'); if(typeof afterLoad==='function') afterLoad(); }));
+}
+function initMenu(){ const b=$('#helpBtn'), p=$('#helpPanel'); if(b&&p) b.addEventListener('click',()=>p.classList.toggle('open')); }
+window.addEventListener('DOMContentLoaded',()=>{initChoices(); initMenu(); if(typeof afterLoad==='function') afterLoad();}); document.body.classList.add('ansiedade');
+$$('[data-save]').forEach(el=>el.addEventListener('input',()=>{$('#summaryBox').textContent=makeSummary();}));
+function val(k){return ($(`[data-save="${k}"]`)||{}).value||'-'}
+function makeSummary(){return `MAPA DA ANSIEDADE\n\n1. Gatilho: ${val('gatilho')}\n2. Pensamento: ${val('pensamento')}\n3. Corpo: ${val('corpo')}\n4. Ação automática: ${val('acao')}\n5. Alívio curto: ${val('alivio')}\n6. Custo: ${val('custo')}\n\nResposta alternativa possível:\n${val('alternativa')}`;}
+function makeTask(){return `Atividade: Mapa da Ansiedade\n\nQuando sentir ansiedade durante a semana, observe:\n1. O que disparou?\n2. O que sua mente contou?\n3. Onde apareceu no corpo?\n4. O que você fez ou evitou?\n5. O que aliviou na hora?\n6. Qual foi o custo depois?\n\nDepois me envie suas respostas por mensagem, foto ou áudio.`;}
+function afterLoad(){ $('#summaryBox').textContent=makeSummary(); }
+</script>
+<a class="pq-central-back" href="../../HUB_COMPLETO/index.html">← Central</a> 
+
+<script id="pq-mobile-open-target">
+(function(){
+  const TARGET = "";
+  function safeBack(){
+    document.querySelectorAll('a.pq-central-back').forEach(a=>{a.setAttribute('href','../../HUB_COMPLETO/index.html'); a.textContent='← Central';});
+  }
+  function openTarget(){
+    safeBack();
+    if(!TARGET) return;
+    try{ if(location.hash !== '#'+TARGET && history.replaceState) history.replaceState(null,'','#'+TARGET); }catch(e){}
+    try{ if(typeof window.openTool === 'function'){ window.openTool(TARGET); return; } }catch(e){}
+    try{ if(typeof window.routeTo === 'function'){ window.routeTo(TARGET,true); return; } }catch(e){}
+    try{
+      const el=document.getElementById(TARGET);
+      if(el){
+        document.querySelectorAll('.workspace,.screen,.tool,.section').forEach(x=>{ if(x!==el && x.classList && x.classList.contains('active')) x.classList.remove('active'); });
+        el.classList.remove('hidden'); el.classList.add('active'); el.scrollIntoView({block:'start'});
+      }
+    }catch(e){}
+  }
+  document.addEventListener('DOMContentLoaded',()=>{setTimeout(openTarget,80);setTimeout(openTarget,300);});
+  window.addEventListener('load',()=>{setTimeout(openTarget,160);});
+})();
+</script>
+
+
+<footer class="kt-footer">Gabriel Vinícius – Psicólogo • CRP 06/215890 • PsicoQuest • @gabrielopsicologo • Todos os direitos reservados • © 2026</footer>
+
+<script id="kt-standard-script">
+(function(){
+  function toast(msg){
+    var old=document.querySelector('.kt-toast'); if(old) old.remove();
+    var el=document.createElement('div'); el.className='kt-toast'; el.textContent=msg;
+    document.body.appendChild(el); setTimeout(function(){el.remove()},2200);
+  }
+  function textContent(){
+    var main=document.querySelector('main') || document.body;
+    var clone=main.cloneNode(true);
+    clone.querySelectorAll('script,style,.kt-topbar,.kt-footer,.kt-modal,button,a').forEach(function(n){n.remove()});
+    var form=[];
+    document.querySelectorAll('input,textarea,select').forEach(function(el){
+      var label=''; var parent=el.closest('.form-group,.field,.row,.card,.node');
+      if(parent){ var l=parent.querySelector('label,h3,strong'); if(l) label=l.textContent.trim(); }
+      if(el.value && el.value.trim()) form.push((label?label+': ':'')+el.value.trim());
+    });
+    var txt=(clone.innerText||'').replace(/\n{3,}/g,'\n\n').trim();
+    if(form.length) txt += '\n\nRespostas preenchidas:\n' + form.join('\n');
+    return txt.trim();
+  }
+  function safeCopy(t){
+    t = t || textContent();
+    if(!t){toast('Ainda não há conteúdo para copiar.'); return;}
+    if(navigator.clipboard){navigator.clipboard.writeText(t).then(function(){toast('Copiado.')}).catch(fallback)} else fallback();
+    function fallback(){var ta=document.createElement('textarea'); ta.value=t; ta.style.position='fixed'; ta.style.left='-9999px'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy'); toast('Copiado.')}catch(e){toast('Não foi possível copiar.')} ta.remove();}
+  }
+  function state(){
+    var out={}; document.querySelectorAll('input,textarea,select').forEach(function(el,i){
+      var k=el.name||el.id||('field_'+i); out[k]=(el.type==='checkbox'||el.type==='radio')?el.checked:el.value;
+    }); return out;
+  }
+  function apply(st){
+    document.querySelectorAll('input,textarea,select').forEach(function(el,i){
+      var k=el.name||el.id||('field_'+i); if(st[k]!==undefined){ if(el.type==='checkbox'||el.type==='radio') el.checked=!!st[k]; else el.value=st[k]; }
+    });
+  }
+  var key='KT_PROTO_'+(document.title||location.pathname).replace(/\W+/g,'_');
+  window.ktAction=function(action,title){
+    try{
+      if(action==='copySummary'){
+        if(typeof makeSummary==='function') return safeCopy(makeSummary());
+        return safeCopy(textContent());
+      }
+      if(action==='copyTask'){
+        if(typeof makeTask==='function') return safeCopy(makeTask());
+        return safeCopy('Atividade: '+(title||document.title)+'\n\nPreencha ou revise esta ferramenta e traga as respostas para a próxima sessão.');
+      }
+      if(action==='save'){
+        if(typeof saveLocal==='function') return saveLocal();
+        localStorage.setItem(key, JSON.stringify(state())); return toast('Progresso salvo neste aparelho.');
+      }
+      if(action==='load'){
+        if(typeof loadLocal==='function') return loadLocal();
+        var raw=localStorage.getItem(key); if(!raw) return toast('Nada salvo neste aparelho.'); apply(JSON.parse(raw)); return toast('Progresso retomado.');
+      }
+      if(action==='code'){
+        if(typeof continuationCode==='function') return continuationCode();
+        return safeCopy(btoa(unescape(encodeURIComponent(JSON.stringify(state())))));
+      }
+      if(action==='paste'){
+        if(typeof restoreCode==='function') return restoreCode();
+        var code=prompt('Cole o código de continuação:'); if(!code) return; apply(JSON.parse(decodeURIComponent(escape(atob(code.trim()))))); return toast('Código carregado.');
+      }
+      if(action==='txt'){
+        var blob=new Blob([textContent()],{type:'text/plain;charset=utf-8'}); var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=(title||'ferramenta').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'_')+'.txt'; document.body.appendChild(a); a.click(); setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},300); return toast('TXT gerado.');
+      }
+      if(action==='print'){ if(typeof generateAndPrint==='function') return generateAndPrint(); if(typeof printPage==='function') return printPage(); if(typeof gerarPDF==='function') return gerarPDF(); return window.print(); }
+      if(action==='image'){
+        if(typeof downloadSummaryImage==='function' && typeof makeSummary==='function') return downloadSummaryImage(title||document.title, makeSummary(), 'resumo.png');
+        return toast('Imagem automática não está disponível nesta ferramenta. Use print/PDF.');
+      }
+      if(action==='clear'){
+        if(typeof clearLocal==='function') return clearLocal();
+        if(confirm('Limpar campos preenchidos?')){ document.querySelectorAll('input,textarea').forEach(function(el){ if(el.type==='checkbox'||el.type==='radio') el.checked=false; else el.value=''; }); localStorage.removeItem(key); toast('Campos limpos.'); }
+      }
+    }catch(e){ console.error(e); toast('Esta ação não pôde ser concluída nesta ferramenta.'); }
+  };
+  window.ktOpenManual=function(){
+    if(typeof toggleModal==='function'){ try{return toggleModal();}catch(e){} }
+    if(typeof openManual==='function'){ try{return openManual();}catch(e){} }
+    var m=document.getElementById('ktManual'); if(m) m.classList.add('open');
+  };
+  window.ktCloseManual=function(){ var m=document.getElementById('ktManual'); if(m) m.classList.remove('open'); };
+  document.addEventListener('click', function(e){
+    var d=document.querySelector('.kt-actions[open]');
+    if(d && !d.contains(e.target)) d.removeAttribute('open');
+  });
+})();
+</script>
+</body></html>

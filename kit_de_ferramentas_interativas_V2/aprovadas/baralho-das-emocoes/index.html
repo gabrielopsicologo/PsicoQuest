@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Baralho das Emoções</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Metal+Mania&family=Inter:wght@400;600&family=Lora:wght@400;600&display=swap" rel="stylesheet">
+    
+    <script src="seguranca.js" defer></script>
+
+    <style>
+        :root {
+            --cor-madeira-escura: #3e2723;
+            --cor-madeira-clara: #5d4037;
+            --cor-papel: #fdf6e3;
+            --cor-ouro: #c8a464;
+            --cor-texto: #4a2c2a;
+            --sombra-padrao: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        /* ANIMAÇÕES */
+        @keyframes fade-in-up { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes card-pop-entrance { 0% { opacity: 0; transform: scale(0.8) translateY(30px); } 70% { transform: scale(1.05); } 100% { opacity: 1; transform: scale(1); } }
+        @keyframes subtle-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-image: url('https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/BK_Emocoes.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .font-brand { font-family: 'Metal Mania', cursive; letter-spacing: 0.1em; }
+        .font-lora { font-family: 'Lora', serif; }
+        .font-cinzel { font-family: 'Cinzel', serif; }
+
+        .animate-fade-in-up { animation: fade-in-up 0.8s ease-out forwards; }
+        .ship-deck-animated { animation: subtle-float 6s ease-in-out infinite; }
+
+        /* DECK */
+        .ship-deck {
+            background-color: rgba(62, 39, 35, 0.95);
+            background-image: url('https://www.transparenttextures.com/patterns/wood-pattern.png');
+            border-radius: 1rem;
+            box-shadow: var(--sombra-padrao);
+            border: 2px solid var(--cor-ouro);
+            width: 95%; 
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 1.5rem;
+            will-change: transform; 
+            flex: 1; 
+        }
+
+        @media (min-width: 768px) { .ship-deck { padding: 2.5rem; margin-top: 3rem; margin-bottom: 3rem; } }
+
+        /* CARTAS */
+        .card-preview {
+            background-color: var(--cor-papel);
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            border: 2px solid var(--cor-ouro);
+            position: relative;
+            aspect-ratio: 10 / 16;
+            overflow: hidden;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+            z-index: 1;
+        }
+
+        .card-preview:active { transform: scale(0.96) !important; }
+
+        .card-label {
+            background: linear-gradient(to bottom, transparent, var(--cor-papel) 10%);
+            border-top: 3px solid var(--cor-madeira-clara);
+        }
+
+        /* --- MODAL --- */
+        .modal-card {
+            background-color: #f5e6c8;
+            border-radius: 0.75rem;
+            width: 95%;
+            max-height: 90dvh; 
+            display: flex;
+            flex-direction: column;
+            border: 4px double var(--cor-madeira-escura);
+            box-shadow: var(--sombra-padrao);
+            position: relative;
+        }
+
+        @media (min-width: 768px) { .modal-card { width: 90%; max-width: 900px; border-width: 8px; } }
+        
+        .story-scroll-area { 
+            overflow-y: auto; 
+            padding: 0 0.5rem 1rem 0.5rem;
+            margin: 0.5rem 0;
+            color: var(--cor-texto); 
+            -webkit-overflow-scrolling: touch; 
+            flex: 1 1 auto;
+        }
+
+        .question-item {
+            background-color: rgba(255, 255, 255, 0.6);
+            padding: 0.8rem;
+            border-radius: 0.5rem;
+            border-left: 3px solid var(--cor-madeira-clara);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .answer-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid #d4b57f;
+            border-radius: 4px;
+            padding: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            color: #2a1a18;
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        /* --- RODAPÉ ESTÁTICO --- */
+        .static-footer {
+            width: 100%;
+            background: linear-gradient(to top, rgba(40, 25, 20, 0.95) 0%, rgba(40, 25, 20, 0.8) 100%);
+            color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+            padding: 1.5rem 1rem;
+            margin-top: auto;
+            z-index: 20;
+            position: relative;
+            font-size: 0.75rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            border-top: 1px solid rgba(200, 164, 100, 0.3);
+        }
+        
+        @media (min-width: 768px) { .static-footer { font-size: 0.85rem; padding: 2rem 1rem; } }
+
+        .footer-link {
+            color: #fbbf24;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .footer-link:hover { color: #fff; text-decoration: underline; }
+
+        #vignette-effect { position: fixed; inset: 0; background: radial-gradient(circle, transparent 60%, rgba(0,0,0,0.7) 100%); z-index: 5; pointer-events: none; }
+    </style>
+
+<style id="kt-standard-style">
+:root{--kt-navy:#071a37;--kt-navy2:#0b254f;--kt-gold:#e8c867;--kt-green:#16a34a;--kt-line:rgba(255,255,255,.16);--kt-ink:#111827;}
+html{scroll-behavior:smooth;}
+body{overflow-x:hidden!important;}
+.kt-topbar{position:static!important;top:auto!important;z-index:1000;background:linear-gradient(90deg,var(--kt-navy),var(--kt-navy2));color:#fff;border-bottom:1px solid rgba(255,255,255,.12);font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;box-shadow:0 10px 28px rgba(7,26,55,.14);}
+.kt-topbar *{box-sizing:border-box;}
+.ktbar-inner{min-height:58px;display:flex;align-items:center;gap:12px;padding:9px 14px;}
+.kt-back{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:38px;padding:8px 13px;border-radius:999px;border:1px solid var(--kt-line);background:rgba(255,255,255,.08);color:#fff;text-decoration:none;font-weight:760;font-size:14px;white-space:nowrap;}
+.kt-logo{width:36px;height:36px;border-radius:13px;background:linear-gradient(135deg,#f4d675,#e0bd52);color:#071a37;display:grid;place-items:center;font-weight:900;font-size:14px;flex:0 0 auto;}
+.kt-brand{min-width:170px;max-width:260px;line-height:1.08;}
+.kt-brand strong{display:block;font-size:14px;letter-spacing:.08em;text-transform:uppercase;font-weight:820;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.kt-brand span{display:block;font-size:11px;color:#c8d3e4;font-weight:620;margin-top:3px;}
+.kt-title{min-width:0;flex:1;line-height:1.1;}
+.kt-title strong{display:block;font-size:17px;font-weight:760;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.kt-title span{display:block;font-size:12px;color:#c8d3e4;font-weight:560;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.kt-controls{display:flex;align-items:center;gap:8px;flex:0 0 auto;}
+.kt-btn,.kt-actions summary{appearance:none;border:1px solid var(--kt-line);background:rgba(255,255,255,.09);color:#fff;border-radius:999px;min-height:38px;padding:8px 13px;font:760 13px/1 Inter,system-ui,sans-serif;text-decoration:none;cursor:pointer;white-space:nowrap;list-style:none;}
+.kt-support{background:#10943f!important;border-color:#10943f!important;}
+.kt-actions{position:relative;}
+.kt-actions summary::-webkit-details-marker{display:none;}
+.kt-menu{position:absolute;right:0;top:calc(100% + 8px);width:230px;background:#fff;color:#111827;border:1px solid rgba(15,23,42,.12);border-radius:16px;box-shadow:0 24px 70px rgba(7,26,55,.24);padding:8px;display:grid;gap:4px;z-index:9999;}
+.kt-menu button{width:100%;text-align:left;border:0;background:transparent;color:#111827;border-radius:10px;padding:10px 11px;font:720 13px/1.15 Inter,system-ui,sans-serif;cursor:pointer;}
+.kt-menu button:hover{background:#f1f5f9;}
+.kt-modal{position:fixed;inset:0;background:rgba(2,6,23,.62);z-index:99999;display:none;align-items:center;justify-content:center;padding:20px;font-family:Inter,system-ui,sans-serif;}
+.kt-modal.open{display:flex;}
+.kt-modal-card{width:min(620px,94vw);background:#fff;border-radius:22px;box-shadow:0 28px 90px rgba(0,0,0,.28);padding:24px;color:#111827;}
+.kt-modal-card h2{margin:0 0 10px;font-size:24px;letter-spacing:-.03em;color:#071a37;}
+.kt-modal-card p{color:#475569;line-height:1.62;margin:0 0 16px;font-size:15px;}
+.kt-modal-card button{border:0;background:#071a37;color:#fff;border-radius:999px;padding:11px 16px;font-weight:800;cursor:pointer;}
+.kt-footer{display:block!important;position:static!important;left:auto!important;right:auto!important;bottom:auto!important;top:auto!important;width:100%!important;height:auto!important;max-width:100%!important;margin:40px auto 0!important;padding:18px 18px!important;text-align:center!important;color:#8792a3!important;background:transparent!important;border:0!important;box-shadow:none!important;font:600 12px/1.5 Inter,system-ui,Arial,sans-serif!important;letter-spacing:.01em!important;transform:none!important;writing-mode:horizontal-tb!important;z-index:1!important;}
+.kt-toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#111827;color:#fff;border-radius:999px;padding:11px 15px;font:760 13px/1 Inter,system-ui,sans-serif;z-index:999999;box-shadow:0 18px 50px rgba(0,0,0,.24);}
+.pq-central-back,.floating-central,.central-float,[class*="central"][style*="fixed"]{display:none!important;}
+.whatsapp-float,.whatsapp-button,.support-btn[class*="float"],a[href*="wa.link"].fixed,a[href*="wa.me"].fixed,#vertical-credits,#crp-vertical,.logo-psicologo{display:none!important;}
+@media(max-width:850px){.ktbar-inner{align-items:flex-start;flex-wrap:wrap}.kt-title{order:3;flex-basis:100%}.kt-brand{max-width:calc(100vw - 210px)}.kt-controls{margin-left:auto}.kt-btn,.kt-actions summary{font-size:12px;padding:8px 10px}.kt-menu{right:0}.kt-back{font-size:13px}}
+@media print{.kt-topbar,.kt-footer,.kt-modal,.kt-toast,.pq-central-back,.whatsapp-float,.whatsapp-button,.support-btn,.logo-psicologo,#vertical-credits,#crp-vertical,.no-print{display:none!important} body{background:#fff!important;overflow:visible!important} *{box-shadow:none!important} @page{margin:12mm}}
+</style>
+
+<style id="kt-specific-style">
+.static-footer, a[href*="wa.link"].fixed, a[href*="wa.me"].fixed{display:none!important;}
+body{padding-bottom:0!important;min-height:100vh!important;}
+main.relative{min-height:auto!important;}
+</style>
+
+<style id="kt-proto-v2-fixes">
+/* V2: correções locais do protótipo de 6 ferramentas — sem iframe e sem patch global agressivo. */
+html,body{max-width:100%!important;overflow-x:hidden!important;}
+.kt-topbar{display:block!important;visibility:visible!important;opacity:1!important;position:static!important;transform:none!important;width:100%!important;max-width:100%!important;min-height:auto!important;}
+.ktbar-inner{display:flex!important;align-items:center!important;gap:10px!important;flex-wrap:wrap!important;min-height:52px!important;padding:8px 12px!important;overflow:visible!important;}
+.kt-back{min-height:34px!important;padding:7px 11px!important;font-size:13px!important;}
+.kt-logo{width:32px!important;height:32px!important;border-radius:11px!important;font-size:13px!important;}
+.kt-brand{min-width:145px!important;max-width:230px!important;}
+.kt-brand strong{font-size:13px!important;letter-spacing:.055em!important;font-weight:760!important;}
+.kt-brand span{font-size:10.5px!important;}
+.kt-title strong{font-size:15px!important;font-weight:740!important;}
+.kt-title span{font-size:11.5px!important;}
+.kt-controls{margin-left:auto!important;display:flex!important;align-items:center!important;gap:7px!important;flex-wrap:wrap!important;}
+.kt-btn,.kt-actions summary{min-height:34px!important;padding:7px 11px!important;font-size:12.5px!important;font-weight:740!important;}
+.kt-actions{position:relative!important;overflow:visible!important;}
+.kt-actions[open]{flex:1 0 100%!important;order:20!important;display:block!important;margin-top:4px!important;}
+.kt-actions[open] summary{display:inline-flex!important;margin-bottom:8px!important;background:rgba(255,255,255,.14)!important;}
+.kt-menu{position:static!important;inset:auto!important;right:auto!important;top:auto!important;width:100%!important;max-width:100%!important;display:grid!important;grid-template-columns:repeat(auto-fit,minmax(135px,1fr))!important;gap:6px!important;margin:0!important;background:#fff!important;color:#111827!important;border:1px solid rgba(15,23,42,.12)!important;border-radius:14px!important;box-shadow:0 12px 30px rgba(7,26,55,.16)!important;padding:8px!important;z-index:10!important;}
+.kt-menu button{text-align:center!important;padding:9px 10px!important;border-radius:10px!important;font-size:12.5px!important;}
+.kt-footer{display:block!important;visibility:visible!important;position:static!important;clear:both!important;width:100%!important;margin:42px auto 0!important;padding:18px 14px!important;text-align:center!important;color:#8792a3!important;background:transparent!important;border:0!important;box-shadow:none!important;font:600 12px/1.55 Inter,system-ui,Arial,sans-serif!important;transform:none!important;writing-mode:horizontal-tb!important;}
+.pq-central-back,.floating-central,.central-float,.whatsapp-float,.whatsapp-button,.support-btn[class*="float"],#vertical-credits,#crp-vertical,.logo-psicologo{display:none!important;}
+@media(max-width:800px){.kt-title{flex-basis:100%!important;order:10!important}.kt-controls{margin-left:0!important;width:100%!important}.kt-btn,.kt-actions summary{flex:0 0 auto}.kt-actions[open]{width:100%!important}.kt-menu{grid-template-columns:1fr 1fr!important}.kt-brand{max-width:calc(100vw - 190px)!important;}}
+@media print{.kt-topbar,.kt-footer,.kt-modal,.kt-toast,.pq-central-back,.whatsapp-float,.whatsapp-button,.support-btn,.logo-psicologo,#vertical-credits,#crp-vertical,.no-print,.kt-actions{display:none!important} body{background:#fff!important;overflow:visible!important;max-width:none!important} *{box-shadow:none!important} @page{margin:12mm}}
+</style>
+
+<style id="kt-page-fix-baralho">
+.static-footer, a[href*="wa.link"].fixed, a[href*="wa.me"].fixed{display:none!important;}
+body{padding-bottom:0!important;min-height:100vh!important;}
+body > header.kt-topbar{display:block!important;}
+main.relative{min-height:auto!important;}
+</style>
+
+</head>
+<body>
+
+<header class="kt-topbar no-print">
+  <div class="ktbar-inner">
+    <a class="kt-back" href="../../HUB_COMPLETO/index.html">← Central</a>
+    <div class="kt-logo">KT</div>
+    <div class="kt-brand"><strong>Kit Essencial do Terapeuta</strong><span>Central Digital</span></div>
+    <div class="kt-title"><strong>Baralho das Emoções</strong><span>Emoções • Clássico</span></div>
+    <div class="kt-controls">
+      <button class="kt-btn" type="button" onclick="ktOpenManual()">Instruções</button>
+      <a class="kt-btn kt-support" href="https://wa.link/ydbdpl" target="_blank" rel="noopener">Suporte</a>
+      <details class="kt-actions"><summary>Ações ▾</summary><div class="kt-menu">
+        <button type="button" onclick="ktAction('copySummary','Baralho das Emoções')">Copiar resumo</button>
+        <button type="button" onclick="ktAction('copyTask','Baralho das Emoções')">Copiar tarefa</button>
+        <button type="button" onclick="ktAction('save','Baralho das Emoções')">Salvar</button>
+        <button type="button" onclick="ktAction('load','Baralho das Emoções')">Retomar</button>
+        <button type="button" onclick="ktAction('code','Baralho das Emoções')">Código</button>
+        <button type="button" onclick="ktAction('paste','Baralho das Emoções')">Colar código</button>
+        <button type="button" onclick="ktAction('txt','Baralho das Emoções')">Baixar TXT</button>
+        <button type="button" onclick="ktAction('print','Baralho das Emoções')">Salvar PDF</button>
+        <button type="button" onclick="ktAction('image','Baralho das Emoções')">Imagem</button>
+        <button type="button" onclick="ktAction('clear','Baralho das Emoções')">Limpar tudo</button>
+      </div></details>
+    </div>
+  </div>
+</header>
+<div class="kt-modal" id="ktManual" onclick="if(event.target===this) ktCloseManual()">
+  <div class="kt-modal-card"><h2>Como usar</h2><p>Use como baralho reflexivo. O paciente escolhe uma carta, lê o desafio e responde às perguntas como ponto de partida para exploração emocional.</p><p>Use como material de apoio profissional, educativo e mediado. Ajuste a condução conforme avaliação clínica, contexto e necessidade do paciente.</p><button type="button" onclick="ktCloseManual()">Entendi</button></div>
+</div>
+
+
+    <div id="vignette-effect"></div>
+
+    <main class="relative z-10 w-full flex flex-col items-center flex-grow">
+        
+        <div class="ship-deck ship-deck-animated">
+            <header class="text-center mb-6 md:mb-8 animate-fade-in-up">
+                <div class="inline-flex items-center gap-2 md:gap-4 bg-[#3e2723] py-2 px-4 md:py-3 md:px-6 rounded-lg border-2 border-[#c8a464] shadow-xl w-full justify-center md:w-auto hover:scale-105 transition-transform duration-300">
+                    <i data-lucide="compass" class="w-5 h-5 md:w-6 md:h-6 text-yellow-400 shrink-0 animate-pulse"></i>
+                    <h1 class="font-brand text-lg md:text-3xl font-bold text-yellow-400 drop-shadow-md whitespace-nowrap">
+                        Baralho das Emoções
+                    </h1>
+                    <i data-lucide="anchor" class="w-5 h-5 md:w-6 md:h-6 text-yellow-400 shrink-0 animate-pulse"></i>
+                </div>
+                <p class="text-gray-200 mt-3 max-w-2xl mx-auto text-xs md:text-base font-medium drop-shadow-md px-2 animate-fade-in-up" style="animation-delay: 0.3s; opacity: 0; animation-fill-mode: forwards;">
+                    Toque em uma carta para revelar seu desafio.
+                </p>
+            </header>
+
+            <div id="deck-panel" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-6">
+                </div>
+        </div>
+    </main>
+
+    <footer class="static-footer font-cinzel">
+        <div class="max-w-4xl mx-auto flex flex-col items-center justify-center gap-3">
+            <a href="https://www.instagram.com/gabrielopsicologo" target="_blank" class="hover:scale-105 transition-transform duration-300">
+                <img src="https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/Logo_branca.png" alt="Logo Gabriel Psicólogo" class="h-10 md:h-12 opacity-60 hover:opacity-100 transition-opacity duration-300 drop-shadow-sm">
+            </a>
+
+            <div class="flex flex-col md:flex-row items-center justify-center gap-1 md:gap-4 leading-tight">
+                <p>Desenvolvido por <a href="https://www.instagram.com/gabrielopsicologo" target="_blank" class="footer-link">@gabrielopsicologo</a></p>
+                <span class="hidden md:inline opacity-50">|</span>
+                <p>Gabriel Vinicius dos Santos Fernandes Vasconcelos - CRP 06/215890</p>
+            </div>
+            <div class="mt-1 opacity-50 font-sans text-[0.65rem] md:text-xs">
+                &copy; 2025 Todos os direitos reservados.
+            </div>
+        </div>
+    </footer>
+
+    <div id="card-modal" class="fixed inset-0 bg-black/85 modal-overlay z-50 hidden flex items-center justify-center p-3 md:p-4 transition-opacity duration-300" onclick="closeModal(event)">
+        <div id="modal-content-area" class="modal-card scale-95 transition-transform duration-300 p-4 md:p-5" onclick="event.stopPropagation()">
+            </div>
+    </div>
+
+    <a href="https://wa.link/ydbdpl" target="_blank" class="fixed bottom-24 md:bottom-28 right-4 md:right-6 z-40 bg-green-600 text-white p-3 md:p-4 rounded-full shadow-xl hover:bg-green-500 transition-colors animate-bounce-slow animate-fade-in-up" style="animation-delay: 0.7s">
+        <i data-lucide="message-circle" class="w-6 h-6 md:w-7 md:h-7"></i>
+    </a>
+
+    <script>
+        // TEXTOS COMPLETOS RESTAURADOS
+        const DECK = [
+            { theme: "Ajuda e Suporte", icon: "hand-heart", iconColor: "text-blue-700", imageUrl: "https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/Ajuda_Suporte.jpg", situation: "<strong>O Dilema da Autossuficiência:</strong> Clara sempre acreditou que pedir ajuda era um sinal de fraqueza. Ao enfrentar uma situação complexa no trabalho, ela tentou resolver tudo sozinha, ficando exausta e estressada. Finalmente, exausta, ela decide se abrir com um colega. --- O que a crença de 'ter que resolver tudo sozinho' estava protegendo? Para você, pedir ajuda é um ato de fraqueza ou de força? Já houve um momento em que a vulnerabilidade de pedir ajuda resultou em um alívio ou solução inesperada?" },
+            { theme: "Metas e Persistência", icon: "target", iconColor: "text-yellow-700", imageUrl: "https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/Metas.jpg", situation: "<strong>A Superação do 'Eu Não Consigo':</strong> João, após uma tentativa falha de passar em um concurso, sentiu-se um fracasso e pensou em desistir. Ele estava fazendo uma generalização ('Eu nunca vou passar'). Em vez de parar, ele reavaliou seu plano de estudos e prometeu a si mesmo ser mais consistente. --- Como a dor de um revés pode ensinar sobre o seu objetivo? Como você sugere desafiar o pensamento 'eu não consigo'? Qual é a meta que te move, mesmo após um fracasso?" },
+            { theme: "Rede de Apoio", icon: "users", iconColor: "text-purple-700", imageUrl: "https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/Rede_Apoio.jpg", situation: "<strong>Enfrentando o Fardo:</strong> Pedro, ao se sentir sobrecarregado por problemas familiares, começou a se isolar, acreditando que era um 'fardo' para seus amigos. He antecipava a rejeição (leitura mental). Um dia, seus amigos o confrontaram com carinho, dizendo: 'Você não está sozinho, queremos te ajudar'. --- Qual distorção cognitiva Pedro estava usando? Você já se sentiu um fardo? O que o suporte social de outras pessoas significa para a sua saúde mental?" },
+            { theme: "Processar o Luto", icon: "flame", iconColor: "text-red-700", imageUrl: "https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/Luto.jpg", situation: "<strong>O Término Inevitável:</strong> Laura teve que se despedir de um grande projeto ou relacionamento que amava muito, mas que havia chegado ao fim natural. Sentiu uma dor profunda, mas decidiu fazer um 'ritual' de encerramento, reconhecendo o valor do que viveu. --- O luto não é só sobre morte. Como você lida com a dor de perder algo importante? Como as memórias positivas podem te ajudar a construir o futuro, em vez de te prenderem ao passado?" },
+            { theme: "Coragem vs. Medo", icon: "sword", iconColor: "text-green-700", imageUrl: "https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/Coragem.jpg", situation: "<strong>A Máscara da Coragem:</strong> Felipe tem uma ansiedade social intensa e, antes de apresentações importantes, ele sente a necessidade de criar um 'personagem' confiante para se proteger. Ele age apesar do medo. --- O que a 'máscara' ou 'personagem' está tentando evitar ou proteger? Como você vê a coragem? Pense em um momento em que você agiu apesar do medo. O que te deu forças para dar o primeiro passo?" },
+            { theme: "Valores Pessoais", icon: "scroll", iconColor: "text-gray-800", imageUrl: "https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/Valores_Pessoais.jpg", situation: "<strong>Ação Guiada por Princípios:</strong> Um profissional de saúde, mesmo exausto após um plantão, dedicou tempo extra para um paciente em crise, pois seu valor central é o cuidado humanizado. Sua ação foi um reforço positivo para seu próprio senso de propósito. --- Qual é o valor que guia suas ações e decisões mais difíceis (ex: justiça, honestidade, empatia)? Já teve que defender um valor seu, mesmo que fosse difícil? Como se sente após agir de acordo com seus valores?" },
+            { theme: "Autoaceitação", icon: "star", iconColor: "text-pink-600", imageUrl: "https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/Autoaceitação.jpg", situation: "<strong>A Diferença Aceita:</strong> Marina, que é neurodivergente, lutou por anos para se encaixar em padrões que não eram dela. A partir do momento em que ela entendeu e aceitou sua singularidade, sentiu-se mais livre e valorizada. --- Como a aceitação dos outros impacta a forma como nos vemos? O que em você é 'diferente' e que está aprendendo a amar ou celebrar? Qual é a sua crença central sobre si mesmo?" },
+            { theme: "Autonomia", icon: "anchor", iconColor: "text-orange-500", imageUrl: "https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/Autonomia.jpg", situation: "<strong>Defendendo o Direito de Escolher:</strong> Um jovem se sentiu pressionado pela família a seguir uma carreira que não queria. Em um momento crucial, ele decidiu impor um limite firme e escolher o próprio caminho, mesmo sabendo que haveria atrito. --- O que a palavra 'autonomia' significa para você? Existem situações em que vale a pena desafiar as expectativas para defender sua liberdade de escolha? O que te faz sentir verdadeiramente livre?" },
+            { theme: "Resiliência", icon: "mountain-snow", iconColor: "text-cyan-700", imageUrl: "https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/Resiliencia.jpg", situation: "<strong>A Força da Promessa:</strong> Uma pessoa se recupera de uma doença grave. A única coisa que a manteve lutando, mesmo nos piores momentos, foi a promessa de ver o neto nascer e o sonho de viajar. --- Como um objetivo futuro pode nos ajudar a sobreviver a momentos difíceis? A esperança é uma ferramenta para a resiliência? Qual 'promessa' ou objetivo te ajuda a continuar navegando nos dias ruins?" },
+            { theme: "Legado", icon: "book-open", iconColor: "text-amber-700", imageUrl: "https://cdn.jsdelivr.net/gh/gabriel20402/Jogos-terapeuticos@main/Legado.jpg", situation: "<strong>A Marca Positiva:</strong> Um professor aposentado continuou a orientar jovens, mesmo sem remuneração, pois sentia que seu conhecimento era um legado a ser deixado. Ele focava em fazer o bem, sabendo que isso duraria. --- Reflita sobre a frase: 'Um legado é o que se deixa nos corações e mentes dos outros'. Que tipo de 'marca' você gostaria de deixar para as pessoas ao seu redor? O que te dá um senso de propósito maior?" }
+        ];
+
+        function renderDeckPanel() {
+            const panel = document.getElementById('deck-panel');
+            panel.innerHTML = ''; 
+            DECK.forEach((card, index) => {
+                const cardEl = document.createElement('div');
+                cardEl.className = 'card-preview group'; 
+                cardEl.style.animation = `card-pop-entrance 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${index * 0.1}s backwards`;
+                cardEl.onclick = () => openModal(index);
+                cardEl.innerHTML = `
+                    <img src="${card.imageUrl}" alt="${card.theme}" loading="lazy" class="absolute inset-0 w-full h-full object-cover md:group-hover:scale-110 transition-transform duration-500" onerror="this.style.display='none'">
+                    <div class="absolute inset-0 bg-[#fdf6e3] -z-10"></div> 
+                    <div class="absolute bottom-0 w-full p-1.5 md:p-2 z-10">
+                        <div class="card-label bg-[#fdf6e3]/95 backdrop-blur-sm py-1.5 md:py-2 border-t-2 md:border-t-4 border-[#5a3d2b] shadow-lg">
+                            <h3 class="font-brand text-xs md:text-sm font-bold text-[#4a2c2a] text-center uppercase truncate px-1 group-hover:text-[#8c5a2b] transition-colors">
+                                ${card.theme}
+                            </h3>
+                        </div>
+                    </div>
+                `;
+                panel.appendChild(cardEl);
+            });
+            lucide.createIcons();
+        }
+
+        function openModal(index) {
+            const data = DECK[index];
+            const modalEl = document.getElementById('card-modal');
+            const contentArea = document.getElementById('modal-content-area');
+
+            const parts = data.situation.split('---');
+            const description = parts[0];
+            const questions = parts[1] ? parts[1].split('?').filter(q => q.trim() !== '') : [];
+            
+            // Criando itens de pergunta com campo de resposta
+            const questionsHtml = questions.map(q => `
+                <div class="question-item">
+                    <p class="font-sans text-sm font-semibold text-[#2a1a18]">${q.trim()}?</p>
+                    <textarea class="answer-input" placeholder="Escreva sua reflexão aqui..."></textarea>
+                </div>
+            `).join('');
+
+            const htmlContent = `
+                <div class="flex items-center gap-3 border-b border-[#88674b] pb-3 shrink-0">
+                    <div class="p-1.5 bg-white rounded-full shadow-sm shrink-0">
+                        <i data-lucide="${data.icon}" class="w-6 h-6 md:w-8 md:h-8 ${data.iconColor}"></i>
+                    </div>
+                    <div class="flex flex-col overflow-hidden">
+                        <span class="font-brand text-xs text-[#8c5a2b] uppercase tracking-widest">Desafio</span>
+                        <h3 class="font-brand text-lg md:text-2xl font-bold text-[#5a3d2b] leading-none truncate">${data.theme}</h3>
+                    </div>
+                </div>
+
+                <div class="story-scroll-area custom-scrollbar">
+                    <p class="font-lora text-sm md:text-base leading-relaxed text-[#2a1a18] mb-6 text-justify block">
+                        ${description}
+                    </p>
+                    
+                    ${questionsHtml ? `
+                    <div class="mt-2">
+                        <h4 class="font-cinzel text-xs font-bold text-[#8c5a2b] mb-4 uppercase flex items-center gap-1">
+                           <i data-lucide="sparkles" class="w-3 h-3"></i> Reflexões e Respostas
+                        </h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            ${questionsHtml}
+                        </div>
+                    </div>` : ''}
+                </div>
+
+                <div class="pt-3 border-t border-[#d4b57f] shrink-0">
+                    <button onclick="closeModalDirect()" class="w-full bg-[#8c1c13] active:bg-[#6b150e] md:hover:bg-[#a0221a] text-white py-2.5 rounded-lg font-bold shadow-md transition-all flex items-center justify-center font-brand tracking-wider text-base">
+                        <i data-lucide="rotate-ccw" class="w-4 h-4 mr-2"></i>
+                        Retornar
+                    </button>
+                </div>
+            `;
+            
+            contentArea.innerHTML = htmlContent;
+
+            modalEl.classList.remove('hidden');
+            setTimeout(() => {
+                modalEl.firstElementChild.classList.remove('scale-95');
+                modalEl.firstElementChild.classList.add('scale-100');
+            }, 10);
+            
+            lucide.createIcons();
+        }
+
+        function closeModalDirect() {
+            const modalEl = document.getElementById('card-modal');
+            modalEl.firstElementChild.classList.remove('scale-100');
+            modalEl.firstElementChild.classList.add('scale-95');
+            setTimeout(() => {
+                modalEl.classList.add('hidden');
+            }, 200);
+        }
+
+        function closeModal(event) {
+            if (event.target.id === 'card-modal') closeModalDirect();
+        }
+
+        document.addEventListener('DOMContentLoaded', renderDeckPanel);
+    </script>
+
+<footer class="kt-footer">Gabriel Vinícius – Psicólogo • CRP 06/215890 • PsicoQuest • @gabrielopsicologo • Todos os direitos reservados • © 2026</footer>
+
+<script id="kt-standard-script">
+(function(){
+  function toast(msg){
+    var old=document.querySelector('.kt-toast'); if(old) old.remove();
+    var el=document.createElement('div'); el.className='kt-toast'; el.textContent=msg;
+    document.body.appendChild(el); setTimeout(function(){el.remove()},2200);
+  }
+  function textContent(){
+    var main=document.querySelector('main') || document.body;
+    var clone=main.cloneNode(true);
+    clone.querySelectorAll('script,style,.kt-topbar,.kt-footer,.kt-modal,button,a').forEach(function(n){n.remove()});
+    var form=[];
+    document.querySelectorAll('input,textarea,select').forEach(function(el){
+      var label=''; var parent=el.closest('.form-group,.field,.row,.card,.node');
+      if(parent){ var l=parent.querySelector('label,h3,strong'); if(l) label=l.textContent.trim(); }
+      if(el.value && el.value.trim()) form.push((label?label+': ':'')+el.value.trim());
+    });
+    var txt=(clone.innerText||'').replace(/\n{3,}/g,'\n\n').trim();
+    if(form.length) txt += '\n\nRespostas preenchidas:\n' + form.join('\n');
+    return txt.trim();
+  }
+  function safeCopy(t){
+    t = t || textContent();
+    if(!t){toast('Ainda não há conteúdo para copiar.'); return;}
+    if(navigator.clipboard){navigator.clipboard.writeText(t).then(function(){toast('Copiado.')}).catch(fallback)} else fallback();
+    function fallback(){var ta=document.createElement('textarea'); ta.value=t; ta.style.position='fixed'; ta.style.left='-9999px'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy'); toast('Copiado.')}catch(e){toast('Não foi possível copiar.')} ta.remove();}
+  }
+  function state(){
+    var out={}; document.querySelectorAll('input,textarea,select').forEach(function(el,i){
+      var k=el.name||el.id||('field_'+i); out[k]=(el.type==='checkbox'||el.type==='radio')?el.checked:el.value;
+    }); return out;
+  }
+  function apply(st){
+    document.querySelectorAll('input,textarea,select').forEach(function(el,i){
+      var k=el.name||el.id||('field_'+i); if(st[k]!==undefined){ if(el.type==='checkbox'||el.type==='radio') el.checked=!!st[k]; else el.value=st[k]; }
+    });
+  }
+  var key='KT_PROTO_'+(document.title||location.pathname).replace(/\W+/g,'_');
+  window.ktAction=function(action,title){
+    try{
+      if(action==='copySummary'){
+        if(typeof makeSummary==='function') return safeCopy(makeSummary());
+        return safeCopy(textContent());
+      }
+      if(action==='copyTask'){
+        if(typeof makeTask==='function') return safeCopy(makeTask());
+        return safeCopy('Atividade: '+(title||document.title)+'\n\nPreencha ou revise esta ferramenta e traga as respostas para a próxima sessão.');
+      }
+      if(action==='save'){
+        if(typeof saveLocal==='function') return saveLocal();
+        localStorage.setItem(key, JSON.stringify(state())); return toast('Progresso salvo neste aparelho.');
+      }
+      if(action==='load'){
+        if(typeof loadLocal==='function') return loadLocal();
+        var raw=localStorage.getItem(key); if(!raw) return toast('Nada salvo neste aparelho.'); apply(JSON.parse(raw)); return toast('Progresso retomado.');
+      }
+      if(action==='code'){
+        if(typeof continuationCode==='function') return continuationCode();
+        return safeCopy(btoa(unescape(encodeURIComponent(JSON.stringify(state())))));
+      }
+      if(action==='paste'){
+        if(typeof restoreCode==='function') return restoreCode();
+        var code=prompt('Cole o código de continuação:'); if(!code) return; apply(JSON.parse(decodeURIComponent(escape(atob(code.trim()))))); return toast('Código carregado.');
+      }
+      if(action==='txt'){
+        var blob=new Blob([textContent()],{type:'text/plain;charset=utf-8'}); var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=(title||'ferramenta').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'_')+'.txt'; document.body.appendChild(a); a.click(); setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},300); return toast('TXT gerado.');
+      }
+      if(action==='print'){ if(typeof generateAndPrint==='function') return generateAndPrint(); if(typeof printPage==='function') return printPage(); if(typeof gerarPDF==='function') return gerarPDF(); return window.print(); }
+      if(action==='image'){
+        if(typeof downloadSummaryImage==='function' && typeof makeSummary==='function') return downloadSummaryImage(title||document.title, makeSummary(), 'resumo.png');
+        return toast('Imagem automática não está disponível nesta ferramenta. Use print/PDF.');
+      }
+      if(action==='clear'){
+        if(typeof clearLocal==='function') return clearLocal();
+        if(confirm('Limpar campos preenchidos?')){ document.querySelectorAll('input,textarea').forEach(function(el){ if(el.type==='checkbox'||el.type==='radio') el.checked=false; else el.value=''; }); localStorage.removeItem(key); toast('Campos limpos.'); }
+      }
+    }catch(e){ console.error(e); toast('Esta ação não pôde ser concluída nesta ferramenta.'); }
+  };
+  window.ktOpenManual=function(){
+    if(typeof toggleModal==='function'){ try{return toggleModal();}catch(e){} }
+    if(typeof openManual==='function'){ try{return openManual();}catch(e){} }
+    var m=document.getElementById('ktManual'); if(m) m.classList.add('open');
+  };
+  window.ktCloseManual=function(){ var m=document.getElementById('ktManual'); if(m) m.classList.remove('open'); };
+  document.addEventListener('click', function(e){
+    var d=document.querySelector('.kt-actions[open]');
+    if(d && !d.contains(e.target)) d.removeAttribute('open');
+  });
+})();
+</script>
+</body>

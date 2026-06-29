@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PsicoQuest - Técnicas de Relaxamento</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #5D9C96; /* Verde Terapêutico */
+            --primary-dark: #3A6B66;
+            --accent-color: #E0F2F1; /* Fundo suave */
+            --text-color: #2C3E50;
+            --text-light: #546E7A;
+            --card-bg: #FFFFFF;
+            --shadow-soft: 0 10px 30px rgba(0,0,0,0.05);
+            --shadow-hover: 0 15px 35px rgba(93, 156, 150, 0.2);
+            --header-height: 70px;
+            --footer-height: 90px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--accent-color);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(93, 156, 150, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(93, 156, 150, 0.05) 0%, transparent 20%);
+            color: var(--text-color);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden; /* Evita scroll na página inteira */
+        }
+
+        /* --- Header --- */
+        header {
+            height: var(--header-height);
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            z-index: 100;
+        }
+
+        .header-logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-logo {
+            height: 40px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .header-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            letter-spacing: -0.5px;
+        }
+
+        .manual-btn {
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .manual-btn:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* --- Main Content Area (Slider) --- */
+        main {
+            flex: 1;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start; /* Alinhado ao início para o scroll */
+            overflow-x: auto;
+            overflow-y: hidden;
+            scroll-snap-type: x mandatory;
+            padding: 0 20px;
+            gap: 20px;
+            /* Scrollbar styling */
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary-color) transparent;
+        }
+
+        main::-webkit-scrollbar {
+            height: 6px;
+        }
+        main::-webkit-scrollbar-thumb {
+            background-color: var(--primary-color);
+            border-radius: 10px;
+        }
+
+        /* --- Cards --- */
+        .card {
+            flex: 0 0 auto; /* Não encolher, não crescer, base auto */
+            width: 280px;
+            height: 400px; /* Altura fixa para uniformidade */
+            background: var(--card-bg);
+            border-radius: 24px;
+            box-shadow: var(--shadow-soft);
+            scroll-snap-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+
+        /* Desktop Adjustments: Grid instead of slider if screen is huge, 
+           but request asked for "side scrolling buttons preference". 
+           We will keep the slider logic but make cards wider on desktop. */
+        @media (min-width: 1024px) {
+            main {
+                justify-content: center; /* Centraliza se couber */
+                flex-wrap: wrap; /* Grid no desktop para melhor uso do espaço */
+                overflow-y: auto; /* Scroll vertical apenas no container central */
+                padding: 40px;
+            }
+            .card {
+                width: 300px;
+                height: 220px; /* Cartas mais compactas em grid */
+                scroll-snap-align: unset;
+                margin-bottom: 20px;
+            }
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--primary-color);
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-color);
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .card-decoration {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: var(--primary-color);
+        }
+
+        /* --- Modal/Overlay --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px); /* Efeito Glassmorphism */
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: white;
+            width: 100%;
+            max-width: 600px;
+            max-height: 85vh;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            padding: 40px;
+            position: relative;
+            overflow-y: auto;
+            border: 1px solid #eee;
+            animation: modalUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes modalUp {
+            from { transform: translateY(30px) scale(0.95); opacity: 0; }
+            to { transform: translateY(0) scale(1); opacity: 1; }
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #f0f0f0;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            transition: background 0.2s;
+        }
+
+        .close-modal:hover {
+            background: #e0e0e0;
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            color: var(--primary-dark);
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .modal-body {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: var(--text-color);
+        }
+
+        .modal-body ul, .modal-body ol {
+            padding-left: 20px;
+            margin-top: 10px;
+        }
+        
+        .modal-body li {
+            margin-bottom: 10px;
+        }
+
+        .highlight-box {
+            background: var(--accent-color);
+            border-left: 4px solid var(--primary-color);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 0.95rem;
+            color: var(--primary-dark);
+        }
+
+        /* --- Footer --- */
+        footer {
+            height: var(--footer-height);
+            background: white;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 30px;
+            font-size: 0.8rem;
+            color: var(--text-light);
+            z-index: 100;
+        }
+
+        .footer-left {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .footer-logo {
+            height: 35px;
+            width: auto;
+            margin-bottom: 5px;
+        }
+
+        .dev-link {
+            color: var(--primary-dark);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .support-btn {
+            background: #25D366;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
+            transition: transform 0.2s;
+        }
+
+        .support-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Scroll Arrows (Mobile/Tablet) */
+        .scroll-controls {
+            position: absolute;
+            width: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            justify-content: space-between;
+            padding: 0 10px;
+            pointer-events: none; /* Deixa clicar através nos cards */
+            z-index: 50;
+        }
+
+        .scroll-btn {
+            pointer-events: auto;
+            background: rgba(255,255,255,0.8);
+            border: 1px solid #ddd;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            color: var(--primary-dark);
+            font-size: 1.2rem;
+        }
+
+        @media (min-width: 1024px) {
+            .scroll-controls { display: none; } /* Esconde setas no desktop pois é grid */
+        }
+        
+        @media (max-width: 480px) {
+            .header-title { font-size: 1rem; }
+            footer { flex-direction: column; height: auto; padding: 15px; gap: 15px; text-align: center; }
+            .modal-content { padding: 25px; }
+            .card { width: 85vw; height: 60vh; }
+        }
+
+    </style>
+
+<style id="kt-standard-style">
+:root{--kt-navy:#071a37;--kt-navy2:#0b254f;--kt-gold:#e8c867;--kt-green:#16a34a;--kt-line:rgba(255,255,255,.16);--kt-ink:#111827;}
+html{scroll-behavior:smooth;}
+body{overflow-x:hidden!important;}
+.kt-topbar{position:static!important;top:auto!important;z-index:1000;background:linear-gradient(90deg,var(--kt-navy),var(--kt-navy2));color:#fff;border-bottom:1px solid rgba(255,255,255,.12);font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;box-shadow:0 10px 28px rgba(7,26,55,.14);}
+.kt-topbar *{box-sizing:border-box;}
+.ktbar-inner{min-height:58px;display:flex;align-items:center;gap:12px;padding:9px 14px;}
+.kt-back{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:38px;padding:8px 13px;border-radius:999px;border:1px solid var(--kt-line);background:rgba(255,255,255,.08);color:#fff;text-decoration:none;font-weight:760;font-size:14px;white-space:nowrap;}
+.kt-logo{width:36px;height:36px;border-radius:13px;background:linear-gradient(135deg,#f4d675,#e0bd52);color:#071a37;display:grid;place-items:center;font-weight:900;font-size:14px;flex:0 0 auto;}
+.kt-brand{min-width:170px;max-width:260px;line-height:1.08;}
+.kt-brand strong{display:block;font-size:14px;letter-spacing:.08em;text-transform:uppercase;font-weight:820;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.kt-brand span{display:block;font-size:11px;color:#c8d3e4;font-weight:620;margin-top:3px;}
+.kt-title{min-width:0;flex:1;line-height:1.1;}
+.kt-title strong{display:block;font-size:17px;font-weight:760;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.kt-title span{display:block;font-size:12px;color:#c8d3e4;font-weight:560;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.kt-controls{display:flex;align-items:center;gap:8px;flex:0 0 auto;}
+.kt-btn,.kt-actions summary{appearance:none;border:1px solid var(--kt-line);background:rgba(255,255,255,.09);color:#fff;border-radius:999px;min-height:38px;padding:8px 13px;font:760 13px/1 Inter,system-ui,sans-serif;text-decoration:none;cursor:pointer;white-space:nowrap;list-style:none;}
+.kt-support{background:#10943f!important;border-color:#10943f!important;}
+.kt-actions{position:relative;}
+.kt-actions summary::-webkit-details-marker{display:none;}
+.kt-menu{position:absolute;right:0;top:calc(100% + 8px);width:230px;background:#fff;color:#111827;border:1px solid rgba(15,23,42,.12);border-radius:16px;box-shadow:0 24px 70px rgba(7,26,55,.24);padding:8px;display:grid;gap:4px;z-index:9999;}
+.kt-menu button{width:100%;text-align:left;border:0;background:transparent;color:#111827;border-radius:10px;padding:10px 11px;font:720 13px/1.15 Inter,system-ui,sans-serif;cursor:pointer;}
+.kt-menu button:hover{background:#f1f5f9;}
+.kt-modal{position:fixed;inset:0;background:rgba(2,6,23,.62);z-index:99999;display:none;align-items:center;justify-content:center;padding:20px;font-family:Inter,system-ui,sans-serif;}
+.kt-modal.open{display:flex;}
+.kt-modal-card{width:min(620px,94vw);background:#fff;border-radius:22px;box-shadow:0 28px 90px rgba(0,0,0,.28);padding:24px;color:#111827;}
+.kt-modal-card h2{margin:0 0 10px;font-size:24px;letter-spacing:-.03em;color:#071a37;}
+.kt-modal-card p{color:#475569;line-height:1.62;margin:0 0 16px;font-size:15px;}
+.kt-modal-card button{border:0;background:#071a37;color:#fff;border-radius:999px;padding:11px 16px;font-weight:800;cursor:pointer;}
+.kt-footer{display:block!important;position:static!important;left:auto!important;right:auto!important;bottom:auto!important;top:auto!important;width:100%!important;height:auto!important;max-width:100%!important;margin:40px auto 0!important;padding:18px 18px!important;text-align:center!important;color:#8792a3!important;background:transparent!important;border:0!important;box-shadow:none!important;font:600 12px/1.5 Inter,system-ui,Arial,sans-serif!important;letter-spacing:.01em!important;transform:none!important;writing-mode:horizontal-tb!important;z-index:1!important;}
+.kt-toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#111827;color:#fff;border-radius:999px;padding:11px 15px;font:760 13px/1 Inter,system-ui,sans-serif;z-index:999999;box-shadow:0 18px 50px rgba(0,0,0,.24);}
+.pq-central-back,.floating-central,.central-float,[class*="central"][style*="fixed"]{display:none!important;}
+.whatsapp-float,.whatsapp-button,.support-btn[class*="float"],a[href*="wa.link"].fixed,a[href*="wa.me"].fixed,#vertical-credits,#crp-vertical,.logo-psicologo{display:none!important;}
+@media(max-width:850px){.ktbar-inner{align-items:flex-start;flex-wrap:wrap}.kt-title{order:3;flex-basis:100%}.kt-brand{max-width:calc(100vw - 210px)}.kt-controls{margin-left:auto}.kt-btn,.kt-actions summary{font-size:12px;padding:8px 10px}.kt-menu{right:0}.kt-back{font-size:13px}}
+@media print{.kt-topbar,.kt-footer,.kt-modal,.kt-toast,.pq-central-back,.whatsapp-float,.whatsapp-button,.support-btn,.logo-psicologo,#vertical-credits,#crp-vertical,.no-print{display:none!important} body{background:#fff!important;overflow:visible!important} *{box-shadow:none!important} @page{margin:12mm}}
+</style>
+
+<style id="kt-specific-style">
+body > header:not(.kt-topbar), body > footer:not(.kt-footer), body > a.support-btn, .support-btn{display:none!important;}
+body{padding-bottom:0!important;min-height:100vh!important;}
+#cardContainer{min-height:calc(100vh - 120px)!important;}
+</style>
+
+<style id="kt-proto-v2-fixes">
+/* V2: correções locais do protótipo de 6 ferramentas — sem iframe e sem patch global agressivo. */
+html,body{max-width:100%!important;overflow-x:hidden!important;}
+.kt-topbar{display:block!important;visibility:visible!important;opacity:1!important;position:static!important;transform:none!important;width:100%!important;max-width:100%!important;min-height:auto!important;}
+.ktbar-inner{display:flex!important;align-items:center!important;gap:10px!important;flex-wrap:wrap!important;min-height:52px!important;padding:8px 12px!important;overflow:visible!important;}
+.kt-back{min-height:34px!important;padding:7px 11px!important;font-size:13px!important;}
+.kt-logo{width:32px!important;height:32px!important;border-radius:11px!important;font-size:13px!important;}
+.kt-brand{min-width:145px!important;max-width:230px!important;}
+.kt-brand strong{font-size:13px!important;letter-spacing:.055em!important;font-weight:760!important;}
+.kt-brand span{font-size:10.5px!important;}
+.kt-title strong{font-size:15px!important;font-weight:740!important;}
+.kt-title span{font-size:11.5px!important;}
+.kt-controls{margin-left:auto!important;display:flex!important;align-items:center!important;gap:7px!important;flex-wrap:wrap!important;}
+.kt-btn,.kt-actions summary{min-height:34px!important;padding:7px 11px!important;font-size:12.5px!important;font-weight:740!important;}
+.kt-actions{position:relative!important;overflow:visible!important;}
+.kt-actions[open]{flex:1 0 100%!important;order:20!important;display:block!important;margin-top:4px!important;}
+.kt-actions[open] summary{display:inline-flex!important;margin-bottom:8px!important;background:rgba(255,255,255,.14)!important;}
+.kt-menu{position:static!important;inset:auto!important;right:auto!important;top:auto!important;width:100%!important;max-width:100%!important;display:grid!important;grid-template-columns:repeat(auto-fit,minmax(135px,1fr))!important;gap:6px!important;margin:0!important;background:#fff!important;color:#111827!important;border:1px solid rgba(15,23,42,.12)!important;border-radius:14px!important;box-shadow:0 12px 30px rgba(7,26,55,.16)!important;padding:8px!important;z-index:10!important;}
+.kt-menu button{text-align:center!important;padding:9px 10px!important;border-radius:10px!important;font-size:12.5px!important;}
+.kt-footer{display:block!important;visibility:visible!important;position:static!important;clear:both!important;width:100%!important;margin:42px auto 0!important;padding:18px 14px!important;text-align:center!important;color:#8792a3!important;background:transparent!important;border:0!important;box-shadow:none!important;font:600 12px/1.55 Inter,system-ui,Arial,sans-serif!important;transform:none!important;writing-mode:horizontal-tb!important;}
+.pq-central-back,.floating-central,.central-float,.whatsapp-float,.whatsapp-button,.support-btn[class*="float"],#vertical-credits,#crp-vertical,.logo-psicologo{display:none!important;}
+@media(max-width:800px){.kt-title{flex-basis:100%!important;order:10!important}.kt-controls{margin-left:0!important;width:100%!important}.kt-btn,.kt-actions summary{flex:0 0 auto}.kt-actions[open]{width:100%!important}.kt-menu{grid-template-columns:1fr 1fr!important}.kt-brand{max-width:calc(100vw - 190px)!important;}}
+@media print{.kt-topbar,.kt-footer,.kt-modal,.kt-toast,.pq-central-back,.whatsapp-float,.whatsapp-button,.support-btn,.logo-psicologo,#vertical-credits,#crp-vertical,.no-print,.kt-actions{display:none!important} body{background:#fff!important;overflow:visible!important;max-width:none!important} *{box-shadow:none!important} @page{margin:12mm}}
+</style>
+
+<style id="kt-page-fix-relax">
+body > header.kt-topbar{display:block!important;}
+body > header:not(.kt-topbar), body > footer:not(.kt-footer), body > a.support-btn, .support-btn{display:none!important;}
+body{padding-bottom:0!important;min-height:100vh!important;display:block!important;}
+#cardContainer{min-height:auto!important;}
+</style>
+
+
+
+<style id="kt-v21-relax-actions-fix">
+/* V2.1: menu Ações do Técnicas de Relaxamento deve ocupar espaço real no topo, sem ficar atrás das cartas. */
+body{overflow-y:auto!important;overflow-x:hidden!important;height:auto!important;min-height:100vh!important;display:block!important;}
+body > header.kt-topbar{height:auto!important;min-height:0!important;max-height:none!important;overflow:visible!important;position:relative!important;z-index:999999!important;display:block!important;}
+.ktbar-inner{height:auto!important;min-height:0!important;max-height:none!important;overflow:visible!important;position:relative!important;z-index:999999!important;}
+.kt-actions{position:relative!important;z-index:1000000!important;}
+.kt-actions[open]{display:block!important;flex:1 0 100%!important;order:99!important;width:100%!important;margin:6px 0 0!important;position:relative!important;z-index:1000000!important;}
+.kt-actions[open] .kt-menu{display:grid!important;position:relative!important;z-index:1000001!important;width:100%!important;margin:0!important;}
+#cardContainer{position:relative!important;z-index:1!important;margin-top:0!important;overflow-x:auto!important;overflow-y:visible!important;min-height:calc(100vh - 140px)!important;}
+.card,.scroll-controls,.modal-overlay{z-index:1!important;}
+.modal-overlay{z-index:99999!important;}
+.kt-modal{z-index:1000002!important;}
+@media print{.kt-topbar,.kt-actions,.kt-menu{display:none!important}}
+</style>
+
+</head>
+<body>
+
+<header class="kt-topbar no-print">
+  <div class="ktbar-inner">
+    <a class="kt-back" href="../../HUB_COMPLETO/index.html">← Central</a>
+    <div class="kt-logo">KT</div>
+    <div class="kt-brand"><strong>Kit Essencial do Terapeuta</strong><span>Central Digital</span></div>
+    <div class="kt-title"><strong>Técnicas de Relaxamento</strong><span>Maestria Emocional • Clássico</span></div>
+    <div class="kt-controls">
+      <button class="kt-btn" type="button" onclick="ktOpenManual()">Instruções</button>
+      <a class="kt-btn kt-support" href="https://wa.link/ydbdpl" target="_blank" rel="noopener">Suporte</a>
+      <details class="kt-actions"><summary>Ações ▾</summary><div class="kt-menu">
+        <button type="button" onclick="ktAction('copySummary','Técnicas de Relaxamento')">Copiar resumo</button>
+        <button type="button" onclick="ktAction('copyTask','Técnicas de Relaxamento')">Copiar tarefa</button>
+        <button type="button" onclick="ktAction('save','Técnicas de Relaxamento')">Salvar</button>
+        <button type="button" onclick="ktAction('load','Técnicas de Relaxamento')">Retomar</button>
+        <button type="button" onclick="ktAction('code','Técnicas de Relaxamento')">Código</button>
+        <button type="button" onclick="ktAction('paste','Técnicas de Relaxamento')">Colar código</button>
+        <button type="button" onclick="ktAction('txt','Técnicas de Relaxamento')">Baixar TXT</button>
+        <button type="button" onclick="ktAction('print','Técnicas de Relaxamento')">Salvar PDF</button>
+        <button type="button" onclick="ktAction('image','Técnicas de Relaxamento')">Imagem</button>
+        <button type="button" onclick="ktAction('clear','Técnicas de Relaxamento')">Limpar tudo</button>
+      </div></details>
+    </div>
+  </div>
+</header>
+<div class="kt-modal" id="ktManual" onclick="if(event.target===this) ktCloseManual()">
+  <div class="kt-modal-card"><h2>Como usar</h2><p>Use para apresentar estratégias de regulação emocional e relaxamento. Escolha uma técnica, leia com o paciente e pratique em sessão antes de enviar como tarefa.</p><p>Use como material de apoio profissional, educativo e mediado. Ajuste a condução conforme avaliação clínica, contexto e necessidade do paciente.</p><button type="button" onclick="ktCloseManual()">Entendi</button></div>
+</div>
+
+
+    <header>
+        <div class="header-logo-container">
+            <img src="https://gabrielopsicologo.com/wp-content/uploads/2025/12/Design-sem-nome.png" alt="PsicoQuest Logo" class="header-logo">
+            <span class="header-title">PsicoQuest</span>
+        </div>
+        <button class="manual-btn" onclick="openManual()">Como usar?</button>
+    </header>
+
+    <main id="cardContainer">
+        <div class="scroll-controls">
+            <button class="scroll-btn" onclick="scrollCards(-1)">&#8249;</button>
+            <button class="scroll-btn" onclick="scrollCards(1)">&#8250;</button>
+        </div>
+        </main>
+
+    <footer>
+        <div class="footer-left">
+            <img src="https://gabrielopsicologo.com/wp-content/uploads/2025/11/Logo_preta.png" alt="Gabriel Psicólogo Logo" class="footer-logo">
+            <span>Desenvolvido por <a href="https://www.instagram.com/gabrielopsicologo/#" target="_blank" class="dev-link">@gabrielopsicologo</a></span>
+            <span>CRP 06/215890</span>
+            <span style="font-size: 0.7rem; color: #999;">© 2026 Todos os direitos reservados.</span>
+        </div>
+        
+        <a href="https://wa.link/ydbdpl" target="_blank" class="support-btn">
+            <span>Precisa de Suporte?</span>
+            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+        </a>
+    </footer>
+
+    <div class="modal-overlay" id="infoModal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal()">&times;</button>
+            <h2 class="modal-title" id="modalTitle">Título</h2>
+            <div class="modal-body" id="modalBody">Conteúdo</div>
+        </div>
+    </div>
+
+    <script src="seguranca.js" defer></script>
+
+    <script>
+        // Dados das Cartas Baseados no PDF 
+        const deckData = [
+            {
+                id: 1,
+                title: "Técnica de Grounding",
+                icon: "⚓",
+                content: `
+                    <p>Esta técnica ajuda a trazer você de volta ao momento presente quando a ansiedade está alta.</p>
+                    <ul>
+                        <li><strong>5</strong> coisas que você pode ver.</li>
+                        <li><strong>4</strong> coisas que você pode tocar.</li>
+                        <li><strong>3</strong> coisas que você pode ouvir.</li>
+                        <li><strong>2</strong> coisas que você pode cheirar.</li>
+                        <li><strong>1</strong> coisa que você pode degustar.</li>
+                    </ul>
+                    <div class="highlight-box">Repita até se sentir calma(o) novamente.</div>
+                ` // [cite: 14-19]
+            },
+            {
+                id: 2,
+                title: "Respiração da Mão",
+                icon: "✋",
+                content: `
+                    <p>Use sua própria mão para guiar sua respiração e foco.</p>
+                    <ol>
+                        <li>Abra a mão e estique os dedos como uma estrela.</li>
+                        <li>Finja que o dedo indicador da outra mão é um lápis.</li>
+                        <li>Trace ao redor de cada dedo lentamente.</li>
+                        <li>Enquanto sobe o dedo, <strong>inspire</strong> pelo nariz.</li>
+                        <li>Enquanto desce o dedo, <strong>expire</strong> pela boca.</li>
+                    </ol>
+                    <div class="highlight-box">Continue até contornar toda a mão.</div>
+                ` // [cite: 20-28]
+            },
+            {
+                id: 3,
+                title: "Preocupe-se Menos",
+                icon: "📝",
+                content: `
+                    <p>Externalizar as preocupações ajuda a tirá-las da mente.</p>
+                    <ol>
+                        <li>Pegue caneta e papel.</li>
+                        <li>Escreva uma lista de tudo que está te preocupando.</li>
+                        <li>Dê a si mesmo permissão para se preocupar com elas por <strong>um minuto</strong>.</li>
+                        <li>Após esse tempo, concentre-se na sua tarefa atual e tente não pensar nelas.</li>
+                    </ol>
+                ` // [cite: 31-35]
+            },
+            {
+                id: 4,
+                title: "Visualização do Mar",
+                icon: "🌊",
+                content: `
+                    <p>Deite-se confortavelmente de costas e imagine-se flutuando.</p>
+                    <p>Flutue para trás <strong>inspirando</strong> e flutue para frente <strong>expirando</strong>, permanecendo perto da margem.</p>
+                    <div class="highlight-box">Quando não conseguir mais controlar, apenas se deixe flutuar em paz.</div>
+                ` // [cite: 36-40]
+            },
+            {
+                id: 5,
+                title: "Respiração Diafragmática",
+                icon: "🌬️",
+                content: `
+                    <p>Uma técnica clássica para redução fisiológica da ansiedade.</p>
+                    <ol>
+                        <li>Fique confortável e feche os olhos.</li>
+                        <li>Concentre-se apenas na respiração.</li>
+                        <li><strong>Inspire</strong> por 4 segundos.</li>
+                        <li><strong>Prenda</strong> o ar por 2 segundos.</li>
+                        <li><strong>Expire</strong> lentamente por 6 segundos.</li>
+                    </ol>
+                ` // [cite: 47-52]
+            },
+            {
+                id: 6,
+                title: "Alegria de Não Fazer Nada",
+                icon: "😌",
+                content: `
+                    <p>Nem sempre é necessário preencher todos os momentos do dia. Permita-se uma pausa.</p>
+                    <p>Reserve 5 minutos para deitar-se no chão, pernas esticadas, olhos fechados. Relaxe os músculos. Ouça os sons ao redor e aproveite a experiência de apenas "ser".</p>
+                ` // [cite: 53-57]
+            },
+            {
+                id: 7,
+                title: "Foco no Positivo",
+                icon: "✨",
+                content: `
+                    <p>Quando estiver focando apenas no negativo, combata isso identificando e anotando de 3 a 5 coisas positivas, como:</p>
+                    <ul>
+                        <li>O que deu certo hoje?</li>
+                        <li>Coisas pelas quais sou grato.</li>
+                        <li>Coisas pelas quais estou ansioso(a) de forma boa.</li>
+                    </ul>
+                ` // [cite: 60-64]
+            },
+            {
+                id: 8,
+                title: "Relaxamento Muscular Progressivo",
+                icon: "💪",
+                content: `
+                    <ol>
+                        <li>Escolha um local tranquilo e respire profundamente.</li>
+                        <li>Concentre-se em um grupo muscular (ex: ombros) e <strong>contraia</strong> por 5 segundos.</li>
+                        <li>Libere lentamente a tensão e sinta o relaxamento.</li>
+                        <li>Repita o processo em cada grupo muscular do corpo.</li>
+                    </ol>
+                ` // [cite: 66-72]
+            },
+            {
+                id: 9,
+                title: "Férias Mentais",
+                icon: "🏖️",
+                content: `
+                    <p>Ao encerrar o trabalho, crie uma transição para o seu lar.</p>
+                    <p>Imagine-se no seu local de relaxamento favorito por alguns instantes antes de seguir para as responsabilidades de casa. Não leve a agitação com você.</p>
+                ` // [cite: 73-75]
+            },
+            {
+                id: 10,
+                title: "Foco no Objeto",
+                icon: "🔍",
+                content: `
+                    <p>Escolha um objeto no seu ambiente e concentre-se nele com total atenção.</p>
+                    <p>Observe cor, textura, formas, movimentos, cheiros e sons. Essa prática acalma e desenvolve o foco.</p>
+                ` // [cite: 76-80]
+            },
+            {
+                id: 11,
+                title: "Caminhada Tranquila",
+                icon: "🚶",
+                content: `
+                    <p>Caminhe de 10 a 15 passos e faça uma pausa para respirar.</p>
+                    <p>Observe o ambiente: foque nas árvores, na folhagem e no chão que você está pisando. Esteja presente no movimento.</p>
+                ` // [cite: 90-91]
+            },
+            {
+                id: 12,
+                title: "Técnica A.C.A.L.M.E-S.E",
+                icon: "🛡️",
+                content: `
+                    <ul>
+                        <li><strong>A</strong>ceite sua ansiedade.</li>
+                        <li><strong>C</strong>ontemple as coisas ao redor.</li>
+                        <li><strong>A</strong>ja como se não estivesse ansioso(a).</li>
+                        <li><strong>L</strong>ibere o ar dos pulmões.</li>
+                        <li><strong>M</strong>antenha os passos anteriores.</li>
+                        <li><strong>E</strong>xamine seus pensamentos (são reais?).</li>
+                        <li><strong>S</strong>orria, você conseguiu!</li>
+                        <li><strong>E</strong>spere o futuro com aceitação.</li>
+                    </ul>
+                ` // [cite: 92-96]
+            },
+            {
+                id: 13,
+                title: "Autoabraço",
+                icon: "🫂",
+                content: `
+                    <p>Levante a cabeça, solte os ombros e abra o peito.</p>
+                    <p>Respire fundo, abra bem os braços e enrole-os em torno de você. Coloque o queixo em direção ao peito e dê a si mesma um abraço completo. Balance de um lado para o outro se quiser.</p>
+                ` // [cite: 102-106]
+            }
+        ];
+
+        // Render Cards
+        const container = document.getElementById('cardContainer');
+        
+        deckData.forEach(card => {
+            const cardEl = document.createElement('div');
+            cardEl.className = 'card';
+            cardEl.innerHTML = `
+                <div class="card-icon">${card.icon}</div>
+                <div class="card-title">${card.title}</div>
+                <div class="card-decoration"></div>
+            `;
+            cardEl.onclick = () => openModal(card);
+            container.appendChild(cardEl);
+        });
+
+        // Modal Logic
+        const modal = document.getElementById('infoModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalBody = document.getElementById('modalBody');
+
+        function openModal(cardData) {
+            modalTitle.innerText = cardData.title;
+            modalBody.innerHTML = cardData.content;
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            modal.classList.remove('active');
+        }
+
+        // Close modal on outside click
+        modal.onclick = (e) => {
+            if (e.target === modal) closeModal();
+        }
+
+        // Manual Logic
+        function openManual() {
+            modalTitle.innerText = "Bem-vindo ao PsicoQuest";
+            modalBody.innerHTML = `
+                <p>Este recurso terapêutico digital foi desenhado para auxiliar no manejo da Ansiedade e TDAH.</p>
+                <p><strong>Como usar:</strong></p>
+                <ul>
+                    <li>Navegue pelos cartões deslizando para o lado (celular) ou visualizando a grade (computador).</li>
+                    <li>Escolha uma técnica que ressoe com seu momento atual.</li>
+                    <li>Clique no cartão para revelar as instruções passo a passo.</li>
+                    <li>Realize a técnica com calma.</li>
+                </ul>
+                <div class="highlight-box">
+                    Lembre-se: Este é um recurso de apoio e não substitui a terapia profissional.
+                </div>
+            `;
+            modal.classList.add('active');
+        }
+
+        // Scroll Logic for Buttons
+        function scrollCards(direction) {
+            const scrollAmount = 300; // Largura do card + gap
+            container.scrollBy({
+                left: direction * scrollAmount,
+                behavior: 'smooth'
+            });
+        }
+    </script>
+
+<footer class="kt-footer">Gabriel Vinícius – Psicólogo • CRP 06/215890 • PsicoQuest • @gabrielopsicologo • Todos os direitos reservados • © 2026</footer>
+
+<script id="kt-standard-script">
+(function(){
+  function toast(msg){
+    var old=document.querySelector('.kt-toast'); if(old) old.remove();
+    var el=document.createElement('div'); el.className='kt-toast'; el.textContent=msg;
+    document.body.appendChild(el); setTimeout(function(){el.remove()},2200);
+  }
+  function textContent(){
+    var main=document.querySelector('main') || document.body;
+    var clone=main.cloneNode(true);
+    clone.querySelectorAll('script,style,.kt-topbar,.kt-footer,.kt-modal,button,a').forEach(function(n){n.remove()});
+    var form=[];
+    document.querySelectorAll('input,textarea,select').forEach(function(el){
+      var label=''; var parent=el.closest('.form-group,.field,.row,.card,.node');
+      if(parent){ var l=parent.querySelector('label,h3,strong'); if(l) label=l.textContent.trim(); }
+      if(el.value && el.value.trim()) form.push((label?label+': ':'')+el.value.trim());
+    });
+    var txt=(clone.innerText||'').replace(/\n{3,}/g,'\n\n').trim();
+    if(form.length) txt += '\n\nRespostas preenchidas:\n' + form.join('\n');
+    return txt.trim();
+  }
+  function safeCopy(t){
+    t = t || textContent();
+    if(!t){toast('Ainda não há conteúdo para copiar.'); return;}
+    if(navigator.clipboard){navigator.clipboard.writeText(t).then(function(){toast('Copiado.')}).catch(fallback)} else fallback();
+    function fallback(){var ta=document.createElement('textarea'); ta.value=t; ta.style.position='fixed'; ta.style.left='-9999px'; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy'); toast('Copiado.')}catch(e){toast('Não foi possível copiar.')} ta.remove();}
+  }
+  function state(){
+    var out={}; document.querySelectorAll('input,textarea,select').forEach(function(el,i){
+      var k=el.name||el.id||('field_'+i); out[k]=(el.type==='checkbox'||el.type==='radio')?el.checked:el.value;
+    }); return out;
+  }
+  function apply(st){
+    document.querySelectorAll('input,textarea,select').forEach(function(el,i){
+      var k=el.name||el.id||('field_'+i); if(st[k]!==undefined){ if(el.type==='checkbox'||el.type==='radio') el.checked=!!st[k]; else el.value=st[k]; }
+    });
+  }
+  var key='KT_PROTO_'+(document.title||location.pathname).replace(/\W+/g,'_');
+  window.ktAction=function(action,title){
+    try{
+      if(action==='copySummary'){
+        if(typeof makeSummary==='function') return safeCopy(makeSummary());
+        return safeCopy(textContent());
+      }
+      if(action==='copyTask'){
+        if(typeof makeTask==='function') return safeCopy(makeTask());
+        return safeCopy('Atividade: '+(title||document.title)+'\n\nPreencha ou revise esta ferramenta e traga as respostas para a próxima sessão.');
+      }
+      if(action==='save'){
+        if(typeof saveLocal==='function') return saveLocal();
+        localStorage.setItem(key, JSON.stringify(state())); return toast('Progresso salvo neste aparelho.');
+      }
+      if(action==='load'){
+        if(typeof loadLocal==='function') return loadLocal();
+        var raw=localStorage.getItem(key); if(!raw) return toast('Nada salvo neste aparelho.'); apply(JSON.parse(raw)); return toast('Progresso retomado.');
+      }
+      if(action==='code'){
+        if(typeof continuationCode==='function') return continuationCode();
+        return safeCopy(btoa(unescape(encodeURIComponent(JSON.stringify(state())))));
+      }
+      if(action==='paste'){
+        if(typeof restoreCode==='function') return restoreCode();
+        var code=prompt('Cole o código de continuação:'); if(!code) return; apply(JSON.parse(decodeURIComponent(escape(atob(code.trim()))))); return toast('Código carregado.');
+      }
+      if(action==='txt'){
+        var blob=new Blob([textContent()],{type:'text/plain;charset=utf-8'}); var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=(title||'ferramenta').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'_')+'.txt'; document.body.appendChild(a); a.click(); setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},300); return toast('TXT gerado.');
+      }
+      if(action==='print'){ if(typeof generateAndPrint==='function') return generateAndPrint(); if(typeof printPage==='function') return printPage(); if(typeof gerarPDF==='function') return gerarPDF(); return window.print(); }
+      if(action==='image'){
+        if(typeof downloadSummaryImage==='function' && typeof makeSummary==='function') return downloadSummaryImage(title||document.title, makeSummary(), 'resumo.png');
+        return toast('Imagem automática não está disponível nesta ferramenta. Use print/PDF.');
+      }
+      if(action==='clear'){
+        if(typeof clearLocal==='function') return clearLocal();
+        if(confirm('Limpar campos preenchidos?')){ document.querySelectorAll('input,textarea').forEach(function(el){ if(el.type==='checkbox'||el.type==='radio') el.checked=false; else el.value=''; }); localStorage.removeItem(key); toast('Campos limpos.'); }
+      }
+    }catch(e){ console.error(e); toast('Esta ação não pôde ser concluída nesta ferramenta.'); }
+  };
+  window.ktOpenManual=function(){
+    if(typeof toggleModal==='function'){ try{return toggleModal();}catch(e){} }
+    if(typeof openManual==='function'){ try{return openManual();}catch(e){} }
+    var m=document.getElementById('ktManual'); if(m) m.classList.add('open');
+  };
+  window.ktCloseManual=function(){ var m=document.getElementById('ktManual'); if(m) m.classList.remove('open'); };
+  document.addEventListener('click', function(e){
+    var d=document.querySelector('.kt-actions[open]');
+    if(d && !d.contains(e.target)) d.removeAttribute('open');
+  });
+})();
+</script>
+</body>

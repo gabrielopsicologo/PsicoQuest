@@ -1,2 +1,17 @@
-Links internos verificados.
-Faltando: 0
+VERIFICAÇÃO DE LINKS — GitHub Pages / hubs em pastas
+
+Arquivos HTML verificados: 148
+Links locais verificados: 549
+Links locais faltando: 0
+
+Correções aplicadas:
+- Hubs em pasta agora apontam para ../novas_v711_estavel, ../classica_original, ../aventura_original e ../aprovadas.
+- Links entre hubs agora apontam para ../HUB_COMPLETO/index.html, ../HUB_ADULTOS/index.html e ../HUB_CRIANCAS_ADOLESCENTES/index.html.
+- Entrada principal aponta para as pastas dos hubs, compatível com GitHub Pages.
+- Pasta aprovadas foi incluída com as 6 ferramentas validadas do protótipo.
+- Botões de voltar das ferramentas aprovadas apontam para o Hub Completo.
+- Arquivos seguranca.js de compatibilidade foram criados onde estavam faltando.
+- O hub interno antigo de novas_v711_estavel foi transformado em redirecionamento para o Hub Completo.
+- Links locais para PDFs ausentes foram neutralizados para evitar erro 404.
+
+Resultado: nenhum link local faltando encontrado.
